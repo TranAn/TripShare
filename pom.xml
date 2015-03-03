@@ -50,6 +50,11 @@
 			<artifactId>objectify-gwt</artifactId>
 			<version>1.2.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.gwt.google-apis</groupId>
+			<artifactId>gwt-maps</artifactId>
+			<version>3.8.0-pre</version>
+		</dependency>
 
 		<!-- Test Dependencies -->
 		<dependency>
@@ -88,6 +93,7 @@
 			<version>6.8</version>
 			<scope>test</scope>
 		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -131,7 +137,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<runTarget>home.html</runTarget>
+					<runTarget>create/index.html</runTarget>
 					<modules>
 						<module>com.itpro.tripshare.TripShare</module>
 					</modules>

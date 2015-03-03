@@ -1,0 +1,33 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	.CreateTrip-Obj1 {
+		float: left;
+	}
+	
+	.CreateTrip-Obj2 {
+		min-height: 500px;
+	}
+	</ui:style>
+	<g:HTMLPanel styleName="{style.CreateTrip-Obj2}">
+		<g:HTMLPanel styleName="{style.CreateTrip-Obj1}">
+			<g:Label text="Tên chuyến đi:" />
+			<g:TextBox />
+			<g:Label text="Điểm đi:" />
+			<g:TextBox />
+			<g:Label text="Điểm đến:" />
+			<g:TextBox />
+			<g:HTMLPanel />
+			<g:Anchor text="Thêm điểm đến" ui:field="btnAddPart" />
+			<g:Label text="Mô tả:" />
+			<g:TextArea width="490px" height="50px" />
+			<g:HTMLPanel>
+				<g:Button ui:field="btnCreateTrip">Tạo chuyến đi</g:Button>
+			</g:HTMLPanel>
+		</g:HTMLPanel>
+
+		<g:HTMLPanel ui:field="mapContainer" height="500px" width="500px"
+			styleName="{style.CreateTrip-Obj1}" />
+	</g:HTMLPanel>
+</ui:UiBinder> 
