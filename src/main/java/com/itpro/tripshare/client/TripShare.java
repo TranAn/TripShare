@@ -10,6 +10,9 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormHandler;
+import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormSubmitEvent;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -51,9 +54,11 @@ public class TripShare implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				uploadForm.submit();
+				
 
 			}
 		});
+		 
 		uploadForm
 				.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
 
@@ -61,7 +66,8 @@ public class TripShare implements EntryPoint {
 					public void onSubmitComplete(SubmitCompleteEvent event) {
 
 						uploadForm.reset();
-						startNewBlobstoreSession();
+					
+						 
 						System.out.println("submit complete"
 								+ event.getResults());
 					}

@@ -40,6 +40,7 @@ public class UploadServiceIpmls extends HttpServlet implements Servlet {
 
 		}
 		System.out.println("doPost");
+		return;
 		 
 	}
 
