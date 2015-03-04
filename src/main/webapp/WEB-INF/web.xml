@@ -3,10 +3,60 @@
 	version="2.5"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee                
 	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-		
+
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>home.html</welcome-file>
 	</welcome-file-list>
-	
+
+	<!-- register objectify -->
+	<servlet>
+		<servlet-name>register</servlet-name>
+		<servlet-class>com.itpro.tripshare.server.DataRegister</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+
+	<!-- server for trip -->
+	<servlet>
+		<servlet-name>data_service</servlet-name>
+		<servlet-class>com.itpro.tripshare.server.DataServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>data_service</servlet-name>
+		<url-pattern>/script/service-trip</url-pattern>
+	</servlet-mapping>
+
+	<!-- server for blob store -->
+
+	<servlet>
+		<servlet-name>blob_service</servlet-name>
+		<servlet-class>com.itpro.tripshare.server.PictureServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>blob_service</servlet-name>
+		<url-pattern>/script/blobservice</url-pattern>
+	</servlet-mapping>
+
+	<!-- upload file -->
+
+	<servlet>
+		<servlet-name>upload_Service</servlet-name>
+		<servlet-class>com.itpro.tripshare.server.UploadServiceIpmls</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>upload_Service</servlet-name>
+		<url-pattern>/upload</url-pattern>
+	</servlet-mapping>
+
+	<!-- download file -->
+	<servlet>
+		<servlet-name>downloadService</servlet-name>
+		<servlet-class>com.itpro.tripshare.server.DownloadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>downloadService</servlet-name>
+		<url-pattern>/script/downloadService</url-pattern>
+	</servlet-mapping>
+
 </web-app>
