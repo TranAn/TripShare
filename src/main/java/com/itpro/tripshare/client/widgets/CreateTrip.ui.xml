@@ -13,9 +13,10 @@
 	<g:HTMLPanel styleName="{style.CreateTrip-Obj2}">
 		<g:HTMLPanel styleName="{style.CreateTrip-Obj1}">
 			<g:Label text="Tên chuyến đi:" />
-			<g:TextBox />
+			<g:TextBox ui:field="txbName" />
 			<g:Label text="Điểm đi:" />
 			<g:TextBox ui:field="txbOrigin" />
+			<g:Button ui:field="btnFindYourLocation">Tìm vị trí của bạn</g:Button>
 			<g:Label text="Điểm đến:" />
 			<g:TextBox ui:field="txbDestination" />
 			<g:Button text="Chọn địa danh"></g:Button>
@@ -25,7 +26,7 @@
 				<g:Button>Upload ảnh</g:Button>
 			</g:HTMLPanel>
 			<g:Label text="Mô tả:" />
-			<g:TextArea width="490px" height="120px" />
+			<g:TextArea width="490px" height="120px" ui:field="txbDescription" />
 			<g:HTMLPanel>
 				<g:Button ui:field="btnCreateTrip">Tạo chuyến đi</g:Button>
 			</g:HTMLPanel>

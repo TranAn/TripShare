@@ -1,8 +1,10 @@
 package com.itpro.tripshare.shared;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import com.google.maps.gwt.client.LatLng;
 
 public class Journey implements Serializable {
 
@@ -10,38 +12,47 @@ public class Journey implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	List<Locate> locate;
-	Map<String, List<Point>> directions;
+	
+	List<Locate> locates;
+	List<Point> directions = new ArrayList<Point>();
 
-	public List<Locate> getLocate() {
-		return locate;
+	public List<Locate> getLocates() {
+		return locates;
 	}
 
-	public void setLocate(List<Locate> locate) {
-		this.locate = locate;
+	public void setLocates(List<Locate> locates) {
+		this.locates = locates;
 	}
 
-	public Map<String, List<Point>> getDirections() {
+	public List<Point> getDirections() {
 		return directions;
 	}
 
-	public void setDirections(Map<String, List<Point>> directions) {
+	public void setDirections(List<Point> directions) {
 		this.directions = directions;
 	}
 
-	public static class Point {
+	public static class Point implements Serializable{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
 		Double x;
 		Double y;
 
 		public Point() {
 			super();
 		}
+		
+		public Point(LatLng latlng) {
+			this.x = latlng.lat();
+			this.y = latlng.lng();
+		}
 
 		public Point(Double x, Double y) {
-			
 			this.x = x;
 			this.y = y;
-
 		}
 
 		public Double getX() {

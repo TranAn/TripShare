@@ -12,6 +12,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -19,12 +21,19 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.maps.gwt.client.DirectionsResult;
+import com.google.maps.gwt.client.DirectionsRoute;
 import com.google.maps.gwt.client.DirectionsWaypoint;
 import com.google.maps.gwt.client.LatLng;
 import com.google.maps.gwt.client.places.Autocomplete;
 import com.google.maps.gwt.client.places.Autocomplete.PlaceChangedHandler;
 import com.google.maps.gwt.client.places.PlaceResult;
 import com.itpro.tripshare.client.TripShare;
+import com.itpro.tripshare.shared.Journey;
+import com.itpro.tripshare.shared.Journey.Point;
+import com.itpro.tripshare.shared.Locate;
+import com.itpro.tripshare.shared.Trip;
+import com.google.gwt.user.client.ui.TextArea;
 
 public class CreateTrip extends Composite {
 
@@ -37,29 +46,32 @@ public class CreateTrip extends Composite {
 	@UiField HTMLPanel htmlDestinationBox;
 	@UiField TextBox txbOrigin;
 	@UiField TextBox txbDestination;
+	@UiField TextBox txbName;
+	@UiField TextArea txbDescription;
+	@UiField Button btnFindYourLocation;
 
 	interface CreateTripUiBinder extends UiBinder<Widget, CreateTrip> {
 	}
 	
-	LatLng originPoint;
-	LatLng destinationPoint;
-	List<LatLng> listWayPoint = new ArrayList<LatLng>();
+	Locate originPoint;
+	Locate destinationPoint;
+	List<Locate> listWayPoint = new ArrayList<Locate>();
 	
 	@SuppressWarnings("unchecked")
 	JsArray<DirectionsWaypoint> waypoints = (JsArray<DirectionsWaypoint>) JsArray.createArray();
-	
+	DirectionsRoute directionRouter;
 	
 	void findTheJourney() {
 		waypoints.setLength(0);
-		for(LatLng latlng: listWayPoint) {
+		for(Locate locate: listWayPoint) {
 			DirectionsWaypoint waypoint = DirectionsWaypoint.create();
-			waypoint.setLocation(latlng);
+			waypoint.setLocation(locate.getLatLng());
 			waypoints.push(waypoint);
 		}
 		if(waypoints.length() != 0)
-			TripShare.tripMap.findDirection(originPoint, destinationPoint, waypoints);
+			TripShare.tripMap.findDirection(originPoint.getLatLng(), destinationPoint.getLatLng(), waypoints);
 		else
-			TripShare.tripMap.findDirection(originPoint, destinationPoint, null);
+			TripShare.tripMap.findDirection(originPoint.getLatLng(), destinationPoint.getLatLng(), null);
 	}
 
 	public CreateTrip() {
@@ -71,7 +83,8 @@ public class CreateTrip extends Composite {
 		autocomplete.addPlaceChangedListener(new PlaceChangedHandler() {
 			public void handle() {
 				PlaceResult place = autocomplete.getPlace();
-				originPoint = place.getGeometry().getLocation();
+				String address = place.getFormattedAddress();
+				originPoint = new Locate(address, place.getGeometry().getLocation());
 				if(destinationPoint == null) {
 					TripShare.tripMap.addMaker(place.getGeometry().getLocation());
 					TripShare.tripMap.getMap().setCenter(place.getGeometry().getLocation());
@@ -90,16 +103,29 @@ public class CreateTrip extends Composite {
 				if(originPoint != null) {
 					PlaceResult place = autocomplete2.getPlace();
 					LatLng destinationP = place.getGeometry().getLocation();
+					String address = place.getFormattedAddress();
 					if(listWayPoint.isEmpty())
-						destinationPoint = destinationP;
+						destinationPoint = new Locate(address, destinationP);
 					else {
 						listWayPoint.remove(0);
-						listWayPoint.add(0, destinationP);
+						listWayPoint.add(0, new Locate(address, destinationP));
 					}
 					findTheJourney();
 				}
 			}
 		});
+	}
+	
+	public void setDirectionResult(DirectionsResult directionResult) {
+		directionRouter = directionResult.getRoutes().get(0);
+	}
+	
+	public void setYourLocation(String address, LatLng position) {
+		txbOrigin.setText(address);
+		originPoint = new Locate(address, position);
+		if(destinationPoint != null) {
+			findTheJourney();
+		}
 	}
 	
 	List<TextBox> destinationBoxMap = new ArrayList<TextBox>();
@@ -120,20 +146,21 @@ public class CreateTrip extends Composite {
 			public void handle() {
 				PlaceResult place = autocomplete3.getPlace();
 				LatLng destinationP = place.getGeometry().getLocation();
+				String address = place.getFormattedAddress();
 				if(listWayPoint.isEmpty()) {
 					listWayPoint.add(0, destinationPoint);
-					destinationPoint = destinationP;
+					destinationPoint = new Locate(address, destinationP);
 				}
 				else {
 					int index = destinationBoxMap.indexOf(txb);
 					if(index == destinationBoxMap.size() - 1){
 						if(listWayPoint.size() == index)
 							listWayPoint.add(index, destinationPoint);
-						destinationPoint = destinationP;
+						destinationPoint =  new Locate(address, destinationP);
 					}
 					else {
 						listWayPoint.remove(index + 1);
-						listWayPoint.add(index + 1, destinationP);
+						listWayPoint.add(index + 1,  new Locate(address, destinationP));
 					}
 				}
 				findTheJourney();
@@ -171,10 +198,62 @@ public class CreateTrip extends Composite {
 		if(destinationBoxMap.isEmpty()) {
 			if(destinationPoint != null)
 				destinationBoxMap.add(addDestination());
+			else
+				txbDestination.setFocus(true);
 		}
 		else {
 			if(destinationBoxMap.get(destinationBoxMap.size()-1).getText().length() != 0)
 				destinationBoxMap.add(addDestination());
+			else
+				destinationBoxMap.get(destinationBoxMap.size()-1).setFocus(true);
 		}
 	}
+	
+	Journey getJourney() {
+		Journey journey = new Journey();
+		List<Locate> locates = new ArrayList<Locate>();
+		locates.add(originPoint);
+		locates.addAll(listWayPoint);
+		locates.add(destinationPoint);
+		List<Point> directions = new ArrayList<Point>();
+		for (int i = 0; i < directionRouter.getOverviewPath().length(); i++) {
+			Point p = new Point(directionRouter.getOverviewPath().get(i));
+			directions.add(p);
+		}
+		journey.setLocates(locates);
+		journey.setDirections(directions);
+		return journey;
+	}
+	
+	@UiHandler("btnCreateTrip")
+	void onBtnCreateTripClick(ClickEvent event) {
+		if(VerifiedField()) {
+			Trip trip = new Trip();
+			trip.setName(txbName.getText());
+			trip.setDescription(txbDescription.getText());
+			trip.setJourney(getJourney());
+			TripShare.dataService.insertTrip(trip, new AsyncCallback<Trip>() {
+				
+				@Override
+				public void onSuccess(Trip result) {
+					Window.alert("!: Hãy xắp xếp đồ đạc và chuẩn bị lên đường nào.");
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
+				}
+			});
+		}
+	}
+	
+	boolean VerifiedField() {
+		return true;
+	}
+	
+	@UiHandler("btnFindYourLocation")
+	void onBtnFindYourLocationClick(ClickEvent event) {
+		TripShare.tripMap.getCurrentLocation();
+	}
+	
 }

@@ -1,6 +1,7 @@
 package com.itpro.tripshare.shared;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,11 +20,11 @@ public class Trip implements Serializable {
 	@Index
 	Long owner;
 	@Index
-	List<Long> companion;
+	List<Long> companion = new ArrayList<Long>();
 	@Index
-	List<Long> destination;
+	List<Long> destination = new ArrayList<Long>();;
 	@Index
-	List<Long> gallery;
+	List<Long> gallery = new ArrayList<Long>();;
 	@Index
 	String name;
 	Date createDate;

@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.maps.gwt.client.DirectionsRenderer;
 import com.google.maps.gwt.client.DirectionsRequest;
 import com.google.maps.gwt.client.DirectionsResult;
-import com.google.maps.gwt.client.DirectionsRoute;
 import com.google.maps.gwt.client.DirectionsService;
 import com.google.maps.gwt.client.DirectionsService.Callback;
 import com.google.maps.gwt.client.DirectionsStatus;
@@ -33,15 +32,17 @@ import com.google.maps.gwt.client.MouseEvent;
 import com.google.maps.gwt.client.Polyline;
 import com.google.maps.gwt.client.TravelMode;
 
-public class GwtGoogleMap {
+public class TravelMap {
 
 	private static SimplePanel container = new SimplePanel();
 	private static GoogleMap theMap;
 	private static DirectionsRenderer directionsRenderer;
 	private static List<Marker> markers = new ArrayList<Marker>();
+	private static Polyline polyline;
 	
 	public interface Listener {
 		void getCurrentLocation(String address, LatLng position);
+		void getDirectionResult(DirectionsResult directionResult);
 	}
 	
 	private Listener listener;
@@ -50,11 +51,11 @@ public class GwtGoogleMap {
 		this.listener = listener;
 	}
 
-	protected GwtGoogleMap() {
+	protected TravelMap() {
 		super();
 	}
 
-	public static GwtGoogleMap create() {
+	public static TravelMap create() {
 		MapOptions options = MapOptions.create();
 		options.setCenter(LatLng.create(39.509, -98.434));
 		options.setZoom(6);
@@ -66,8 +67,10 @@ public class GwtGoogleMap {
 		theMap = GoogleMap.create(container.getElement(), options);
 		directionsRenderer = DirectionsRenderer.create();
 		directionsRenderer.setMap(theMap);
+		polyline = Polyline.create();
+		polyline.setMap(theMap);
 		container.setSize("100%", "100%");
-		return new GwtGoogleMap();
+		return new TravelMap();
 	}
 
 	public SimplePanel getMapView() {
@@ -81,11 +84,20 @@ public class GwtGoogleMap {
 	public void setMapSize(int width, int height) {
 		container.setSize(width + "px", height + "px");
 	}
+	
+	public void clearMap() {
+		GoogleMap nullmap = null;
+		for( Marker m: markers )
+			m.setMap(nullmap);
+		markers.clear();
+		directionsRenderer.setMap(nullmap);
+		polyline.setMap(nullmap);
+	}
 
 	public void getCurrentLocation() {
 		Geolocation geoLocation = Geolocation.getIfSupported();
 		if (geoLocation == null) {
-			Window.alert("Your old browser is stuck in the past");
+			Window.alert("!: Your old browser is stuck in the past");
 		} else {
 			geoLocation.getCurrentPosition(new com.google.gwt.core.client.Callback<Position, PositionError>() {
 				
@@ -110,7 +122,7 @@ public class GwtGoogleMap {
 				
 				@Override
 				public void onFailure(PositionError reason) {
-					Window.alert("Some error occur!");
+					Window.alert("!: Map API request error.");
 				}
 			});
 		}
@@ -144,33 +156,19 @@ public class GwtGoogleMap {
 		directionService.route(directionRequest, new Callback() {
 			@Override
 			public void handle(DirectionsResult a, DirectionsStatus b) {
+				clearMap();
+				directionsRenderer.setMap(theMap);
 				directionsRenderer.setDirections(a);
-				DirectionsRoute route = a.getRoutes().get(0);
-				saveDirection.clear();
-				for (int i = 0; i < route.getOverviewPath().length(); i++) {
-					Point p = new Point(route.getOverviewPath().get(i));
-					saveDirection.add(p);
-				}
+				if(listener != null)
+					listener.getDirectionResult(a);
 			}
 		});
-		for( Marker m: markers ) {
-			GoogleMap nullmap = null;
-			m.setMap(nullmap);
-		}
 	}
 
-	private List<Point> saveDirection = new ArrayList<Point>();
-
-	@SuppressWarnings("unchecked")
-	public void drawTheJourney() {
-		Polyline theJourney = Polyline.create();
-		theJourney.setMap(theMap);
-		JsArray<LatLng> journey = (JsArray<LatLng>) JsArray.createArray();
-		for (Point p : saveDirection) {
-			journey.push(p.toLatLng());
-		}
-		Window.alert(journey.toString());
-		theJourney.setPath(journey);
+	public void drawTheJourney(JsArray<LatLng> journey) {
+		clearMap();
+		polyline.setMap(theMap);
+		polyline.setPath(journey);
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.itpro.tripshare.shared;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.objectify.annotation.Entity;
@@ -16,7 +17,7 @@ public class User implements Serializable {
 	@Id
 	Long id;
 	@Index
-	List<Long> myTrip;
+	List<Long> myTrip = new ArrayList<Long>();
 	@Index
 	String accessToken;
 
