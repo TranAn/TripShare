@@ -17,6 +17,7 @@ import com.google.maps.gwt.client.DirectionsRoute;
 import com.google.maps.gwt.client.DirectionsService;
 import com.google.maps.gwt.client.DirectionsService.Callback;
 import com.google.maps.gwt.client.DirectionsStatus;
+import com.google.maps.gwt.client.DirectionsWaypoint;
 import com.google.maps.gwt.client.Geocoder;
 import com.google.maps.gwt.client.GeocoderRequest;
 import com.google.maps.gwt.client.GeocoderResult;
@@ -132,12 +133,13 @@ public class GwtGoogleMap {
 		});
 	}
 
-	public void findDirection(LatLng originPoint, LatLng destinationPoint) {
+	public void findDirection(LatLng originPoint, LatLng destinationPoint, JsArray<DirectionsWaypoint> waypoints) {
 		DirectionsRequest directionRequest = DirectionsRequest.create();
 		TravelMode mode = TravelMode.DRIVING;
 		directionRequest.setTravelMode(mode);
 		directionRequest.setOrigin(originPoint);
 		directionRequest.setDestination(destinationPoint);
+		directionRequest.setWaypoints(waypoints);
 		DirectionsService directionService = DirectionsService.create();
 		directionService.route(directionRequest, new Callback() {
 			@Override

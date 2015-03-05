@@ -15,13 +15,17 @@
 			<g:Label text="Tên chuyến đi:" />
 			<g:TextBox />
 			<g:Label text="Điểm đi:" />
-			<g:TextBox />
+			<g:TextBox ui:field="txbOrigin" />
 			<g:Label text="Điểm đến:" />
-			<g:TextBox />
-			<g:HTMLPanel />
+			<g:TextBox ui:field="txbDestination" />
+			<g:Button text="Chọn địa danh"></g:Button>
+			<g:HTMLPanel ui:field="htmlDestinationBox" />
 			<g:Anchor text="Thêm điểm đến" ui:field="btnAddPart" />
+			<g:HTMLPanel>
+				<g:Button>Upload ảnh</g:Button>
+			</g:HTMLPanel>
 			<g:Label text="Mô tả:" />
-			<g:TextArea width="490px" height="50px" />
+			<g:TextArea width="490px" height="120px" />
 			<g:HTMLPanel>
 				<g:Button ui:field="btnCreateTrip">Tạo chuyến đi</g:Button>
 			</g:HTMLPanel>

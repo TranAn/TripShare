@@ -33,6 +33,6 @@ public class Menu extends Composite {
 
 	@UiHandler("menuPlanTrip")
 	void onMenuPlanTripClick(ClickEvent event) {
-		Window.Location.assign("/create");
+		Window.Location.assign("/create/");
 	}
 }
