@@ -18,7 +18,6 @@ public interface DataServiceAsync {
 	void removeTrip(Long idTrip, AsyncCallback<Void> callback);
 
 	// part
-
 	void insertPart(Part part, AsyncCallback<Part> callback);
 
 	void findPart(Long idPart, AsyncCallback<Part> callback);
@@ -28,17 +27,15 @@ public interface DataServiceAsync {
 	void removePart(Long idPart, AsyncCallback<Void> callback);
 
 	// user
+	void insertUser(User user, AsyncCallback<Void> callback);
 
-	void insertUser(User user, AsyncCallback<User> callback);
-
-	void findUser(Long idUser, AsyncCallback<User> callback);
+	void findUser(String idUser, AsyncCallback<User> callback);
 
 	void updateUser(User user, AsyncCallback<User> callback);
 
-	void removeUser(Long idUser, AsyncCallback<Void> callback);
+	void removeUser(String idUser, AsyncCallback<Void> callback);
 
 	// picture
-
 	void getURLUpload(AsyncCallback<String> callback);
 
 	void deletePicture(Long idPicture, AsyncCallback<Void> callback);

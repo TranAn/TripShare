@@ -99,14 +99,14 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	private User exportUser = null;
 
 	@Override
-	public User insertUser(User user) {
-		Key<User> key = ofy().save().entity(user).now();
-		exportUser = ofy().load().key(key).now();
-		return exportUser;
+	public void insertUser(User user) {
+		User existUser = ofy().load().type(User.class).id(user.getId()).now();
+		if(existUser == null) 
+			ofy().save().entity(user);
 	}
 
 	@Override
-	public User findUser(Long idUser) {
+	public User findUser(String idUser) {
 		User oldData = ofy().load().type(User.class).id(idUser).now();
 		return oldData;
 	}
@@ -124,7 +124,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public void removeUser(Long idUser) {
+	public void removeUser(String idUser) {
 		User oldData = findUser(idUser);
 		ofy().delete().entity(oldData);
 

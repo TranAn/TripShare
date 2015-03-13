@@ -20,7 +20,6 @@ public interface DataService extends RemoteService {
 	public void removeTrip(Long idTrip);
 
 	// part
-
 	public Part insertPart(Part part);
 
 	public Part findPart(Long idPart);
@@ -30,16 +29,15 @@ public interface DataService extends RemoteService {
 	public void removePart(Long idPart);
 
 	// user
-	public User insertUser(User user);
+	public void insertUser(User user);
 
-	public User findUser(Long idUser);
+	public User findUser(String idUser);
 
 	public User updateUser(User user);
 
-	public void removeUser(Long idUser);
+	public void removeUser(String idUser);
 
 	// picture
-
 	public String getURLUpload();
 
 	public void deletePicture(Long idPicture);

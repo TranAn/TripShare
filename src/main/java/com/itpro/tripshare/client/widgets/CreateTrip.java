@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.maps.gwt.client.DirectionsResult;
@@ -33,7 +34,6 @@ import com.itpro.tripshare.shared.Journey;
 import com.itpro.tripshare.shared.Journey.Point;
 import com.itpro.tripshare.shared.Locate;
 import com.itpro.tripshare.shared.Trip;
-import com.google.gwt.user.client.ui.TextArea;
 
 public class CreateTrip extends Composite {
 

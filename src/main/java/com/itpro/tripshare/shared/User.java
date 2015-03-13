@@ -15,17 +15,17 @@ import com.googlecode.objectify.annotation.Unindex;
 public class User implements Serializable {
 	@Index
 	@Id
-	Long id;
+	String id;
 	@Index
 	List<Long> myTrip = new ArrayList<Long>();
 	@Index
 	String accessToken;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
