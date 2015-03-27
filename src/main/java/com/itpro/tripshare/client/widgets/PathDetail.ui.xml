@@ -1,0 +1,60 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.dom.client">
+	<ui:style>
+	.PathDetail-Obj1 {
+		position: relative;
+		max-width: 980px;
+		border: 2px solid #a1a1a1;
+		padding: 20px 20px;
+		background-color: rgba(255, 251, 248, 0.81);
+		border-radius: 10px;
+		height: auto !important;
+		-webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+		-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+		box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+		margin-bottom: 40px;
+	}
+	
+	.PathDetail-Obj2 {
+		display: block;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+		background-color: rgba(48, 27, 12, 1);
+		overflow: hidden;
+		border: 1px solid gray;
+		margin-right: 20px;
+	}
+	
+	.PathDetail-Obj3 {
+		margin-bottom: 10px;
+		font-size: 25px;
+		font-family: museo-w01-700, serif;
+		color: rgb(56, 119, 127);
+		cursor: pointer;
+	}
+	
+	.PathDetail-Obj3:hover {
+		text-decoration: underline;
+	}
+	
+	.PathDetail-Obj4 {
+		font-size: 15px;
+		line-height: 1.8em;
+	}
+	</ui:style>
+	<g:HTMLPanel styleName="{style.PathDetail-Obj1}">
+		<table>
+			<tr>
+				<td>
+					<g:Image styleName="{style.PathDetail-Obj2}" width="350px"
+						height="250px" ui:field="picture" />
+				</td>
+				<td valign="top">
+					<g:Label styleName="{style.PathDetail-Obj3}" text="Where and When?"
+						ui:field="lbTitle" />
+					<g:HTML styleName="{style.PathDetail-Obj4}" ui:field="htmlContent"></g:HTML>
+				</td>
+			</tr>
+		</table>
+	</g:HTMLPanel>
+</ui:UiBinder> 

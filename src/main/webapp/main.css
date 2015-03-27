@@ -1,6 +1,195 @@
-/* #footer {
+/* make keyframes that tell the start state and the end state of our object */
+@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+html {
+	background: url(resources/jonesmichael_1349868867_07.jpg) no-repeat
+		center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+#header {
+	width: 100%;
+	background-color: rgba(48, 27, 12, 1);
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+	border-top: 0px solid rgba(48, 27, 12, 1);
+	border-bottom: 0px solid rgba(48, 27, 12, 1);
+	background-color: rgba(48, 27, 12, 1);
+	margin-bottom: 50px;
+}
+
+#title {
+	padding-top: 15px;
+	margin-left: 0px;
+}
+
+#menu {
+	list-style-type: none;
+	display: -webkit-inline-box;
+	width: 100%;
+	margin-top: 20px;
+	margin-bottom: 15px;
+}
+
+#content {
+	opacity: 0; /* make things invisible upon start */
+	-webkit-animation: fadeIn ease-in 1;
+	/* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+	-moz-animation: fadeIn ease-in 1;
+	animation: fadeIn ease-in 1;
+	-webkit-animation-fill-mode: forwards;
+	/* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+	-moz-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+	-webkit-animation-duration: 0.6s;
+	-moz-animation-duration: 0.6s;
+	animation-duration: 0.6s;
+	-webkit-animation-delay: 0.6s;
+	-moz-animation-delay: 0.6s;
+	animation-delay: 0.6s;
+}
+
+#footer {
 	background-color: rgba(48, 27, 12, 1);
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
 	border-top: 0px solid rgba(56, 119, 127, 1);
-	border-bottom: 0px solid rgba(56, 119, 127,
-} */
+	border-bottom: 0px solid rgba(56, 119, 127, 1);
+	margin-top: 50px;
+	color: white;
+	font-weight: bold;
+	padding-top: 30px;
+	height: 50px;
+}
+
+.menubutton,.menubutton:link,.menubutton:visited {
+	cursor: pointer;
+	background: rgba(48, 27, 12, 1)
+		url(http://static.parastorage.com/services/skins/2.995.7/images/wysiwyg/core/themes/base/shiny1button_bg.png)
+		center center repeat-x;
+	background-color: rgba(48, 27, 12, 1);
+	border-radius: 5px;
+	-webkit-transition: color .5s linear, background-color .5s ease-in-out;
+	-moz-transition: color .5s linear, background-color .5s ease-in-out;
+	-o-transition: color .5s linear, background-color .5s ease-in-out;
+	transition: color .5s linear, background-color .5s ease-in-out;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+	display: inline-block;
+	font: normal normal normal 16px/1.1em Play, sans-serif;
+	color: #FFFBF8 !important;
+	padding: 10px 70px;
+	margin-right: 15px;
+	text-decoration: none;
+}
+
+.menubutton:hover {
+	background-color: rgba(56, 119, 127, 1);
+	-webkit-transition: background-color .25s ease-in-out;
+	-moz-transition: background-color .25s ease-in-out;
+	-o-transition: background-color .25s ease-in-out;
+	transition: background-color .25s ease-in-out;
+	color: white !important;
+	text-decoration: none !important;
+}
+
+.menubutton-actived {
+	cursor: pointer;
+	background: rgba(48, 27, 12, 1)
+		url(http://static.parastorage.com/services/skins/2.995.7/images/wysiwyg/core/themes/base/shiny1button_bg.png)
+		center center repeat-x;
+	background-color: rgba(56, 119, 127, 1);
+	border-radius: 5px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+	transition: background-color 0.4s ease 0s;
+	display: inline-block;
+	font: normal normal normal 16px/1.1em Play, sans-serif;
+	color: #FFFBF8 !important;
+	transition: color 0.4s ease 0s;
+	padding: 10px 70px;
+	margin-right: 15px;
+	text-decoration: none;
+	border-radius: 5px;
+}
+
+.menubutton-actived:hover {
+	text-decoration: none !important;
+}
+
+.greenbutton,.greenbutton:link,.greenbutton:visited {
+	color: white;
+	text-decoration: none;
+	padding: 10px 15px;
+	background-color: #8FCF45;
+	-webkit-transition: color .5s linear, background-color .5s ease-in-out;
+	-moz-transition: color .5s linear, background-color .5s ease-in-out;
+	-o-transition: color .5s linear, background-color .5s ease-in-out;
+	transition: color .5s linear, background-color .5s ease-in-out;
+	cursor: pointer;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-shadow: 0px 0px 3px 0px rgba(52, 50, 50, 0.75);
+	-moz-box-shadow: 0px 0px 3px 0px rgba(52, 50, 50, 0.75);
+	box-shadow: 0px 0px 3px 0px rgba(52, 50, 50, 0.75);
+	text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+}
+
+.greenbutton:hover {
+	background-color: #D05944;
+	-webkit-transition: background-color .25s ease-in-out;
+	-moz-transition: background-color .25s ease-in-out;
+	-o-transition: background-color .25s ease-in-out;
+	transition: background-color .25s ease-in-out;
+	color: white !important;
+	font-weight: bold !important;
+	text-decoration: none !important;
+}
+
+.font-blackTitleNormal {
+	font-weight: 700;
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	margin-bottom: 5px;
+}
+
+.font-blackTitleLarge {
+	font-weight: 700;
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+
+.tripMap {
+	display: block;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+	background-color: rgba(48, 27, 12, 1);
+	overflow: hidden;
+}
+
+.tripInfo {
+	position: relative;
+	margin: auto;
+	max-width: 980px;
+	border: 2px solid #a1a1a1;
+	padding: 20px 20px;
+	background-color: #FCFFFF;
+	border-radius: 10px;
+	height: auto !important;
+	-webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+}
+
+.tripContent {
+	position: relative;
+	margin: auto;
+	max-width: 1024px;
+}
+
+.trip-destinations {
+	margin: 5px 0px;
+  	font-size: 15px;
+}

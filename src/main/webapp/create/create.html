@@ -14,6 +14,7 @@
 <!--                                                               -->
 <!-- <link type="text/css" rel="stylesheet" href=""> 			   -->
 <link type="text/css" rel="stylesheet" href="../main.css">
+<link rel="stylesheet" href="/resources/font-awesome-4.2.0/css/font-awesome.min.css">
 
 <!-- Specify the shortcut icon. -->
 <link rel="shortcut icon" href="../favicon.ico" />
@@ -28,7 +29,6 @@
 <!-- If you add any GWT meta tags, they must   -->
 <!-- be added before this line.                -->
 <!--                                           -->
-
 <script type="text/javascript" language="javascript" src="../script/script.nocache.js"></script>
 <script src="http://connect.facebook.net/en_US/all.js"></script>
 <script type="text/javascript" src="/js/facebookConnect.js"></script>
@@ -56,7 +56,8 @@
 <!-- you can leave the body empty if you want  -->
 <!-- to create a completely dynamic UI.        -->
 <!--                                           -->
-<body style="margin: 0px">
+
+<body style="margin: 0px; background: none">
 
 	<!-- OPTIONAL: include this if you want history support -->
 	<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
@@ -72,23 +73,31 @@
 
 	<div id="header">
 		<div id="title">
-			<label>Finding your trip</label> <label>Trip Share</label> <img
-				src="/resources/trip.png" height="42" width="42" /> <label>share with your
-				friend</label>
+			<center>
+			<span style="margin-right:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">finding your trip</font></span>
+			<span style="line-height: 1.1em; font:normal normal normal 55px/1.1em Play,sans-serif; color:#fffbf8">Trip&nbsp;<strong>Share</strong></span>
+			<img src="/resources/1427111517_palm_tree.png" height="42" width="42" /> 
+			<span style="margin-left:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">share with your friend</font></span>
+			</center>
 		</div>
 
-		<ul id="menu">
-			<li><a href="/">Home</a></li>
-			<li><a href="/create">Plan your trip</a></li>
-			<li><a href="/">Profile</a></li>
-			<li><a id="signInMenu" onclick="loginFacebook()">Sign In</a></li>
-		</ul>
+		<div id="menu">
+			<div style="margin:auto; display: -webkit-box;">
+			<li><a class="menubutton" href="/">Home</a></li>
+			<li><a class="menubutton-actived" href="/create">Plan your trip</a></li>
+			<li><a class="menubutton" href="/">Profile</a></li>
+			<!-- <li><a id="signInMenu" onclick="loginFacebook()">Sign In</a></li> -->
+			</div>
+		</div>
+	</div>
+	
+	<div id="content">
+		<div style="min-height: 550px" id="createTrip"></div>
 	</div>
 
-	<div id="createTrip"></div>
-
-	<div id="footer" style="width: 100%; height: 100px">© Copyright
-		2015, ITPRO.</div>
+	<div id="footer" style="width: 100%">
+		<center> © Copyright 2015, ITPRO. </center>
+	</div>
 
 </body>
 </html>

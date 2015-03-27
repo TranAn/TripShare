@@ -1,0 +1,47 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	@external .PhotoUpload-Obj2, .PhotoUpload-Obj3;
+	.PhotoUpload-Obj1 {
+		display: none;
+	}
+	
+	.PhotoUpload-Obj2 {
+		border: 1px solid #ccc;
+		display: inline-block;
+		padding: 6px 12px;
+		padding-bottom: 7px;
+		cursor: pointer;
+	}
+	
+	.PhotoUpload-Obj2:hover {
+		background-color: aliceblue;
+	}
+	
+	.PhotoUpload-Obj3 {
+		max-width: 125px;
+		max-height: 75px;
+		height: 75px;
+ 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  		background-color: rgba(48, 27, 12, 1);
+  		overflow: hidden;
+  		border: 1px solid gray;
+		margin: 10px 5px 0 0;
+	}
+	</ui:style>
+	<g:HTMLPanel width="550px" height="205px">
+		<center>
+			<label for="fileUpload" class="PhotoUpload-Obj2">
+				<i class="fa fa-cloud-upload"></i>
+				Upload Photos
+			</label>
+		</center>
+		<g:FormPanel>
+			<g:FileUpload width="100%" height="100%"
+				styleName="{style.PhotoUpload-Obj1}" ui:field="fileUpload" />
+		</g:FormPanel>
+		<g:HTMLPanel height="125px" ui:field="imageTable" />
+		<g:Button width="89px">Upload</g:Button>
+	</g:HTMLPanel>
+</ui:UiBinder> 

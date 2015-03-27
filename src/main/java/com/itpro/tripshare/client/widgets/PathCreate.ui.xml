@@ -1,0 +1,155 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client" xmlns:p2="urn:import:com.itpro.tripshare.client.widgets">
+	<ui:style>
+	@external .PathCreate-Obj12;
+	.PathCreate-Obj1 {
+		float: left;
+		width: 30%;
+	}
+	
+	.PathCreate-Obj2 {
+		float: left;
+		width: 70%;
+	}
+	
+	.PathCreate-Obj3 {
+		margin-bottom: 20px;
+		position: relative;
+		border: 2px solid #a1a1a1;
+		background-color: #FCFFFF;
+		border-radius: 10px;
+		height: auto !important;
+		-webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+		-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+		box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+		overflow: hidden;
+	}
+	
+	.PathCreate-Obj4 {
+		background-color: #f6f7f8;
+		border: 1px #e9eaed solid;
+		padding: 10px;
+	}
+	
+	.PathCreate-Obj5 {
+		color: gray;
+		padding: 5px 10px;
+		text-shadow: none;
+		display: -webkit-box;
+	}
+	
+	.PathCreate-Obj6 {
+		padding: 8px;
+		font-size: 14px;
+		box-sizing: border-box;
+    	-moz-box-sizing: border-box;
+    	-webkit-box-sizing: border-box;
+    	max-width: 100%;
+    	min-height: 140px;
+    	overflow: hidden;
+	}
+	
+	.PathCreate-Obj7 {
+		margin-bottom:-4px;
+	}
+	
+	.PathCreate-Obj8 {
+		color: aliceblue;
+  		padding: 6px 10px;
+  		margin-left: 10px;
+  		float: right;
+  		margin-top: 3px;
+  		margin-right: 7px;
+	}
+	
+	.PathCreate-Obj9 {
+		float: left;
+	}
+	
+	.PathCreate-Obj10 {
+		margin-left: 10px;
+		white-space: nowrap;
+	}
+	
+	.PathCreate-Obj11 {
+		overflow-y: hidden !important; 
+	}
+	
+	.PathCreate-Obj12 {
+		display: block;
+		margin-top: 10px;
+		border: 1px dashed Black;
+		color: silver;
+		cursor: pointer;
+		float: left;
+		margin-right: 5px;
+	}
+	
+	.PathCreate-Obj12:hover {
+		background: aliceblue;
+		color: silver;
+	}
+	
+	.PathCreate-Obj13 {
+		float: left;
+		margin-left: 10px;
+	 	color: silver;
+  		font-size: 14px;
+  		margin-top: 12px;
+	}
+
+	</ui:style>
+	<g:HTMLPanel styleName="{style.PathCreate-Obj3}">
+	
+		<g:HTMLPanel height="" styleName="{style.PathCreate-Obj4}">
+			<table>
+			<tr>
+			<td style="padding-left: 10px; padding-top: 5px;">
+			<g:Label text="Địa điểm:" width="70px" styleName="font-blackTitleNormal"/>
+			</td>
+			<td>
+			<g:TextBox width="" ui:field="txbLocation" height=""/>
+			</td>
+			<td style="padding-right:40px;">
+			<g:Anchor ui:field="btnFindYourLocation" styleName="greenbutton {style.PathCreate-Obj5}"><i class="fa fa-crosshairs fa-lg"></i></g:Anchor>
+			</td>
+			<td style="padding-left: 10px; padding-top: 5px;">
+			<g:Label text="Thời gian:" width="70px" styleName="font-blackTitleNormal"/>
+			</td>
+			<td>
+			<p1:DateBox width="" ui:field="txbTimeline" height=""/>
+			</td>
+			</tr>
+			</table>
+		</g:HTMLPanel>
+		
+		<g:HTMLPanel styleName="{style.PathCreate-Obj7}">
+			<p2:StretchyTextArea styleName="gwt-TextBox {style.PathCreate-Obj6}" width="100%" height="" ui:field="txbDescription"/>
+			<!-- <g:TextArea  styleName="gwt-TextBox {style.PathCreate-Obj6}" width="100%" height="140px" ui:field="txbDescription"/> -->
+		</g:HTMLPanel>
+		
+		<g:ScrollPanel styleName="{style.PathCreate-Obj11}" ui:field="scrollPathPhotos" height="0px">
+			<g:HTMLPanel styleName="{style.PathCreate-Obj10}" height="100%" ui:field="htmlPathPhotos">
+			</g:HTMLPanel>
+		</g:ScrollPanel>
+		
+		<g:HTMLPanel height="36px" styleName="{style.PathCreate-Obj4}">
+			<g:FormPanel ui:field="formUpload" styleName="{style.PathCreate-Obj9}">
+				<g:HTMLPanel>
+					<g:LongBox ui:field="boxTripId" visible="false"/>
+					<g:LongBox visible="false" ui:field="boxPathId"/>
+					<g:FileUpload width="100%" height="100%" ui:field="pathPhotoUpload" visible="false"/>
+					<label for="pathPhotoUpload" class="PhotoUpload-Obj2">
+						<i style="margin-right:5px;" class="fa fa-camera fa-lg"></i>
+						Upload Photos
+					</label>
+				</g:HTMLPanel>
+			</g:FormPanel>
+			<g:Label text="0 / Photos" styleName="{style.PathCreate-Obj13}" ui:field="lbCountPhotos"/>
+			<g:Anchor ui:field="btnPost"  styleName="greenbutton {style.PathCreate-Obj8}" ><i style="margin-right:5px;" class="fa fa-floppy-o fa-lg"></i> Save</g:Anchor>
+			<g:Anchor ui:field="btnCancel"  styleName="greenbutton {style.PathCreate-Obj8}" ><i style="margin-right:5px;" class="fa fa-ban fa-lg"></i> Cancel</g:Anchor>
+		</g:HTMLPanel>
+		
+	</g:HTMLPanel>
+</ui:UiBinder> 

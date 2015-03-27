@@ -1,6 +1,7 @@
 package com.itpro.tripshare.client.widgets;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -34,6 +35,7 @@ import com.itpro.tripshare.shared.Journey;
 import com.itpro.tripshare.shared.Journey.Point;
 import com.itpro.tripshare.shared.Locate;
 import com.itpro.tripshare.shared.Trip;
+import com.google.gwt.user.datepicker.client.DateBox;
 
 public class CreateTrip extends Composite {
 
@@ -41,14 +43,15 @@ public class CreateTrip extends Composite {
 			.create(CreateTripUiBinder.class);
 	
 	@UiField HTMLPanel mapContainer;
-	@UiField Button btnCreateTrip;
+	@UiField Anchor btnCreateTrip;
 	@UiField Anchor btnAddPart;
 	@UiField HTMLPanel htmlDestinationBox;
 	@UiField TextBox txbOrigin;
 	@UiField TextBox txbDestination;
 	@UiField TextBox txbName;
 	@UiField TextArea txbDescription;
-	@UiField Button btnFindYourLocation;
+	@UiField Anchor btnFindYourLocation;
+	@UiField DateBox txbDeparture;
 
 	interface CreateTripUiBinder extends UiBinder<Widget, CreateTrip> {
 	}
@@ -78,15 +81,19 @@ public class CreateTrip extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 		mapContainer.add(TripShare.tripMap.getMapView());
 		
+		txbName.getElement().setPropertyString("placeholder", "Tên chuyến đi của bạn");
+		txbDescription.getElement().setPropertyString("placeholder", "Mô tả chuyến đi của bạn!");
+		txbDeparture.setValue(new Date());
+		
 		final Autocomplete autocomplete = Autocomplete
 				.create((InputElement) (Element) txbOrigin.getElement());
 		autocomplete.addPlaceChangedListener(new PlaceChangedHandler() {
 			public void handle() {
 				PlaceResult place = autocomplete.getPlace();
-				String address = place.getFormattedAddress();
+				String address = txbOrigin.getText();
 				originPoint = new Locate(address, place.getGeometry().getLocation());
 				if(destinationPoint == null) {
-					TripShare.tripMap.addMaker(place.getGeometry().getLocation());
+					TripShare.tripMap.addMaker(place.getGeometry().getLocation(), address);
 					TripShare.tripMap.getMap().setCenter(place.getGeometry().getLocation());
 					TripShare.tripMap.getMap().setZoom(17.0);
 				}
@@ -103,7 +110,7 @@ public class CreateTrip extends Composite {
 				if(originPoint != null) {
 					PlaceResult place = autocomplete2.getPlace();
 					LatLng destinationP = place.getGeometry().getLocation();
-					String address = place.getFormattedAddress();
+					String address = txbDestination.getText();
 					if(listWayPoint.isEmpty())
 						destinationPoint = new Locate(address, destinationP);
 					else {
@@ -133,8 +140,16 @@ public class CreateTrip extends Composite {
 	public TextBox addDestination() {
 		final Label lb = new Label("Điểm đến:");
 		final TextBox txb = new TextBox();
-		final Button btn1 = new Button("Chọn địa danh");
-		final Button btn = new Button("Xóa");
+		final Anchor btn1 = new Anchor();
+		final Anchor btn = new Anchor();
+		
+		lb.setStyleName("font-blackTitleNormal");
+		txb.setStyleName("gwt-TextBox CreateTrip-Obj7");
+		btn1.setStyleName("greenbutton CreateTrip-Obj13");
+		btn.setStyleName("greenbutton CreateTrip-Obj12");
+		btn1.getElement().setInnerHTML("<i class='fa fa-picture-o fa-lg'></i>");
+		btn.getElement().setInnerHTML("<i class='fa fa-times fa-lg'></i>");
+		
 		htmlDestinationBox.add(lb);
 		htmlDestinationBox.add(txb);
 		htmlDestinationBox.add(btn1);
@@ -146,7 +161,7 @@ public class CreateTrip extends Composite {
 			public void handle() {
 				PlaceResult place = autocomplete3.getPlace();
 				LatLng destinationP = place.getGeometry().getLocation();
-				String address = place.getFormattedAddress();
+				String address = txb.getText();
 				if(listWayPoint.isEmpty()) {
 					listWayPoint.add(0, destinationPoint);
 					destinationPoint = new Locate(address, destinationP);
@@ -230,6 +245,7 @@ public class CreateTrip extends Composite {
 		if(VerifiedField()) {
 			Trip trip = new Trip();
 			trip.setName(txbName.getText());
+			trip.setDepartureDate(txbDeparture.getValue());
 			trip.setDescription(txbDescription.getText());
 			trip.setJourney(getJourney());
 			TripShare.dataService.insertTrip(trip, new AsyncCallback<Trip>() {

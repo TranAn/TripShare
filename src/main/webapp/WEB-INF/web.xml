@@ -28,24 +28,23 @@
 		<url-pattern>/script/datastore</url-pattern>
 	</servlet-mapping>
 
-	<!-- upload file -->
+	<!-- Servlets -->
 	<servlet>
-		<servlet-name>upload_Service</servlet-name>
-		<servlet-class>com.itpro.tripshare.server.UploadServiceIpmls</servlet-class>
+		<servlet-name>PhotoUploadServlet</servlet-name>
+		<servlet-class>com.itpro.tripshare.server.UploadService</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>upload_Service</servlet-name>
-		<url-pattern>/upload</url-pattern>
+		<servlet-name>PhotoUploadServlet</servlet-name>
+		<url-pattern>/photo_upload</url-pattern>
 	</servlet-mapping>
 
-	<!-- download file -->
 	<servlet>
-		<servlet-name>downloadService</servlet-name>
-		<servlet-class>com.itpro.tripshare.server.DownloadServlet</servlet-class>
+		<servlet-name>journeyPage</servlet-name>
+		<jsp-file>/journey/journey.jsp</jsp-file>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>downloadService</servlet-name>
-		<url-pattern>/script/downloadService</url-pattern>
+		<servlet-name>journeyPage</servlet-name>
+		<url-pattern>/journey/*</url-pattern>
 	</servlet-mapping>
 
 </web-app>

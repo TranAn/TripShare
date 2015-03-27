@@ -143,7 +143,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<runTarget>create/index.html</runTarget>
+					<runTarget>journey/journey.jsp</runTarget>
 					<modules>
 						<module>com.itpro.tripshare.TripShare</module>
 					</modules>

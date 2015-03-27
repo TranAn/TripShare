@@ -31,6 +31,7 @@ import com.google.maps.gwt.client.Marker.ClickHandler;
 import com.google.maps.gwt.client.MouseEvent;
 import com.google.maps.gwt.client.Polyline;
 import com.google.maps.gwt.client.TravelMode;
+import com.itpro.tripshare.client.TripShare;
 
 public class TravelMap {
 
@@ -57,19 +58,21 @@ public class TravelMap {
 
 	public static TravelMap create() {
 		MapOptions options = MapOptions.create();
-		options.setCenter(LatLng.create(39.509, -98.434));
-		options.setZoom(6);
+		LatLng officeP = LatLng.create(21.039971, 105.773398);
+		options.setCenter(officeP);
+		options.setZoom(16);
 		options.setMapTypeId(MapTypeId.ROADMAP);
 		options.setDraggable(true);
 		options.setMapTypeControl(true);
 		options.setScaleControl(true);
-		options.setScrollwheel(true);
+		options.setScrollwheel(false);
 		theMap = GoogleMap.create(container.getElement(), options);
 		directionsRenderer = DirectionsRenderer.create();
 		directionsRenderer.setMap(theMap);
 		polyline = Polyline.create();
 		polyline.setMap(theMap);
 		container.setSize("100%", "100%");
+		addMaker(officeP, "Trip Share Office");
 		return new TravelMap();
 	}
 
@@ -95,6 +98,7 @@ public class TravelMap {
 	}
 
 	public void getCurrentLocation() {
+		clearMap();
 		Geolocation geoLocation = Geolocation.getIfSupported();
 		if (geoLocation == null) {
 			Window.alert("!: Your old browser is stuck in the past");
@@ -104,16 +108,16 @@ public class TravelMap {
 				@Override
 				public void onSuccess(Position result) {
 					final LatLng l = LatLng.create(result.getCoordinates().getLatitude(), result.getCoordinates().getLongitude());
-					addMaker(l);
 					theMap.setCenter(l);
-					theMap.setZoom(17.0);
+					theMap.setZoom(16.0);
 					GeocoderRequest geoRequest = GeocoderRequest.create();
 					geoRequest.setLocation(l);
 					Geocoder geoCode = Geocoder.create();
 					geoCode.geocode(geoRequest, new Geocoder.Callback() {
 						@Override
 						public void handle(JsArray<GeocoderResult> a, GeocoderStatus b) {
-							String address = a.get(0).getAddressComponents().get(0).getShortName();
+							String address = a.get(0).getFormattedAddress();
+							addMaker(l, address);
 							if(listener != null)
 								listener.getCurrentLocation(address, l);
 						}
@@ -128,21 +132,25 @@ public class TravelMap {
 		}
 	}
 
-	public void addMaker(final LatLng position) {
+	public static void addMaker(final LatLng position, final String info) {
 		Marker marker = Marker.create();
 		markers.add(marker);
 		marker.setPosition(position);
 		marker.setMap(theMap);
-		marker.addClickListener(new ClickHandler() {
-			@Override
-			public void handle(MouseEvent event) {
-				InfoWindow info = InfoWindow.create();
-				HTMLPanel html = new HTMLPanel(("I'm Info Window"));
-				info.setContent(html.getElement());
-				info.setPosition(position);
-				info.open(theMap);
-			}
-		});
+//		marker.addClickListener(new ClickHandler() {
+//			@Override
+//			public void handle(MouseEvent event) {
+//				InfoWindow infowindow = InfoWindow.create();
+//				HTMLPanel html = new HTMLPanel(info);
+//				infowindow.setContent(html.getElement());
+//				infowindow.setPosition(position);
+//				infowindow.open(theMap);
+//			}
+//		});
+		InfoWindow infowindow = InfoWindow.create();
+		HTMLPanel html = new HTMLPanel(info);
+		infowindow.setContent(html.getElement());
+		infowindow.open(theMap, marker);
 	}
 
 	public void findDirection(LatLng originPoint, LatLng destinationPoint, JsArray<DirectionsWaypoint> waypoints) {
@@ -165,8 +173,14 @@ public class TravelMap {
 		});
 	}
 
-	public void drawTheJourney(JsArray<LatLng> journey) {
+	@SuppressWarnings("unchecked")
+	public void drawTheJourney(List<com.itpro.tripshare.shared.Journey.Point> directions) {
 		clearMap();
+		JsArray<LatLng> journey = (JsArray<LatLng>) JsArray.createArray();
+		for (com.itpro.tripshare.shared.Journey.Point p : directions) {
+			journey.push(p.toLatLng());
+		}
+		TripShare.tripMap.getMap().setCenter(directions.get(0).toLatLng());
 		polyline.setMap(theMap);
 		polyline.setPath(journey);
 	}

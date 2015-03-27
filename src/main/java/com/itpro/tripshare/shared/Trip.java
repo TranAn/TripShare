@@ -7,29 +7,29 @@ import java.util.List;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
-import com.googlecode.objectify.annotation.Unindex;
 
 @SuppressWarnings("serial")
 @Entity(name = "Trip")
-@Unindex
 public class Trip implements Serializable {
-	@Index
+	
+	public enum TripStatus {
+		ONGOING, COMPLETED;
+	}
+
 	@Id
 	Long id;
-	@Index
+	
 	Long owner;
-	@Index
 	List<Long> companion = new ArrayList<Long>();
-	@Index
-	List<Long> destination = new ArrayList<Long>();;
-	@Index
-	List<Long> gallery = new ArrayList<Long>();;
-	@Index
+	List<Long> destination = new ArrayList<Long>();
+	List<Long> gallery = new ArrayList<Long>();
+	
 	String name;
 	Date createDate;
+	Date departureDate;
 	String description;
 	Journey journey;
+	TripStatus status;
 
 	public Journey getJourney() {
 		return journey;
@@ -103,4 +103,20 @@ public class Trip implements Serializable {
 		this.description = description;
 	}
 
+	public Date getDepartureDate() {
+		return departureDate;
+	}
+
+	public void setDepartureDate(Date departureDate) {
+		this.departureDate = departureDate;
+	}
+
+	public TripStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TripStatus status) {
+		this.status = status;
+	}
+	
 }

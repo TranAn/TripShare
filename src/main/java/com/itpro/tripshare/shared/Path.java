@@ -1,22 +1,23 @@
 package com.itpro.tripshare.shared;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
-import com.googlecode.objectify.annotation.Unindex;
 
-@Entity(name = "Part")
+@Entity(name = "Path")
 @SuppressWarnings("serial")
-@Unindex
-public class Part implements Serializable {
-	@Index
+public class Path implements Serializable {
+	
 	@Id
 	Long id;
-	@Index
-	Long picture;
+	
+	List<Long> gallery = new ArrayList<Long>();
+	
+	String title;
 	Date createDate;
 	Locate locate;
 	String description;
@@ -29,12 +30,20 @@ public class Part implements Serializable {
 		this.locate = locate;
 	}
 
-	public Long getPicture() {
-		return picture;
+	public List<Long> getGallery() {
+		return gallery;
 	}
 
-	public void setPicture(Long picture) {
-		this.picture = picture;
+	public void setGallery(List<Long> gallery) {
+		this.gallery = gallery;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public Long getId() {

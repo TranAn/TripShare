@@ -4,22 +4,19 @@ import java.io.Serializable;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
-import com.googlecode.objectify.annotation.Unindex;
 
 @SuppressWarnings("serial")
-@Unindex
 @Entity(name = "Picture")
 public class Picture implements Serializable {
-	@Index
+	
 	@Id
 	Long id;
-	// id trip
-	@Index
+	
 	Long onTrip;
-	// save blob-key
-	@Index
+	Long onPath;
+
 	String key;
+	String serveUrl;
 
 	public Long getId() {
 		return id;
@@ -44,4 +41,21 @@ public class Picture implements Serializable {
 	public void setKey(String key) {
 		this.key = key;
 	}
+
+	public Long getOnPath() {
+		return onPath;
+	}
+
+	public void setOnPath(Long onPath) {
+		this.onPath = onPath;
+	}
+
+	public String getServeUrl() {
+		return serveUrl;
+	}
+
+	public void setServeUrl(String serveUrl) {
+		this.serveUrl = serveUrl;
+	}
+	
 }

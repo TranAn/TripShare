@@ -71,5 +71,10 @@ public class Journey implements Serializable {
 			this.y = y;
 		}
 
+		public LatLng toLatLng() {
+			LatLng l = LatLng.create(x, y);
+			return l;
+		}
+		
 	}
 }

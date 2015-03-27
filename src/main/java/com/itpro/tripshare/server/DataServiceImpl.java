@@ -2,7 +2,10 @@ package com.itpro.tripshare.server;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
@@ -10,7 +13,7 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.googlecode.objectify.Key;
 import com.itpro.tripshare.client.rpc.DataService;
-import com.itpro.tripshare.shared.Part;
+import com.itpro.tripshare.shared.Path;
 import com.itpro.tripshare.shared.Picture;
 import com.itpro.tripshare.shared.Trip;
 import com.itpro.tripshare.shared.User;
@@ -59,28 +62,41 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	/**
 	 * impls for part
 	 */
-	private Part exportPart = null;
+	private Path exportPart = null;
 
 	@Override
-	public Part insertPart(Part part) {
-		part.setCreateDate(new Date());
-		Key<Part> key = ofy().save().entity(part).now();
-		exportPart = ofy().load().key(key).now();
-		return exportPart;
-
+	public Path insertPart(Path part, Long tripId) {
+		Trip trip = ofy().load().type(Trip.class).id(tripId).now();
+		if(trip != null) {
+//			part.setCreateDate(new Date());
+			Key<Path> key = ofy().save().entity(part).now();
+			exportPart = ofy().load().key(key).now();
+			trip.getDestination().add(exportPart.getId());
+			ofy().save().entity(trip);
+			return exportPart;
+		}
+		else
+			return null;
 	}
 
 	@Override
-	public Part findPart(Long idPart) {
-		Part oldData = ofy().load().type(Part.class).id(idPart).now();
+	public Path findPart(Long idPart) {
+		Path oldData = ofy().load().type(Path.class).id(idPart).now();
 		return oldData;
 	}
 
 	@Override
-	public Part updatePart(Part part) {
-		Part oldData = findPart(part.getId());
+	public List<Path> listOfPath(List<Long> idsPath) {
+		Map<Long, Path> mapPaths = ofy().load().type(Path.class).ids(idsPath);
+		List<Path> result = new ArrayList<Path>(mapPaths.values());
+		return result;
+	}
+
+	@Override
+	public Path updatePart(Path part) {
+		Path oldData = findPart(part.getId());
 		if (oldData != null) {
-			Key<Part> key = ofy().save().entity(part).now();
+			Key<Path> key = ofy().save().entity(part).now();
 			exportPart = ofy().load().key(key).now();
 		} else
 			exportPart = null;
@@ -90,7 +106,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public void removePart(Long idPart) {
-		Part oldData = findPart(idPart);
+		Path oldData = findPart(idPart);
 		if (oldData != null)
 			ofy().delete().entity(oldData);
 
@@ -127,18 +143,14 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	public void removeUser(String idUser) {
 		User oldData = findUser(idUser);
 		ofy().delete().entity(oldData);
-
 	}
 
-	private BlobstoreService blogStoreService = BlobstoreServiceFactory
-			.getBlobstoreService();
-
-	private final BlobstoreService blobstoreService = BlobstoreServiceFactory
+	private BlobstoreService blobStoreService = BlobstoreServiceFactory
 			.getBlobstoreService();
 
 	@Override
-	public String getURLUpload() {
-		return blogStoreService.createUploadUrl("/upload");
+	public String getUploadUrl() {
+		return blobStoreService.createUploadUrl("/photo_upload");
 	}
 
 	@Override
@@ -154,11 +166,11 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public void deletePicture(Long idPicture) {
-		Picture p = findPicture(idPicture);
-		BlobKey blobKey = new BlobKey(p.getKey());
-		blobstoreService.delete(blobKey);
-		ofy().delete().entity(p);
+//		Picture p = findPicture(idPicture);
+//		BlobKey blobKey = new BlobKey(p.getKey());
+//		blobstoreService.delete(blobKey);
+//		ofy().delete().entity(p);
 
 	}
-
+	
 }

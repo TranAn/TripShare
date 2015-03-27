@@ -18,7 +18,7 @@ window.fbAsyncInit = function() {
 	fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
 
-window.onload = userInfoLoad;
+//window.onload = userInfoLoad;
 
 function userInfoLoad() {
 	if(location.pathname == "/create/")
@@ -37,8 +37,7 @@ function checkUserLogin() {
 			FB.getLoginStatus(function(response) {
 				if (response.status === 'connected') {
 					document.body.style.visibility = "visible";
-					setUserInfo(response.name);
-					storeSession(response);
+					getUserInfo();
 				} else if (response.status === 'not_authorized') {
 					window.location = "/";
 				} else {
@@ -50,7 +49,7 @@ function checkUserLogin() {
     	FB.getLoginStatus(function(response) {
 			if (response.status === 'connected') {
 				document.body.style.visibility = "visible";
-				setUserInfo(response.name);
+				getUserInfo();
 			} else if (response.status === 'not_authorized') {
 				window.location = "/";
 			} else {
@@ -67,7 +66,7 @@ function getLoginStatus() {
 	     } else {
 			FB.getLoginStatus(function(response) {
 				if (response.status === 'connected') {
-					setUserInfo(response.name);
+					getUserInfo();
 				} else if (response.status === 'not_authorized') {
 				} else {
 				}
@@ -76,7 +75,7 @@ function getLoginStatus() {
    } else {
    		FB.getLoginStatus(function(response) {
 			if (response.status === 'connected') {
-				setUserInfo(response.name);
+				getUserInfo();
 			} else if (response.status === 'not_authorized') {
 			} else {
 			}
@@ -84,25 +83,28 @@ function getLoginStatus() {
    }
 }
 
+function getUserInfo() {
+	FB.api('/me', function(response) {
+		if(typeof(Storage) !== "undefined") {
+			storeSession(response);
+		}
+		setUserInfo(response.name);
+		console.log(JSON.stringify(response));
+	});
+}
+
 function storeSession(response) {
-	sessionStorage.userId = response.authResponse.userID;
-	sessionStorage.userName = response.authResponse.userName;
+	sessionStorage.userId = response.id;
+	sessionStorage.userName = response.name;
 }
 
 function loginFacebook() {
 	console.log('Log: Connect to facebook.... ');
 	FB.login(function(response) {
 		if (response.authResponse) {
-			FB.api('/me', function(response) {
-				var facebookApi = new GWTExport.FacebookApi();
-				facebookApi.saveNewFacebookUser(response.id);
-				if(typeof(Storage) !== "undefined") {
-					sessionStorage.userId = response.id;
-					sessionStorage.userName = response.name;
-				}
-				setUserInfo(response.name);
-				console.log(JSON.stringify(response));
-			});
+			var facebookApi = new GWTExport.FacebookApi();
+			facebookApi.saveNewFacebookUser(response.authResponse.userID);
+			getUserInfo();
 		} else {
 			console.log('Log: User cancelled login or did not fully authorize.');
 		}
