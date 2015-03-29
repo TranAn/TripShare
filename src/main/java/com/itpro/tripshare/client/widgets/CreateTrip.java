@@ -16,13 +16,12 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.DateBox;
 import com.google.maps.gwt.client.DirectionsResult;
 import com.google.maps.gwt.client.DirectionsRoute;
 import com.google.maps.gwt.client.DirectionsWaypoint;
@@ -35,7 +34,6 @@ import com.itpro.tripshare.shared.Journey;
 import com.itpro.tripshare.shared.Journey.Point;
 import com.itpro.tripshare.shared.Locate;
 import com.itpro.tripshare.shared.Trip;
-import com.google.gwt.user.datepicker.client.DateBox;
 
 public class CreateTrip extends Composite {
 
@@ -49,9 +47,12 @@ public class CreateTrip extends Composite {
 	@UiField TextBox txbOrigin;
 	@UiField TextBox txbDestination;
 	@UiField TextBox txbName;
-	@UiField TextArea txbDescription;
+	@UiField StretchyTextArea txbDescription;
 	@UiField Anchor btnFindYourLocation;
 	@UiField DateBox txbDeparture;
+	@UiField Label lbName;
+	@UiField Label lbOrigin;
+	@UiField Label lbDestination;
 
 	interface CreateTripUiBinder extends UiBinder<Widget, CreateTrip> {
 	}
@@ -93,7 +94,7 @@ public class CreateTrip extends Composite {
 				String address = txbOrigin.getText();
 				originPoint = new Locate(address, place.getGeometry().getLocation());
 				if(destinationPoint == null) {
-					TripShare.tripMap.addMaker(place.getGeometry().getLocation(), address);
+					TripShare.tripMap.addMarker(place.getGeometry().getLocation(), address, true, true);
 					TripShare.tripMap.getMap().setCenter(place.getGeometry().getLocation());
 					TripShare.tripMap.getMap().setZoom(17.0);
 				}
@@ -260,11 +261,33 @@ public class CreateTrip extends Composite {
 					Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
 				}
 			});
+		} 
+		else {
+			Window.scrollTo(0, 20);
 		}
 	}
 	
 	boolean VerifiedField() {
-		return true;
+		boolean isFieldComplete = true;
+		if(txbName.getText().isEmpty()) {
+			lbName.setStyleName("font-redTitleNormal");
+			isFieldComplete = false;
+		} else {
+			lbName.setStyleName("font-blackTitleNormal");
+		}
+		if(txbOrigin.getText().isEmpty()) {
+			lbOrigin.setStyleName("font-redTitleNormal");
+			isFieldComplete = false;
+		} else {
+			lbOrigin.setStyleName("font-blackTitleNormal");
+		}
+		if(txbDestination.getText().isEmpty()) {
+			lbDestination.setStyleName("font-redTitleNormal");
+			isFieldComplete = false;
+		} else {
+			lbDestination.setStyleName("font-blackTitleNormal");
+		}
+		return isFieldComplete;
 	}
 	
 	@UiHandler("btnFindYourLocation")

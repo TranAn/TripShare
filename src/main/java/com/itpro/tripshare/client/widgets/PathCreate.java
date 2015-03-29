@@ -21,26 +21,26 @@ import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LongBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
-import com.itpro.tripshare.client.TripShare;
-import com.itpro.tripshare.shared.Locate;
-import com.itpro.tripshare.shared.Path;
-import com.google.gwt.user.client.ui.Label;
 import com.google.maps.gwt.client.Geocoder;
 import com.google.maps.gwt.client.GeocoderRequest;
 import com.google.maps.gwt.client.GeocoderResult;
 import com.google.maps.gwt.client.GeocoderStatus;
 import com.google.maps.gwt.client.LatLng;
+import com.itpro.tripshare.client.TripShare;
+import com.itpro.tripshare.shared.Locate;
+import com.itpro.tripshare.shared.Path;
 
 public class PathCreate extends Composite {
 
 	private static Binder uiBinder = GWT.create(Binder.class);
 	
+	@UiField HTMLPanel container;
 	@UiField TextBox txbLocation;
 	@UiField DateBox txbTimeline;
 	@UiField Anchor btnPost;
@@ -57,13 +57,23 @@ public class PathCreate extends Composite {
 	Long tripId;
 	Locate locate = new Locate();
 	boolean isHandlerUploadEvent = false;
-
+	
 	interface Binder extends UiBinder<Widget, PathCreate> {
 	}
+
+	public interface Listener {
+		void onClose();
+	}
 	
+	private Listener listener;
+	
+	public void setListener(Listener listener) {
+		this.listener = listener;
+	}
+
 	public PathCreate() {
 		initWidget(uiBinder.createAndBindUi(this));
-		this.setVisible(false);
+//		this.setVisible(false);
 		
 		formUpload.setEncoding(FormPanel.ENCODING_MULTIPART);
 		formUpload.setMethod(FormPanel.METHOD_POST);
@@ -88,6 +98,19 @@ public class PathCreate extends Composite {
 				formUpload.reset();
 			}
 		});
+		
+//		txbDescription.addChangeHandler(new ChangeHandler() {
+//			
+//			@Override
+//			public void onChange(ChangeEvent event) {
+//				if(txbDescription.getElement().getClientHeight() >= 360) {
+//					txbDescription.addStyleName("PathCreate-Obj6ScrollAble");
+//				}
+//				else {
+//					txbDescription.removeStyleName("PathCreate-Obj6ScrollAble");
+//				}
+//			}
+//		});
 	}
 	
 	public void handlerUploadEvent() {
@@ -161,31 +184,9 @@ public class PathCreate extends Composite {
 	public void setTripId(Long tripId) {
 		this.tripId = tripId;
 		txbTimeline.setValue(new Date());
-		txbDescription.setFocus(true);
+		txbLocation.setFocus(true);
 	}
 
-	@UiHandler("btnPost")
-	void onBtnPostClick(ClickEvent event) {
-		Path path = new Path();
-		locate.setAddressName(txbLocation.getText());
-		path.setLocate(locate);
-		path.setCreateDate(txbTimeline.getValue());
-		path.setDescription(txbDescription.getText());
-		TripShare.dataService.insertPart(path, tripId, new AsyncCallback<Path>() {
-			
-			@Override
-			public void onSuccess(Path result) {
-				uploadPhoto(tripId, result.getId());
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-	}
-	
 	public void uploadPhoto(final Long tripId, final Long pathId) {
 		TripShare.dataService.getUploadUrl(new AsyncCallback<String>() {
 			
@@ -206,9 +207,32 @@ public class PathCreate extends Composite {
 		});
 	}
 	
+	@UiHandler("btnPost")
+	void onBtnPostClick(ClickEvent event) {
+		Path path = new Path();
+		locate.setAddressName(txbLocation.getText());
+		path.setLocate(locate);
+		path.setCreateDate(txbTimeline.getValue());
+		path.setDescription(txbDescription.getValue());
+		TripShare.dataService.insertPart(path, tripId, new AsyncCallback<Path>() {
+			
+			@Override
+			public void onSuccess(Path result) {
+				uploadPhoto(tripId, result.getId());
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
+
 	@UiHandler("btnCancel")
 	void onBtnCancelClick(ClickEvent event) {
-		this.setVisible(false);
+//		this.setVisible(false);
+		this.setStyleName("PathCreate-Obj3");
 		txbLocation.setText("");
 		txbTimeline.getElement().setInnerHTML("");
 		txbDescription.setText("");
@@ -217,6 +241,8 @@ public class PathCreate extends Composite {
 		lbCountPhotos.setText("0 / Photos");
 		formUpload.reset();
 		locate = new Locate();
+		if(listener != null)
+			listener.onClose();
 	}
 	
 	@UiHandler("btnFindYourLocation") 

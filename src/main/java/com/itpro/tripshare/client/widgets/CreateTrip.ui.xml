@@ -1,6 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client" xmlns:p2="urn:import:com.itpro.tripshare.client.widgets">
 	<ui:style>
 	@external .CreateTrip-Obj5, .CreateTrip-Obj6, .CreateTrip-Obj7, .CreateTrip-Obj12, .CreateTrip-Obj13;
 	.CreateTrip-Obj2 {
@@ -35,10 +35,8 @@
 	}
 	
 	.CreateTrip-Obj4 {
-		
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 		background-color: rgba(48, 27, 12, 1);
-		
 	}
 	
 	.CreateTrip-Obj5 {
@@ -98,6 +96,15 @@
   		right: 2px;
  	 	z-index: 1;
 	}
+	
+	.CreateTrip-Obj15 {
+		margin-bottom: 5px;
+		max-width: 80%;
+		width: 80%;
+		min-height: 160px;
+		resize: none;
+		overflow: hidden;
+	}
 	</ui:style>
 	<g:HTMLPanel styleName="{style.CreateTrip-Obj1}">
 		<g:Image url="/resources/1411646988_note2.png" width="36px" height="36px" styleName="{style.CreateTrip-Obj14}"/>
@@ -105,12 +112,12 @@
 			<tr>
 				<td style="width:50%">
 					<g:HTMLPanel>
-						<g:Label text="Tên chuyến đi (*):" styleName="font-blackTitleNormal" />
+						<g:Label text="Tên chuyến đi (*):" styleName="font-blackTitleNormal" ui:field="lbName" />
 						<g:TextBox ui:field="txbName" styleName="gwt-TextBox {style.CreateTrip-Obj7}" width="80%"/>
-						<g:Label text="Điểm đi (*):" styleName="font-blackTitleNormal" />
+						<g:Label text="Điểm đi (*):" styleName="font-blackTitleNormal" ui:field="lbOrigin" />
 						<g:TextBox ui:field="txbOrigin" styleName="gwt-TextBox {style.CreateTrip-Obj7}" width="80%"/>
 						<g:Anchor ui:field="btnFindYourLocation" styleName="greenbutton {style.CreateTrip-Obj5}"><i class="fa fa-crosshairs fa-lg"></i></g:Anchor>
-						<g:Label text="Điểm đến (*):" styleName="font-blackTitleNormal" />
+						<g:Label text="Điểm đến (*):" styleName="font-blackTitleNormal" ui:field="lbDestination" />
 						<g:TextBox ui:field="txbDestination" styleName="gwt-TextBox {style.CreateTrip-Obj7}" width="80%"/>
 						<g:Anchor styleName="greenbutton {style.CreateTrip-Obj6}"><i class="fa fa-picture-o fa-lg"></i></g:Anchor>
 						<g:HTMLPanel ui:field="htmlDestinationBox" styleName="{style.CreateTrip-Obj11}" />
@@ -118,7 +125,7 @@
 						<g:Label text="Ngày khời hành:" styleName="font-blackTitleNormal {style.CreateTrip-Obj10}" />
 						<p1:DateBox width="80%" height="18px" ui:field="txbDeparture" styleName="gwt-TextBox {style.CreateTrip-Obj7}"/>
 						<g:Label text="Giới thiệu về chuyến đi:" styleName="font-blackTitleNormal {style.CreateTrip-Obj8}" />
-						<g:TextArea width="80%" height="120px" ui:field="txbDescription" styleName="gwt-TextBox {style.CreateTrip-Obj7}"/>
+						<p2:StretchyTextArea width="80%" ui:field="txbDescription" styleName="gwt-TextBox {style.CreateTrip-Obj15}"/>
 						<g:HTMLPanel styleName="{style.CreateTrip-Obj2}">
 							<g:Anchor ui:field="btnCreateTrip" styleName="greenbutton">Tạo chuyến đi</g:Anchor>
 						</g:HTMLPanel>

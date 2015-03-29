@@ -65,6 +65,24 @@ html {
 	height: 50px;
 }
 
+.fadeIn {
+	opacity: 0; /* make things invisible upon start */
+	-webkit-animation: fadeIn ease-in 1;
+	/* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+	-moz-animation: fadeIn ease-in 1;
+	animation: fadeIn ease-in 1;
+	-webkit-animation-fill-mode: forwards;
+	/* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+	-moz-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+	-webkit-animation-duration: 0.4s;
+	-moz-animation-duration: 0.4s;
+	animation-duration: 0.4s;
+	-webkit-animation-delay: 0.4s;
+	-moz-animation-delay: 0.4s;
+	animation-delay: 0.4s;
+}
+
 .menubutton,.menubutton:link,.menubutton:visited {
 	cursor: pointer;
 	background: rgba(48, 27, 12, 1)
@@ -155,6 +173,14 @@ html {
 	margin-bottom: 5px;
 }
 
+.font-redTitleNormal {
+	font-weight: 700;
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	margin-bottom: 5px;
+	color: red;
+}
+
 .font-blackTitleLarge {
 	font-weight: 700;
 	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
@@ -172,6 +198,7 @@ html {
 .tripInfo {
 	position: relative;
 	margin: auto;
+	width: 76%;
 	max-width: 980px;
 	border: 2px solid #a1a1a1;
 	padding: 20px 20px;
@@ -186,6 +213,7 @@ html {
 .tripContent {
 	position: relative;
 	margin: auto;
+	width: 76%;
 	max-width: 1024px;
 }
 

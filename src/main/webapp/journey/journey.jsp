@@ -86,6 +86,12 @@
 			Your web browser must have JavaScript enabled in order for this
 			application to display correctly.</div>
 	</noscript>
+	
+	<script type="text/javascript">
+		window.onbeforeunload = function(){
+			window.scrollTo(0,0);
+		}
+	</script>
 
 	<div id="header">
 		<div id="title">
@@ -100,7 +106,7 @@
 		<div id="menu">
 			<div style="margin:auto; display: -webkit-box;">
 			<li><a class="menubutton-actived" href="/">Home</a></li>
-			<li><a class="menubutton" href="/create">Plan your trip</a></li>
+			<li><a class="menubutton" href="/create/">Plan your trip</a></li>
 			<li><a class="menubutton" href="/">Profile</a></li>
 			<!-- <li><a id="signInMenu" onclick="loginFacebook()">Sign In</a></li> -->
 			</div>
@@ -129,7 +135,8 @@
 							redirectHomeUrl(response);
 		
 						} else {
-							%>							
+							%>				
+								<img src="/resources/1411646988_note2.png" width="36px" height="36px" style="position: absolute; top: 4px; right: 2px; z-index: 1;"/>			
 								<table>
 								<tr>
 								<td valign="top" style="width:100%">
@@ -149,7 +156,7 @@
 									<div class="font-blackTitleLarge" style="margin-top:25px;">Ngày khởi hành:</div>
 									<div style="font-size:15px;"><%= trip.getDepartureDate() %></div>
 									<div class="font-blackTitleLarge" style="margin-top:30px;">Giới thiệu về chuyến đi:</div>
-									<div style="font-size:15px; line-height: 1.8em;"><%= trip.getDescription() %></div>
+									<div style="font-size:15px; line-height: 1.8em; white-space: pre-line;"><%= trip.getDescription() %></div>
 								</td>
 								<td height="1">
 									<div id="tripMap" class="tripMap" style="width: 500px; height: 100%; margin-left: 10px; min-height: 450px; border:1px solid gray;"></div>

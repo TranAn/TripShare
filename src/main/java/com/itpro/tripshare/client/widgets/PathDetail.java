@@ -26,7 +26,12 @@ public class PathDetail extends Composite {
 		
 		picture.setUrl(pictureUrl);
 		lbTitle.setText(title);
-		htmlContent.setHTML(content);
+		String summaryContent;
+		if(content.length() > 501)
+			summaryContent = content.substring(0, 500) + "..." + " <a href=''>View more</a>";
+		else
+			summaryContent = content;
+		htmlContent.getElement().setInnerHTML(summaryContent);
 	}
 	
 	public void setDisplayPhoto(String src) {

@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client" xmlns:p2="urn:import:com.itpro.tripshare.client.widgets">
 	<ui:style>
-	@external .PathCreate-Obj12;
+	@external .PathCreate-Obj3, .PathCreate-Obj3Open, .PathCreate-Obj3WideOpen, .PathCreate-Obj6ScrollAble, .PathCreate-Obj12;
 	.PathCreate-Obj1 {
 		float: left;
 		width: 30%;
@@ -14,16 +14,25 @@
 	}
 	
 	.PathCreate-Obj3 {
-		margin-bottom: 20px;
+	  	margin-top: 5px;
 		position: relative;
-		border: 2px solid #a1a1a1;
+		border-top: none;
 		background-color: #FCFFFF;
 		border-radius: 10px;
 		height: auto !important;
-		-webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
-		-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
-		box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
-		overflow: hidden;
+		overflow-y: hidden;
+		max-height: 0px; 
+		transition-property: all;
+		transition-duration: .5s;
+		transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+	}
+	
+	.PathCreate-Obj3Open {
+		max-height: 300px;
+	}
+	
+	.PathCreate-Obj3WideOpen {
+		max-height: 500px;
 	}
 	
 	.PathCreate-Obj4 {
@@ -46,8 +55,15 @@
     	-moz-box-sizing: border-box;
     	-webkit-box-sizing: border-box;
     	max-width: 100%;
-    	min-height: 140px;
-    	overflow: hidden;
+    	min-height: 180px;
+    	max-height: 370px;
+    	/* overflow: hidden; */
+    	resize: none;
+	}
+	
+	.PathCreate-Obj6ScrollAble {
+		overflow: visible;
+		overflow-x: hidden;
 	}
 	
 	.PathCreate-Obj7 {
@@ -100,7 +116,7 @@
 	}
 
 	</ui:style>
-	<g:HTMLPanel styleName="{style.PathCreate-Obj3}">
+	<g:HTMLPanel ui:field="container" styleName="{style.PathCreate-Obj3}">
 	
 		<g:HTMLPanel height="" styleName="{style.PathCreate-Obj4}">
 			<table>

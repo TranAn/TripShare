@@ -7,9 +7,11 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.geolocation.client.Geolocation;
 import com.google.gwt.geolocation.client.Position;
 import com.google.gwt.geolocation.client.PositionError;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.maps.gwt.client.Animation;
 import com.google.maps.gwt.client.DirectionsRenderer;
 import com.google.maps.gwt.client.DirectionsRequest;
 import com.google.maps.gwt.client.DirectionsResult;
@@ -24,14 +26,17 @@ import com.google.maps.gwt.client.GeocoderStatus;
 import com.google.maps.gwt.client.GoogleMap;
 import com.google.maps.gwt.client.InfoWindow;
 import com.google.maps.gwt.client.LatLng;
+import com.google.maps.gwt.client.LatLngBounds;
 import com.google.maps.gwt.client.MapOptions;
 import com.google.maps.gwt.client.MapTypeId;
 import com.google.maps.gwt.client.Marker;
 import com.google.maps.gwt.client.Marker.ClickHandler;
+import com.google.maps.gwt.client.MarkerOptions;
 import com.google.maps.gwt.client.MouseEvent;
 import com.google.maps.gwt.client.Polyline;
+import com.google.maps.gwt.client.PolylineOptions;
 import com.google.maps.gwt.client.TravelMode;
-import com.itpro.tripshare.client.TripShare;
+import com.itpro.tripshare.shared.Locate;
 
 public class TravelMap {
 
@@ -67,12 +72,19 @@ public class TravelMap {
 		options.setScaleControl(true);
 		options.setScrollwheel(false);
 		theMap = GoogleMap.create(container.getElement(), options);
+		
 		directionsRenderer = DirectionsRenderer.create();
 		directionsRenderer.setMap(theMap);
-		polyline = Polyline.create();
+		
+		PolylineOptions polyLineOption = PolylineOptions.create();
+		polyLineOption.setStrokeColor("blue");
+		polyLineOption.setStrokeOpacity(0.5);
+		polyLineOption.setStrokeWeight(5.0);
+		polyline = Polyline.create(polyLineOption);
 		polyline.setMap(theMap);
+		
 		container.setSize("100%", "100%");
-		addMaker(officeP, "Trip Share Office");
+		addMarker(officeP, "Trip Share Office", true, true);
 		return new TravelMap();
 	}
 
@@ -117,7 +129,7 @@ public class TravelMap {
 						@Override
 						public void handle(JsArray<GeocoderResult> a, GeocoderStatus b) {
 							String address = a.get(0).getFormattedAddress();
-							addMaker(l, address);
+							addMarker(l, address, true, true);
 							if(listener != null)
 								listener.getCurrentLocation(address, l);
 						}
@@ -132,25 +144,30 @@ public class TravelMap {
 		}
 	}
 
-	public static void addMaker(final LatLng position, final String info) {
-		Marker marker = Marker.create();
+	public static void addMarker(final LatLng position, final String info, boolean isOriginPoint, boolean isOpenInfoWindow) {
+		MarkerOptions markerOption = MarkerOptions.create();
+		markerOption.setAnimation(Animation.DROP);
+		if(!isOriginPoint)
+			markerOption.setIcon("/resources/green-spotlight.png");
+		else
+			markerOption.setIcon("/resources/red-spotlight.png");
+		final Marker marker = Marker.create(markerOption);
 		markers.add(marker);
 		marker.setPosition(position);
 		marker.setMap(theMap);
-//		marker.addClickListener(new ClickHandler() {
-//			@Override
-//			public void handle(MouseEvent event) {
-//				InfoWindow infowindow = InfoWindow.create();
-//				HTMLPanel html = new HTMLPanel(info);
-//				infowindow.setContent(html.getElement());
-//				infowindow.setPosition(position);
-//				infowindow.open(theMap);
-//			}
-//		});
-		InfoWindow infowindow = InfoWindow.create();
+		//set Info window
+		final InfoWindow infowindow = InfoWindow.create();
 		HTMLPanel html = new HTMLPanel(info);
 		infowindow.setContent(html.getElement());
-		infowindow.open(theMap, marker);
+		if(isOpenInfoWindow)
+			infowindow.open(theMap, marker);
+		//marker onclick listener
+		marker.addClickListener(new ClickHandler() {
+			@Override
+			public void handle(MouseEvent event) {
+				infowindow.open(theMap, marker);
+			}
+		});
 	}
 
 	public void findDirection(LatLng originPoint, LatLng destinationPoint, JsArray<DirectionsWaypoint> waypoints) {
@@ -173,16 +190,55 @@ public class TravelMap {
 		});
 	}
 
+	int index;
+	
 	@SuppressWarnings("unchecked")
-	public void drawTheJourney(List<com.itpro.tripshare.shared.Journey.Point> directions) {
+	public void drawTheJourney(final List<com.itpro.tripshare.shared.Journey.Point> directions, final List<Locate> locates) {
 		clearMap();
-		JsArray<LatLng> journey = (JsArray<LatLng>) JsArray.createArray();
-		for (com.itpro.tripshare.shared.Journey.Point p : directions) {
-			journey.push(p.toLatLng());
+		final JsArray<LatLng> journey = (JsArray<LatLng>) JsArray.createArray();
+		//zoom the map
+		LatLngBounds bounds = LatLngBounds.create();
+		for (int i = 0; i < directions.size(); i++) {
+		    bounds.extend(directions.get(i).toLatLng());
 		}
-		TripShare.tripMap.getMap().setCenter(directions.get(0).toLatLng());
-		polyline.setMap(theMap);
-		polyline.setPath(journey);
+		bounds.getCenter();
+		theMap.fitBounds(bounds);
+		//add marker and draw journey
+		index = 0;
+		Timer timer = new Timer() {
+		     @Override
+		     public void run() {		 
+		    	 if(index == locates.size()) {
+		    		polyline.setMap(theMap);
+		    		index = 1;		    		
+		    		Timer timer = new Timer() {
+		    			 @Override
+		    		     public void run() {
+		    				 if(index >= directions.size()) {
+		    					 cancel();
+		    				 }
+		    				 else {
+			    				 journey.setLength(0);
+			    				 for(int i = 0; i <= index; i++) {
+			    					 journey.push(directions.get(i).toLatLng());
+			    				 }
+			    				 polyline.setPath(journey);			    						
+			    				 index++;
+		    				 }		    				 
+		    			 }
+		    		}; timer.scheduleRepeating(5);
+		 			cancel();
+		    	 }
+		    	 else {
+		    		 if(index == 0)
+		    			 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), true, true);
+		    		 else
+		    			 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, true);
+		    		 index++;
+		    	 }
+		     }
+		 };
+		 timer.scheduleRepeating(670);
 	}
 
 }
