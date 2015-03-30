@@ -22,7 +22,7 @@
 	<!-- <inherits name="com.google.gwt.logging.Logging"/> -->
 
 	<!-- Specify the app entry point class. -->
-	<entry-point class='com.itpro.tripshare.client.TripShare' />
+	<entry-point class='com.born2go.client.TripShare' />
 
 	<!-- Specify the paths for translatable code -->
 	<source path='client' />

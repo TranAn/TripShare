@@ -1,4 +1,4 @@
-package com.itpro.tripshare.client.widgets;
+package com.born2go.client.widgets;
 
 /*
 

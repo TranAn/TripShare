@@ -1,8 +1,9 @@
-package com.itpro.tripshare.client.widgets;
+package com.born2go.client.widgets;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.born2go.shared.Locate;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.geolocation.client.Geolocation;
 import com.google.gwt.geolocation.client.Position;
@@ -36,7 +37,6 @@ import com.google.maps.gwt.client.MouseEvent;
 import com.google.maps.gwt.client.Polyline;
 import com.google.maps.gwt.client.PolylineOptions;
 import com.google.maps.gwt.client.TravelMode;
-import com.itpro.tripshare.shared.Locate;
 
 public class TravelMap {
 
@@ -193,7 +193,7 @@ public class TravelMap {
 	int index;
 	
 	@SuppressWarnings("unchecked")
-	public void drawTheJourney(final List<com.itpro.tripshare.shared.Journey.Point> directions, final List<Locate> locates) {
+	public void drawTheJourney(final List<com.born2go.shared.Journey.Point> directions, final List<Locate> locates) {
 		clearMap();
 		final JsArray<LatLng> journey = (JsArray<LatLng>) JsArray.createArray();
 		//zoom the map

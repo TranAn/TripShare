@@ -1,19 +1,19 @@
-package com.itpro.tripshare.client;
+package com.born2go.client;
 
 import org.timepedia.exporter.client.ExporterUtil;
 
+import com.born2go.client.rpc.DataService;
+import com.born2go.client.rpc.DataServiceAsync;
+import com.born2go.client.widgets.CreateTrip;
+import com.born2go.client.widgets.PathView;
+import com.born2go.client.widgets.TravelMap;
+import com.born2go.client.widgets.TravelMap.Listener;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.maps.gwt.client.DirectionsResult;
 import com.google.maps.gwt.client.LatLng;
-import com.itpro.tripshare.client.rpc.DataService;
-import com.itpro.tripshare.client.rpc.DataServiceAsync;
-import com.itpro.tripshare.client.widgets.CreateTrip;
-import com.itpro.tripshare.client.widgets.PathView;
-import com.itpro.tripshare.client.widgets.TravelMap;
-import com.itpro.tripshare.client.widgets.TravelMap.Listener;
 
 public class TripShare implements EntryPoint {
 

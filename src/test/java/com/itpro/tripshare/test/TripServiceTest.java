@@ -4,11 +4,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.born2go.server.DataServiceImpl;
+import com.born2go.shared.Trip;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalTaskQueueTestConfig;
-import com.itpro.tripshare.server.DataServiceImpl;
-import com.itpro.tripshare.shared.Trip;
 
 import static com.itpro.tripshare.test.ObjService.factory;
 

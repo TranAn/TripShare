@@ -1,11 +1,11 @@
-package com.itpro.tripshare.server;
+package com.born2go.server;
 
+import com.born2go.shared.Path;
+import com.born2go.shared.Picture;
+import com.born2go.shared.Trip;
+import com.born2go.shared.User;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.googlecode.objectify.ObjectifyService;
-import com.itpro.tripshare.shared.Path;
-import com.itpro.tripshare.shared.Picture;
-import com.itpro.tripshare.shared.Trip;
-import com.itpro.tripshare.shared.User;
 
 @SuppressWarnings("serial")
 public class DataRegister extends RemoteServiceServlet {

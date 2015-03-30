@@ -1,4 +1,4 @@
-package com.itpro.tripshare.server;
+package com.born2go.server;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
@@ -7,16 +7,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.born2go.client.rpc.DataService;
+import com.born2go.shared.Path;
+import com.born2go.shared.Picture;
+import com.born2go.shared.Trip;
+import com.born2go.shared.User;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.googlecode.objectify.Key;
-import com.itpro.tripshare.client.rpc.DataService;
-import com.itpro.tripshare.shared.Path;
-import com.itpro.tripshare.shared.Picture;
-import com.itpro.tripshare.shared.Trip;
-import com.itpro.tripshare.shared.User;
 
 @SuppressWarnings("serial")
 public class DataServiceImpl extends RemoteServiceServlet implements

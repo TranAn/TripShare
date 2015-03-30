@@ -1,6 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client" xmlns:p2="urn:import:com.itpro.tripshare.client.widgets">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client" xmlns:p2="urn:import:com.born2go.client.widgets">
 	<ui:style>
 	@external .PathCreate-Obj3, .PathCreate-Obj3Open, .PathCreate-Obj3WideOpen, .PathCreate-Obj6ScrollAble, .PathCreate-Obj12;
 	.PathCreate-Obj1 {

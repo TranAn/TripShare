@@ -1,8 +1,12 @@
-package com.itpro.tripshare.client.widgets;
+package com.born2go.client.widgets;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.born2go.client.TripShare;
+import com.born2go.shared.Path;
+import com.born2go.shared.Picture;
+import com.born2go.shared.Trip;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -17,10 +21,6 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.itpro.tripshare.client.TripShare;
-import com.itpro.tripshare.shared.Path;
-import com.itpro.tripshare.shared.Picture;
-import com.itpro.tripshare.shared.Trip;
 import com.google.gwt.user.client.ui.ListBox;
 
 public class PathView extends Composite {
@@ -122,7 +122,7 @@ public class PathView extends Composite {
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
-//				Window.alert("com.itpro.tripshare.client.widgets.TripView log: server response error!");
+//				Window.alert("com.born2go.client.widgets.TripView log: server response error!");
 			}
 		});
 	}

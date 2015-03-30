@@ -1,7 +1,10 @@
-package com.itpro.tripshare.client.widgets;
+package com.born2go.client.widgets;
 
 import java.util.Date;
 
+import com.born2go.client.TripShare;
+import com.born2go.shared.Locate;
+import com.born2go.shared.Path;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -32,9 +35,6 @@ import com.google.maps.gwt.client.GeocoderRequest;
 import com.google.maps.gwt.client.GeocoderResult;
 import com.google.maps.gwt.client.GeocoderStatus;
 import com.google.maps.gwt.client.LatLng;
-import com.itpro.tripshare.client.TripShare;
-import com.itpro.tripshare.shared.Locate;
-import com.itpro.tripshare.shared.Path;
 
 public class PathCreate extends Composite {
 

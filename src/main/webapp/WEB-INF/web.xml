@@ -14,14 +14,14 @@
 	<!-- register objectify -->
 	<servlet>
 		<servlet-name>register</servlet-name>
-		<servlet-class>com.itpro.tripshare.server.DataRegister</servlet-class>
+		<servlet-class>com.born2go.server.DataRegister</servlet-class>
 		<load-on-startup>0</load-on-startup>
 	</servlet>
 
 	<!-- DataStore service -->
 	<servlet>
 		<servlet-name>data_service</servlet-name>
-		<servlet-class>com.itpro.tripshare.server.DataServiceImpl</servlet-class>
+		<servlet-class>com.born2go.server.DataServiceImpl</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>data_service</servlet-name>
@@ -31,7 +31,7 @@
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>PhotoUploadServlet</servlet-name>
-		<servlet-class>com.itpro.tripshare.server.UploadService</servlet-class>
+		<servlet-class>com.born2go.server.UploadService</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>PhotoUploadServlet</servlet-name>

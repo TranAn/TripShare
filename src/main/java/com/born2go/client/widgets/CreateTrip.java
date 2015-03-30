@@ -1,9 +1,14 @@
-package com.itpro.tripshare.client.widgets;
+package com.born2go.client.widgets;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.born2go.client.TripShare;
+import com.born2go.shared.Journey;
+import com.born2go.shared.Locate;
+import com.born2go.shared.Trip;
+import com.born2go.shared.Journey.Point;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
@@ -29,11 +34,6 @@ import com.google.maps.gwt.client.LatLng;
 import com.google.maps.gwt.client.places.Autocomplete;
 import com.google.maps.gwt.client.places.Autocomplete.PlaceChangedHandler;
 import com.google.maps.gwt.client.places.PlaceResult;
-import com.itpro.tripshare.client.TripShare;
-import com.itpro.tripshare.shared.Journey;
-import com.itpro.tripshare.shared.Journey.Point;
-import com.itpro.tripshare.shared.Locate;
-import com.itpro.tripshare.shared.Trip;
 
 public class CreateTrip extends Composite {
 

@@ -1,14 +1,14 @@
 <%@ page import="com.google.gwt.user.client.Window"%>
-<%@ page import="com.itpro.tripshare.shared.Trip"%>
+<%@ page import="com.born2go.shared.Trip"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ page import="java.util.List"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
-<%@ page import="com.itpro.tripshare.shared.Picture"%>
-<%@ page import="com.itpro.tripshare.shared.Journey"%>
-<%@ page import="com.itpro.tripshare.shared.Locate"%>
-<%@ page import="com.itpro.tripshare.server.DataServiceImpl"%>
+<%@ page import="com.born2go.shared.Picture"%>
+<%@ page import="com.born2go.shared.Journey"%>
+<%@ page import="com.born2go.shared.Locate"%>
+<%@ page import="com.born2go.server.DataServiceImpl"%>
 <%@ page import="java.util.ArrayList"%>
 
 <!doctype html>
@@ -178,7 +178,7 @@
 	<br />
 	
 	<div id="footer" style="width: 100%">
-		<center> © Copyright 2015, ITPRO. </center>
+		<center> © Copyright 2015, Born2Go. </center>
 	</div>
 
 </body>

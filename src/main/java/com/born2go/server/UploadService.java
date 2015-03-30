@@ -1,4 +1,4 @@
-package com.itpro.tripshare.server;
+package com.born2go.server;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.born2go.shared.Path;
+import com.born2go.shared.Picture;
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -22,8 +24,6 @@ import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.googlecode.objectify.Key;
-import com.itpro.tripshare.shared.Path;
-import com.itpro.tripshare.shared.Picture;
 
 @SuppressWarnings("serial")
 public class UploadService extends HttpServlet implements Servlet {

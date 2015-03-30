@@ -1,4 +1,4 @@
-package com.itpro.tripshare.shared;
+package com.born2go.shared;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.itpro.tripshare.client;
+package com.born2go.client;
 
 public class AppStorage {
 	

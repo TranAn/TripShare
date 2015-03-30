@@ -1,12 +1,12 @@
-package com.itpro.tripshare.client.export;
+package com.born2go.client.export;
 
 import org.timepedia.exporter.client.Export;
 import org.timepedia.exporter.client.ExportPackage;
 import org.timepedia.exporter.client.Exportable;
 
+import com.born2go.client.TripShare;
+import com.born2go.shared.User;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.itpro.tripshare.client.TripShare;
-import com.itpro.tripshare.shared.User;
 
 @ExportPackage("GWTExport")
 @Export

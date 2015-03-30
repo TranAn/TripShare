@@ -1,12 +1,12 @@
-package com.itpro.tripshare.client.rpc;
+package com.born2go.client.rpc;
 
 import java.util.List;
 
+import com.born2go.shared.Path;
+import com.born2go.shared.Picture;
+import com.born2go.shared.Trip;
+import com.born2go.shared.User;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.itpro.tripshare.shared.Path;
-import com.itpro.tripshare.shared.Picture;
-import com.itpro.tripshare.shared.Trip;
-import com.itpro.tripshare.shared.User;
 
 public interface DataServiceAsync {
 
