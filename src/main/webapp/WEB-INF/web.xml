@@ -3,7 +3,7 @@
 	version="2.5"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee                
 	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-
+	
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>home.html</welcome-file>
@@ -11,12 +11,22 @@
 		<welcome-file>journey.jsp</welcome-file>
 	</welcome-file-list>
 
-	<!-- register objectify -->
+	<!-- Register objectify entity -->
 	<servlet>
 		<servlet-name>register</servlet-name>
 		<servlet-class>com.born2go.server.DataRegister</servlet-class>
 		<load-on-startup>0</load-on-startup>
 	</servlet>
+	
+	<!-- Objectify Filter -->
+	<filter>
+		<filter-name>ObjectifyFilter</filter-name>
+		<filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ObjectifyFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<!-- DataStore service -->
 	<servlet>
@@ -46,5 +56,34 @@
 		<servlet-name>journeyPage</servlet-name>
 		<url-pattern>/journey/*</url-pattern>
 	</servlet-mapping>
+
+	<!-- Appstats -->
+	<filter>
+		<filter-name>appstats</filter-name>
+		<filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>appstats</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>appstats</servlet-name>
+		<servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>appstats</servlet-name>
+		<url-pattern>/born2go/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- <security-constraint>
+		<web-resource-collection>
+			<web-resource-name>appstats</web-resource-name>
+			<url-pattern>/born2go/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint> -->
 
 </web-app>

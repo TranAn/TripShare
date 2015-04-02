@@ -254,6 +254,7 @@ public class CreateTrip extends Composite {
 				@Override
 				public void onSuccess(Trip result) {
 					Window.alert("!: Hãy xắp xếp đồ đạc và chuẩn bị lên đường nào.");
+					Window.Location.assign("/journey/"+ result.getId());
 				}
 				
 				@Override

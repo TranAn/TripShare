@@ -31,6 +31,8 @@ public interface DataServiceAsync {
 	void removePart(Long idPart, AsyncCallback<Void> callback);
 
 	// user
+	void verifiedUser(String accessToken, AsyncCallback<Void> callback) throws Exception;
+	
 	void insertUser(User user, AsyncCallback<Void> callback);
 
 	void findUser(String idUser, AsyncCallback<User> callback);

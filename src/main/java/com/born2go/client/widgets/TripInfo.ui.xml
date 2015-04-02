@@ -1,0 +1,123 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client"
+	xmlns:p2="urn:import:com.born2go.client.widgets">
+	<ui:style>
+	@external .TripInfo-Obj3Edit, .TripInfo-Obj5, .TripInfo-Obj4, .TripInfo-Obj6, .TripInfo-Obj8Edit, .TripInfo-Disable;
+	.TripInfo-Obj1 {
+		width: 500px;
+		height: 100%;
+		margin-left: 10px;
+		min-height: 350px;
+		max-height: 500px;
+		border: 1px solid gray;
+		display: block;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+		background-color: rgba(48, 27, 12, 1);
+		overflow: hidden;
+	}
+	
+	.TripInfo-Obj2 {
+		color: gray;
+		padding: 5px 8px;
+		text-shadow: none;
+	}
+	
+	.TripInfo-Obj3 {
+		margin-bottom: 20px;
+		font-size: 30px;
+		font-family: museo-w01-700, serif;
+		color: rgb(56, 119, 127);
+		padding: 6px;
+		width: 95%;
+	}
+	
+	.TripInfo-Obj3Edit {	
+		font-size: 25px;
+	}
+	
+	.TripInfo-Obj4 {
+		font-size: 15px;
+		margin-left: 5px;
+		min-width: 70%;
+		margin-bottom: 15px;
+	}
+	
+	.TripInfo-Obj5 {
+		width: 22px;
+		height: 30px;
+		vertical-align: top;
+	}
+	
+	.TripInfo-Obj6 {
+		font-size: 15px;
+		margin-left: 9px;
+		min-width: 70%;
+		margin-bottom: 15px;
+	}
+	
+	.TripInfo-Obj7 {
+		font-size: 15px;
+		width: 95%;
+		margin-bottom: 15px;
+	}
+	
+	.TripInfo-Obj8 {
+		font-size: 15px;
+		width: 99%;
+		resize: none;
+		padding: 5px;
+	}
+	
+	.TripInfo-Obj8Edit {
+		margin-bottom: 15px;
+		min-height: 150px;
+	}
+	
+	.TripInfo-Disable {
+		border: none;
+  		padding: 0px;
+  		pointer-events: none;
+	}
+	</ui:style>
+	<g:HTMLPanel>
+		<g:HTMLPanel>
+			<img src="/resources/1411646988_note2.png" width="36px" height="36px"
+				style="position: absolute; top: 4px; right: 2px; z-index: 1;" />
+
+			<table>
+				<tr>
+					<td valign="top" style="width:100%">
+						<g:TextBox
+							styleName="gwt-TextBox font-blackTitleLarge {style.TripInfo-Obj3} TripInfo-Obj3Edit"
+							ui:field="txbName"></g:TextBox>
+						<div class="font-blackTitleLarge">Hành trình:</div>
+						<div class="trip-destinations">
+							<img src="/resources/red-spotlight.png" style="width:22px;height:30px;vertical-align: top;" />
+							<g:TextBox ui:field="txbOrigin" styleName="gwt-TextBox {style.TripInfo-Obj4}"></g:TextBox>
+						</div>
+						<g:HTMLPanel ui:field="htmlDestinationTable"></g:HTMLPanel>
+						<g:Anchor ui:field="btnAddPart" styleName="greenbutton {style.TripInfo-Obj2}">
+							<i class="fa fa-plus fa-lg"></i>
+						</g:Anchor>
+						<div class="font-blackTitleLarge" style="margin-top:25px;">Ngày khởi hành:</div>
+						<p1:DateBox ui:field="txbDepartureDate"
+							styleName="gwt-TextBox {style.TripInfo-Obj7}" />
+					</td>
+					<td valign="top" height="1">
+						<g:HTMLPanel ui:field="mapTable" styleName="{style.TripInfo-Obj1}"></g:HTMLPanel>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div class="font-blackTitleLarge" style="margin-top:30px;">Giới thiệu về chuyến
+							đi:</div>
+						<p2:StretchyTextArea ui:field="txbDescription"
+							styleName="gwt-TextBox {style.TripInfo-Obj8} TripInfo-Obj8Edit" />
+					</td>
+				</tr>
+			</table>
+
+		</g:HTMLPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

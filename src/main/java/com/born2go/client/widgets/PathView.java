@@ -8,10 +8,13 @@ import com.born2go.shared.Path;
 import com.born2go.shared.Picture;
 import com.born2go.shared.Trip;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ScrollEvent;
@@ -20,8 +23,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.maps.gwt.client.DirectionsResult;
 
 public class PathView extends Composite {
 
@@ -53,11 +58,20 @@ public class PathView extends Composite {
 	Anchor btnComment;
 	@UiField 
 	ListBox listArrange;
+	@UiField 
+	HTMLPanel editToolbar;
+	@UiField 
+	Anchor btnSave;
+	@UiField 
+	Anchor btnCancel;
 	
 	Long tripId;
+	TripInfo tripInfo;
 	PathCreate pathCreate = new PathCreate();
 	PhotoUpload photoUpload = new PhotoUpload();
 	List<PathDetail> listPathsDetail = new ArrayList<PathDetail>();
+	
+	private Trip theTrip;
 
 	public PathView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -107,6 +121,10 @@ public class PathView extends Composite {
 		});
 	}
 	
+	public void setDirectionResult(DirectionsResult directionResult) {
+		tripInfo.setDirectionResult(directionResult);
+	}
+	
 	public void getTrip(Long tripId) {
 		this.tripId = tripId;
 		TripShare.dataService.findTrip(tripId, new AsyncCallback<Trip>() {
@@ -114,6 +132,7 @@ public class PathView extends Composite {
 			@Override
 			public void onSuccess(Trip result) {
 				if(result != null) {
+					theTrip = result;
 					TripShare.tripMap.drawTheJourney(result.getJourney().getDirections(), result.getJourney().getLocates());
 					getThePaths(result.getDestination());
 				}
@@ -175,6 +194,16 @@ public class PathView extends Composite {
 
 	@UiHandler("btnEdit")
 	void onBtnEditClick(ClickEvent event) {
+		Window.scrollTo(0, 0);
+		htmlPathToolbar.addStyleName("PathView-Obj13");
+		htmlPathTable.setVisible(false);
+		htmlPathCreate.setVisible(false);
+		toolbar.setVisible(false);
+		editToolbar.setVisible(true);
+		DOM.getElementById("tripInfo").setInnerHTML("");
+		tripInfo = new TripInfo();
+		RootPanel.get("tripInfo").add(tripInfo);
+		tripInfo.setTrip(theTrip);
 	}
 
 	@UiHandler("btnPost")
@@ -214,4 +243,24 @@ public class PathView extends Composite {
   		viewer.add('http://s13.postimg.org/6p1f1m1iv/spiral_galaxy_2880x1800.jpg');
   		viewer.show(0);
 	}-*/;
+	
+	@UiHandler("btnSave")
+	void onBtnSaveClick(ClickEvent event) {
+		tripInfo.updateTrip();
+	}
+	
+	@UiHandler("btnCancel")
+	void onBtnCancelClick(ClickEvent event) {
+		Window.scrollTo(0, 0);
+		htmlPathTable.setVisible(true);
+		htmlPathCreate.setVisible(true);
+		toolbar.setVisible(true);
+		editToolbar.setVisible(false);
+		htmlPathToolbar.removeStyleName("PathView-Obj13");
+		for(PathDetail pathDetail: listPathsDetail) {
+			pathDetail.setStyleName("PathDetail-Obj1");
+		}
+		tripInfo.setTrip(theTrip);
+		tripInfo.setDisable();
+	}
 }

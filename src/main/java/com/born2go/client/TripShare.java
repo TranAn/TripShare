@@ -19,7 +19,6 @@ public class TripShare implements EntryPoint {
 
 	public static TravelMap tripMap = TravelMap.create();
 	public static final DataServiceAsync dataService = GWT.create(DataService.class);
-	public static final AppStorage appStorage = new AppStorage();
 
 	static final CreateTrip createTrip = new CreateTrip();
 	static final PathView pathView = new PathView();
@@ -28,8 +27,13 @@ public class TripShare implements EntryPoint {
 	public void onModuleLoad() {
 		if (RootPanel.get("tripMap") != null)
 			RootPanel.get("tripMap").add(tripMap.getMapView());
-		if (RootPanel.get("createTrip") != null)
+		
+		if (RootPanel.get("createTrip") != null) {
 			RootPanel.get("createTrip").add(createTrip);
+//			createTrip.setVisible(false);
+//			createTrip.setVisible(true);
+		}
+		
 		if (RootPanel.get("tripcontent") != null) {
 			String tripId = Window.Location.getPath().replaceAll("/journey/", "");
 			if(tripId.length() != 0) {
@@ -48,12 +52,16 @@ public class TripShare implements EntryPoint {
 			
 			@Override
 			public void getDirectionResult(DirectionsResult directionResult) {
-				createTrip.setDirectionResult(directionResult);
+				if (RootPanel.get("createTrip") != null) 
+					createTrip.setDirectionResult(directionResult);
+				if (RootPanel.get("tripcontent") != null) 
+					pathView.setDirectionResult(directionResult);
 			}
 			
 			@Override
 			public void getCurrentLocation(String address, LatLng position) {
-				createTrip.setYourLocation(address, position);
+				if (RootPanel.get("createTrip") != null) 
+					createTrip.setYourLocation(address, position);
 			}
 		});
 	}

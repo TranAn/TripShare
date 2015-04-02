@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
-	@external .PathView-Obj3, .PathView-Obj4;
+	@external .PathView-Obj3, .PathView-Obj4, .PathView-Obj13;
 	.PathView-Obj1 {
 		margin: auto;
 		padding: 20px 0px;
@@ -61,6 +61,25 @@
 	.PathView-Obj8 {
 		border: 1px silver solid;
 	}
+	
+	.PathView-Obj9 {
+		color: aliceblue;
+  		padding: 6px 50px;
+  		margin-left: 10px;
+	}
+	
+	.PathView-Obj10 {
+		margin: auto;
+	}
+	
+	.PathView-Obj12 {
+		margin: auto;
+		padding: 20px 0px;
+	}
+	
+	.PathView-Obj13 {
+		margin-bottom: 0px;
+	}
 	</ui:style>
 	<g:HTMLPanel>
 		<g:HTMLPanel ui:field="htmlPathToolbarFixed" styleName="{style.PathView-Obj4}"></g:HTMLPanel>
@@ -77,6 +96,12 @@
 				<g:HorizontalPanel styleName="{style.PathView-Obj6}">
 					<g:Label text="Arrange by:" styleName="{style.PathView-Obj7} font-blackTitleNormal" />
 					<g:ListBox styleName="gwt-ListBox {style.PathView-Obj8}" height="30px" width="140px" ui:field="listArrange"/>
+				</g:HorizontalPanel>
+			</g:HTMLPanel>
+			<g:HTMLPanel ui:field="editToolbar" styleName="{style.PathView-Obj12}" height="" visible="false">
+				<g:HorizontalPanel styleName="{style.PathView-Obj10}">
+					<g:Anchor ui:field="btnSave"  styleName="greenbutton {style.PathView-Obj9}" ><i style="margin-right:5px;" class="fa fa-floppy-o fa-lg"></i> Save</g:Anchor>
+					<g:Anchor ui:field="btnCancel"  styleName="greenbutton {style.PathView-Obj9}" ><i style="margin-right:5px;" class="fa fa-ban fa-lg"></i> Cancel</g:Anchor>
 				</g:HorizontalPanel>
 			</g:HTMLPanel>
 			<g:HTMLPanel ui:field="htmlPathCreate"></g:HTMLPanel>

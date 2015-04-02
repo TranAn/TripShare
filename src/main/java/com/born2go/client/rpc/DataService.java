@@ -33,6 +33,8 @@ public interface DataService extends RemoteService {
 	public void removePart(Long idPart);
 
 	// user
+	public void verifiedUser(String accessToken) throws Exception;
+	
 	public void insertUser(User user);
 
 	public User findUser(String idUser);

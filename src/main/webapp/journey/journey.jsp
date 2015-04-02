@@ -115,7 +115,7 @@
 	
 	<!-- Add Content here -->
 	<div id="content">
-		<div class="tripInfo">
+		<div id="tripInfo" class="tripInfo">
 			<div>
 				<%!public void redirectHomeUrl(HttpServletResponse response) {
 					String site = new String("/");
@@ -155,12 +155,17 @@
 								%>
 									<div class="font-blackTitleLarge" style="margin-top:25px;">Ngày khởi hành:</div>
 									<div style="font-size:15px;"><%= trip.getDepartureDate() %></div>
-									<div class="font-blackTitleLarge" style="margin-top:30px;">Giới thiệu về chuyến đi:</div>
-									<div style="font-size:15px; line-height: 1.8em; white-space: pre-line;"><%= trip.getDescription() %></div>
+									
 								</td>
-								<td height="1">
-									<div id="tripMap" class="tripMap" style="width: 500px; height: 100%; margin-left: 10px; min-height: 450px; border:1px solid gray;"></div>
+								<td valign="top" height="1">
+									<div id="tripMap" class="tripMap" style="width: 500px; height: 100%; margin-left: 10px; min-height: 350px; max-height: 500px; border:1px solid gray;"></div>
 								</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<div class="font-blackTitleLarge" style="margin-top:30px;">Giới thiệu về chuyến đi:</div>
+										<div style="font-size:15px; line-height: 1.8em; white-space: pre-line;"><%= trip.getDescription() %></div>
+									</td>
 								</tr>
 								</table>
 							<% 
