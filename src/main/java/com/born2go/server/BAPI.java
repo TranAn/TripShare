@@ -1,6 +1,9 @@
 package com.born2go.server;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -17,6 +20,13 @@ public class BAPI extends HttpServlet implements Servlet{
 	private static final long serialVersionUID = 1L;
 	DataServiceImpl dataService = new DataServiceImpl();
 	
+	/**
+	 * Supported Actions:
+	 * getTrip: Return json data
+	 * getPath: Return html
+	 * getSetting: Return json data of current version, min mobile app version, adv rate (%) ....
+	 * 			{"version":"10","minversion":"7","advrate":"0"}
+	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
 			IOException {
@@ -28,22 +38,50 @@ public class BAPI extends HttpServlet implements Servlet{
 			
 			if (action.compareToIgnoreCase("getPath") == 0){
 				result = getPathContentByID(Long.parseLong(id));
-				resp.setContentType("text/html");
-				resp.getWriter().write(result);
+				resp.setContentType("text/html; charset=utf-8");
 			}
 			else if (action.compareToIgnoreCase("getTrip") == 0){
 				result = getTripByID(Long.parseLong(id));
-				resp.setContentType("text/json");
-				resp.getWriter().write(result);
+				resp.setContentType("application/json; charset=utf-8");
+			}
+			else if (action.compareToIgnoreCase("getSetting") == 0){
+				resp.setContentType("application/json; charset=utf-8");
+				result = getSetting();
 			}
 			else{
-				resp.getWriter().write("This command is not supported yet. Check again!");
+				result = "This command is not supported yet. Check again!";
 			}
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		resp.getWriter().write(result);
 	}
+	
+    //NOTICE NOTICE NOTICE
+	//GAE supports gzip natively, so code here for reference only
+	// Choose GZIP if the header includes "gzip"
+	/*PrintWriter out = null;
+
+	String encodings = req.getHeader("Accept-Encoding");
+    //Test code
+    if (encodings == null) encodings = "gzip, deflate, sdch";
+    
+    if (encodings != null && encodings.indexOf("gzip") != -1) {
+      // Go with GZIP
+      resp.setHeader("Content-Encoding", "gzip");
+      out = new PrintWriter(new GZIPOutputStream(resp.getOutputStream()),false);
+      result = "Trying ZIP! " + result;
+    }
+    else {
+      // No compression
+      out = resp.getWriter();
+      result = "No Encoding! " + encodings + result;
+    }
+    resp.setHeader("Vary", "Accept-Encoding");
+    resp.setHeader("Born2Go", "Welcome");
+    out.write(result);*/
+	
 	/**
 	 * 
 	 * @param id
@@ -76,10 +114,17 @@ public class BAPI extends HttpServlet implements Servlet{
 		Trip trip = dataService.findTrip(id);
 		if (trip != null){
 			Gson gson = new Gson();
-			json = gson.toJson(trip);
+			json = gson.toJson(trip.getDescription());
+			json += gson.toJson(trip);
 		} else{
 			json = "{\"status\": false,\"error\": \"Trip ID: " + id + "doesn't exist\"}";
 		}
 		return json;
+	}
+	
+	private String getSetting(){
+		String result = "";
+		result = "{\"version\":\"10\",\"minversion\":\"7\",\"advrate\":\"0\"}";//Test setting only
+		return result;
 	}
 }
