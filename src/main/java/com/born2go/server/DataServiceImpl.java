@@ -11,9 +11,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import com.born2go.client.rpc.DataService;
 import com.born2go.shared.Path;
 import com.born2go.shared.Picture;
+import com.born2go.shared.Poster;
 import com.born2go.shared.Trip;
 import com.born2go.shared.User;
 import com.google.appengine.api.blobstore.BlobstoreService;
@@ -28,11 +31,20 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	private Trip exportTrip = null;
 
 	@Override
-	public Trip insertTrip(Trip trip) {
-		trip.setCreateDate(new Date());
-		Key<Trip> key = ofy().save().entity(trip).now();
-		exportTrip = ofy().load().key(key).now();
-		return exportTrip;
+	public Trip insertTrip(Trip trip, String accessToken) {
+		try {
+			if(accessToken != null) {
+				Poster poster = getPoster(accessToken);
+				trip.setPoster(poster);
+			}
+			trip.setCreateDate(new Date());
+			Key<Trip> key = ofy().save().entity(trip).now();
+			exportTrip = ofy().load().key(key).now();
+			return exportTrip;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
@@ -68,15 +80,24 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	private Path exportPart = null;
 
 	@Override
-	public Path insertPart(Path part, Long tripId) {
+	public Path insertPart(Path part, Long tripId, String accessToken) {
 		Trip trip = ofy().load().type(Trip.class).id(tripId).now();
 		if(trip != null) {
-//			part.setCreateDate(new Date());
-			Key<Path> key = ofy().save().entity(part).now();
-			exportPart = ofy().load().key(key).now();
-			trip.getDestination().add(exportPart.getId());
-			ofy().save().entity(trip);
-			return exportPart;
+			try {
+				if(accessToken != null) {
+					Poster poster = getPoster(accessToken);
+					part.setPoster(poster);
+				}
+				Key<Path> key = ofy().save().entity(part).now();
+				exportPart = ofy().load().key(key).now();
+				//--
+				trip.getDestination().add(exportPart.getId());
+				ofy().save().entity(trip);
+				return exportPart;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
 		}
 		else
 			return null;
@@ -117,8 +138,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 
 	private User exportUser = null;
 
-	@Override
-	public void verifiedUser(String accessToken) throws Exception{
+	public Poster getPoster(String accessToken) throws Exception{
 		String url = "https://graph.facebook.com/me?access_token=" + accessToken;
 		 
 		URL obj = new URL(url);
@@ -144,7 +164,12 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		in.close();
  
 		//print result
-		System.out.println(response.toString());
+		JSONObject myObj = new JSONObject(response.toString());
+		Poster poster = new Poster();
+		poster.setUserID(myObj.getLong("id"));
+		poster.setUserName(myObj.getString("first_name")+ " "+ myObj.getString("last_name"));
+		
+		return poster;
 	}
 
 	@Override
@@ -195,6 +220,13 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	public Picture findPicture(Long idPicture) {
 		Picture p = ofy().load().type(Picture.class).id(idPicture).now();
 		return p;
+	}
+
+	@Override
+	public List<Picture> listPicture(List<Long> idsPicture) {
+		Map<Long, Picture> mapPaths = ofy().load().type(Picture.class).ids(idsPicture);
+		List<Picture> result = new ArrayList<Picture>(mapPaths.values());
+		return result;
 	}
 
 	@Override

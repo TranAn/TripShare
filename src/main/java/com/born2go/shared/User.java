@@ -6,20 +6,19 @@ import java.util.List;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
-import com.googlecode.objectify.annotation.Unindex;
 
 @SuppressWarnings("serial")
 @Entity(name = "User")
-@Unindex
 public class User implements Serializable {
-	@Index
+
 	@Id
 	String id;
-	@Index
-	List<Long> myTrip = new ArrayList<Long>();
-	@Index
-	String accessToken;
+	
+	List<Long> myTrips = new ArrayList<Long>();
+
+	public User() {
+		super();
+	}
 
 	public String getId() {
 		return id;
@@ -29,19 +28,12 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public List<Long> getMyTrip() {
-		return myTrip;
+	public List<Long> getMyTrips() {
+		return myTrips;
 	}
 
-	public void setMyTrip(List<Long> myTrip) {
-		this.myTrip = myTrip;
+	public void setMyTrips(List<Long> myTrips) {
+		this.myTrips = myTrips;
 	}
 
-	public String getAccessToken() {
-		return accessToken;
-	}
-
-	public void setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
-	}
 }

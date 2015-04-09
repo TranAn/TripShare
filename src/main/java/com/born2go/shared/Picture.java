@@ -17,6 +17,10 @@ public class Picture implements Serializable {
 
 	String key;
 	String serveUrl;
+	
+	public Picture() {
+		super();
+	}
 
 	public Long getId() {
 		return id;

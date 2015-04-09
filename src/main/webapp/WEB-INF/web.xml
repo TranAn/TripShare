@@ -49,12 +49,31 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>RESTful</servlet-name>
+		<servlet-class>com.born2go.server.BAPI</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RESTful</servlet-name>
+		<url-pattern>/api</url-pattern>
+	</servlet-mapping>
+	
+	<!-- JSP Servlet -->
+	<servlet>
 		<servlet-name>journeyPage</servlet-name>
 		<jsp-file>/journey/journey.jsp</jsp-file>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>journeyPage</servlet-name>
 		<url-pattern>/journey/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>MobileWeb</servlet-name>
+		<jsp-file>/mobile/mView.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MobileWeb</servlet-name>
+		<url-pattern>/mobile/*</url-pattern>
 	</servlet-mapping>
 
 	<!-- Appstats -->

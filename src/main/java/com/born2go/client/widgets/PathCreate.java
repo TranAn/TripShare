@@ -7,6 +7,8 @@ import com.born2go.shared.Locate;
 import com.born2go.shared.Path;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.geolocation.client.Geolocation;
 import com.google.gwt.geolocation.client.Position;
@@ -35,6 +37,9 @@ import com.google.maps.gwt.client.GeocoderRequest;
 import com.google.maps.gwt.client.GeocoderResult;
 import com.google.maps.gwt.client.GeocoderStatus;
 import com.google.maps.gwt.client.LatLng;
+import com.google.maps.gwt.client.places.Autocomplete;
+import com.google.maps.gwt.client.places.PlaceResult;
+import com.google.maps.gwt.client.places.Autocomplete.PlaceChangedHandler;
 
 public class PathCreate extends Composite {
 
@@ -63,6 +68,8 @@ public class PathCreate extends Composite {
 
 	public interface Listener {
 		void onClose();
+		
+		void createPathSuccess(Long newPathId);
 	}
 	
 	private Listener listener;
@@ -82,6 +89,7 @@ public class PathCreate extends Composite {
 		boxTripId.setName("tripId");
 		boxPathId.setName("pathId");
 		
+		formUpload.getElement().setAttribute("id", "formUpload");
 		pathPhotoUpload.getElement().setAttribute("id", "pathPhotoUpload");
 		htmlPathPhotos.getElement().setAttribute("id", "htmlPathPhotos");
 		scrollPathPhotos.getElement().setAttribute("id", "scrollPathPhotos");
@@ -95,7 +103,19 @@ public class PathCreate extends Composite {
 			
 			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event) {
-				formUpload.reset();
+				TripShare.loadBox.hide();
+				if(listener != null)
+					listener.createPathSuccess(boxPathId.getValue());
+				cancelPost();
+			}
+		});
+		
+		final Autocomplete autocomplete = Autocomplete.create(
+				(InputElement) (Element) txbLocation.getElement());
+		autocomplete.addPlaceChangedListener(new PlaceChangedHandler() {
+			public void handle() {
+				PlaceResult place = autocomplete.getPlace();
+				locate.setLatLng(place.getGeometry().getLocation());
 			}
 		});
 		
@@ -125,6 +145,7 @@ public class PathCreate extends Composite {
 			$wnd.document.getElementById('htmlPathPhotos').innerHTML = "";
 			$wnd.document.getElementById('scrollPathPhotos').style.height = "0px";
 			$wnd.document.getElementById('lbCountPhotos').innerHTML = "0 / Photos";
+			$wnd.document.getElementById('formUpload').reset();
 		}
 		
 		function handleFileSelect(evt) {
@@ -201,20 +222,21 @@ public class PathCreate extends Composite {
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
+				TripShare.loadBox.hide();
+				Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
 			}
 		});
 	}
 	
 	@UiHandler("btnPost")
 	void onBtnPostClick(ClickEvent event) {
+		TripShare.loadBox.center();
 		Path path = new Path();
 		locate.setAddressName(txbLocation.getText());
 		path.setLocate(locate);
 		path.setCreateDate(txbTimeline.getValue());
 		path.setDescription(txbDescription.getValue());
-		TripShare.dataService.insertPart(path, tripId, new AsyncCallback<Path>() {
+		TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
 			
 			@Override
 			public void onSuccess(Path result) {
@@ -223,15 +245,13 @@ public class PathCreate extends Composite {
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
+				TripShare.loadBox.hide();
+				Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
 			}
 		});
 	}
-
-	@UiHandler("btnCancel")
-	void onBtnCancelClick(ClickEvent event) {
-//		this.setVisible(false);
+	
+	void cancelPost() {
 		this.setStyleName("PathCreate-Obj3");
 		txbLocation.setText("");
 		txbTimeline.getElement().setInnerHTML("");
@@ -243,6 +263,11 @@ public class PathCreate extends Composite {
 		locate = new Locate();
 		if(listener != null)
 			listener.onClose();
+	}
+
+	@UiHandler("btnCancel")
+	void onBtnCancelClick(ClickEvent event) {
+		cancelPost();
 	}
 	
 	@UiHandler("btnFindYourLocation") 

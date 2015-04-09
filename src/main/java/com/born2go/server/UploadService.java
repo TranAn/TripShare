@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.born2go.shared.Path;
 import com.born2go.shared.Picture;
+import com.born2go.shared.Trip;
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -48,15 +49,22 @@ public class UploadService extends HttpServlet implements Servlet {
 				String encodedFilename = URLEncoder.encode(blobInfo.getFilename(), "utf-8");
 		    	encodedFilename.replaceAll("\\+", "%20");
 		    	// set fileupload info
-		    	file.setOnTrip(Long.valueOf(req.getParameter("tripId").replaceAll(",", "")));
-		    	file.setOnPath(Long.valueOf(req.getParameter("pathId").replaceAll(",", "")));
+		    	if(req.getParameter("tripId") != null)
+		    		file.setOnTrip(Long.valueOf(req.getParameter("tripId").replaceAll(",", "")));
+		    	if(req.getParameter("pathId") != null)
+		    		file.setOnPath(Long.valueOf(req.getParameter("pathId").replaceAll(",", "")));
 		    	file.setKey(key.getKeyString());
 		    	file.setServeUrl(imagesService.getServingUrl(ServingUrlOptions.Builder.withBlobKey(key)) + "=s1600");
 				Key<Picture> keyPicture = ofy().save().entity(file).now();
 				Picture exportPicture = ofy().load().key(keyPicture).now();
 				
-				if(req.getParameter("pathId").isEmpty()) {
-					
+				if(req.getParameter("pathId") ==  null || req.getParameter("pathId").isEmpty()) {
+					Long tripid = Long.valueOf(req.getParameter("tripId").replaceAll(",", ""));
+					Trip trip = ofy().load().type(Trip.class).id(tripid).now();
+					if(trip != null) {
+						trip.getGallery().add(exportPicture.getId());
+						ofy().save().entity(trip);
+					}
 				}
 				else {
 					Long pathid = Long.valueOf(req.getParameter("pathId").replaceAll(",", ""));

@@ -19,7 +19,7 @@ public class Trip implements Serializable {
 	@Id
 	Long id;
 	
-	Long owner;
+	Poster poster;
 	List<Long> companion = new ArrayList<Long>();
 	List<Long> destination = new ArrayList<Long>();
 	List<Long> gallery = new ArrayList<Long>();
@@ -30,6 +30,10 @@ public class Trip implements Serializable {
 	String description;
 	Journey journey;
 	TripStatus status;
+	
+	public Trip() {
+		super();
+	}
 
 	public Journey getJourney() {
 		return journey;
@@ -47,12 +51,12 @@ public class Trip implements Serializable {
 		this.id = id;
 	}
 
-	public Long getOwner() {
-		return owner;
+	public Poster getPoster() {
+		return poster;
 	}
 
-	public void setOwner(Long owner) {
-		this.owner = owner;
+	public void setPoster(Poster poster) {
+		this.poster = poster;
 	}
 
 	public List<Long> getCompanion() {

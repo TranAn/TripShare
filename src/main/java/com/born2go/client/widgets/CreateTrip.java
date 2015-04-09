@@ -6,9 +6,9 @@ import java.util.List;
 
 import com.born2go.client.TripShare;
 import com.born2go.shared.Journey;
+import com.born2go.shared.Journey.Point;
 import com.born2go.shared.Locate;
 import com.born2go.shared.Trip;
-import com.born2go.shared.Journey.Point;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
@@ -18,6 +18,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -244,21 +245,23 @@ public class CreateTrip extends Composite {
 	@UiHandler("btnCreateTrip")
 	void onBtnCreateTripClick(ClickEvent event) {
 		if(VerifiedField()) {
+			TripShare.loadBox.center();
 			Trip trip = new Trip();
 			trip.setName(txbName.getText());
 			trip.setDepartureDate(txbDeparture.getValue());
 			trip.setDescription(txbDescription.getText());
 			trip.setJourney(getJourney());
-			TripShare.dataService.insertTrip(trip, new AsyncCallback<Trip>() {
+			TripShare.dataService.insertTrip(trip, TripShare.access_token, new AsyncCallback<Trip>() {
 				
 				@Override
 				public void onSuccess(Trip result) {
-					Window.alert("!: Hãy xắp xếp đồ đạc và chuẩn bị lên đường nào.");
+					TripShare.loadBox.hide();
 					Window.Location.assign("/journey/"+ result.getId());
 				}
 				
 				@Override
 				public void onFailure(Throwable caught) {
+					TripShare.loadBox.hide();
 					Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
 				}
 			});

@@ -1,9 +1,10 @@
 window.fbAsyncInit = function() {
     FB.init({
-      appId      : '1636504239911870',
+      appId      : '386540048195283',
       xfbml      : true,
       version    : 'v2.3'
     });
+    checkUserLogin();
 };
 
 (function(d, s, id){
@@ -13,6 +14,7 @@ window.fbAsyncInit = function() {
     js.src = "//connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
+
   
 function checkUserLogin() {
 	FB.getLoginStatus(function(response) {
@@ -32,12 +34,15 @@ function checkUserLogin() {
 
 
 function saveCookie(accessToken) {
-	document.cookie="access_token=" + accessToken;
+	var path = window.location.pathname;
+	if(path == "/")
+		document.cookie="access_token=" + accessToken;
 }
 
 function loginFacebook() {
 	FB.login(function(response) {
 		if (response.authResponse) {
+			var userId = response.authResponse.userID;
 			var accessToken = response.authResponse.accessToken;	
 			saveCookie(accessToken);
 		    //rpc call save new user

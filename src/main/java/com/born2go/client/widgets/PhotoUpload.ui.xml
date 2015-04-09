@@ -2,9 +2,19 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
-	@external .PhotoUpload-Obj2, .PhotoUpload-Obj3;
+	@external .PhotoUpload-Obj2, .PhotoUpload-Obj3, .PhotoUpload-Obj10, .PhotoUpload-Obj11, .PhotoUploadDialog;
+	.PhotoUploadDialog {
+		background: #FCFFFF;
+		border: 2px solid #a1a1a1;
+		-webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+		-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+		box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+	}
+	
 	.PhotoUpload-Obj1 {
-		display: none;
+		background-color: #f6f7f8;
+		border: 1px #e9eaed solid;
+		padding: 15px;
 	}
 	
 	.PhotoUpload-Obj2 {
@@ -29,19 +39,106 @@
   		border: 1px solid gray;
 		margin: 10px 5px 0 0;
 	}
+	
+	.PhotoUpload-Obj4 {
+		float: right;
+		margin-right: 5px;
+	}
+	
+	.PhotoUpload-Obj5 {
+		color: aliceblue;
+  		padding: 6px 10px;
+  		margin-left: 10px;
+  		float: right;
+  		margin-top: 3px;
+  		margin-right: 7px;
+	}
+	
+	.PhotoUpload-Obj6 {
+		background-color: #f6f7f8;
+		border: 1px #e9eaed solid;
+		padding: 8px;
+	}
+	
+	.PhotoUpload-Obj7 {
+		float: left;
+		margin-left: 5px;
+		font-size: 14px;
+		color: silver;
+		margin-top: 8px;
+	}
+	
+	.PhotoUpload-Obj8 {
+		overflow-y: hidden !important; 
+	}
+	
+	.PhotoUpload-Obj9 {
+		margin-left: 10px;
+		white-space: nowrap;
+	}
+	
+	.PhotoUpload-Obj10 {
+		display: block;
+		margin-top: 15px;
+		border: 1px dashed Black;
+		color: silver;
+		cursor: pointer;
+		float: left;
+		margin-right: 5px;
+	}
+	
+	.PhotoUpload-Obj10:hover {
+		background: aliceblue;
+		color: silver;
+	}
+	
+	.PhotoUpload-Obj11 {
+		max-width: 125px;
+		max-height: 102px;
+		height: 102px;
+ 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  		background-color: rgba(48, 27, 12, 1);
+  		overflow: hidden;
+  		border: 1px solid gray;
+		margin: 13px 5px 0 0;
+	}
+	
+	.PhotoUpload-Obj12 {
+		float: left;
+	}
+	
+	.PhotoUpload-Obj13 {
+		float: left;
+		margin-left: 10px;
+	}
 	</ui:style>
-	<g:HTMLPanel width="550px" height="205px">
-		<center>
-			<label for="fileUpload" class="PhotoUpload-Obj2">
-				<i class="fa fa-cloud-upload"></i>
-				Upload Photos
-			</label>
-		</center>
-		<g:FormPanel>
-			<g:FileUpload width="100%" height="100%"
-				styleName="{style.PhotoUpload-Obj1}" ui:field="fileUpload" />
+	<g:HTMLPanel width="650px" height="">
+		<g:HTMLPanel height="16px" styleName="{style.PhotoUpload-Obj1}" width="">
+			<g:Label text="Upload Photos" styleName="font-blackTitleNormal {style.PhotoUpload-Obj12}"/>
+			<g:Image url="/resources/loading.gif" styleName="{style.PhotoUpload-Obj13}" width="30px" height="18px" ui:field="imgUploading" visible="false"/>
+		</g:HTMLPanel>
+		
+		<g:FormPanel visible="false" ui:field="formUpload">
+			<g:HTMLPanel>
+				<g:LongBox ui:field="boxTripId" /> 
+				<g:FileUpload width="100%" height="100%" ui:field="fileUpload" />
+			</g:HTMLPanel>
 		</g:FormPanel>
-		<g:HTMLPanel height="125px" ui:field="imageTable" />
-		<g:Button width="89px">Upload</g:Button>
+		
+		<g:ScrollPanel height="140px">
+			<g:HTMLPanel styleName="{style.PhotoUpload-Obj9}" height="100%" ui:field="imageTable">
+				<label for="fileUpload" style="width:100px; height:100px" class="PhotoUpload-Obj10" >
+					<i style="margin-top: 19px;margin-left: 24px;" class="fa fa-plus fa-5x"></i>
+				</label>
+			</g:HTMLPanel>
+		</g:ScrollPanel>
+		
+		<g:HTMLPanel styleName="{style.PhotoUpload-Obj6}" height="35px">
+			<g:Label text="0 / Photos" styleName="{style.PhotoUpload-Obj7}" ui:field="lbPhotosCount"/>
+			<g:HorizontalPanel styleName="{style.PhotoUpload-Obj4}">
+				<g:Anchor ui:field="btnPost"  styleName="greenbutton {style.PhotoUpload-Obj5}" ><i style="margin-right:5px;" class="fa fa-cloud-upload fa-lg"></i> Upload</g:Anchor>
+				<g:Anchor ui:field="btnCancel"  styleName="greenbutton {style.PhotoUpload-Obj5}" ><i style="margin-right:5px;" class="fa fa-ban fa-lg"></i> Cancel</g:Anchor> 
+			</g:HorizontalPanel>
+		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

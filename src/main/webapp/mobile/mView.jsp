@@ -10,26 +10,23 @@
 <%@ page import="com.born2go.shared.Locate"%>
 <%@ page import="com.born2go.server.DataServiceImpl"%>
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="java.text.SimpleDateFormat"%>
-
 
 <%!
 	//Global functions
 	public void redirectHomeUrl(HttpServletResponse response) {
 		String site = new String("/");
-		response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+		response.setStatus(response.SC_MOVED_TEMPORARILY);
 		response.setHeader("Location", site);
 	}
 %>
 
-
 <%
+	boolean bMobile = false;
 	//Check if we serve mobile or not?
 	String ua=request.getHeader("User-Agent").toLowerCase();
 	if(ua.matches("(?i).*((android|bb\\d+|meego).+mobile|avantgo|bada\\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\\.(browser|link)|vodafone|wap|windows ce|xda|xiino).*")||ua.substring(0,4).matches("(?i)1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\\-(n|u)|c55\\/|capi|ccwa|cdm\\-|cell|chtm|cldc|cmd\\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\\-s|devi|dica|dmob|do(c|p)o|ds(12|\\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\\-|_)|g1 u|g560|gene|gf\\-5|g\\-mo|go(\\.w|od)|gr(ad|un)|haie|hcit|hd\\-(m|p|t)|hei\\-|hi(pt|ta)|hp( i|ip)|hs\\-c|ht(c(\\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\\-(20|go|ma)|i230|iac( |\\-|\\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\\/)|klon|kpt |kwc\\-|kyo(c|k)|le(no|xi)|lg( g|\\/(k|l|u)|50|54|\\-[a-w])|libw|lynx|m1\\-w|m3ga|m50\\/|ma(te|ui|xo)|mc(01|21|ca)|m\\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\\-2|po(ck|rt|se)|prox|psio|pt\\-g|qa\\-a|qc(07|12|21|32|60|\\-[2-7]|i\\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\\-|oo|p\\-)|sdk\\/|se(c(\\-|0|1)|47|mc|nd|ri)|sgh\\-|shar|sie(\\-|m)|sk\\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\\-|v\\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\\-|tdg\\-|tel(i|m)|tim\\-|t\\-mo|to(pl|sh)|ts(70|m\\-|m3|m5)|tx\\-9|up(\\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\\-|your|zeto|zte\\-")) {
-		response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
-		response.setHeader("Location", request.getRequestURI().replaceFirst("journey", "mobile"));
-		return;
+		//We are in mobile version, do nothing
+		response.getWriter().print("You are in mobile version. URI: " + request.getRequestURI());
 	}
 %>
 
@@ -49,7 +46,6 @@
 <!--                                                               -->
 <!-- <link type="text/css" rel="stylesheet" href=""> 			   -->
 <link type="text/css" rel="stylesheet" href="../main.css">
-<link rel="stylesheet" href="/resources/font-awesome-4.2.0/css/font-awesome.min.css">
 
 <!-- Specify the shortcut icon. -->
 <link rel="shortcut icon" href="../favicon.ico" />
@@ -64,11 +60,13 @@
 <!-- If you add any GWT meta tags, they must   -->
 <!-- be added before this line.                -->
 <!--                                           -->
+<script type="text/javascript" src="http://slideshow.triptracker.net/slide.js"></script>
 <script type="text/javascript" language="javascript" src="../script/script.nocache.js"></script>
-<!-- <script src="http://connect.facebook.net/en_US/all.js"></script> -->
+<script src="http://connect.facebook.net/en_US/all.js"></script>
 <script type="text/javascript" src="/js/facebookConnect.js"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false;key=AIzaSyCwX2qpyTev25qwNaBxFXBbgIhbPtFeLHw"></script>
-<script type="text/javascript" src="http://slideshow.triptracker.net/slide.js"></script>
+
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
 <!-- <script>
 	(function(i, s, o, g, r, a, m) {
@@ -128,7 +126,7 @@
 			<div style="margin:auto; display: -webkit-box;">
 			<li><a class="menubutton-actived" href="/">Home</a></li>
 			<li><a class="menubutton" href="/create/">Plan your trip</a></li>
-			<li><a id="menubutton" class="menubutton" href="/">Profile</a></li>
+			<li><a class="menubutton" href="/">Profile</a></li>
 			<!-- <li><a id="signInMenu" onclick="loginFacebook()">Sign In</a></li> -->
 			</div>
 		</div>
@@ -136,7 +134,7 @@
 	
 	<!-- Add Content here -->
 	<div id="content">
-		<div id="tripInfo" class="tripInfo">
+		<div class="tripInfo">
 			<div>
 		
 				<%
@@ -156,11 +154,7 @@
 								<table>
 								<tr>
 								<td valign="top" style="width:100%">
-									<div class="font-blackTitleLarge" style="font-size: 30px;font-family: museo-w01-700,serif; color:rgb(56, 119, 127)"><%=trip.getName()%></div>
-									<div style="display: inline-flex;">
-										<div class="font-blackTitleLarge" style="margin-bottom: 20px;margin-right: 4px;font-size: 15px;font-family: museo-w01-700,serif; color:silver; font-style: italic;">Create by</div>
-										<div class="font-blackTitleLarge link" style="margin-bottom: 20px;font-size: 15px;font-family: museo-w01-700,serif; color:silver; font-style: italic;"><%=(trip.getPoster()!=null?trip.getPoster().getUserName():"Tester")%></div>
-									</div>
+									<div class="font-blackTitleLarge" style="margin-bottom: 20px;font-size: 30px;font-family: museo-w01-700,serif; color:rgb(56, 119, 127)"><%=trip.getName()%></div>
 									<div class="font-blackTitleLarge">Hành trình:</div>
 									<div class="trip-destinations">
 									<img src="/resources/red-spotlight.png" style="width:22px;height:30px;vertical-align: middle;"/> 
@@ -174,44 +168,32 @@
 									}
 								%>
 									<div class="font-blackTitleLarge" style="margin-top:25px;">Ngày khởi hành:</div>
-									<%SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MMM d hh:mm:ss");%>
-									<div style="font-size:15px;"><%= dateFormat.format(trip.getDepartureDate()) %></div>
-									
+									<div style="font-size:15px;"><%= trip.getDepartureDate() %></div>
+									<div class="font-blackTitleLarge" style="margin-top:30px;">Giới thiệu về chuyến đi:</div>
+									<div style="font-size:15px; line-height: 1.8em; white-space: pre-line;"><%= trip.getDescription() %></div>
 								</td>
-								<td valign="top" height="1">
-									<div id="tripMap" class="tripMap" style="width: 500px; height: 100%; margin-left: 10px; min-height: 400px; max-height: 500px; border:1px solid gray;"></div>
+								<td height="1">
+									<div id="tripMap" class="tripMap" style="width: 500px; height: 100%; margin-left: 10px; min-height: 450px; border:1px solid gray;"></div>
 								</td>
-								</tr>
-								
-								<tr>
-									<td colspan="2">
-										<div class="tripInfoBorder"></div>
-										<div class="font-blackTitleLarge" style="margin-top:30px;">Giới thiệu về chuyến đi:</div>
-										<p style="white-space: pre-line; font-size: 15px; line-height: 1.6em;"><%= trip.getDescription() %></p>
-									</td>
 								</tr>
 								</table>
 							<% 
 						}
+					}
 				%>
 			</div>
+	
+		<!-- End of jsp content -->
 		</div>
 		
 		<div id="tripcontent" class="tripContent"></div>
-		
-		<div id="commentBox" class="commentBox">
-		<div class="fb-comments" data-width="100%" data-href="http://born2go-b.appspot.com/journey/<%= tripId %>" data-numposts="5" data-colorscheme="light"></div>
-		<% } %> 
 	</div>
-	</div>
+	
+	<br />
 	
 	<div id="footer" style="width: 100%">
 		<center> © Copyright 2015, Born2Go. </center>
 	</div>
-	
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script type="text/javascript" src="http://arrow.scrolltotop.com/arrow50.js"></script>
-	<noscript>Not seeing a <a href="http://www.scrolltotop.com/">Scroll to Top Button</a>? Go to our FAQ page for more info.</noscript>
-	
+
 </body>
 </html>

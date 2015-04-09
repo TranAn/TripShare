@@ -3,7 +3,6 @@ package com.born2go.client.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.born2go.shared.Journey.Point;
 import com.born2go.shared.Locate;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.geolocation.client.Geolocation;
@@ -197,6 +196,7 @@ public class TravelMap {
 	public void drawTheJourney(final List<com.born2go.shared.Journey.Point> directions, final List<Locate> locates) {
 		clearMap();
 		final JsArray<LatLng> journey = (JsArray<LatLng>) JsArray.createArray();
+		polyline.setPath(journey);	
 		//zoom the map
 		LatLngBounds bounds = LatLngBounds.create();
 		for (int i = 0; i < directions.size(); i++) {
@@ -206,47 +206,40 @@ public class TravelMap {
 		theMap.fitBounds(bounds);
 		//add marker and draw journey
 		index = 0;
-//		Timer timer = new Timer() {
-//		     @Override
-//		     public void run() {		 
-//		    	 if(index == locates.size()) {
-//		    		polyline.setMap(theMap);
-//		    		index = 1;		    		
-//		    		Timer timer = new Timer() {
-//		    			 @Override
-//		    		     public void run() {
-//		    				 if(index >= directions.size()) {
-//		    					 cancel();
-//		    				 }
-//		    				 else {
-//			    				 journey.setLength(0);
-//			    				 for(int i = 0; i <= index; i++) {
-//			    					 journey.push(directions.get(i).toLatLng());
-//			    				 }
-//			    				 polyline.setPath(journey);			    						
-//			    				 index++;
-//		    				 }		    				 
-//		    			 }
-//		    		}; timer.scheduleRepeating(5);
-//		 			cancel();
-//		    	 }
-//		    	 else {
-//		    		 if(index == 0)
-//		    			 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), true, true);
-//		    		 else
-//		    			 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, true);
-//		    		 index++;
-//		    	 }
-//		     }
-//		 };
-//		 timer.scheduleRepeating(670);
-		
-		polyline.setMap(theMap);
-		for(Point p: directions)
-			journey.push(p.toLatLng());
-		polyline.setPath(journey);	
-		for(Locate l: locates)
-			addMarker(l.getLatLng(), l.getAddressName(), false, false);
+		Timer timer = new Timer() {
+		     @Override
+		     public void run() {		 
+		    	 if(index == locates.size()) {
+		    		polyline.setMap(theMap);
+		    		index = 1;		    		
+		    		Timer timer = new Timer() {
+		    			 @Override
+		    		     public void run() {
+		    				 if(index >= directions.size()) {
+		    					 cancel();
+		    				 }
+		    				 else {
+			    				 journey.setLength(0);
+			    				 for(int i = 0; i <= index; i++) {
+			    					 journey.push(directions.get(i).toLatLng());
+			    				 }
+			    				 polyline.setPath(journey);			    						
+			    				 index++;
+		    				 }		    				 
+		    			 }
+		    		}; timer.scheduleRepeating(5);
+		 			cancel();
+		    	 }
+		    	 else {
+		    		 if(index == 0)
+		    			 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), true, true);
+		    		 else
+		    			 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, true);
+		    		 index++;
+		    	 }
+		     }
+		 };
+		 timer.scheduleRepeating(670);
 	}
 
 }

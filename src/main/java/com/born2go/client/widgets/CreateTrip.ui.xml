@@ -37,6 +37,7 @@
 	.CreateTrip-Obj4 {
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 		background-color: rgba(48, 27, 12, 1);
+		max-height: 500px;
 	}
 	
 	.CreateTrip-Obj5 {
@@ -131,7 +132,7 @@
 						</g:HTMLPanel>
 					</g:HTMLPanel>
 				</td>
-				<td height="1">
+				<td valign="top" height="1">
 					<g:HTMLPanel ui:field="mapContainer" height="100%" styleName="{style.CreateTrip-Obj4}"/>
 				</td>
 			</tr>

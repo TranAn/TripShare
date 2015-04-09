@@ -8,13 +8,11 @@ import com.born2go.shared.Path;
 import com.born2go.shared.Picture;
 import com.born2go.shared.Trip;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ScrollEvent;
@@ -23,9 +21,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.maps.gwt.client.DirectionsResult;
 
 public class PathView extends Composite {
@@ -42,6 +40,8 @@ public class PathView extends Composite {
 	HTMLPanel htmlPathToolbar;
 	@UiField
 	HTMLPanel htmlPathTable;
+	@UiField
+	HTMLPanel facebookComments;
 	@UiField
 	HTMLPanel htmlPathCreate;
 	@UiField
@@ -65,7 +65,8 @@ public class PathView extends Composite {
 	@UiField 
 	Anchor btnCancel;
 	
-	Long tripId;
+	static Long tripId;
+	
 	TripInfo tripInfo;
 	PathCreate pathCreate = new PathCreate();
 	PhotoUpload photoUpload = new PhotoUpload();
@@ -83,7 +84,7 @@ public class PathView extends Composite {
 			@Override
 			public void onWindowScroll(ScrollEvent event) {
 				if(event.getScrollTop() >= htmlPathToolbar.getElement().getAbsoluteTop()) {
-					if(htmlPathToolbar.getElement().getChildCount() >= 2) {
+					if(htmlPathToolbar.getElement().getChildCount() >= 4) {
 						htmlPathToolbar.setHeight(toolbar.getOffsetHeight()+ htmlPathCreate.getOffsetHeight()+ "px");
 						htmlPathToolbar.remove(toolbar);
 						htmlPathToolbar.remove(htmlPathCreate);
@@ -111,12 +112,42 @@ public class PathView extends Composite {
 		});
 		
 		pathCreate.setListener(new PathCreate.Listener() {
-			
 			@Override
 			public void onClose() {
 				if(htmlPathToolbarFixed.getElement().hasChildNodes()) {
 					htmlPathToolbar.setHeight(toolbar.getOffsetHeight()+ "px");
 				}
+				btnUpload.setVisible(true);
+			}
+
+			@Override
+			public void createPathSuccess(Long newPathId) {
+				TripShare.loadBox.center();
+				TripShare.dataService.findPart(newPathId, new AsyncCallback<Path>() {
+					
+					@Override
+					public void onSuccess(Path result) {
+						TripShare.loadBox.hide();
+						String title = result.getLocate().getAddressName()+ " - " + TripShare.dateFormat(result.getCreateDate());
+						String poster = "Tester";
+						if(result.getPoster() != null)
+							poster = result.getPoster().getUserName();
+						PathDetail pathDetail = new PathDetail("/resources/Travel tips2.jpg", title, poster, result.getDescription());
+						if(listPathsDetail.isEmpty())
+							htmlPathTable.add(pathDetail);
+						else
+							htmlPathTable.getElement().insertBefore(pathDetail.getElement(), listPathsDetail.get(0).getElement());
+						getPathPhoto(result, pathDetail);
+						listPathsDetail.add(0, pathDetail);
+						pathDetail.setStyleName("PathDetail-Obj1 fadeIn");
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						TripShare.loadBox.hide();
+						Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
+					}
+				});
 			}
 		});
 	}
@@ -125,7 +156,7 @@ public class PathView extends Composite {
 		tripInfo.setDirectionResult(directionResult);
 	}
 	
-	public void getTrip(Long tripId) {
+	public void getTrip(final Long tripId) {
 		this.tripId = tripId;
 		TripShare.dataService.findTrip(tripId, new AsyncCallback<Trip>() {
 			
@@ -135,6 +166,7 @@ public class PathView extends Composite {
 					theTrip = result;
 					TripShare.tripMap.drawTheJourney(result.getJourney().getDirections(), result.getJourney().getLocates());
 					getThePaths(result.getDestination());
+//					facebookComments.getElement().setInnerHTML("<div class='fb-comments' data-href='http://localhost:8080/journey/" + tripId + "' data-numposts='5' data-colorscheme='light'></div>");
 				}
 			}
 			
@@ -152,9 +184,13 @@ public class PathView extends Composite {
 				
 				@Override
 				public void onSuccess(List<Path> result) {
-					for(Path path: result) {
-						String title = path.getLocate().getAddressName() + " - " + path.getCreateDate();
-						PathDetail pathDetail = new PathDetail("/resources/loaderPincode.gif", title, path.getDescription());
+					for(int i=result.size()-1; i>=0; i--) {
+						Path path = result.get(i);
+						String title = path.getLocate().getAddressName()+ " - " + TripShare.dateFormat(path.getCreateDate());
+						String poster = "Tester";
+						if(path.getPoster() != null)
+							poster = path.getPoster().getUserName();
+						PathDetail pathDetail = new PathDetail("/resources/Travel tips2.jpg", title, poster, path.getDescription());
 						htmlPathTable.add(pathDetail);
 						getPathPhoto(path, pathDetail);
 						listPathsDetail.add(pathDetail);
@@ -200,15 +236,51 @@ public class PathView extends Composite {
 		htmlPathCreate.setVisible(false);
 		toolbar.setVisible(false);
 		editToolbar.setVisible(true);
+		DOM.getElementById("commentBox").setAttribute("style", "display:none");
 		DOM.getElementById("tripInfo").setInnerHTML("");
 		tripInfo = new TripInfo();
 		RootPanel.get("tripInfo").add(tripInfo);
 		tripInfo.setTrip(theTrip);
+		tripInfo.setListener(new TripInfo.Listener() {
+			
+			@Override
+			public void onUpdateTrip(Trip updateTrip) {
+				theTrip = updateTrip;
+				cancelEdit();
+			}
+		});
+	}
+
+	void cancelEdit() {
+		Window.scrollTo(0, 0);
+		htmlPathTable.setVisible(true);
+		htmlPathCreate.setVisible(true);
+		toolbar.setVisible(true);
+		editToolbar.setVisible(false);
+		DOM.getElementById("commentBox").setAttribute("style", "");
+		htmlPathToolbar.removeStyleName("PathView-Obj13");
+		for(PathDetail pathDetail: listPathsDetail) {
+			pathDetail.setStyleName("PathDetail-Obj1");
+		}
+		tripInfo.setTrip(theTrip);
+		tripInfo.setDisable();
+		TripShare.tripMap.drawTheJourney(theTrip.getJourney().getDirections(), theTrip.getJourney().getLocates());
+	}
+
+	@UiHandler("btnSave")
+	void onBtnSaveClick(ClickEvent event) {
+		tripInfo.updateTrip();
+	}
+
+	@UiHandler("btnCancel")
+	void onBtnCancelClick(ClickEvent event) {
+		cancelEdit();
 	}
 
 	@UiHandler("btnPost")
 	void onBtnPostClick(ClickEvent event) {
 		pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3Open");
+		btnUpload.setVisible(false);
 		pathCreate.setTripId(tripId);
 		pathCreate.handlerUploadEvent();
 		Timer timer = new Timer () {
@@ -227,40 +299,35 @@ public class PathView extends Composite {
 
 	@UiHandler("btnGallery")
 	void onBtnGalleryClick(ClickEvent event) {
-		openGallery();
+		TripShare.dataService.listPicture(theTrip.getGallery(), new AsyncCallback<List<Picture>>() {
+			
+			@Override
+			public void onSuccess(List<Picture> result) {
+				String photosUri = "";
+				for(Picture p: result)
+					photosUri = photosUri + p.getServeUrl() + ";";
+				openGallery(photosUri);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
+	public static native void openGallery(String photosUri) /*-{
+	  	var viewer = new $wnd.PhotoViewer();
+	  	var URIs = photosUri.split(";");
+	  	for(var i = 0; i < URIs.length-1; i++) {
+	  		viewer.add(URIs[i]);
+	  	}
+		viewer.show(0);
+	}-*/;
+
 	@UiHandler("btnComment")
 	void onBtnCommentClick(ClickEvent event) {
-	}
-
-	public static native void openGallery() /*-{
-	  	var viewer = new $wnd.PhotoViewer();
-  		viewer.add('http://s13.postimg.org/5t4xm5ruf/1379562560_beautiful_nature_wallpaper_hd.jpg/resources/1.jpg');
-  		viewer.add('http://s13.postimg.org/7alsjz77b/alone_in_the_universe_wallpaper_1366x768.jpg');
-  		viewer.add('http://s13.postimg.org/k39wjwit3/Desktop_Wallpaper_Background_Desktop_Background.jpg');
-  		viewer.add('http://s13.postimg.org/se4wj7t4n/Gaming_3_D_Earth_Sky_94.jpg');
-  		viewer.add('http://s13.postimg.org/6p1f1m1iv/spiral_galaxy_2880x1800.jpg');
-  		viewer.show(0);
-	}-*/;
-	
-	@UiHandler("btnSave")
-	void onBtnSaveClick(ClickEvent event) {
-		tripInfo.updateTrip();
-	}
-	
-	@UiHandler("btnCancel")
-	void onBtnCancelClick(ClickEvent event) {
-		Window.scrollTo(0, 0);
-		htmlPathTable.setVisible(true);
-		htmlPathCreate.setVisible(true);
-		toolbar.setVisible(true);
-		editToolbar.setVisible(false);
-		htmlPathToolbar.removeStyleName("PathView-Obj13");
-		for(PathDetail pathDetail: listPathsDetail) {
-			pathDetail.setStyleName("PathDetail-Obj1");
-		}
-		tripInfo.setTrip(theTrip);
-		tripInfo.setDisable();
+		Window.scrollTo(0, DOM.getElementById("commentBox").getAbsoluteTop());
 	}
 }

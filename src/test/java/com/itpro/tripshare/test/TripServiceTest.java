@@ -37,7 +37,7 @@ public class TripServiceTest {
 		Trip trip = new Trip();
 		trip.setName("Hà Nội đi Sapa");
 		trip.setDescription("Chuyến đi sẽ đi qua Yên Bái, Dừng chân ở Lào Cai ăn sáng và cuối cùng là đến Sapa");
-		trip.setOwner(123L);
+//		trip.setOwner(123L);
 		return trip;
 	}
 }

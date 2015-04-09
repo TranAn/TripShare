@@ -18,7 +18,7 @@
 		position: relative;
 		border-top: none;
 		background-color: #FCFFFF;
-		border-radius: 10px;
+		border-radius: 0px 0px 10px 10px;
 		height: auto !important;
 		overflow-y: hidden;
 		max-height: 0px; 
@@ -56,7 +56,7 @@
     	-webkit-box-sizing: border-box;
     	max-width: 100%;
     	min-height: 180px;
-    	max-height: 370px;
+    	max-height: 250px;
     	/* overflow: hidden; */
     	resize: none;
 	}
@@ -122,7 +122,7 @@
 			<table>
 			<tr>
 			<td style="padding-left: 10px; padding-top: 5px;">
-			<g:Label text="Địa điểm:" width="70px" styleName="font-blackTitleNormal"/>
+			<g:Label text="Tiêu đề:" width="70px" styleName="font-blackTitleNormal"/>
 			</td>
 			<td>
 			<g:TextBox width="" ui:field="txbLocation" height=""/>
@@ -131,7 +131,7 @@
 			<g:Anchor ui:field="btnFindYourLocation" styleName="greenbutton {style.PathCreate-Obj5}"><i class="fa fa-crosshairs fa-lg"></i></g:Anchor>
 			</td>
 			<td style="padding-left: 10px; padding-top: 5px;">
-			<g:Label text="Thời gian:" width="70px" styleName="font-blackTitleNormal"/>
+			<g:Label text="Thời gian:" width="80px" styleName="font-blackTitleNormal"/>
 			</td>
 			<td>
 			<p1:DateBox width="" ui:field="txbTimeline" height=""/>
@@ -163,8 +163,8 @@
 				</g:HTMLPanel>
 			</g:FormPanel>
 			<g:Label text="0 / Photos" styleName="{style.PathCreate-Obj13}" ui:field="lbCountPhotos"/>
-			<g:Anchor ui:field="btnPost"  styleName="greenbutton {style.PathCreate-Obj8}" ><i style="margin-right:5px;" class="fa fa-floppy-o fa-lg"></i> Save</g:Anchor>
 			<g:Anchor ui:field="btnCancel"  styleName="greenbutton {style.PathCreate-Obj8}" ><i style="margin-right:5px;" class="fa fa-ban fa-lg"></i> Cancel</g:Anchor>
+			<g:Anchor ui:field="btnPost"  styleName="greenbutton {style.PathCreate-Obj8}" ><i style="margin-right:5px;" class="fa fa-floppy-o fa-lg"></i> Save</g:Anchor>
 		</g:HTMLPanel>
 		
 	</g:HTMLPanel>

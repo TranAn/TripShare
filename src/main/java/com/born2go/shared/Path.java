@@ -15,12 +15,18 @@ public class Path implements Serializable {
 	@Id
 	Long id;
 	
+	Poster poster;
+	Long tripId;
 	List<Long> gallery = new ArrayList<Long>();
 	
 	String title;
 	Date createDate;
 	Locate locate;
 	String description;
+	
+	public Path() {
+		super();
+	}
 
 	public Locate getLocate() {
 		return locate;
@@ -68,6 +74,22 @@ public class Path implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Poster getPoster() {
+		return poster;
+	}
+
+	public void setPoster(Poster poster) {
+		this.poster = poster;
+	}
+
+	public Long getTripId() {
+		return tripId;
+	}
+
+	public void setTripId(Long tripId) {
+		this.tripId = tripId;
 	}
 
 }

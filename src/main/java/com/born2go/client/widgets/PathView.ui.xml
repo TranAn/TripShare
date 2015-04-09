@@ -28,12 +28,12 @@
 	
 	.PathView-Obj4 {
 		position: fixed;
-		width: 76%;
+		width: 75.8%;
  		max-width: 1024px;
 		top: 0px;
 		border: 2px solid #a1a1a1;
 		border-top: none;
-		background-color: #f6f7f8;
+		background-color: rgba(255, 254, 252, 0.81);
 		border-radius: 0px 0px 10px 10px;
 		-webkit-box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.25);
 		-moz-box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.25);
@@ -89,7 +89,7 @@
 				<g:HorizontalPanel styleName="{style.PathView-Obj5}">
 					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="65px" ui:field="btnEdit"><i style="margin-right:5px;" class="fa fa-file-text-o fa-lg"></i> Edit</g:Anchor>
 					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="65px" ui:field="btnPost"><i style="margin-right:5px;" class="fa fa-pencil fa-lg"></i> Post</g:Anchor>
-					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="105px" ui:field="btnUpload"><i style="margin-right:5px;" class="fa fa-camera fa-lg"></i> Upload Photo</g:Anchor>
+					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="105px" ui:field="btnUpload"><i style="margin-right:5px;" class="fa fa-camera fa-lg"></i> Upload Photos</g:Anchor>
 					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="72px" ui:field="btnGallery"><i style="margin-right:5px;" class="fa fa-picture-o fa-lg"></i> Gallery</g:Anchor>
 					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="72px" ui:field="btnComment"><i style="margin-right:5px;" class="fa fa-comment fa-lg"></i> Comment</g:Anchor>
 				</g:HorizontalPanel>
@@ -108,6 +108,8 @@
 		</g:HTMLPanel>
 	
 		<g:HTMLPanel ui:field="htmlPathTable"></g:HTMLPanel>
+		
+		<g:HTMLPanel ui:field="facebookComments"></g:HTMLPanel>
 		
 	</g:HTMLPanel>
 </ui:UiBinder> 

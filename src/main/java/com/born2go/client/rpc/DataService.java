@@ -13,7 +13,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface DataService extends RemoteService {
 
 	// trip
-	public Trip insertTrip(Trip trip);
+	public Trip insertTrip(Trip trip, String accessToken);
 
 	public Trip findTrip(Long idTrip);
 
@@ -22,7 +22,7 @@ public interface DataService extends RemoteService {
 	public void removeTrip(Long idTrip);
 
 	// part
-	public Path insertPart(Path part, Long tripId);
+	public Path insertPart(Path part, Long tripId, String accessToken);
 
 	public Path findPart(Long idPart);
 	
@@ -33,8 +33,6 @@ public interface DataService extends RemoteService {
 	public void removePart(Long idPart);
 
 	// user
-	public void verifiedUser(String accessToken) throws Exception;
-	
 	public void insertUser(User user);
 
 	public User findUser(String idUser);
@@ -49,6 +47,8 @@ public interface DataService extends RemoteService {
 	public void deletePicture(Long idPicture);
 
 	public Picture findPicture(Long idPicture);
+	
+	public List<Picture> listPicture(List<Long> idsPicture);
 
 	public void insertPicture(Picture picture);
 

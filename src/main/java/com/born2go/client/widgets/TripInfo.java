@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -39,6 +40,7 @@ public class TripInfo extends Composite {
 			.create(TripInfoUiBinder.class);
 	
 	@UiField TextBox txbName;
+	@UiField Label lbPoster;
 	@UiField HTMLPanel htmlDestinationTable;
 	@UiField DateBox txbDepartureDate;
 	@UiField StretchyTextArea txbDescription;
@@ -53,6 +55,16 @@ public class TripInfo extends Composite {
 	private Trip trip;
 
 	interface TripInfoUiBinder extends UiBinder<Widget, TripInfo> {
+	}
+	
+	public interface Listener {
+		void onUpdateTrip(Trip updateTrip);
+	}
+	
+	private Listener listener;
+	
+	public void setListener(Listener listener) {
+		this.listener = listener;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -98,10 +110,17 @@ public class TripInfo extends Composite {
 	
 	public void setTrip(Trip trip) {
 		this.trip = trip;
+		mapTable.clear();
 		mapTable.add(TripShare.tripMap.getMapView());
 		txbName.setText(trip.getName());
+		if(trip.getPoster() != null)
+			lbPoster.setText("Create by "+ trip.getPoster().getUserName());
+		else
+			lbPoster.setText("Create by Tester");
 		txbDepartureDate.setValue(trip.getDepartureDate());
-		txbDescription.setText(trip.getDescription());
+		txbDescription.setValue(trip.getDescription());
+		txbDescription.setHeight("");
+		txbDescription.setVisible(true);
 		//
 		originPoint = trip.getJourney().getLocates().get(0);
 		txbOrigin.setText(trip.getJourney().getLocates().get(0).getAddressName());
@@ -111,7 +130,8 @@ public class TripInfo extends Composite {
 			listDestinationPoint.add(trip.getJourney().getLocates().get(i));
 			htmlDestinationTable.add(addDestination(trip.getJourney().getLocates().get(i).getAddressName()));
 		}
-		directions = trip.getJourney().getDirections();
+		directions.clear();
+		directions.addAll(trip.getJourney().getDirections());
 	}
 	
 	public void setDirectionResult(DirectionsResult directionResult) {
@@ -174,6 +194,7 @@ public class TripInfo extends Composite {
 	}
 
 	public void updateTrip() {
+		TripShare.loadBox.center();
 		trip.setName(txbName.getText());
 		trip.setDepartureDate(txbDepartureDate.getValue());
 		trip.setDescription(txbDescription.getText());
@@ -182,14 +203,15 @@ public class TripInfo extends Composite {
 			
 			@Override
 			public void onSuccess(Trip result) {
-				// TODO Auto-generated method stub
-				
+				TripShare.loadBox.hide();
+				if(listener != null)
+					listener.onUpdateTrip(result);
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
+				TripShare.loadBox.hide();
+				Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
 			}
 		});
 	}

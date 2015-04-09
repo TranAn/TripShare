@@ -27,7 +27,7 @@
 	}
 	
 	.PathDetail-Obj3 {
-		margin-bottom: 10px;
+		margin-bottom: 12px;
 		font-size: 22px;
 		font-family: museo-w01-700, serif;
 		color: rgb(56, 119, 127);
@@ -43,6 +43,33 @@
 		line-height: 1.8em;
 		white-space: pre-line;
 	}
+	
+	.PathDetail-Obj5 {
+		font-size: 15px;
+		font-family: museo-w01-700,serif; 
+		color:silver; 
+		font-style: italic;
+		margin-bottom: 0px;
+		margin-right: 4px;
+	}
+	
+	.PathDetail-Obj6 {
+		font-size: 15px;
+		font-family: museo-w01-700,serif; 
+		color:silver; 
+		font-style: italic;
+		margin-bottom: 0px;
+	}
+	
+	.PathDetail-Obj6:hover {
+		cursor: pointer;
+		text-decoration: underline;
+		color: blue;
+	}
+	
+	.PathDetail-Obj7 {
+		display: inline-flex;
+	}
 	</ui:style>
 	<g:HTMLPanel styleName="{style.PathDetail-Obj1}">
 		<table>
@@ -54,7 +81,11 @@
 				<td valign="top">
 					<g:Label styleName="{style.PathDetail-Obj3}" text="Where and When?"
 						ui:field="lbTitle" />
-					<g:HTML styleName="{style.PathDetail-Obj4}" ui:field="htmlContent"></g:HTML>
+					<g:HTMLPanel styleName="{style.PathDetail-Obj7}">
+						<g:Label styleName="font-blackTitleLarge {style.PathDetail-Obj5}">Post by</g:Label>
+						<g:Label styleName="font-blackTitleLarge {style.PathDetail-Obj6}" ui:field="lbPoster">Tran An</g:Label>
+					</g:HTMLPanel>
+					<p ui:field="htmlContent" style="white-space: pre-line; font-size: 15px; line-height: 1.6em;" />
 				</td>
 			</tr>
 		</table>
