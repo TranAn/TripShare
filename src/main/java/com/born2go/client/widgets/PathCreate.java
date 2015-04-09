@@ -110,14 +110,14 @@ public class PathCreate extends Composite {
 			}
 		});
 		
-		final Autocomplete autocomplete = Autocomplete.create(
-				(InputElement) (Element) txbLocation.getElement());
-		autocomplete.addPlaceChangedListener(new PlaceChangedHandler() {
-			public void handle() {
-				PlaceResult place = autocomplete.getPlace();
-				locate.setLatLng(place.getGeometry().getLocation());
-			}
-		});
+//		final Autocomplete autocomplete = Autocomplete.create(
+//				(InputElement) (Element) txbLocation.getElement());
+//		autocomplete.addPlaceChangedListener(new PlaceChangedHandler() {
+//			public void handle() {
+//				PlaceResult place = autocomplete.getPlace();
+//				locate.setLatLng(place.getGeometry().getLocation());
+//			}
+//		});
 		
 //		txbDescription.addChangeHandler(new ChangeHandler() {
 //			

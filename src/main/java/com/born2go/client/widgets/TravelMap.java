@@ -198,7 +198,7 @@ public class TravelMap {
 		final JsArray<LatLng> journey = (JsArray<LatLng>) JsArray.createArray();
 		polyline.setPath(journey);	
 		//zoom the map
-		LatLngBounds bounds = LatLngBounds.create();
+		final LatLngBounds bounds = LatLngBounds.create();
 		for (int i = 0; i < directions.size(); i++) {
 		    bounds.extend(directions.get(i).toLatLng());
 		}
@@ -228,6 +228,7 @@ public class TravelMap {
 		    				 }		    				 
 		    			 }
 		    		}; timer.scheduleRepeating(5);
+		    		theMap.fitBounds(bounds);
 		 			cancel();
 		    	 }
 		    	 else {

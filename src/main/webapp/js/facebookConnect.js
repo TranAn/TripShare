@@ -20,14 +20,19 @@ function checkUserLogin() {
 	FB.getLoginStatus(function(response) {
 		if (response.status === 'connected') {
 //			console.log(response.authResponse);
-//			var userId = response.authResponse.userID;
-		    var accessToken = response.authResponse.accessToken;	
-		    saveCookie(accessToken);
+			var userId = response.authResponse.userID;
+		    var accessToken = response.authResponse.accessToken;
+		    var facebookApi = new GWTExport.FacebookApi();
+		    facebookApi.getAccessToken(accessToken);
 			FB.api('/me', function(response) {
 				setUserInfo(response.name);
 			});
 		} else if (response.status === 'not_authorized') {
+			 var facebookApi = new GWTExport.FacebookApi();
+			 facebookApi.getAccessToken("");
 		} else {
+			 var facebookApi = new GWTExport.FacebookApi();
+			 facebookApi.getAccessToken("");
 		}
 	});
 }
@@ -43,23 +48,25 @@ function loginFacebook() {
 	FB.login(function(response) {
 		if (response.authResponse) {
 			var userId = response.authResponse.userID;
-			var accessToken = response.authResponse.accessToken;	
-			saveCookie(accessToken);
+			var accessToken = response.authResponse.accessToken;
 		    //rpc call save new user
 			var facebookApi = new GWTExport.FacebookApi();
+			facebookApi.getAccessToken(accessToken);
 			facebookApi.saveNewFacebookUser(userId);
 			//set user info to view
 			FB.api('/me', function(response) {
 				setUserInfo(response.name);
 			});
 		} else {
+			 var facebookApi = new GWTExport.FacebookApi();
+			 facebookApi.getAccessToken("");
 		}
 	});
 }
 
 function logoutfacebook() {
 	FB.logout(function(response) {
-		document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+//		document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
 	});
 }
 

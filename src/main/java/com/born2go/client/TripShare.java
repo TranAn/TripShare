@@ -14,7 +14,6 @@ import com.born2go.client.widgets.TravelMap.Listener;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.maps.gwt.client.DirectionsResult;
@@ -34,19 +33,11 @@ public class TripShare implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
-		access_token = Cookies.getCookie("access_token");
-		
 		if (RootPanel.get("tripMap") != null)
 			RootPanel.get("tripMap").add(tripMap.getMapView());
 		
 		if (RootPanel.get("createTrip") != null) {
 			RootPanel.get("createTrip").add(createTrip);
-			//---
-			createTrip.setVisible(false);
-			if(access_token.equals("undefined"))
-				Window.Location.assign("/");
-			else
-				createTrip.setVisible(true);
 		}
 		
 		if (RootPanel.get("tripcontent") != null) {
@@ -54,12 +45,6 @@ public class TripShare implements EntryPoint {
 			if(tripId.length() != 0) {
 				pathView.getTrip(Long.valueOf(tripId));
 				RootPanel.get("tripcontent").add(pathView);
-				//---
-				pathView.setVisible(false);
-				if(access_token.equals("undefined"))
-					Window.Location.assign("/");
-				else
-					pathView.setVisible(true);
 			}
 		}
 		
@@ -94,6 +79,17 @@ public class TripShare implements EntryPoint {
 
 	void exportGwtClass() {
 		ExporterUtil.exportAll();
+	}
+	
+	public static void getAccessToken(String accessToken) {
+		access_token = accessToken;
+		if(access_token.isEmpty()) {
+			if(Window.Location.getPath().contains("create") || Window.Location.getPath().contains("journey"))
+				Window.Location.assign("/");
+		}
+		else {
+
+		}
 	}
 	
 	public static final String dateFormat(Date date) {

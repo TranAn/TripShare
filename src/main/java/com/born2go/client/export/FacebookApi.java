@@ -31,21 +31,8 @@ public class FacebookApi implements Exportable {
 		});
 	}
 	
-	public void verifiedUser(String accessToken) throws Exception {
-//		TripShare.dataService.verifiedUser(accessToken, new AsyncCallback<Void>() {
-//			
-//			@Override
-//			public void onSuccess(Void result) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//		});
+	public void getAccessToken(String accessToken) throws Exception {
+		TripShare.getAccessToken(accessToken);
 	}
 
 }

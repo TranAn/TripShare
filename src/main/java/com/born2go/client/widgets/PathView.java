@@ -8,6 +8,8 @@ import com.born2go.shared.Path;
 import com.born2go.shared.Picture;
 import com.born2go.shared.Trip;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -79,6 +81,28 @@ public class PathView extends Composite {
 		htmlPathCreate.add(pathCreate);
 		listArrange.addItem("Date descending");
 		listArrange.addItem("Date ascending");
+		
+		listArrange.addChangeHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				htmlPathTable.clear();
+				if(listArrange.getSelectedIndex() == 0) {
+					for(int i=0; i<=listPathsDetail.size()-1; i++) {
+						listPathsDetail.get(i).setStyleName("PathDetail-Obj1");
+						htmlPathTable.add(listPathsDetail.get(i));
+						listPathsDetail.get(i).setStyleName("PathDetail-Obj1 fadeIn");
+					}
+				}
+				else {
+					for(int i=listPathsDetail.size()-1; i>=0; i--) {
+						listPathsDetail.get(i).setStyleName("PathDetail-Obj1");
+						htmlPathTable.add(listPathsDetail.get(i));
+						listPathsDetail.get(i).setStyleName("PathDetail-Obj1 fadeIn");
+					}
+				}
+			}
+		});
 		
 		Window.addWindowScrollHandler(new ScrollHandler() {
 			@Override
