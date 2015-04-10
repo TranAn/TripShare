@@ -7,8 +7,6 @@ import com.born2go.shared.Locate;
 import com.born2go.shared.Path;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.geolocation.client.Geolocation;
 import com.google.gwt.geolocation.client.Position;
@@ -37,9 +35,6 @@ import com.google.maps.gwt.client.GeocoderRequest;
 import com.google.maps.gwt.client.GeocoderResult;
 import com.google.maps.gwt.client.GeocoderStatus;
 import com.google.maps.gwt.client.LatLng;
-import com.google.maps.gwt.client.places.Autocomplete;
-import com.google.maps.gwt.client.places.PlaceResult;
-import com.google.maps.gwt.client.places.Autocomplete.PlaceChangedHandler;
 
 public class PathCreate extends Composite {
 

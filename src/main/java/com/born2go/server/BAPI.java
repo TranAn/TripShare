@@ -1,9 +1,8 @@
 package com.born2go.server;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.util.zip.GZIPOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -42,6 +41,10 @@ public class BAPI extends HttpServlet implements Servlet{
 			}
 			else if (action.compareToIgnoreCase("getTrip") == 0){
 				result = getTripByID(Long.parseLong(id));
+				resp.setContentType("application/json; charset=utf-8");
+			}
+			else if (action.compareToIgnoreCase("getAllPost") == 0){
+				result = getAllPostByTripID(Long.parseLong(id));
 				resp.setContentType("application/json; charset=utf-8");
 			}
 			else if (action.compareToIgnoreCase("getSetting") == 0){
@@ -98,7 +101,7 @@ public class BAPI extends HttpServlet implements Servlet{
 			html = path.getDescription();
 		}
 		else{
-			html = "<h2>" + id + "</h2><br> This path is not exist. That's all we know :(";
+			html = "<h2>" + id + "</h2><br> This post is not exist. That's all we know :(";
 		}
 		return html;
 	}
@@ -114,14 +117,42 @@ public class BAPI extends HttpServlet implements Servlet{
 		Trip trip = dataService.findTrip(id);
 		if (trip != null){
 			Gson gson = new Gson();
-			json = gson.toJson(trip.getDescription());
-			json += gson.toJson(trip);
+			json = gson.toJson(trip);
 		} else{
 			json = "{\"status\": false,\"error\": \"Trip ID: " + id + "doesn't exist\"}";
 		}
 		return json;
 	}
 	
+	private String getAllPostByTripID(Long id){
+		String json = "";
+		String html = "";
+		Trip trip = dataService.findTrip(id);
+		if (trip != null){
+			List<Long> ids = trip.getDestination();
+			List<Path> paths = dataService.listOfPath(ids);
+			List<String> posts = new ArrayList<String>();
+			
+			Gson gson = new Gson();
+			
+			for(Path path: paths){
+				if (path != null){
+					html = "<h2>" + path.getTitle() + "</h2><br>";
+					
+					html = path.getDescription();
+				}
+				else{
+					html = "<h2>" + id + "</h2><br> This post is not exist. That's all we know :(";
+				}
+				posts.add(html);
+			}
+			json = gson.toJson(posts);
+		} else{
+			json = "{\"status\": false,\"error\": \"Trip ID: " + id + "doesn't exist\"}";
+		}
+		return json;
+	}
+
 	private String getSetting(){
 		String result = "";
 		result = "{\"version\":\"10\",\"minversion\":\"7\",\"advrate\":\"0\"}";//Test setting only
