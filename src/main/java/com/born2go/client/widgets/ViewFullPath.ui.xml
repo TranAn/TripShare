@@ -1,0 +1,12 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	.pointer {
+		cursor: pointer;
+	}
+	</ui:style>
+	<g:HTMLPanel ui:field="htmlImages">
+		<g:FlexTable styleName="{style.pointer}" ui:field="flextImages" cellPadding="5"/>
+	</g:HTMLPanel>
+</ui:UiBinder> 

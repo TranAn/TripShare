@@ -79,8 +79,8 @@ public class PathView extends Composite {
 	public PathView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		htmlPathCreate.add(pathCreate);
-		listArrange.addItem("Date descending");
-		listArrange.addItem("Date ascending");
+		listArrange.addItem("Newest");
+		listArrange.addItem("Oldest");
 		
 		listArrange.addChangeHandler(new ChangeHandler() {
 			
@@ -156,7 +156,7 @@ public class PathView extends Composite {
 						String poster = "Tester";
 						if(result.getPoster() != null)
 							poster = result.getPoster().getUserName();
-						PathDetail pathDetail = new PathDetail("/resources/Travel tips2.jpg", title, poster, result.getDescription());
+						PathDetail pathDetail = new PathDetail(result.getId(), "/resources/Travel tips2_resize.jpg", title, poster, result.getDescription());
 						if(listPathsDetail.isEmpty())
 							htmlPathTable.add(pathDetail);
 						else
@@ -214,7 +214,7 @@ public class PathView extends Composite {
 						String poster = "Tester";
 						if(path.getPoster() != null)
 							poster = path.getPoster().getUserName();
-						PathDetail pathDetail = new PathDetail("/resources/Travel tips2.jpg", title, poster, path.getDescription());
+						PathDetail pathDetail = new PathDetail(path.getId(), "/resources/Travel tips2_resize.jpg", title, poster, path.getDescription());
 						htmlPathTable.add(pathDetail);
 						getPathPhoto(path, pathDetail);
 						listPathsDetail.add(pathDetail);

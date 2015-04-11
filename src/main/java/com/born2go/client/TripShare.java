@@ -11,6 +11,7 @@ import com.born2go.client.widgets.LoadingBox;
 import com.born2go.client.widgets.PathView;
 import com.born2go.client.widgets.TravelMap;
 import com.born2go.client.widgets.TravelMap.Listener;
+import com.born2go.client.widgets.ViewFullPath;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -30,6 +31,7 @@ public class TripShare implements EntryPoint {
 	
 	static final CreateTrip createTrip = new CreateTrip();
 	static final PathView pathView = new PathView();
+	static final ViewFullPath viewFullPath = new ViewFullPath();
 
 	@Override
 	public void onModuleLoad() {
@@ -46,6 +48,14 @@ public class TripShare implements EntryPoint {
 				pathView.getTrip(Long.valueOf(tripId));
 				RootPanel.get("tripcontent").add(pathView);
 			}
+		}
+		
+		if (RootPanel.get("gallery") != null) {
+			String pathId = Window.Location.getPath().replaceAll("/destination/", "");
+			 if(pathId.length() != 0) {
+				 viewFullPath.getPath(Long.valueOf(pathId));
+				 RootPanel.get("gallery").add(viewFullPath);
+			 }
 		}
 		
 		if (RootPanel.get("betaTrip") != null) {
@@ -84,8 +94,9 @@ public class TripShare implements EntryPoint {
 	public static void getAccessToken(String accessToken) {
 		access_token = accessToken;
 		if(access_token.isEmpty()) {
-			if(Window.Location.getPath().contains("create") || Window.Location.getPath().contains("journey"))
-				Window.Location.assign("/");
+			if(Window.Location.getPath().contains("create") || Window.Location.getPath().contains("journey") ||
+					Window.Location.getPath().contains("destination"))
+				Window.Location.assign("/unauthorize.html");
 		}
 		else {
 

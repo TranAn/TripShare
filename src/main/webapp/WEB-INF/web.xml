@@ -9,6 +9,7 @@
 		<welcome-file>home.html</welcome-file>
 		<welcome-file>create.html</welcome-file>
 		<welcome-file>journey.jsp</welcome-file>
+		<welcome-file>path.jsp</welcome-file>
 	</welcome-file-list>
 
 	<!-- Register objectify entity -->
@@ -65,6 +66,15 @@
 	<servlet-mapping>
 		<servlet-name>journeyPage</servlet-name>
 		<url-pattern>/journey/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>destinationPage</servlet-name>
+		<jsp-file>/destination/path.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>destinationPage</servlet-name>
+		<url-pattern>/destination/*</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>

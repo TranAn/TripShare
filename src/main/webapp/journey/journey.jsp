@@ -57,7 +57,7 @@
 <!--                                           -->
 <!-- Any title is fine                         -->
 <!--                                           -->
-<title>Trip</title>
+<title>Journey</title>
 
 <!--                                           -->
 <!-- This script loads your compiled module.   -->

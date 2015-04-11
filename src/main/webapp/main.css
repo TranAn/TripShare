@@ -1,7 +1,7 @@
 /* make keyframes that tell the start state and the end state of our object */
-@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@-webkit-keyframes fadeIn {from { opacity:0;}to {opacity: 1;}}
+@-moz-keyframes fadeIn {from { opacity:0;}to {opacity: 1;}}
+@keyframes fadeIn {from { opacity:0;}to {opacity: 1;}}
 
 html {
 	background: url(resources/jonesmichael_1349868867_07.jpg) no-repeat
@@ -212,7 +212,7 @@ html {
 
 .tripInfoBorder {
 	border: 1px silver dotted;
-  	margin-top: 20px;
+	margin-top: 20px;
 }
 
 .tripContent {
@@ -224,7 +224,7 @@ html {
 
 .trip-destinations {
 	margin: 5px 0px;
-  	font-size: 15px;
+	font-size: 15px;
 }
 
 .commentBox {
@@ -243,12 +243,86 @@ html {
 	z-index: -2;
 }
 
-.fb-comments, .fb-comments * {
-    width:100% !important;
+.fb-comments,.fb-comments * {
+	width: 100% !important;
 }
 
 .link:hover {
 	cursor: pointer;
 	text-decoration: underline;
 	color: blue !important;
+}
+
+.left_rightPath {
+	border: 1px solid #a1a1a1;
+	padding: 20px;
+	background-color: #FCFFFF;
+	-webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+}
+
+.pathInfo {
+	position: relative;
+	margin: auto;
+	width: 76%;
+	max-width: 1000px;
+	height: auto !important;
+}
+
+.pathContent {
+	position: relative;
+	margin: auto;
+	width: 76%;
+	max-width: 1024px;
+}
+
+ul {
+	padding-left: 15px;
+}
+
+ul.a {
+	list-style-type: circle;
+}
+
+.font_4 {
+	font: normal normal normal 34px/1.4em nimbus-sans-tw01con, sans-serif;
+	color: rgb(56, 119, 127);
+	font-size: 25px;
+	margin-bottom: 10px;
+}
+
+.font_6 {
+	font: normal normal normal 18px/1.4em 'open sans condensed', sans-serif;
+	color: rgb(56, 119, 127);
+}
+
+.font_9 {
+	font-size: 15px;
+ 	font-family: museo-w01-700, serif;
+  	color: gray;
+  	font-style: italic;
+  	margin-top: 0px;
+  	float: left;
+  	margin-right: 50px;
+  	margin-bottom: 20px;
+}
+
+.one_imageView {
+	min-width: 50%;
+	max-width: 100%;
+	height: 400px;
+	display: block;
+ 	/* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); */
+  	background-color: rgba(48, 27, 12, 1);
+ 	overflow: hidden;
+  	border: 2px gray double;
+}
+
+.imageView {
+	width: 165px;
+	height: 150px;
+	background: #fff;
+	border: 1px solid #ccc;
+	vertical-align: bottom;
 }

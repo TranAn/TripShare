@@ -64,14 +64,11 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		return exportTrip;
 	}
 
-	boolean isRemove = false;
-
 	@Override
 	public void removeTrip(Long idTrip) {
 		Trip oldTrip = findTrip(idTrip);
 		if (oldTrip != null)
 			ofy().delete().entity(oldTrip);
-
 	}
 
 	/**
