@@ -61,9 +61,9 @@
 <!-- be added before this line.                -->
 <!--                                           -->
 <script type="text/javascript" src="http://slideshow.triptracker.net/slide.js"></script>
-<script type="text/javascript" language="javascript" src="../script/script.nocache.js"></script>
+<script type="text/javascript" language="javascript" src="../tripshare/tripshare.nocache.js"></script>
 <script src="http://connect.facebook.net/en_US/all.js"></script>
-<script type="text/javascript" src="/js/facebookConnect.js"></script>
+<script type="text/javascript" src="/myjs/facebookConnect.js"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false;key=AIzaSyCwX2qpyTev25qwNaBxFXBbgIhbPtFeLHw"></script>
 
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">

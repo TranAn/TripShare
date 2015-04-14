@@ -59,6 +59,7 @@
     	max-height: 250px;
     	/* overflow: hidden; */
     	resize: none;
+    	display: none;
 	}
 	
 	.PathCreate-Obj6ScrollAble {
@@ -140,7 +141,7 @@
 			</table>
 		</g:HTMLPanel>
 		
-		<g:HTMLPanel styleName="{style.PathCreate-Obj7}">
+		<g:HTMLPanel ui:field="editTextBox" styleName="{style.PathCreate-Obj7}">
 			<p2:StretchyTextArea styleName="gwt-TextBox {style.PathCreate-Obj6}" width="100%" height="" ui:field="txbDescription"/>
 			<!-- <g:TextArea  styleName="gwt-TextBox {style.PathCreate-Obj6}" width="100%" height="140px" ui:field="txbDescription"/> -->
 		</g:HTMLPanel>

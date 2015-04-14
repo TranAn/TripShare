@@ -36,7 +36,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>data_service</servlet-name>
-		<url-pattern>/script/datastore</url-pattern>
+		<url-pattern>/tripshare/datastore</url-pattern>
 	</servlet-mapping>
 
 	<!-- Servlets -->

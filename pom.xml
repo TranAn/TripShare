@@ -11,7 +11,6 @@
 		<appengine.target.version>1.9.9</appengine.target.version>
 		<gwtVersion>2.7.0</gwtVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
 		<appengine.home>${user.home}/.m2/repository/com/google/appengine/appengine-java-sdk/${appengine.target.version}/appengine-java-sdk-${appengine.target.version}</appengine.home>
 	</properties>
 
@@ -27,6 +26,13 @@
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
 			<version>${gwtVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-dev</artifactId>
+			<version>${gwtVersion}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
@@ -157,10 +163,11 @@
 					</execution>
 				</executions>
 				<configuration>
-					<runTarget>journey/journey.jsp</runTarget>
+					<runTarget>home.html</runTarget>
 					<modules>
 						<module>com.born2go.TripShare</module>
 					</modules>
+					<superDevMode>true</superDevMode>
 					<compileReport>true</compileReport>
 					<appEngineHome>${appengine.home}</appEngineHome>
 					<server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server>
@@ -169,7 +176,7 @@
 					<logLevel>INFO</logLevel>
 				</configuration>
 			</plugin>
+			
 		</plugins>
-
 	</build>
 </project>

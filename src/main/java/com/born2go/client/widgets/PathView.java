@@ -114,6 +114,7 @@ public class PathView extends Composite {
 						htmlPathToolbar.setHeight(toolbar.getOffsetHeight()+ htmlPathCreate.getOffsetHeight()+ "px");
 						htmlPathToolbar.remove(toolbar);
 						htmlPathToolbar.remove(htmlPathCreate);
+						pathCreate.reAddCKEditor();
 						htmlPathToolbarFixed.add(toolbar);
 						htmlPathToolbarFixed.add(htmlPathCreate);				
 					}
@@ -123,6 +124,7 @@ public class PathView extends Composite {
 						htmlPathToolbar.setHeight("");
 						htmlPathToolbar.add(toolbar);
 						htmlPathToolbar.add(htmlPathCreate);
+						pathCreate.reAddCKEditor();
 						htmlPathToolbarFixed.remove(toolbar);
 						htmlPathToolbarFixed.remove(htmlPathCreate);			
 					}
