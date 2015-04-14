@@ -231,19 +231,24 @@ public class PathCreate extends Composite {
 		path.setLocate(locate);
 		path.setCreateDate(txbTimeline.getValue());
 		path.setDescription(txbDescription.getValue());
-		TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
-			
-			@Override
-			public void onSuccess(Path result) {
-				uploadPhoto(tripId, result.getId());
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				TripShare.loadBox.hide();
-				Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
-			}
-		});
+		if(TripShare.access_token == null) {
+			Window.alert("!: Your login has expired, pls login again.");
+		}
+		else {
+			TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
+				
+				@Override
+				public void onSuccess(Path result) {
+					uploadPhoto(tripId, result.getId());
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					TripShare.loadBox.hide();
+					Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
+				}
+			});
+		}
 	}
 	
 	void cancelPost() {

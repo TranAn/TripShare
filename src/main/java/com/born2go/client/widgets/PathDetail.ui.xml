@@ -24,6 +24,9 @@
 		overflow: hidden;
 		border: 1px solid gray;
 		margin-right: 20px;
+		max-width: 350px;
+		min-height: 250px;
+		max-height: 300px;
 	}
 	
 	.PathDetail-Obj3 {
@@ -76,8 +79,7 @@
 		<table>
 			<tr>
 				<td valign="top">
-					<g:Image styleName="{style.PathDetail-Obj2}" width="350px"
-						height="250px" ui:field="picture" />
+					<g:Image styleName="{style.PathDetail-Obj2}" ui:field="picture" />
 				</td>
 				<td valign="top">
 					<g:Anchor styleName="{style.PathDetail-Obj3}" ui:field="lbTitle" />

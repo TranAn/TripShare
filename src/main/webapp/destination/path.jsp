@@ -160,7 +160,7 @@
 									%>
 								</div>
 
-								<div class="font-blackTitleLarge" style="margin-top: 30px; color: gray;">Mô tả:</div>
+								<br/>
 								<p
 									style="font-size: 15px; line-height: 1.6em; white-space: pre-line;"><%=path.getDescription()%></p>
 								<div 

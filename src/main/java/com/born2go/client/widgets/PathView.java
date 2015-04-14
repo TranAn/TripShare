@@ -72,6 +72,8 @@ public class PathView extends Composite {
 	TripInfo tripInfo;
 	PathCreate pathCreate = new PathCreate();
 	PhotoUpload photoUpload = new PhotoUpload();
+	
+	List<Path> listPaths = new ArrayList<Path>();
 	List<PathDetail> listPathsDetail = new ArrayList<PathDetail>();
 	
 	private Trip theTrip;
@@ -208,6 +210,7 @@ public class PathView extends Composite {
 				
 				@Override
 				public void onSuccess(List<Path> result) {
+					listPaths.addAll(result);
 					for(int i=result.size()-1; i>=0; i--) {
 						Path path = result.get(i);
 						String title = path.getLocate().getAddressName()+ " - " + TripShare.dateFormat(path.getCreateDate());
@@ -323,7 +326,11 @@ public class PathView extends Composite {
 
 	@UiHandler("btnGallery")
 	void onBtnGalleryClick(ClickEvent event) {
-		TripShare.dataService.listPicture(theTrip.getGallery(), new AsyncCallback<List<Picture>>() {
+		List<Long> photos = new ArrayList<Long>();
+		photos.addAll(theTrip.getGallery());
+		for(Path path: listPaths)
+			photos.addAll(path.getGallery());
+		TripShare.dataService.listPicture(photos, new AsyncCallback<List<Picture>>() {
 			
 			@Override
 			public void onSuccess(List<Picture> result) {
