@@ -256,7 +256,7 @@ public class CKConfig {
 	}
 
 	/**
-	 * Define if the ckEditor instance should have the focus on startup or not
+	 * Define if the txbRichDescription instance should have the focus on startup or not
 	 * 
 	 * @param name
 	 *            The toolbar name

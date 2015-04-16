@@ -11,11 +11,7 @@ import com.born2go.client.TripShare;
 import com.born2go.shared.Locate;
 import com.born2go.shared.Path;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JsArray;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.geolocation.client.Geolocation;
-import com.google.gwt.geolocation.client.Position;
-import com.google.gwt.geolocation.client.PositionError;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -30,16 +26,12 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.LongBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
-import com.google.maps.gwt.client.Geocoder;
-import com.google.maps.gwt.client.GeocoderRequest;
-import com.google.maps.gwt.client.GeocoderResult;
-import com.google.maps.gwt.client.GeocoderStatus;
-import com.google.maps.gwt.client.LatLng;
 
 public class PathCreate extends Composite {
 
@@ -59,10 +51,13 @@ public class PathCreate extends Composite {
 	@UiField ScrollPanel scrollPathPhotos;
 	@UiField Label lbCountPhotos;
 	@UiField HTMLPanel editTextBox;
+	@UiField ListBox lbPostTo;
+	@UiField Anchor btnRichTextEdit;
 	
 	Long tripId;
 	Locate locate = new Locate();
 	boolean isHandlerUploadEvent = false;
+	boolean isRichTextEdit = false;
 	
 	interface Binder extends UiBinder<Widget, PathCreate> {
 	}
@@ -79,7 +74,7 @@ public class PathCreate extends Composite {
 		this.listener = listener;
 	}
 	
-	CKEditor ckEditor;
+	CKEditor txbRichDescription;
 	
 	public CKConfig getCKConfig() {
 		// Creates a new config, with FULL preset toolbar as default
@@ -91,6 +86,7 @@ public class PathCreate extends Composite {
 		// Setting size
 		ckf.setWidth("");
 		ckf.setHeight("180px");
+		ckf.setResizeMaxHeight(250);
 
 		// Creating personalized toolbar
 		ToolbarLine line1 = new ToolbarLine();
@@ -173,17 +169,24 @@ public class PathCreate extends Composite {
 		return ckf;
 	}
 	
-	public void reAddCKEditor() {
-		ckEditor.removeFromParent();
-		ckEditor = new CKEditor(getCKConfig());
-		editTextBox.add(ckEditor);
-	}
+//	public void reAddCKEditor() {
+//		String saveText = txbRichDescription.getData();
+//		txbRichDescription.removeFromParent();
+//		txbRichDescription = null;
+//		txbRichDescription = new CKEditor(getCKConfig());
+//		txbRichDescription.setData(saveText);
+//		editTextBox.add(txbRichDescription);
+//		if(!isRichTextEdit)
+//			txbRichDescription.setVisible(false);
+//	}
 
 	public PathCreate() {
 		initWidget(uiBinder.createAndBindUi(this));
 //		this.setVisible(false);
-		ckEditor = new CKEditor(getCKConfig());
-		editTextBox.add(ckEditor);
+		lbPostTo.addItem("new");
+//		txbRichDescription = new CKEditor(getCKConfig());
+//		editTextBox.add(txbRichDescription);
+//		txbRichDescription.setVisible(false);
 		
 		formUpload.setEncoding(FormPanel.ENCODING_MULTIPART);
 		formUpload.setMethod(FormPanel.METHOD_POST);
@@ -338,11 +341,19 @@ public class PathCreate extends Composite {
 		locate.setAddressName(txbLocation.getText());
 		path.setLocate(locate);
 		path.setCreateDate(txbTimeline.getValue());
-		path.setDescription(txbDescription.getValue());
-		if(TripShare.access_token == null) {
-			Window.alert("!: Your login has expired, pls login again.");
+		if(!isRichTextEdit) {
+			if(txbRichDescription != null) {
+				txbRichDescription.setData(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
+				path.setDescription(txbRichDescription.getData());
+			} else 
+				path.setDescription(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
 		}
-		else {
+		else
+			path.setDescription(txbRichDescription.getData());
+//		if(TripShare.access_token == null) {
+//			Window.alert("!: Your login has expired, pls login again.");
+//		}
+//		else {
 			TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
 				
 				@Override
@@ -356,14 +367,21 @@ public class PathCreate extends Composite {
 					Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
 				}
 			});
-		}
+//		}
 	}
 	
 	void cancelPost() {
 		this.setStyleName("PathCreate-Obj3");
 		txbLocation.setText("");
 		txbTimeline.getElement().setInnerHTML("");
+		btnRichTextEdit.removeStyleName("PathCreate-Obj16");
 		txbDescription.setText("");
+		txbDescription.setVisible(true);
+		if(txbRichDescription != null) {
+			txbRichDescription.setData("");
+			txbRichDescription.setVisible(false);
+		}
+		isRichTextEdit = false;
 		scrollPathPhotos.setHeight("0px");
 		htmlPathPhotos.getElement().setInnerHTML("");
 		lbCountPhotos.setText("0 / Photos");
@@ -378,35 +396,66 @@ public class PathCreate extends Composite {
 		cancelPost();
 	}
 	
-	@UiHandler("btnFindYourLocation") 
-	void onBtnFindYourLocationClick(ClickEvent event) {
-		Geolocation geoLocation = Geolocation.getIfSupported();
-		if (geoLocation == null) {
-			Window.alert("!: Your old browser not support GeoLocation");
-		} else {
-			geoLocation.getCurrentPosition(new com.google.gwt.core.client.Callback<Position, PositionError>() {
-				
-				@Override
-				public void onSuccess(Position result) {
-					final LatLng l = LatLng.create(result.getCoordinates().getLatitude(), result.getCoordinates().getLongitude());
-					GeocoderRequest geoRequest = GeocoderRequest.create();
-					geoRequest.setLocation(l);
-					Geocoder geoCode = Geocoder.create();
-					geoCode.geocode(geoRequest, new Geocoder.Callback() {
-						@Override
-						public void handle(JsArray<GeocoderResult> a, GeocoderStatus b) {
-							String address = a.get(0).getFormattedAddress();
-							txbLocation.setText(address);
-							locate.setLatLng(l);
-						}
-					});
+//	@UiHandler("btnFindYourLocation") 
+//	void onBtnFindYourLocationClick(ClickEvent event) {
+//		Geolocation geoLocation = Geolocation.getIfSupported();
+//		if (geoLocation == null) {
+//			Window.alert("!: Your old browser not support GeoLocation");
+//		} else {
+//			geoLocation.getCurrentPosition(new com.google.gwt.core.client.Callback<Position, PositionError>() {
+//				
+//				@Override
+//				public void onSuccess(Position result) {
+//					final LatLng l = LatLng.create(result.getCoordinates().getLatitude(), result.getCoordinates().getLongitude());
+//					GeocoderRequest geoRequest = GeocoderRequest.create();
+//					geoRequest.setLocation(l);
+//					Geocoder geoCode = Geocoder.create();
+//					geoCode.geocode(geoRequest, new Geocoder.Callback() {
+//						@Override
+//						public void handle(JsArray<GeocoderResult> a, GeocoderStatus b) {
+//							String address = a.get(0).getFormattedAddress();
+//							txbLocation.setText(address);
+//							locate.setLatLng(l);
+//						}
+//					});
+//				}
+//				
+//				@Override
+//				public void onFailure(PositionError reason) {
+//					Window.alert("!: Can't find your location");
+//				}
+//			});
+//		}
+//	}
+	
+	@UiHandler("btnRichTextEdit") 
+	void onBtnRichTextEditClick(ClickEvent event) {
+		if(isRichTextEdit) {
+			if(txbRichDescription.getHTML().length() != 0) {
+				if(Window.confirm("!: Rich text can't convert to normal text, if you continue the text will be clear.")) {
+					txbRichDescription.setVisible(false);
+					txbDescription.setVisible(true);
+					btnRichTextEdit.removeStyleName("PathCreate-Obj16");
+					txbDescription.setText("");
+					isRichTextEdit = !isRichTextEdit;
 				}
-				
-				@Override
-				public void onFailure(PositionError reason) {
-					Window.alert("!: Can't find your location");
-				}
-			});
+			} else {
+				txbRichDescription.setVisible(false);
+				txbDescription.setVisible(true);
+				btnRichTextEdit.removeStyleName("PathCreate-Obj16");
+				isRichTextEdit = !isRichTextEdit;
+			}
+		}
+		else {
+			if(txbRichDescription == null) {
+				txbRichDescription = new CKEditor(getCKConfig());
+				editTextBox.add(txbRichDescription);
+			}
+			txbRichDescription.setVisible(true);
+			txbDescription.setVisible(false);
+			btnRichTextEdit.addStyleName("PathCreate-Obj16");
+			txbRichDescription.setData(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
+			isRichTextEdit = !isRichTextEdit;
 		}
 	}
 	

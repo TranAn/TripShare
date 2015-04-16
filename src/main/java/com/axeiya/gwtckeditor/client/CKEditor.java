@@ -458,7 +458,7 @@ public class CKEditor extends Composite implements HasSaveHandlers<CKEditor>, Ha
 	}
 
 	/**
-	 * Set the focus natively if ckEditor is attached, alerts you if it's not
+	 * Set the focus natively if txbRichDescription is attached, alerts you if it's not
 	 * the case.
 	 * 
 	 * @param focus

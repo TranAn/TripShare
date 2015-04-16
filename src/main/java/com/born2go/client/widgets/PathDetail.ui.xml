@@ -17,6 +17,14 @@
 		margin-bottom: 40px;
 	}
 	
+	.PathDetail-Obj1 i{
+		opacity: 0;
+	}
+	
+	.PathDetail-Obj1:hover i{
+		opacity: 1;	
+	}
+	
 	.PathDetail-Obj2 {
 		display: block;
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
@@ -74,6 +82,19 @@
 	.PathDetail-Obj7 {
 		display: inline-flex;
 	}
+	
+	.PathDetail-Obj8 {
+		bottom: 20px;
+  		right: 20px;
+  		position: absolute;
+		color: black !important;
+		cursor: pointer;
+		margin-top: 5px;
+	}
+	
+	.PathDetail-Obj8:hover {
+		color: gray !important;
+	}
 	</ui:style>
 	<g:HTMLPanel styleName="{style.PathDetail-Obj1}">
 		<table>
@@ -87,7 +108,8 @@
 						<g:Label styleName="font-blackTitleLarge {style.PathDetail-Obj5}">Post by</g:Label>
 						<g:Label styleName="font-blackTitleLarge {style.PathDetail-Obj6}" ui:field="lbPoster">Tran An</g:Label>
 					</g:HTMLPanel>
-					<p ui:field="htmlContent" style="white-space: pre-line; font-size: 15px; line-height: 1.6em;" />
+					<p ui:field="htmlContent" style="font-size: 15px; line-height: 1.6em;" />
+					<g:Anchor title="Delete this post" ui:field="btnDeletePost" styleName="{style.PathDetail-Obj8}"><i class="fa fa-trash fa-2x"></i></g:Anchor>
 				</td>
 			</tr>
 		</table>

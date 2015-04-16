@@ -35,6 +35,9 @@ public class ViewFullPath extends Composite {
 	List<String> urls;
 
 	List<Image> listImages;
+	
+	public static Long trip_Id;
+	public static Long path_Id;
 
 	public ViewFullPath() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -45,6 +48,8 @@ public class ViewFullPath extends Composite {
 			
 			@Override
 			public void onSuccess(Path result) {
+				trip_Id = result.getTripId();
+				path_Id = result.getId();
 				TripShare.dataService.listPicture(result.getGallery(), new AsyncCallback<List<Picture>>() {
 					
 					@Override

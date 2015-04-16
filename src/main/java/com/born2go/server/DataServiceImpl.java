@@ -85,6 +85,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 					Poster poster = getPoster(accessToken);
 					part.setPoster(poster);
 				}
+				part.setTripId(tripId);
 				Key<Path> key = ofy().save().entity(part).now();
 				exportPart = ofy().load().key(key).now();
 				//--

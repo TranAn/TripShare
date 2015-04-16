@@ -122,7 +122,7 @@
 							redirectHomeUrl(response);
 						} else {
 				%>
-				<table>
+				<table style="width: 100%;">
 					<tr>
 						<td valign="top" style="padding-right: 10px;">
 							<div class="left_rightPath">
@@ -163,8 +163,26 @@
 								<br/>
 								<p
 									style="font-size: 15px; line-height: 1.6em; white-space: pre-line;"><%=path.getDescription()%></p>
-								<div 
-									class="font-blackTitleLarge" style="margin-top: 30px; color: gray;">Gallery:</div>
+								<div style="height: 55px;">
+									<div class="font-blackTitleLarge" style="float: left;margin-top: 30px; color: gray;">Gallery:</div>						
+									<label onclick="uploadPhotos()" style="position: relative; float: right; top: 15px; font-size: small;" class="PhotoUpload-Obj2">
+										<i style="margin-right:5px;" class="fa fa-camera fa-lg"></i>
+										Upload Photos
+									</label>
+									<label onclick="editPost()" style="position: relative; float: right; top: 15px; font-size: small; margin-right: 10px;" class="PhotoUpload-Obj2">
+										<i style="margin-right:5px;" class="fa fa-pencil fa-lg"></i>
+										Edit
+									</label>
+									<script type="text/javascript">
+										function uploadPhotos() {
+											 var gwtCallApi = new GWTExport.GwtCallApi();
+											 gwtCallApi.uploadPhotoCall();
+										}
+										function editPost() {
+											alert("edit");
+										}
+									</script>
+								</div>
 								<div
 									style="with:100%; border: 1px solid #ccc;   margin: 15px 0px" id="gallery" class="gallery"></div>
 									
@@ -204,11 +222,11 @@
 										<img src="/resources/Travel tips2_resize.jpg"
 											style="margin-top: 0px; margin-left: 0px; width: 131px; height: 146px;" />
 									</div>
-									<div style="margin-top: 20px">
+									<!-- <div style="margin-top: 20px">
 										<div align="left">FaceBook</div>
 										<div align="center" style="margin-top: -18px;">Twinter</div>
 										<div align="right" style="margin-top: -18px;">Google +</div>
-									</div>
+									</div> -->
 								</div>
 								<hr style="margin-bottom: 20px;" />
 

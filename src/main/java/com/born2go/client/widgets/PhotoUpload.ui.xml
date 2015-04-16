@@ -121,6 +121,7 @@
 		<g:FormPanel visible="false" ui:field="formUpload">
 			<g:HTMLPanel>
 				<g:LongBox ui:field="boxTripId" /> 
+				<g:LongBox ui:field="boxPathId" /> 
 				<g:FileUpload width="100%" height="100%" ui:field="fileUpload" />
 			</g:HTMLPanel>
 		</g:FormPanel>

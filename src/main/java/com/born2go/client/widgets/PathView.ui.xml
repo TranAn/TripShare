@@ -81,9 +81,8 @@
 		margin-bottom: 0px;
 	}
 	</ui:style>
-	<g:HTMLPanel>
-		<g:HTMLPanel ui:field="htmlPathToolbarFixed" styleName="{style.PathView-Obj4}"></g:HTMLPanel>
-		
+	<g:HTMLPanel ui:field="pathViewForm">
+		<g:HTMLPanel ui:field="dummyNode"></g:HTMLPanel>
 		<g:HTMLPanel ui:field="htmlPathToolbar" styleName="{style.PathView-Obj3}">
 			<g:HTMLPanel ui:field="toolbar" styleName="{style.PathView-Obj1}">
 				<g:HorizontalPanel styleName="{style.PathView-Obj5}">
@@ -107,7 +106,7 @@
 			<g:HTMLPanel ui:field="htmlPathCreate"></g:HTMLPanel>
 		</g:HTMLPanel>
 	
-		<g:HTMLPanel ui:field="htmlPathTable"></g:HTMLPanel>
+		<g:FlowPanel ui:field="htmlPathTable"></g:FlowPanel>
 		
 		<g:HTMLPanel ui:field="facebookComments"></g:HTMLPanel>
 		

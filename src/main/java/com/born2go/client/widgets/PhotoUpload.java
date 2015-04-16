@@ -9,6 +9,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -30,6 +31,7 @@ public class PhotoUpload extends DialogBox {
 	@UiField HTMLPanel imageTable;
 	@UiField FormPanel formUpload;
 	@UiField LongBox boxTripId;
+	@UiField LongBox boxPathId;
 	@UiField Label lbPhotosCount;
 	@UiField Image imgUploading;
 	
@@ -50,6 +52,7 @@ public class PhotoUpload extends DialogBox {
 		
 		fileUpload.setName("filesUpload");
 		boxTripId.setName("tripId");
+		boxPathId.setName("pathId");
 	
 		fileUpload.getElement().setAttribute("id", "fileUpload");
 		imageTable.getElement().setAttribute("id", "imageTable");
@@ -62,6 +65,8 @@ public class PhotoUpload extends DialogBox {
 			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event) {
 				cancelUpload();
+				if(Window.Location.getPath().contains("destination"))
+					Window.Location.reload();
 			}
 		});
 	}
@@ -134,6 +139,11 @@ public class PhotoUpload extends DialogBox {
 			
 	}-*/;
 	
+	public void uploadFor(Long tripId, Long pathId) {
+		boxTripId.setValue(tripId);
+		boxPathId.setValue(pathId);
+	}
+	
 	void cancelUpload() {
 		imgUploading.setVisible(false);
 		formUpload.reset();
@@ -156,7 +166,6 @@ public class PhotoUpload extends DialogBox {
 			@Override
 			public void onSuccess(String result) {
 				formUpload.setAction(result.toString());
-				boxTripId.setValue(PathView.tripId);
 				formUpload.submit();
 			}
 			

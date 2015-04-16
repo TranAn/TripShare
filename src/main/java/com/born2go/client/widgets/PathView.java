@@ -22,6 +22,7 @@ import com.google.gwt.user.client.Window.ScrollHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -37,11 +38,13 @@ public class PathView extends Composite {
 	}
 	
 	@UiField
-	HTMLPanel htmlPathToolbarFixed;
+	HTMLPanel pathViewForm;
+	@UiField
+	HTMLPanel dummyNode;
 	@UiField
 	HTMLPanel htmlPathToolbar;
 	@UiField
-	HTMLPanel htmlPathTable;
+	FlowPanel htmlPathTable;
 	@UiField
 	HTMLPanel facebookComments;
 	@UiField
@@ -109,25 +112,14 @@ public class PathView extends Composite {
 		Window.addWindowScrollHandler(new ScrollHandler() {
 			@Override
 			public void onWindowScroll(ScrollEvent event) {
-				if(event.getScrollTop() >= htmlPathToolbar.getElement().getAbsoluteTop()) {
-					if(htmlPathToolbar.getElement().getChildCount() >= 4) {
-						htmlPathToolbar.setHeight(toolbar.getOffsetHeight()+ htmlPathCreate.getOffsetHeight()+ "px");
-						htmlPathToolbar.remove(toolbar);
-						htmlPathToolbar.remove(htmlPathCreate);
-						pathCreate.reAddCKEditor();
-						htmlPathToolbarFixed.add(toolbar);
-						htmlPathToolbarFixed.add(htmlPathCreate);				
-					}
+				if(event.getScrollTop() >= pathViewForm.getElement().getAbsoluteTop()) {
+					htmlPathToolbar.setStyleName("PathView-Obj4");
+					dummyNode.setHeight("95px");
 				}
-				else {
-					if(htmlPathToolbarFixed.getElement().hasChildNodes()) {
-						htmlPathToolbar.setHeight("");
-						htmlPathToolbar.add(toolbar);
-						htmlPathToolbar.add(htmlPathCreate);
-						pathCreate.reAddCKEditor();
-						htmlPathToolbarFixed.remove(toolbar);
-						htmlPathToolbarFixed.remove(htmlPathCreate);			
-					}
+				else {	
+					pathViewForm.getElement().insertFirst(htmlPathToolbar.getElement());
+					htmlPathToolbar.setStyleName("PathView-Obj3");
+					dummyNode.setHeight("0px");
 				}
 				
 				for(PathDetail pathDetail: listPathsDetail) {
@@ -142,9 +134,6 @@ public class PathView extends Composite {
 		pathCreate.setListener(new PathCreate.Listener() {
 			@Override
 			public void onClose() {
-				if(htmlPathToolbarFixed.getElement().hasChildNodes()) {
-					htmlPathToolbar.setHeight(toolbar.getOffsetHeight()+ "px");
-				}
 				btnUpload.setVisible(true);
 			}
 
@@ -161,10 +150,18 @@ public class PathView extends Composite {
 						if(result.getPoster() != null)
 							poster = result.getPoster().getUserName();
 						PathDetail pathDetail = new PathDetail(result.getId(), "/resources/Travel tips2_resize.jpg", title, poster, result.getDescription());
+						pathDetail.setListener(new PathDetail.Listener() {
+							
+							@Override
+							public void onDeletePost(PathDetail pathDetail) {
+								htmlPathTable.remove(pathDetail);
+								listPathsDetail.remove(pathDetail);
+							}
+						});
 						if(listPathsDetail.isEmpty())
 							htmlPathTable.add(pathDetail);
 						else
-							htmlPathTable.getElement().insertBefore(pathDetail.getElement(), listPathsDetail.get(0).getElement());
+							htmlPathTable.insert(pathDetail, 0);
 						getPathPhoto(result, pathDetail);
 						listPathsDetail.add(0, pathDetail);
 						pathDetail.setStyleName("PathDetail-Obj1 fadeIn");
@@ -178,6 +175,11 @@ public class PathView extends Composite {
 				});
 			}
 		});
+	}
+	
+	public void removePathDetail(PathDetail pathDetail) {
+		htmlPathTable.remove(pathDetail);
+		listPathsDetail.remove(pathDetail);
 	}
 	
 	public void setDirectionResult(DirectionsResult directionResult) {
@@ -220,6 +222,14 @@ public class PathView extends Composite {
 						if(path.getPoster() != null)
 							poster = path.getPoster().getUserName();
 						PathDetail pathDetail = new PathDetail(path.getId(), "/resources/Travel tips2_resize.jpg", title, poster, path.getDescription());
+						pathDetail.setListener(new PathDetail.Listener() {
+							
+							@Override
+							public void onDeletePost(PathDetail pathDetail) {
+								htmlPathTable.remove(pathDetail);
+								listPathsDetail.remove(pathDetail);
+							}
+						});
 						htmlPathTable.add(pathDetail);
 						getPathPhoto(path, pathDetail);
 						listPathsDetail.add(pathDetail);
@@ -323,6 +333,7 @@ public class PathView extends Composite {
 	@UiHandler("btnUpload")
 	void onBtnUploadClick(ClickEvent event) {
 		photoUpload.center();
+		photoUpload.uploadFor(tripId, null);
 		photoUpload.handlerUploadEvent();
 	}
 

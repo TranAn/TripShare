@@ -52,7 +52,7 @@ public class UploadService extends HttpServlet implements Servlet {
 			    	Picture file = new Picture();
 			    	if(req.getParameter("tripId") != null)
 			    		file.setOnTrip(Long.valueOf(req.getParameter("tripId").replaceAll(",", "")));
-			    	if(req.getParameter("pathId") != null)
+			    	if(req.getParameter("pathId") != null && !req.getParameter("pathId").isEmpty())
 			    		file.setOnPath(Long.valueOf(req.getParameter("pathId").replaceAll(",", "")));
 			    	file.setKey(key.getKeyString());
 			    	file.setServeUrl(imagesService.getServingUrl(ServingUrlOptions.Builder.withBlobKey(key)) + "=s1600");

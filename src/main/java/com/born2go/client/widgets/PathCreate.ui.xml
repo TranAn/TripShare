@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client" xmlns:p2="urn:import:com.born2go.client.widgets">
 	<ui:style>
-	@external .PathCreate-Obj3, .PathCreate-Obj3Open, .PathCreate-Obj3WideOpen, .PathCreate-Obj6ScrollAble, .PathCreate-Obj12;
+	@external .PathCreate-Obj3, .PathCreate-Obj3Open, .PathCreate-Obj3WideOpen, .PathCreate-Obj6ScrollAble, .PathCreate-Obj12, .PathCreate-Obj16;
 	.PathCreate-Obj1 {
 		float: left;
 		width: 30%;
@@ -43,7 +43,7 @@
 	
 	.PathCreate-Obj5 {
 		color: gray;
-		padding: 5px 10px;
+		padding: 5px 8px;
 		text-shadow: none;
 		display: -webkit-box;
 	}
@@ -59,7 +59,6 @@
     	max-height: 250px;
     	/* overflow: hidden; */
     	resize: none;
-    	display: none;
 	}
 	
 	.PathCreate-Obj6ScrollAble {
@@ -115,30 +114,66 @@
   		font-size: 14px;
   		margin-top: 12px;
 	}
+	
+	.PathCreate-Obj14 {
+		float: right;
+		position: relative;
+  		top: -6px;
+ 		right: 2px;
+	}
+	
+	.PathCreate-Obj15 {
+		color: gray;
+		padding: 5px 12px;
+		text-shadow: none;
+		display: -webkit-box;
+	}
+	
+	.PathCreate-Obj16 {
+		background-color: #D05944;
+		color: white !important;
+	}
+	
+	.PathCreate-Obj17 {
+		font-style: italic;
+	}
 
 	</ui:style>
 	<g:HTMLPanel ui:field="container" styleName="{style.PathCreate-Obj3}">
 	
-		<g:HTMLPanel height="" styleName="{style.PathCreate-Obj4}">
-			<table>
+		<g:HTMLPanel height="35px" styleName="{style.PathCreate-Obj4}">
+			<table style="float:left;">
 			<tr>
-			<td style="padding-left: 10px; padding-top: 5px;">
-			<g:Label text="Tiêu đề:" width="70px" styleName="font-blackTitleNormal"/>
-			</td>
-			<td>
-			<g:TextBox width="" ui:field="txbLocation" height=""/>
-			</td>
-			<td style="padding-right:40px;">
-			<g:Anchor ui:field="btnFindYourLocation" styleName="greenbutton {style.PathCreate-Obj5}"><i class="fa fa-crosshairs fa-lg"></i></g:Anchor>
-			</td>
-			<td style="padding-left: 10px; padding-top: 5px;">
-			<g:Label text="Thời gian:" width="80px" styleName="font-blackTitleNormal"/>
-			</td>
-			<td>
-			<p1:DateBox width="" ui:field="txbTimeline" height=""/>
-			</td>
+				<td style="padding-top: 5px;">
+				<g:Label text="Post to:" width="55px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>
+				</td>
+				<td style="padding-left: 5px;">
+				<g:ListBox styleName="gwt-ListBox {style.PathCreate-Obj17}" width="130px" height="28px" ui:field="lbPostTo"/>
+				</td>
+				<!--  -->
+				<td style="border-right: 1px dotted silver; padding-left: 20px;"></td>
+				<!--  -->
+				<td style="padding-top: 5px;">
+				<g:Label text="Title:" width="55px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>
+				</td>
+				<td style="padding-left: 5px;">
+				<g:TextBox width="" ui:field="txbLocation" height=""/>
+				</td>
+				<td style="padding-top: 5px;">
+				<g:Label text="Time:" width="70px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>
+				</td>
+				<td style="padding-left: 5px;">
+				<p1:DateBox width="" ui:field="txbTimeline" height="18px"/>
+				</td>
+				<!--  -->
+				<td style="border-right: 1px dotted silver; padding-left: 25px;"></td>
+				<!--  -->
 			</tr>
 			</table>
+			<g:HorizontalPanel styleName="{style.PathCreate-Obj14}" horizontalAlignment="ALIGN_RIGHT" spacing="10">
+				<g:Anchor ui:field="btnFindYourLocation" styleName="greenbutton {style.PathCreate-Obj15}" title="Add location"><i class="fa fa-map-marker fa-lg"></i></g:Anchor>
+				<g:Anchor styleName="greenbutton {style.PathCreate-Obj5}" title="Rich text" ui:field="btnRichTextEdit"><i class="fa fa-font fa-lg"></i></g:Anchor>
+			</g:HorizontalPanel>
 		</g:HTMLPanel>
 		
 		<g:HTMLPanel ui:field="editTextBox" styleName="{style.PathCreate-Obj7}">
