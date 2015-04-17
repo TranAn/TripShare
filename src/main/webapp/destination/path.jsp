@@ -48,6 +48,7 @@
 <script type="text/javascript" src="/myjs/facebookConnect.js"></script>
 <script type="text/javascript"src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false;key=AIzaSyCwX2qpyTev25qwNaBxFXBbgIhbPtFeLHw"></script>
 <script type="text/javascript"src="http://slideshow.triptracker.net/slide.js"></script>
+<script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
 
 </head>
 
@@ -133,7 +134,7 @@
 									<%=path.getLocate().getAddressName()%>
 								<% } %>
 								</div>
-								<div style="">
+								<div style="height: 40px;">
 									<%
 										java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d hh:mm:ss");
 									%>
@@ -144,7 +145,7 @@
 										Date post:
 										<%=df.format(path.getCreateDate())%></p>
 								</div>
-								<div style="min-height: 10px;">
+								<div style="background: whitesmoke;min-height: 10px;padding: 15px 0px;">
 									<%
 										List<Long> gallery = path.getGallery();
 																																																				
@@ -161,25 +162,31 @@
 								</div>
 
 								<br/>
-								<p
-									style="font-size: 15px; line-height: 1.6em; white-space: pre-line;"><%=path.getDescription()%></p>
+								<!-- Editor content -->
+								<div id="pathDescription">
+									<p style="font-size: 15px; line-height: 1.6em; white-space: pre-line;"><%=path.getDescription()%></p>
+								</div>
+								<!--  -->
 								<div style="height: 55px;">
 									<div class="font-blackTitleLarge" style="float: left;margin-top: 30px; color: gray;">Gallery:</div>						
 									<label onclick="uploadPhotos()" style="position: relative; float: right; top: 15px; font-size: small;" class="PhotoUpload-Obj2">
 										<i style="margin-right:5px;" class="fa fa-camera fa-lg"></i>
 										Upload Photos
 									</label>
-									<label onclick="editPost()" style="position: relative; float: right; top: 15px; font-size: small; margin-right: 10px;" class="PhotoUpload-Obj2">
+									<div id="pathEditTool" style="position: relative; float: right; top: 15px; font-size: small; margin-right: 10px;">
+									<label onclick="editPost()" class="PhotoUpload-Obj2">
 										<i style="margin-right:5px;" class="fa fa-pencil fa-lg"></i>
 										Edit
 									</label>
+									</div>
 									<script type="text/javascript">
 										function uploadPhotos() {
 											 var gwtCallApi = new GWTExport.GwtCallApi();
 											 gwtCallApi.uploadPhotoCall();
 										}
 										function editPost() {
-											alert("edit");
+											 var gwtCallApi = new GWTExport.GwtCallApi();
+											 gwtCallApi.editFormCall();
 										}
 									</script>
 								</div>
