@@ -44,9 +44,8 @@
 <!-- be added before this line.                -->
 <!--                                           -->
 <script type="text/javascript" language="javascript"src="../tripshare/tripshare.nocache.js"></script>
-<!-- <script src="http://connect.facebook.net/en_US/all.js"></script> -->
-<script type="text/javascript" src="/myjs/facebookConnect.js"></script>
 <script type="text/javascript"src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false;key=AIzaSyCwX2qpyTev25qwNaBxFXBbgIhbPtFeLHw"></script>
+<script type="text/javascript" src="/myjs/facebookConnect.js"></script>
 <script type="text/javascript"src="http://slideshow.triptracker.net/slide.js"></script>
 <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
 
@@ -77,7 +76,6 @@
 		}
 	</script>
 
-
 	<div id="header">
 		<div id="title">
 			<center>
@@ -85,7 +83,7 @@
 					style="margin-right: 20px; letter-spacing: 0.3em; font: normal normal normal 14px/1.3em 'Open Sans', sans-serif"><font
 					color="#fffbf8">finding your trip</font></span> <span
 					style="line-height: 1.1em; font: normal normal normal 55px/1.1em Play, sans-serif; color: #fffbf8">Trip&nbsp;<strong>Share</strong></span>
-				<img src="/resources/1427111517_palm_tree.png" height="42"
+					<img src="/resources/1427111517_palm_tree.png" height="42"
 					width="42" /> <span
 					style="margin-left: 20px; letter-spacing: 0.3em; font: normal normal normal 14px/1.3em 'Open Sans', sans-serif"><font
 					color="#fffbf8">share with your friend</font></span>
@@ -94,10 +92,9 @@
 
 		<div id="menu">
 			<div style="margin: auto; display: -webkit-box;">
-				<li><a class="menubutton-actived" href="/">Home</a></li>
-				<li><a class="menubutton" href="/create/">Plan your trip</a></li>
-				<li><a id="menubutton" class="menubutton" href="/">Profile</a></li>
-				<!-- <li><a id="signInMenu" onclick="loginFacebook()">Sign In</a></li> -->
+				<a class="menubutton-actived" href="/">Home</a>
+				<a class="menubutton" href="/create/">Plan your trip</a>
+				<a id="menubutton" class="menubutton" onclick="loginFacebook()">Sign in Facebook</a>
 			</div>
 		</div>
 	</div>
@@ -168,41 +165,23 @@
 								</div>
 								<!--  -->
 								<div style="height: 55px;">
-									<div class="font-blackTitleLarge" style="float: left;margin-top: 30px; color: gray;">Gallery:</div>						
-									<label onclick="uploadPhotos()" style="position: relative; float: right; top: 15px; font-size: small;" class="PhotoUpload-Obj2">
-										<i style="margin-right:5px;" class="fa fa-camera fa-lg"></i>
-										Upload Photos
-									</label>
+									<div class="font-blackTitleLarge" style="float: left;margin-top: 30px; color: gray;">Gallery:</div>
+									<div id="pathUploadTool" style="position: relative; float: right; top: 15px; font-size: small;"> 													
+									</div>	
 									<div id="pathEditTool" style="position: relative; float: right; top: 15px; font-size: small; margin-right: 10px;">
-									<label onclick="editPost()" class="PhotoUpload-Obj2">
-										<i style="margin-right:5px;" class="fa fa-pencil fa-lg"></i>
-										Edit
-									</label>
-									</div>
-									<script type="text/javascript">
-										function uploadPhotos() {
-											 var gwtCallApi = new GWTExport.GwtCallApi();
-											 gwtCallApi.uploadPhotoCall();
-										}
-										function editPost() {
-											 var gwtCallApi = new GWTExport.GwtCallApi();
-											 gwtCallApi.editFormCall();
-										}
-									</script>
+									</div>							
 								</div>
-								<div
-									style="with:100%; border: 1px solid #ccc;   margin: 15px 0px" id="gallery" class="gallery"></div>
-									
+								<div style="with:100%; border: 1px solid #ccc;   margin: 15px 0px" id="gallery" class="gallery"></div>
+								<!--  -->
 								<div id="facebook">
 									<div class="fb-like"
 										data-href="http://born2go-b.appspot.com/destination/<%= pathId %>"
 										data-layout="standard" data-action="like"
 										data-show-faces="true" data-share="true"></div>
-									<div class="fb-comments"
+									<div class="fb-comments" data-width="100%"
 										data-href="http://born2go-b.appspot.com/destination/<%= pathId %>"
 										data-numposts="5" data-colorscheme="light" data-order-by="reverse_time"></div>
 								</div>
-
 							</div>
 						</td>
 						

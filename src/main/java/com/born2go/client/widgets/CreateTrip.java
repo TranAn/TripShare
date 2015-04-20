@@ -243,30 +243,37 @@ public class CreateTrip extends Composite {
 	
 	@UiHandler("btnCreateTrip")
 	void onBtnCreateTripClick(ClickEvent event) {
-		if(VerifiedField()) {
-			TripShare.loadBox.center();
-			Trip trip = new Trip();
-			trip.setName(txbName.getText());
-			trip.setDepartureDate(txbDeparture.getValue());
-			trip.setDescription(txbDescription.getText());
-			trip.setJourney(getJourney());
-			TripShare.dataService.insertTrip(trip, TripShare.access_token, new AsyncCallback<Trip>() {
-				
-				@Override
-				public void onSuccess(Trip result) {
-					TripShare.loadBox.hide();
-					Window.Location.assign("/journey/"+ result.getId());
-				}
-				
-				@Override
-				public void onFailure(Throwable caught) {
-					TripShare.loadBox.hide();
-					Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
-				}
-			});
-		} 
+		if(TripShare.access_token.equals("")) {
+			LoginDialog loginDialog = new LoginDialog();
+			loginDialog.center();
+			loginDialog.addStyleName("fadeIn");
+		}
 		else {
-			Window.scrollTo(0, 20);
+			if(VerifiedField()) {
+				TripShare.loadBox.center();
+				Trip trip = new Trip();
+				trip.setName(txbName.getText());
+				trip.setDepartureDate(txbDeparture.getValue());
+				trip.setDescription(txbDescription.getText());
+				trip.setJourney(getJourney());
+				TripShare.dataService.insertTrip(trip, TripShare.access_token, new AsyncCallback<Trip>() {
+					
+					@Override
+					public void onSuccess(Trip result) {
+						TripShare.loadBox.hide();
+						Window.Location.assign("/journey/"+ result.getId());
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						TripShare.loadBox.hide();
+						Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
+					}
+				});
+			} 
+			else {
+				Window.scrollTo(0, 20);
+			}
 		}
 	}
 	

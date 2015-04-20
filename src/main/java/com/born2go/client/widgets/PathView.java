@@ -80,15 +80,18 @@ public class PathView extends Composite {
 	List<PathDetail> listPathsDetail = new ArrayList<PathDetail>();
 	
 	private Trip theTrip;
+	private boolean isPoster = false;
 
 	public PathView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		htmlPathCreate.add(pathCreate);
 		listArrange.addItem("Newest");
 		listArrange.addItem("Oldest");
+		btnEdit.addStyleName("PathView-Obj14");
+		btnPost.addStyleName("PathView-Obj14");
+		btnUpload.addStyleName("PathView-Obj14");
 		
 		listArrange.addChangeHandler(new ChangeHandler() {
-			
 			@Override
 			public void onChange(ChangeEvent event) {
 				htmlPathTable.clear();
@@ -125,7 +128,6 @@ public class PathView extends Composite {
 				for(PathDetail pathDetail: listPathsDetail) {
 					if(event.getScrollTop() + Window.getClientHeight() > pathDetail.getElement().getAbsoluteTop()) {
 						pathDetail.setStyleName("PathDetail-Obj1 fadeIn");
-//						listPathsDetail.remove(pathDetail);
 					}
 				}
 			}
@@ -136,12 +138,10 @@ public class PathView extends Composite {
 			public void onClose() {
 				btnUpload.setVisible(true);
 			}
-
 			@Override
 			public void createPathSuccess(Long newPathId) {
 				TripShare.loadBox.center();
 				TripShare.dataService.findPart(newPathId, new AsyncCallback<Path>() {
-					
 					@Override
 					public void onSuccess(Path result) {
 						TripShare.loadBox.hide();
@@ -150,8 +150,8 @@ public class PathView extends Composite {
 						if(result.getPoster() != null)
 							poster = result.getPoster().getUserName();
 						PathDetail pathDetail = new PathDetail(result.getId(), "/resources/Travel tips2_resize.jpg", title, poster, result.getDescription());
+						pathDetail.addPostControl();
 						pathDetail.setListener(new PathDetail.Listener() {
-							
 							@Override
 							public void onDeletePost(PathDetail pathDetail) {
 								htmlPathTable.remove(pathDetail);
@@ -166,15 +166,31 @@ public class PathView extends Composite {
 						listPathsDetail.add(0, pathDetail);
 						pathDetail.setStyleName("PathDetail-Obj1 fadeIn");
 					}
-					
 					@Override
 					public void onFailure(Throwable caught) {
 						TripShare.loadBox.hide();
-						Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
+						Window.alert(TripShare.ERROR_MESSAGE);
 					}
 				});
 			}
 		});
+	}
+	
+	public void checkPermission() {
+		if(TripShare.user_id == null || theTrip == null)
+			isPoster = false;
+		else {
+			if(theTrip.getPoster().getUserID().toString().equals(TripShare.user_id)) {
+				isPoster = true;
+				btnEdit.removeStyleName("PathView-Obj14");
+				btnPost.removeStyleName("PathView-Obj14");
+				btnUpload.removeStyleName("PathView-Obj14");
+				for(PathDetail pd: listPathsDetail)
+					pd.addPostControl();
+			}
+			else
+				isPoster = false;
+		}
 	}
 	
 	public void removePathDetail(PathDetail pathDetail) {
@@ -189,21 +205,18 @@ public class PathView extends Composite {
 	public void getTrip(final Long tripId) {
 		this.tripId = tripId;
 		TripShare.dataService.findTrip(tripId, new AsyncCallback<Trip>() {
-			
 			@Override
 			public void onSuccess(Trip result) {
 				if(result != null) {
 					theTrip = result;
 					TripShare.tripMap.drawTheJourney(result.getJourney().getDirections(), result.getJourney().getLocates());
 					getThePaths(result.getDestination());
-//					facebookComments.getElement().setInnerHTML("<div class='fb-comments' data-href='http://localhost:8080/journey/" + tripId + "' data-numposts='5' data-colorscheme='light'></div>");
+					checkPermission();
 				}
 			}
-			
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
-//				Window.alert("com.born2go.client.widgets.TripView log: server response error!");
 			}
 		});
 	}
@@ -211,7 +224,6 @@ public class PathView extends Composite {
 	void getThePaths(List<Long> idsPath) {
 		if(!idsPath.isEmpty())
 			TripShare.dataService.listOfPath(idsPath, new AsyncCallback<List<Path>>() {
-				
 				@Override
 				public void onSuccess(List<Path> result) {
 					listPaths.addAll(result);
@@ -223,7 +235,6 @@ public class PathView extends Composite {
 							poster = path.getPoster().getUserName();
 						PathDetail pathDetail = new PathDetail(path.getId(), "/resources/Travel tips2_resize.jpg", title, poster, path.getDescription());
 						pathDetail.setListener(new PathDetail.Listener() {
-							
 							@Override
 							public void onDeletePost(PathDetail pathDetail) {
 								htmlPathTable.remove(pathDetail);
@@ -235,11 +246,9 @@ public class PathView extends Composite {
 						listPathsDetail.add(pathDetail);
 					}
 				}
-				
 				@Override
 				public void onFailure(Throwable caught) {
 					// TODO Auto-generated method stub
-					
 				}
 			});
 	}
@@ -252,16 +261,13 @@ public class PathView extends Composite {
 			int index = (int) (Math.random() * path.getGallery().size()) + 0;
 			Long displayPhotoId = path.getGallery().get(index);
 			TripShare.dataService.findPicture(displayPhotoId, new AsyncCallback<Picture>() {
-				
 				@Override
 				public void onSuccess(Picture result) {
 					pathDetail.setDisplayPhoto(result.getServeUrl());
-				}
-				
+				}				
 				@Override
 				public void onFailure(Throwable caught) {
 					// TODO Auto-generated method stub
-					
 				}
 			});
 		}
@@ -269,25 +275,26 @@ public class PathView extends Composite {
 
 	@UiHandler("btnEdit")
 	void onBtnEditClick(ClickEvent event) {
-		Window.scrollTo(0, 0);
-		htmlPathToolbar.addStyleName("PathView-Obj13");
-		htmlPathTable.setVisible(false);
-		htmlPathCreate.setVisible(false);
-		toolbar.setVisible(false);
-		editToolbar.setVisible(true);
-		DOM.getElementById("commentBox").setAttribute("style", "display:none");
-		DOM.getElementById("tripInfo").setInnerHTML("");
-		tripInfo = new TripInfo();
-		RootPanel.get("tripInfo").add(tripInfo);
-		tripInfo.setTrip(theTrip);
-		tripInfo.setListener(new TripInfo.Listener() {
-			
-			@Override
-			public void onUpdateTrip(Trip updateTrip) {
-				theTrip = updateTrip;
-				cancelEdit();
-			}
-		});
+		if(isPoster) {
+			Window.scrollTo(0, 0);
+			htmlPathToolbar.addStyleName("PathView-Obj13");
+			htmlPathTable.setVisible(false);
+			htmlPathCreate.setVisible(false);
+			toolbar.setVisible(false);
+			editToolbar.setVisible(true);
+			DOM.getElementById("commentBox").setAttribute("style", "display:none");
+			DOM.getElementById("tripInfo").setInnerHTML("");
+			tripInfo = new TripInfo();
+			RootPanel.get("tripInfo").add(tripInfo);
+			tripInfo.setTrip(theTrip);
+			tripInfo.setListener(new TripInfo.Listener() {			
+				@Override
+				public void onUpdateTrip(Trip updateTrip) {
+					theTrip = updateTrip;
+					cancelEdit();
+				}
+			});
+		}
 	}
 
 	void cancelEdit() {
@@ -318,23 +325,27 @@ public class PathView extends Composite {
 
 	@UiHandler("btnPost")
 	void onBtnPostClick(ClickEvent event) {
-		pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3Open");
-		btnUpload.setVisible(false);
-		pathCreate.setTripId(tripId);
-		pathCreate.handlerUploadEvent();
-		Timer timer = new Timer () {
-			@Override
-			public void run() {
-				pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3WideOpen");
-			}
-		};timer.schedule(200);
+		if(isPoster) {
+			pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3Open");
+			btnUpload.setVisible(false);
+			pathCreate.setTripId(tripId);
+			pathCreate.handlerUploadEvent();
+			Timer timer = new Timer () {
+				@Override
+				public void run() {
+					pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3WideOpen");
+				}
+			};timer.schedule(200);
+		}
 	}
 
 	@UiHandler("btnUpload")
 	void onBtnUploadClick(ClickEvent event) {
-		photoUpload.center();
-		photoUpload.uploadFor(tripId, null);
-		photoUpload.handlerUploadEvent();
+		if(isPoster) {
+			photoUpload.center();
+			photoUpload.uploadFor(tripId, null);
+			photoUpload.handlerUploadEvent();
+		}
 	}
 
 	@UiHandler("btnGallery")

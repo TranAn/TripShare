@@ -28,15 +28,23 @@ public class TripShare implements EntryPoint {
 	public static final LoadingBox loadBox = new LoadingBox();
 	
 	public static String access_token;
+	public static String user_id;
 	
 	static final CreateTrip createTrip = new CreateTrip();
 	static final PathView pathView = new PathView();
 	static final ViewFullPath viewFullPath = new ViewFullPath();
+	
+	public static String ERROR_MESSAGE = "!: Đã có lỗi xảy ra, vui lòng tải lại trang.";
 
 	@Override
 	public void onModuleLoad() {
-		if (RootPanel.get("tripMap") != null)
+		//---
+		exportGwtClass();
+		onLoadImpl();
+		//---
+		if (RootPanel.get("tripMap") != null) {
 			RootPanel.get("tripMap").add(tripMap.getMapView());
+		}
 		
 		if (RootPanel.get("createTrip") != null) {
 			RootPanel.get("createTrip").add(createTrip);
@@ -62,15 +70,16 @@ public class TripShare implements EntryPoint {
 			BetaTrip trip = new BetaTrip();
 			RootPanel.get("betaTrip").add(trip);
 		}
-			
+		//---
 		handlerTripMap();
-		
-		exportGwtClass();
 	}
+	
+	private native void onLoadImpl() /*-{
+    	if ($wnd.jscOnLoad && typeof $wnd.jscOnLoad == 'function') $wnd.jscOnLoad();
+  	}-*/;
 	
 	void handlerTripMap() {
 		tripMap.setListener(new Listener() {
-			
 			@Override
 			public void getDirectionResult(DirectionsResult directionResult) {
 				if (RootPanel.get("createTrip") != null) 
@@ -91,15 +100,15 @@ public class TripShare implements EntryPoint {
 		ExporterUtil.exportAll();
 	}
 	
-	public static void getAccessToken(String accessToken) {
+	public static void getAccessToken(String accessToken, String userId) {
 		access_token = accessToken;
+		user_id = userId;
 		if(access_token.isEmpty()) {
-			if(Window.Location.getPath().contains("create") || Window.Location.getPath().contains("journey") ||
-					Window.Location.getPath().contains("destination"))
-				Window.Location.assign("/unauthorize.html");
+			
 		}
 		else {
-
+			pathView.checkPermission();
+			viewFullPath.checkPermission();
 		}
 	}
 	
@@ -108,6 +117,5 @@ public class TripShare implements EntryPoint {
 		DateTimeFormat formatDate = DateTimeFormat.getFormat(dateString);
 		return formatDate.format(date);
 	}
-	
 
 }

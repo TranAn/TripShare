@@ -109,7 +109,9 @@
 						<g:Label styleName="font-blackTitleLarge {style.PathDetail-Obj6}" ui:field="lbPoster">Tran An</g:Label>
 					</g:HTMLPanel>
 					<p ui:field="htmlContent" style="font-size: 15px; line-height: 1.6em;" />
-					<g:Anchor title="Delete this post" ui:field="btnDeletePost" styleName="{style.PathDetail-Obj8}"><i class="fa fa-trash fa-2x"></i></g:Anchor>
+					<g:HTMLPanel ui:field="postControl">
+						<g:Anchor title="Delete this post" ui:field="btnDeletePost" styleName="{style.PathDetail-Obj8}"><i class="fa fa-trash fa-2x"></i></g:Anchor>
+					</g:HTMLPanel>
 				</td>
 			</tr>
 		</table>

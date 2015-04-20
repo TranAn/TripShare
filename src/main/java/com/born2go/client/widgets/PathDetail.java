@@ -11,6 +11,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -28,6 +29,7 @@ public class PathDetail extends Composite {
 	@UiField Image picture;
 	@UiField ParagraphElement htmlContent;
 	@UiField Anchor btnDeletePost;
+	@UiField HTMLPanel postControl;
 	
 	Long pathId;
 	
@@ -43,6 +45,7 @@ public class PathDetail extends Composite {
 
 	public PathDetail(final Long pathId, String pictureUrl, String title, String postBy, String content) {
 		initWidget(uiBinder.createAndBindUi(this));
+		postControl.remove(btnDeletePost);
 		
 		this.pathId = pathId;
 		picture.setUrl(pictureUrl);
@@ -59,19 +62,16 @@ public class PathDetail extends Composite {
 		htmlContent.setInnerHTML(summaryContent);
 		
 		btnDeletePost.addClickHandler(new ClickHandler() {
-			
 			@Override
 			public void onClick(ClickEvent event) {
 				if(Window.confirm("!: Are you sure you want to delete this post?")) {
 					TripShare.loadBox.center();
-					TripShare.dataService.removePart(pathId, new AsyncCallback<Void>() {
-						
+					TripShare.dataService.removePart(pathId, new AsyncCallback<Void>() {			
 						@Override
 						public void onSuccess(Void result) {
 							TripShare.loadBox.hide();
 							removeThisPost();
-						}
-						
+						}						
 						@Override
 						public void onFailure(Throwable caught) {
 							TripShare.loadBox.hide();
@@ -81,6 +81,10 @@ public class PathDetail extends Composite {
 				}
 			}
 		});
+	}
+	
+	public void addPostControl() {
+		postControl.add(btnDeletePost);
 	}
 	
 	public void setDisplayPhoto(String src) {

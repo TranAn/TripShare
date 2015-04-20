@@ -1,6 +1,6 @@
 window.fbAsyncInit = function() {
     FB.init({
-      appId      : '386540048195283',
+      appId      : '1636504239911870',
       xfbml      : true,
       version    : 'v2.3'
     });
@@ -23,18 +23,18 @@ function checkUserLogin() {
 			var userId = response.authResponse.userID;
 		    var accessToken = response.authResponse.accessToken;
 		    var facebookApi = new GWTExport.FacebookApi();
-		    facebookApi.getAccessToken(accessToken);
+		    facebookApi.getAccessToken(accessToken, userId);
 			FB.api('/me', function(response) {
 				setUserInfo(response.name);
 			});
 		} else if (response.status === 'not_authorized') {
 			 var facebookApi = new GWTExport.FacebookApi();
-			 facebookApi.getAccessToken("");
+			 facebookApi.getAccessToken("","");
 		} else {
 			 var facebookApi = new GWTExport.FacebookApi();
-			 facebookApi.getAccessToken("");
+			 facebookApi.getAccessToken("","");
 		}
-	});
+	}, true);
 }
 
 
@@ -51,7 +51,7 @@ function loginFacebook() {
 			var accessToken = response.authResponse.accessToken;
 		    //rpc call save new user
 			var facebookApi = new GWTExport.FacebookApi();
-			facebookApi.getAccessToken(accessToken);
+			facebookApi.getAccessToken(accessToken, userId);
 			facebookApi.saveNewFacebookUser(userId);
 			//set user info to view
 			FB.api('/me', function(response) {
@@ -59,7 +59,7 @@ function loginFacebook() {
 			});
 		} else {
 			 var facebookApi = new GWTExport.FacebookApi();
-			 facebookApi.getAccessToken("");
+			 facebookApi.getAccessToken("","");
 		}
 	});
 }
@@ -71,5 +71,5 @@ function logoutfacebook() {
 }
 
 function setUserInfo(userName) {
-	document.getElementById('menubutton').innerHTML = userName;
+	document.getElementById('menubutton').innerHTML = "Profile";
 }

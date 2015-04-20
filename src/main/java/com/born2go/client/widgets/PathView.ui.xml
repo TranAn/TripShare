@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
-	@external .PathView-Obj3, .PathView-Obj4, .PathView-Obj13;
+	@external .PathView-Obj3, .PathView-Obj4, .PathView-Obj13, .PathView-Obj14;
 	.PathView-Obj1 {
 		margin: auto;
 		padding: 20px 0px;
@@ -79,6 +79,17 @@
 	
 	.PathView-Obj13 {
 		margin-bottom: 0px;
+	}
+	
+	.PathView-Obj14 {
+	  	color: aliceblue;
+  		background-color: silver;
+	}
+	
+	.PathView-Obj14:hover {
+	  	color: aliceblue !important;
+  		background-color: silver;
+  		font-weight: normal !important;
 	}
 	</ui:style>
 	<g:HTMLPanel ui:field="pathViewForm">

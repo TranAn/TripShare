@@ -65,9 +65,8 @@
 <!-- be added before this line.                -->
 <!--                                           -->
 <script type="text/javascript" language="javascript" src="../tripshare/tripshare.nocache.js"></script>
-<!-- <script src="http://connect.facebook.net/en_US/all.js"></script> -->
-<script type="text/javascript" src="/myjs/facebookConnect.js"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false;key=AIzaSyCwX2qpyTev25qwNaBxFXBbgIhbPtFeLHw"></script>
+<script type="text/javascript" src="/myjs/facebookConnect.js"></script>
 <script type="text/javascript" src="http://slideshow.triptracker.net/slide.js"></script>
 <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
 
@@ -126,11 +125,10 @@
 		</div>
 
 		<div id="menu">
-			<div style="margin:auto; display: -webkit-box;">
-			<li><a class="menubutton-actived" href="/">Home</a></li>
-			<li><a class="menubutton" href="/create/">Plan your trip</a></li>
-			<li><a id="menubutton" class="menubutton" href="/">Profile</a></li>
-			<!-- <li><a id="signInMenu" onclick="loginFacebook()">Sign In</a></li> -->
+			<div style="margin: auto; display: -webkit-box;">
+				<a class="menubutton-actived" href="/">Home</a>
+				<a class="menubutton" href="/create/">Plan your trip</a>
+				<a id="menubutton" class="menubutton" onclick="loginFacebook()">Sign in Facebook</a>
 			</div>
 		</div>
 	</div>

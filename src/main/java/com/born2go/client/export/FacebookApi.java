@@ -16,23 +16,20 @@ public class FacebookApi implements Exportable {
 		User facebookUser = new User();
 		facebookUser.setId(userId);
 		TripShare.dataService.insertUser(facebookUser, new AsyncCallback<Void>() {
-			
 			@Override
 			public void onSuccess(Void result) {
-				// TODO Auto-generated method stub
-				
+				// TODO Auto-generated method stub			
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
+				// TODO Auto-generated method stub				
 			}
 		});
 	}
 	
-	public void getAccessToken(String accessToken) throws Exception {
-		TripShare.getAccessToken(accessToken);
+	public void getAccessToken(String accessToken, String userId) throws Exception {
+		TripShare.getAccessToken(accessToken, userId);
 	}
 
 }
