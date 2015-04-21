@@ -20,9 +20,10 @@ public class Trip implements Serializable {
 	Long id;
 	
 	Poster poster;
-	List<Long> companion = new ArrayList<Long>();
-	List<Long> destination = new ArrayList<Long>();
-	List<Long> gallery = new ArrayList<Long>();
+	Long owner;
+	List<Long> companion = new ArrayList<Long>(); //Member sharing the same trip
+	List<Long> destination = new ArrayList<Long>(); //Segments ID list
+	List<Long> gallery = new ArrayList<Long>();		//Photos list
 	
 	String name;
 	Date createDate;

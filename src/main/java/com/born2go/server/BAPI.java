@@ -3,6 +3,9 @@ package com.born2go.server;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
