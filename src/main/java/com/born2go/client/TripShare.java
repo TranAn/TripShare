@@ -9,6 +9,7 @@ import com.born2go.client.rpc.DataServiceAsync;
 import com.born2go.client.widgets.CreateTrip;
 import com.born2go.client.widgets.LoadingBox;
 import com.born2go.client.widgets.PathView;
+import com.born2go.client.widgets.ProfileView;
 import com.born2go.client.widgets.TravelMap;
 import com.born2go.client.widgets.TravelMap.Listener;
 import com.born2go.client.widgets.ViewFullPath;
@@ -33,15 +34,13 @@ public class TripShare implements EntryPoint {
 	static final CreateTrip createTrip = new CreateTrip();
 	static final PathView pathView = new PathView();
 	static final ViewFullPath viewFullPath = new ViewFullPath();
+	static final ProfileView profileView = new ProfileView();
 	
 	public static String ERROR_MESSAGE = "!: Đã có lỗi xảy ra, vui lòng tải lại trang.";
 
 	@Override
 	public void onModuleLoad() {
-		//---
-		exportGwtClass();
-		onLoadImpl();
-		//---
+		//--- Separate pages content ---
 		if (RootPanel.get("tripMap") != null) {
 			RootPanel.get("tripMap").add(tripMap.getMapView());
 		}
@@ -66,18 +65,29 @@ public class TripShare implements EntryPoint {
 			 }
 		}
 		
+		if (RootPanel.get("profileContent") != null) {
+			RootPanel.get("profileContent").add(profileView);
+			String userID = Window.Location.getPath().replaceAll("/profile/","");
+			if (userID.length() != 0) {
+				profileView.showProfileView(userID);
+			}
+		}
+		
 		if (RootPanel.get("betaTrip") != null) {
 			BetaTrip trip = new BetaTrip();
 			RootPanel.get("betaTrip").add(trip);
 		}
-		//---
+		//--- User, login handler ---
+		exportGwtClass();
+		checkUserStatus();
+		//--- Map handler ---
 		handlerTripMap();
 	}
 	
-	private native void onLoadImpl() /*-{
-    	if ($wnd.jscOnLoad && typeof $wnd.jscOnLoad == 'function') $wnd.jscOnLoad();
-  	}-*/;
-	
+	void exportGwtClass() {
+		ExporterUtil.exportAll();
+	}
+
 	void handlerTripMap() {
 		tripMap.setListener(new Listener() {
 			@Override
@@ -87,7 +97,6 @@ public class TripShare implements EntryPoint {
 				if (RootPanel.get("tripcontent") != null) 
 					pathView.setDirectionResult(directionResult);
 			}
-			
 			@Override
 			public void getCurrentLocation(String address, LatLng position) {
 				if (RootPanel.get("createTrip") != null) 
@@ -96,10 +105,26 @@ public class TripShare implements EntryPoint {
 		});
 	}
 
-	void exportGwtClass() {
-		ExporterUtil.exportAll();
-	}
-	
+	private native void checkUserStatus() /*-{
+		$wnd.FB.getLoginStatus(function(response) {
+			if (response.status === 'connected') {
+				var userId = response.authResponse.userID;
+			    var accessToken = response.authResponse.accessToken;
+			    @com.born2go.client.TripShare::getAccessToken(Ljava/lang/String;Ljava/lang/String;)(accessToken,userId);
+				$wnd.FB.api('/me', function(response) {
+					var menuProfile = $wnd.document.getElementById('menubutton');
+					menuProfile.innerHTML = "Profile";
+					var profileHref =  "/profile/"+ userId;
+					menuProfile.setAttribute('href', profileHref);
+				});
+			} else if (response.status === 'not_authorized') {
+				 @com.born2go.client.TripShare::getAccessToken(Ljava/lang/String;Ljava/lang/String;)('','');
+			} else {
+				 @com.born2go.client.TripShare::getAccessToken(Ljava/lang/String;Ljava/lang/String;)('','');
+			}
+		}, true);
+	}-*/;
+
 	public static void getAccessToken(String accessToken, String userId) {
 		access_token = accessToken;
 		user_id = userId;
@@ -111,7 +136,7 @@ public class TripShare implements EntryPoint {
 			viewFullPath.checkPermission();
 		}
 	}
-	
+
 	public static final String dateFormat(Date date) {
 		String dateString = "yyyy MMM d hh:mm:ss";
 		DateTimeFormat formatDate = DateTimeFormat.getFormat(dateString);

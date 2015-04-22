@@ -1,10 +1,9 @@
 window.fbAsyncInit = function() {
     FB.init({
-      appId      : '1636504239911870',
+      appId      : '386540048195283',
       xfbml      : true,
       version    : 'v2.3'
     });
-    checkUserLogin();
 };
 
 (function(d, s, id){
@@ -16,16 +15,16 @@ window.fbAsyncInit = function() {
 }(document, 'script', 'facebook-jssdk'));
 
   
-function checkUserLogin() {
+function checkUserStatus() {
 	FB.getLoginStatus(function(response) {
 		if (response.status === 'connected') {
-//			console.log(response.authResponse);
+			/*console.log(response.authResponse);*/
 			var userId = response.authResponse.userID;
 		    var accessToken = response.authResponse.accessToken;
 		    var facebookApi = new GWTExport.FacebookApi();
 		    facebookApi.getAccessToken(accessToken, userId);
 			FB.api('/me', function(response) {
-				setUserInfo(response.name);
+				setUserInfo(userId, response.name);
 			});
 		} else if (response.status === 'not_authorized') {
 			 var facebookApi = new GWTExport.FacebookApi();
@@ -52,10 +51,10 @@ function loginFacebook() {
 		    //rpc call save new user
 			var facebookApi = new GWTExport.FacebookApi();
 			facebookApi.getAccessToken(accessToken, userId);
-			facebookApi.saveNewFacebookUser(userId);
 			//set user info to view
 			FB.api('/me', function(response) {
-				setUserInfo(response.name);
+				setUserInfo(userId, response.name);
+				facebookApi.saveNewFacebookUser(userId, response.name);
 			});
 		} else {
 			 var facebookApi = new GWTExport.FacebookApi();
@@ -66,10 +65,15 @@ function loginFacebook() {
 
 function logoutfacebook() {
 	FB.logout(function(response) {
-//		document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+		/*document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC";*/
 	});
 }
 
-function setUserInfo(userName) {
-	document.getElementById('menubutton').innerHTML = "Profile";
+function setUserInfo(userId, userName) {
+	var menuProfile = document.getElementById('menubutton');
+	menuProfile.innerHTML = "Profile";
+	menuProfile.removeEventListener("click", loginFacebook);
+	var profileHref =  "/profile/"+ userId;
+	menuProfile.setAttribute('href', profileHref);
 }
+

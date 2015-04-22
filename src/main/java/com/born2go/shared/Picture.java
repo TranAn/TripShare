@@ -2,11 +2,13 @@ package com.born2go.shared;
 
 import java.io.Serializable;
 
+import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
 @SuppressWarnings("serial")
 @Entity(name = "Picture")
+@Cache
 public class Picture implements Serializable {
 	
 	@Id

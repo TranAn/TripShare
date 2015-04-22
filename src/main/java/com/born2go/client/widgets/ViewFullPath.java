@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.axeiya.gwtckeditor.client.CKConfig;
+import com.axeiya.gwtckeditor.client.CKConfig.TOOLBAR_OPTIONS;
 import com.axeiya.gwtckeditor.client.CKEditor;
 import com.axeiya.gwtckeditor.client.Toolbar;
 import com.axeiya.gwtckeditor.client.ToolbarLine;
-import com.axeiya.gwtckeditor.client.CKConfig.TOOLBAR_OPTIONS;
 import com.born2go.client.TripShare;
 import com.born2go.shared.Path;
 import com.born2go.shared.Picture;

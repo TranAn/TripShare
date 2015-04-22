@@ -28,9 +28,11 @@
 <!-- If you add any GWT meta tags, they must   -->
 <!-- be added before this line.                -->
 <!--                                           -->
+
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+<script type="text/javascript" src="myjs/facebookConnect.js"></script>
 <script type="text/javascript" language="javascript" src="tripshare/tripshare.nocache.js"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false;key=AIzaSyCwX2qpyTev25qwNaBxFXBbgIhbPtFeLHw"></script>
-<script type="text/javascript" src="myjs/facebookConnect.js"></script>
 
 <!-- <script src="http://connect.facebook.net/en_US/all.js"></script> -->
 <!-- <script>
@@ -56,7 +58,7 @@
 <!-- you can leave the body empty if you want  -->
 <!-- to create a completely dynamic UI.        -->
 <!--                                           -->
-<body style="margin: 0px;">
+<body style="margin: 0px; background: whitesmoke;">
 
 	<!-- OPTIONAL: include this if you want history support -->
 	<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
@@ -89,10 +91,18 @@
 		</div>
 	</div>
 	
-	<div id="betaTrip"></div>
-	
 	<div id="content">
-		<div id="tripMap" class="tripMap" style="width: 100%; height: 500px"></div>
+		<div style="max-width: 75%; margin: auto;">
+			<div id="cp_widget_e7589623-2d55-4b6c-a4e0-29c9917daf06">...</div><script type="text/javascript">
+			var cpo = []; cpo["_object"] ="cp_widget_e7589623-2d55-4b6c-a4e0-29c9917daf06"; cpo["_fid"] = "AIPAHeMJ5ahO";
+			var _cpmp = _cpmp || []; _cpmp.push(cpo);
+			(function() { var cp = document.createElement("script"); cp.type = "text/javascript";
+			cp.async = true; cp.src = "//www.cincopa.com/media-platform/runtime/libasync.js";
+			var c = document.getElementsByTagName("script")[0];
+			c.parentNode.insertBefore(cp, c); })(); </script><noscript>Powered by Cincopa <a href='http://www.cincopa.com/video-hosting'>Video Hosting for Business</a> solution.<span>New Gallery 2015/4/20</span><span>Bạn đã có một chuyến đi hay một kì nghỉ thú vị nhưng lại lo lắng không biết lưu trữ những kí ức tuyệt với đó ở đâu</span><span>Bạn đã có một chuyến đi hay một kì nghỉ thú vị nhưng lại lo lắng không biết lưu trữ những kí ức tuyệt với đó ở đâu</span><span>originaldate</span><span> 1/1/0001 6:00:00 AM</span><span>width</span><span> 1366</span><span>height</span><span> 768</span><span>Trip Share sẽ giúp bạn lưu trữ những kỉ niệm và chia sẻ với bạn bè, hay soạn thảo thành những cuốn sách phiêu lưu thú vị</span><span>Trip Share sẽ giúp bạn lưu trữ những kỉ niệm và chia sẻ với bạn bè, hay soạn thảo thành những cuốn sách phiêu lưu thú vị</span><span>originaldate</span><span> 1/1/0001 6:00:00 AM</span><span>height</span><span> 1080</span><span>width</span><span> 1920</span><span>orientation</span><span> 1</span><span>camerasoftware</span><span> Adobe Photoshop Elem</span><span>Bạn chỉ cần đăng nhập, tạo chuyến đi và viết lại những trải niêm thú vị của mình</span><span>Bạn chỉ cần đăng nhập, tạo chuyến đi và viết lại những trải niêm thú vị của mình</span><span>originaldate</span><span> 1/1/0001 6:00:00 AM</span><span>height</span><span> 2700</span><span>width</span><span> 3966</span><span>orientation</span><span> 1</span><span>camerasoftware</span><span> Adobe Photoshop CS4 </span></noscript>
+			<div id="betaTrip" style="margin-bottom: 20px;"></div>
+			<div id="tripMap" class="tripMap" style="width: 100%; height: 500px"></div>
+		</div>
 	</div>
 	
 	<div id="footer" style="width: 100%; margin:0px;">

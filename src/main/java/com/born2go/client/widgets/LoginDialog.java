@@ -8,8 +8,8 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -51,10 +51,11 @@ public class LoginDialog extends DialogBox {
 		hide();
 	}
 	
-	static void saveNewFacebookUser(final String accessToken, final String userId) {
+	static void saveNewFacebookUser(final String accessToken, final String userId, final String userName) {
 		TripShare.loadBox.center();
 		User facebookUser = new User();
 		facebookUser.setId(userId);
+		facebookUser.setUserName(userName);
 		TripShare.dataService.insertUser(facebookUser, new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
@@ -78,7 +79,9 @@ public class LoginDialog extends DialogBox {
 				var accessToken = response.authResponse.accessToken;
 				$wnd.document.getElementById('menubutton').innerHTML = "Profile";
 			    // Call instance method saveNewFacebookUser() on this
-				@com.born2go.client.widgets.LoginDialog::saveNewFacebookUser(Ljava/lang/String;Ljava/lang/String;)(accessToken,userId);
+				$wnd.FB.api('/me', function(response) {
+					@com.born2go.client.widgets.LoginDialog::saveNewFacebookUser(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(accessToken,userId,response.name);
+				});
 			} else {
 				 
 			}

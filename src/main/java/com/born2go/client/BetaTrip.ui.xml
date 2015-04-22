@@ -41,6 +41,6 @@
 		</g:HTMLPanel>
 		<g:Label text="Create by Vu Quang Hoa" horizontalAlignment="ALIGN_CENTER"
 			styleName="{style.obj3}" />
-		<g:Label text="Note: Mọi người muốn theo dõi chuyến đi thì inbox antp@itpro.vn or hoavq@itpro.vn" horizontalAlignment="ALIGN_CENTER" styleName="{style.obj5}"/>
+		<g:Label text="Note: Chuyến vượt biên sang thăm nhân dân Lào của Mr.Hòa" horizontalAlignment="ALIGN_CENTER" styleName="{style.obj5}"/>
 	</g:HTMLPanel>
 </ui:UiBinder> 

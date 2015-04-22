@@ -12,9 +12,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 @Export
 public class FacebookApi implements Exportable {
 
-	public void saveNewFacebookUser(String userId) {
+	public void saveNewFacebookUser(String userId, String userName) {
 		User facebookUser = new User();
 		facebookUser.setId(userId);
+		facebookUser.setUserName(userName);
 		TripShare.dataService.insertUser(facebookUser, new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {

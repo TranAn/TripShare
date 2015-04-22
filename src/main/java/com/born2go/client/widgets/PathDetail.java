@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public class PathDetail extends Composite {
@@ -25,7 +24,7 @@ public class PathDetail extends Composite {
 	}
 	
 	@UiField Anchor lbTitle;
-	@UiField Label lbPoster;
+	@UiField Anchor lbPoster;
 	@UiField Image picture;
 	@UiField ParagraphElement htmlContent;
 	@UiField Anchor btnDeletePost;
@@ -43,7 +42,7 @@ public class PathDetail extends Composite {
 		this.listener = listener;
 	}
 
-	public PathDetail(final Long pathId, String pictureUrl, String title, String postBy, String content) {
+	public PathDetail(final Long pathId, String pictureUrl, String title, String postBy, String posterId, String content) {
 		initWidget(uiBinder.createAndBindUi(this));
 		postControl.remove(btnDeletePost);
 		
@@ -54,6 +53,7 @@ public class PathDetail extends Composite {
 		String id = String.valueOf(pathId);
 		lbTitle.setHref("/destination/"+ id);
 		lbPoster.setText(postBy);
+		lbPoster.setHref("/profile/"+ posterId);
 		String summaryContent;
 		if(content.length() > 751)
 			summaryContent = content.substring(0, 750) + "<p>..." + " <a target='_blank' href='/destination/"+ pathId+ "'>View more</a></p>";

@@ -68,7 +68,7 @@
 	.PathDetail-Obj6 {
 		font-size: 15px;
 		font-family: museo-w01-700,serif; 
-		color:silver; 
+		color: silver !important; 
 		font-style: italic;
 		margin-bottom: 0px;
 	}
@@ -76,7 +76,7 @@
 	.PathDetail-Obj6:hover {
 		cursor: pointer;
 		text-decoration: underline;
-		color: blue;
+		color: blue !important;
 	}
 	
 	.PathDetail-Obj7 {
@@ -106,7 +106,7 @@
 					<g:Anchor styleName="{style.PathDetail-Obj3}" ui:field="lbTitle" />
 					<g:HTMLPanel styleName="{style.PathDetail-Obj7}">
 						<g:Label styleName="font-blackTitleLarge {style.PathDetail-Obj5}">Post by</g:Label>
-						<g:Label styleName="font-blackTitleLarge {style.PathDetail-Obj6}" ui:field="lbPoster">Tran An</g:Label>
+						<g:Anchor styleName="font-blackTitleLarge {style.PathDetail-Obj6}" ui:field="lbPoster"></g:Anchor>
 					</g:HTMLPanel>
 					<p ui:field="htmlContent" style="font-size: 15px; line-height: 1.6em;" />
 					<g:HTMLPanel ui:field="postControl">

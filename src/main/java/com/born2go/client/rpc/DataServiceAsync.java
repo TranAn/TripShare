@@ -14,6 +14,8 @@ public interface DataServiceAsync {
 	void insertTrip(Trip trip, String accessToken, AsyncCallback<Trip> callback);
 
 	void findTrip(Long idTrip, AsyncCallback<Trip> callback);
+	
+	void listOfTrip(List<Long> idsTrip, AsyncCallback<List<Trip>> callback);
 
 	void updateTrip(Trip trip, AsyncCallback<Trip> callback);
 

@@ -48,6 +48,7 @@
 <script type="text/javascript" src="/myjs/facebookConnect.js"></script>
 <script type="text/javascript"src="http://slideshow.triptracker.net/slide.js"></script>
 <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
+<script src="http://connect.facebook.net/en_US/all.js"></script>
 
 </head>
 
@@ -136,7 +137,7 @@
 										java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d hh:mm:ss");
 									%>
 									<p class="font_9">
-										Post by: <a href=""><%=path.getPoster().getUserName()%></a>
+										Post by: <a href="/profile/<%=path.getPoster().getUserID()%>"><%=path.getPoster().getUserName()%></a>
 									</p>
 									<p class="font_9">
 										Date post:

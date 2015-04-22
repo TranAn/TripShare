@@ -40,6 +40,12 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 			trip.setCreateDate(new Date());
 			Key<Trip> key = ofy().save().entity(trip).now();
 			exportTrip = ofy().load().key(key).now();
+			//save trip to user
+			User user = ofy().load().type(User.class).id(exportTrip.getPoster().getUserID().toString()).now();
+			if(user != null) {
+				user.getMyTrips().add(exportTrip.getId());
+				ofy().save().entity(user);
+			}
 			return exportTrip;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,6 +57,13 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	public Trip findTrip(Long idTrip) {
 		exportTrip = ofy().load().type(Trip.class).id(idTrip).now();
 		return exportTrip;
+	}
+
+	@Override
+	public List<Trip> listOfTrip(List<Long> idsTrip) {
+		Map<Long, Trip> mapTrips = ofy().load().type(Trip.class).ids(idsTrip);
+		List<Trip> result = new ArrayList<Trip>(mapTrips.values());
+		return result;
 	}
 
 	@Override
@@ -173,14 +186,21 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public void insertUser(User user) {
 		User existUser = ofy().load().type(User.class).id(user.getId()).now();
-		if(existUser == null) 
+		if(existUser == null) {
+			user.setJoinDate(new Date());
 			ofy().save().entity(user);
+		}
 	}
 
 	@Override
 	public User findUser(String idUser) {
-		User oldData = ofy().load().type(User.class).id(idUser).now();
-		return oldData;
+		if(idUser == null || idUser.isEmpty()) {
+			return null;
+		}
+		else {
+			User oldData = ofy().load().type(User.class).id(idUser).now();
+			return oldData;
+		}
 	}
 
 	@Override
@@ -233,7 +253,6 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 //		BlobKey blobKey = new BlobKey(p.getKey());
 //		blobstoreService.delete(blobKey);
 //		ofy().delete().entity(p);
-
 	}
 	
 }

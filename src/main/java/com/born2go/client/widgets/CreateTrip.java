@@ -261,13 +261,16 @@ public class CreateTrip extends Composite {
 					@Override
 					public void onSuccess(Trip result) {
 						TripShare.loadBox.hide();
-						Window.Location.assign("/journey/"+ result.getId());
+						if(result != null)
+							Window.Location.assign("/journey/"+ result.getId());
+						else
+							Window.alert(TripShare.ERROR_MESSAGE);
 					}
 					
 					@Override
 					public void onFailure(Throwable caught) {
 						TripShare.loadBox.hide();
-						Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
+						Window.alert(TripShare.ERROR_MESSAGE);
 					}
 				});
 			} 

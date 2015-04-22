@@ -10,6 +10,7 @@
 		<welcome-file>create.html</welcome-file>
 		<welcome-file>journey.jsp</welcome-file>
 		<welcome-file>path.jsp</welcome-file>
+		<welcome-file>profile.jsp</welcome-file>
 	</welcome-file-list>
 
 	<!-- Register objectify entity -->
@@ -38,8 +39,7 @@
 		<servlet-name>data_service</servlet-name>
 		<url-pattern>/tripshare/datastore</url-pattern>
 	</servlet-mapping>
-
-	<!-- Servlets -->
+	
 	<servlet>
 		<servlet-name>PhotoUploadServlet</servlet-name>
 		<servlet-class>com.born2go.server.UploadService</servlet-class>
@@ -78,6 +78,15 @@
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>profilePage</servlet-name>
+		<jsp-file>/profile/profile.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>profilePage</servlet-name>
+		<url-pattern>/profile/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>MobileWeb</servlet-name>
 		<jsp-file>/mobile/mView.jsp</jsp-file>
 	</servlet>
@@ -104,15 +113,5 @@
 		<servlet-name>appstats</servlet-name>
 		<url-pattern>/born2go/*</url-pattern>
 	</servlet-mapping>
-
-	<!-- <security-constraint>
-		<web-resource-collection>
-			<web-resource-name>appstats</web-resource-name>
-			<url-pattern>/born2go/*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>admin</role-name>
-		</auth-constraint>
-	</security-constraint> -->
 
 </web-app>

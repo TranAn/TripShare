@@ -350,24 +350,22 @@ public class PathCreate extends Composite {
 		}
 		else
 			path.setDescription(txbRichDescription.getData());
-//		if(TripShare.access_token == null) {
-//			Window.alert("!: Your login has expired, pls login again.");
-//		}
-//		else {
-			TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
-				
-				@Override
-				public void onSuccess(Path result) {
+		TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
+			@Override
+			public void onSuccess(Path result) {
+				if(result != null)
 					uploadPhoto(tripId, result.getId());
-				}
-				
-				@Override
-				public void onFailure(Throwable caught) {
+				else {
 					TripShare.loadBox.hide();
-					Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
-				}
-			});
-//		}
+					Window.alert(TripShare.ERROR_MESSAGE);
+				}		
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				TripShare.loadBox.hide();
+				Window.alert(TripShare.ERROR_MESSAGE);
+			}
+		});
 	}
 	
 	void cancelPost() {

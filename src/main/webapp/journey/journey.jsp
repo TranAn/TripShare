@@ -69,6 +69,7 @@
 <script type="text/javascript" src="/myjs/facebookConnect.js"></script>
 <script type="text/javascript" src="http://slideshow.triptracker.net/slide.js"></script>
 <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
+<script src="http://connect.facebook.net/en_US/all.js"></script>
 
 <!-- <script>
 	(function(i, s, o, g, r, a, m) {
@@ -158,7 +159,7 @@
 									<div class="font-blackTitleLarge" style="font-size: 30px;font-family: museo-w01-700,serif; color:rgb(56, 119, 127)"><%=trip.getName()%></div>
 									<div style="display: inline-flex;">
 										<div class="font-blackTitleLarge" style="margin-bottom: 20px;margin-right: 4px;font-size: 15px;font-family: museo-w01-700,serif; color:silver; font-style: italic;">Create by</div>
-										<div class="font-blackTitleLarge link" style="margin-bottom: 20px;font-size: 15px;font-family: museo-w01-700,serif; color:silver; font-style: italic;"><%=(trip.getPoster()!=null?trip.getPoster().getUserName():"Tester")%></div>
+										<a href="/profile/<%=trip.getPoster().getUserID()%>" class="font-blackTitleLarge link" style="margin-bottom: 20px;font-size: 15px;font-family: museo-w01-700,serif; color:silver; font-style: italic;"><%=(trip.getPoster()!=null?trip.getPoster().getUserName():"Tester")%></a>
 									</div>
 									<div class="font-blackTitleLarge">Hành trình:</div>
 									<div class="trip-destinations">

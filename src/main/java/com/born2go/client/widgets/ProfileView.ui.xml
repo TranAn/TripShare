@@ -1,0 +1,25 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	.ProfileView-Obj1 {
+		
+	}
+	
+	.ProfileView-Obj2 {
+		font-family: "Times New Roman", Times, serif;
+		font-size: 20px;
+		font-weight: bold;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		border-bottom: 2px silver dotted;
+	}
+	</ui:style>
+
+	<g:HTMLPanel>
+		<g:VerticalPanel width="100%" ui:field="verDetails">
+			<g:Label text="No journey found!" styleName="{style.ProfileView-Obj2}" />
+		</g:VerticalPanel>
+	</g:HTMLPanel>
+
+</ui:UiBinder> 

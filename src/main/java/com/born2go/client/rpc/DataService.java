@@ -16,6 +16,8 @@ public interface DataService extends RemoteService {
 	public Trip insertTrip(Trip trip, String accessToken);
 
 	public Trip findTrip(Long idTrip);
+	
+	public List<Trip> listOfTrip(List<Long> idsTrip);
 
 	public Trip updateTrip(Trip trip);
 

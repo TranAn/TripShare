@@ -1,0 +1,127 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.dom.client">
+	<ui:style>
+	@external .JourneyInfoView-Obj8, .JourneyInfoView-Obj9;
+	.JourneyInfoView-Obj1 {
+		position: relative;
+		padding: 10px 0px;
+		height: auto !important;
+		border-bottom: 1px solid #a1a1a1;
+		margin-bottom: 10px;
+	}
+	
+	.JourneyInfoView-Obj2 {
+		border: 1px solid #a1a1a1;
+		margin-right: 20px;
+	}
+	
+	.JourneyInfoView-Obj3 {
+		font-size: 24px;
+		font-family: museo-w01-700, serif;
+		color: rgb(56, 119, 127) !important;
+		cursor: pointer;
+	}
+	
+	.JourneyInfoView-Obj3:hover {
+		text-decoration: underline;
+	}
+	
+	.JourneyInfoView-Obj4 {
+		font-size: 15px;
+		line-height: 1.8em;
+		white-space: pre-line;
+	}
+	
+	.JourneyInfoView-Obj5 {
+		font-size: 15px;
+		font-family: museo-w01-700, serif;
+		color: silver;
+		font-style: italic;
+		margin-bottom: 0px;
+		margin-right: 4px;
+	}
+	
+	.JourneyInfoView-Obj6 {
+		font-size: 15px;
+		font-family: museo-w01-700, serif;
+		color: silver;
+		font-style: italic;
+		margin-bottom: 0px;
+	}
+	
+	.JourneyInfoView-Obj6:hover {
+		cursor: pointer;
+		text-decoration: underline;
+		color: blue;
+	}
+	
+	.JourneyInfoView-Obj7 {
+		display: inline-flex;
+		margin-bottom: 10px;
+	}
+	
+	.JourneyInfoView-Obj8 {
+		width: 20px;
+		height: 25px;
+		vertical-align: middle;
+	}
+	
+	.JourneyInfoView-Obj9 {
+		margin-left: 5px;
+		margin-top:5px;
+		font-family: "Times New Roman", Times, serif;
+		font-size: 16px; 
+	}
+	
+	.JourneyInfoView-Obj10 {
+		width: 100%;
+	 	text-align: center;
+	  	margin: auto;
+	  	display: block;
+	  	padding: 8px 0px;
+	  	margin-top: 15px;
+	  	margin-bottom: 10px;
+	}
+	
+	.JourneyInfoView-Obj11 {
+		white-space: pre-line; 
+		font-size: 15px; 
+		line-height: 1.6em;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	</ui:style>
+	<g:HTMLPanel styleName="{style.JourneyInfoView-Obj1}">
+		<table>
+			<tr>
+				<td valign="top" style="width: 250px;">
+					<g:Image styleName="{style.JourneyInfoView-Obj2}" width="100%"
+						height="auto" ui:field="picture" />
+				</td>
+				<td valign="top" style="padding-left: 20px;">
+					<div style="margin-bottom: 10px;">
+					<g:Anchor styleName="{style.JourneyInfoView-Obj3}" text="Where and When?"
+						ui:field="lbTitle" />
+					</div>
+					<g:HTMLPanel styleName="{style.JourneyInfoView-Obj7}">
+						<g:Label styleName="font-blackTitleLarge {style.JourneyInfoView-Obj5}">Date post</g:Label>
+						<g:Label styleName="font-blackTitleLarge {style.JourneyInfoView-Obj5}"
+							ui:field="lbPoster"></g:Label>
+					</g:HTMLPanel>
+					<g:HTMLPanel>
+						<g:VerticalPanel spacing="5" ui:field="verLocate">
+							<g:HorizontalPanel>
+								<g:Image url="/resources/red-spotlight.png" styleName="{style.JourneyInfoView-Obj8}"></g:Image>
+								<g:Label styleName="{style.JourneyInfoView-Obj9}"
+									ui:field="noteDes"></g:Label>
+							</g:HorizontalPanel>
+						</g:VerticalPanel>
+					</g:HTMLPanel>
+				</td>
+			</tr>
+		</table>
+		<g:Label ui:field="btnViewDetail" styleName="PhotoUpload-Obj2 {style.JourneyInfoView-Obj10}">View Description</g:Label>
+		<g:HTML ui:field="htmlContent" styleName="{style.JourneyInfoView-Obj11}" />
+	</g:HTMLPanel>
+</ui:UiBinder> 

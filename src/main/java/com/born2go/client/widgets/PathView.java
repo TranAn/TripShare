@@ -6,6 +6,7 @@ import java.util.List;
 import com.born2go.client.TripShare;
 import com.born2go.shared.Path;
 import com.born2go.shared.Picture;
+import com.born2go.shared.Poster;
 import com.born2go.shared.Trip;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -146,10 +147,10 @@ public class PathView extends Composite {
 					public void onSuccess(Path result) {
 						TripShare.loadBox.hide();
 						String title = result.getLocate().getAddressName()+ " - " + TripShare.dateFormat(result.getCreateDate());
-						String poster = "Tester";
+						Poster poster = new Poster();
 						if(result.getPoster() != null)
-							poster = result.getPoster().getUserName();
-						PathDetail pathDetail = new PathDetail(result.getId(), "/resources/Travel tips2_resize.jpg", title, poster, result.getDescription());
+							poster = result.getPoster();
+						PathDetail pathDetail = new PathDetail(result.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), result.getDescription());
 						pathDetail.addPostControl();
 						pathDetail.setListener(new PathDetail.Listener() {
 							@Override
@@ -230,10 +231,10 @@ public class PathView extends Composite {
 					for(int i=result.size()-1; i>=0; i--) {
 						Path path = result.get(i);
 						String title = path.getLocate().getAddressName()+ " - " + TripShare.dateFormat(path.getCreateDate());
-						String poster = "Tester";
+						Poster poster = new Poster();
 						if(path.getPoster() != null)
-							poster = path.getPoster().getUserName();
-						PathDetail pathDetail = new PathDetail(path.getId(), "/resources/Travel tips2_resize.jpg", title, poster, path.getDescription());
+							poster = path.getPoster();
+						PathDetail pathDetail = new PathDetail(path.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), path.getDescription());
 						pathDetail.setListener(new PathDetail.Listener() {
 							@Override
 							public void onDeletePost(PathDetail pathDetail) {
@@ -254,16 +255,15 @@ public class PathView extends Composite {
 	}
 	
 	void getPathPhoto(Path path, final PathDetail pathDetail) {
-		if(path.getGallery().isEmpty()) {
-			
-		}
+		if(path.getGallery().isEmpty()) {}
 		else {
 			int index = (int) (Math.random() * path.getGallery().size()) + 0;
 			Long displayPhotoId = path.getGallery().get(index);
 			TripShare.dataService.findPicture(displayPhotoId, new AsyncCallback<Picture>() {
 				@Override
 				public void onSuccess(Picture result) {
-					pathDetail.setDisplayPhoto(result.getServeUrl());
+					if(result != null)
+						pathDetail.setDisplayPhoto(result.getServeUrl());
 				}				
 				@Override
 				public void onFailure(Throwable caught) {
