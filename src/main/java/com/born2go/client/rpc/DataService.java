@@ -11,6 +11,9 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("datastore")
 public interface DataService extends RemoteService {
+	
+	// exchange token
+	public String getLongLiveToken(String accessToken) throws Exception;
 
 	// trip
 	public Trip insertTrip(Trip trip, String accessToken);

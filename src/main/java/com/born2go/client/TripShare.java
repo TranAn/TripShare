@@ -17,6 +17,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.maps.gwt.client.DirectionsResult;
 import com.google.maps.gwt.client.LatLng;
@@ -125,7 +126,7 @@ public class TripShare implements EntryPoint {
 		}, true);
 	}-*/;
 
-	public static void getAccessToken(String accessToken, String userId) {
+	public static void getAccessToken(String accessToken, String userId) throws Exception {
 		access_token = accessToken;
 		user_id = userId;
 		if(access_token.isEmpty()) {
@@ -134,6 +135,16 @@ public class TripShare implements EntryPoint {
 		else {
 			pathView.checkPermission();
 			viewFullPath.checkPermission();
+			dataService.getLongLiveToken(accessToken, new AsyncCallback<String>() {
+				@Override
+				public void onSuccess(String result) {
+					access_token = result;
+				}
+				@Override
+				public void onFailure(Throwable caught) {
+					// TODO Auto-generated method stub
+				}
+			});
 		}
 	}
 

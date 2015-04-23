@@ -149,7 +149,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 
 	private User exportUser = null;
 
-	public Poster getPoster(String accessToken) throws Exception{
+	Poster getPoster(String accessToken) throws Exception{
 		String url = "https://graph.facebook.com/me?access_token=" + accessToken;
 		 
 		URL obj = new URL(url);
@@ -161,9 +161,9 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		//add request header
 		con.setRequestProperty("User-Agent", "Mozilla/5.0");
  
-		int responseCode = con.getResponseCode();
+		/*int responseCode = con.getResponseCode();
 		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
+		System.out.println("Response Code : " + responseCode);*/
  
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String inputLine;
@@ -181,6 +181,41 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		poster.setUserName(myObj.getString("first_name")+ " "+ myObj.getString("last_name"));
 		
 		return poster;
+	}
+
+	@Override
+	public String getLongLiveToken(String accessToken) throws Exception{
+		String url = "https://graph.facebook.com/oauth/access_token?"  
+				+ "grant_type=fb_exchange_token&"
+				+ "client_id=1636504239911870&"
+				+ "client_secret=ce5b4aede58568aba92aafb894b91c49&"
+				+ "fb_exchange_token="+ accessToken;
+		 
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+ 
+		// optional default is GET
+		con.setRequestMethod("GET");
+ 
+		//add request header
+		con.setRequestProperty("User-Agent", "Mozilla/5.0");
+ 
+		/*int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);*/
+ 
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+ 
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+		
+		String token[] = response.toString().replaceAll("access_token=", "").split("&");
+		/*System.out.println("long live token="+ token[0]);*/
+		return token[0];
 	}
 
 	@Override

@@ -9,6 +9,9 @@ import com.born2go.shared.User;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface DataServiceAsync {
+	
+	// exchange token
+	void getLongLiveToken(String accessToken, AsyncCallback<String> callback) throws Exception;
 
 	// trip
 	void insertTrip(Trip trip, String accessToken, AsyncCallback<Trip> callback);
