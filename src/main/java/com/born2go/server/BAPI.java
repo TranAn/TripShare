@@ -1,10 +1,14 @@
 package com.born2go.server;
 
+import static com.googlecode.objectify.ObjectifyService.ofy;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.Servlet;
@@ -14,18 +18,129 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.born2go.shared.Path;
+import com.born2go.shared.Picture;
 import com.born2go.shared.Trip;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.gson.Gson;
+import com.googlecode.objectify.Key;
 
 public class BAPI extends HttpServlet implements Servlet{
 
 	private static final long serialVersionUID = 1L;
 	DataServiceImpl dataService = new DataServiceImpl();
+	private BlobstoreService blobstoreService = BlobstoreServiceFactory
+			.getBlobstoreService();
+	private ImagesService imagesService = ImagesServiceFactory.getImagesService();
+	
+	/* Upload from mobile app here
+	 * 
+	 */
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(req);
+		List<BlobKey> blobKeys = blobs.get("file");
+		boolean error = false;
+		String postHtml ="";
+		
+		if(blobKeys != null) {
+			String tripStr = req.getParameter("trip_id");
+			String postStr = req.getParameter("post_id");
+			if (tripStr == null) tripStr = "0";
+			if (postStr == null) postStr = "0";
+			
+			Long tripID, postID;
+			try {
+				tripID = Long.valueOf(tripStr);
+				postID = Long.valueOf(postStr);
+			} catch (NumberFormatException e) {
+				deleteBlobKeysOnError(blobKeys, resp);
+				return;
+			}
+			
+			if (tripID == 0){
+				deleteBlobKeysOnError(blobKeys, resp);
+				return;
+			}
+			
+			postHtml += req.getParameter("post_content") + "<br>";
+			
+			for(BlobKey key: blobKeys) {
+				// get file name on blob info
+				BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(key);
+				long size = blobInfo.getSize();
+				if(size > 0){
+					String encodedFilename = URLEncoder.encode(blobInfo.getFilename(), "utf-8");
+			    	encodedFilename.replaceAll("\\+", "%20");
+			    	// set fileupload info
+			    	Picture file = new Picture();
+		    		file.setOnTrip(tripID);
+		    		file.setOnPath(postID);
+			    	file.setKey(key.getKeyString());
+			    	String servingUrl = imagesService.getServingUrl(ServingUrlOptions.Builder.withBlobKey(key)); 
+			    	file.setServeUrl(servingUrl);
+			    	postHtml += "<img alt=\"\" src=\"" + servingUrl + "\" /> <br>";
+			    	
+					Key<Picture> keyPicture = ofy().save().entity(file).now();
+					Picture exportPicture = ofy().load().key(keyPicture).now();
+					//save id on trip or path
+					if(postID == 0) {
+						Trip trip = ofy().load().type(Trip.class).id(tripID).now();
+						if(trip != null) {
+							trip.getGallery().add(exportPicture.getId());
+							ofy().save().entity(trip);
+						}
+					}
+					else {
+						Path path = ofy().load().type(Path.class).id(postID).now();
+						if(path != null) {
+							path.getGallery().add(exportPicture.getId());
+							ofy().save().entity(path);
+						}
+					}
+				}else{
+					blobstoreService.delete(key);
+				}
+			}
+			//It's time to create new post
+			String accessToken = req.getParameter("access_token");
+			Path newPost = new Path();
+			newPost.setDescription(postHtml);
+			Path insertedPost = dataService.insertPart(newPost, tripID, accessToken);
+			
+			resp.setContentType("text/html; charset=utf-8");
+			if (insertedPost != null){
+				String result = getPathContentByID(insertedPost.getId());
+				resp.getWriter().write(result);
+			} else {
+				resp.getWriter().write(postHtml);
+			}
+		}
+	}
+
+	private void deleteBlobKeysOnError(List<BlobKey> blobKeys, HttpServletResponse resp) throws IOException{
+		if (blobKeys == null)
+			return;
+		for (BlobKey key: blobKeys) {
+			blobstoreService.delete(key);
+		}
+		resp.setContentType("text/html; charset=utf-8");
+		resp.getWriter().write("{\"status\": false,\"error: Something's wrong\"}");
+	}
 	
 	/**
 	 * Supported Actions:
 	 * getTrip: Return json data
 	 * getPath: Return html
+	 * getAllPost: Return json array data
+	 * getUploadUrl: Return text
 	 * getSetting: Return json data of current version, min mobile app version, adv rate (%) ....
 	 * 			{"version":"10","minversion":"7","advrate":"0"}
 	 */
@@ -34,10 +149,9 @@ public class BAPI extends HttpServlet implements Servlet{
 			IOException {
 		String result = "";
 		String action = req.getParameter("action");
+		String id = req.getParameter("id");
 		
 		try {
-			String id = req.getParameter("id");
-			
 			if (action.compareToIgnoreCase("getPath") == 0){
 				result = getPathContentByID(Long.parseLong(id));
 				resp.setContentType("text/html; charset=utf-8");
@@ -50,6 +164,10 @@ public class BAPI extends HttpServlet implements Servlet{
 				result = getAllPostByTripID(Long.parseLong(id));
 				resp.setContentType("application/json; charset=utf-8");
 			}
+			else if (action.compareToIgnoreCase("getUploadUrl") == 0){
+				result = getUploadUrl();
+				resp.setContentType("text/html; charset=utf-8");
+			}
 			else if (action.compareToIgnoreCase("getSetting") == 0){
 				resp.setContentType("application/json; charset=utf-8");
 				result = getSetting();
@@ -60,6 +178,7 @@ public class BAPI extends HttpServlet implements Servlet{
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			result = "Error! Something is wrong: id = " + id;
 		}
 		resp.getWriter().write(result);
 	}
@@ -156,6 +275,38 @@ public class BAPI extends HttpServlet implements Servlet{
 		return json;
 	}
 
+	private String getUploadUrl(){
+		//return blobstoreService.createUploadUrl("api");
+		String html = "<html>";
+		html += "<head>";
+		html += "<title>File Uploading Form</title>";
+		html += "</head>";
+		html += "<body>";
+		html += "<h3>File Upload:</h3>";
+		html += "Select a file to upload: <br />";
+		html += "<form action=\"" + blobstoreService.createUploadUrl("/api") +
+				"\" method=\"post\" enctype=\"multipart/form-data\">";
+		html += "<input type=\"file\" name=\"file\" size=\"50\" />";
+		html += "<br />";
+		
+		html += "<input type=\"text\" name=\"trip_id\" value=\"123456789\">";
+		html += "<br>";
+		html += "<input type=\"text\" name=\"path_id\" value=\"0\">";
+		html += "<br>";
+		html += "Status to update:<br>";
+		html += "<input type=\"text\" name=\"post_content\">";
+		html += "<br>";
+		html += "Access Token:<br>";
+		html += "<input type=\"text\" name=\"access_token\">";
+		
+		html += "<input type=\"submit\" value=\"Upload File\" />";
+		html += "</form>";
+		html += "</body>";
+		html += "</html>";
+		
+		return html;
+	}
+	
 	private String getSetting(){
 		String result = "";
 		result = "{\"version\":\"10\",\"minversion\":\"7\",\"advrate\":\"0\"}";//Test setting only
