@@ -107,6 +107,21 @@ public class TripShare implements EntryPoint {
 	}
 
 	private native void checkUserStatus() /*-{
+	    $wnd.FB.init({
+	      appId      : '386540048195283',
+	      cookie	 : true,
+	      xfbml      : true,
+	      version    : 'v2.2'
+	    });
+		
+		(function(d, s, id){
+		    var js, fjs = d.getElementsByTagName(s)[0];
+		    if (d.getElementById(id)) {return;}
+		    js = d.createElement(s); js.id = id;
+		    js.src = "//connect.facebook.net/en_US/sdk.js";
+		    fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+		
 		$wnd.FB.getLoginStatus(function(response) {
 			if (response.status === 'connected') {
 				var userId = response.authResponse.userID;
@@ -129,16 +144,15 @@ public class TripShare implements EntryPoint {
 	public static void getAccessToken(String accessToken, String userId) throws Exception {
 		access_token = accessToken;
 		user_id = userId;
-		if(access_token.isEmpty()) {
-			
-		}
+		if(access_token.isEmpty()) {}
 		else {
 			pathView.checkPermission();
 			viewFullPath.checkPermission();
 			dataService.getLongLiveToken(accessToken, new AsyncCallback<String>() {
 				@Override
 				public void onSuccess(String result) {
-					access_token = result;
+					if(result != null && !result.isEmpty())
+						access_token = result;
 				}
 				@Override
 				public void onFailure(Throwable caught) {

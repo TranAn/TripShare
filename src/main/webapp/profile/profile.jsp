@@ -71,11 +71,11 @@
 			application to display correctly.</div>
 	</noscript>
 
-	<script type="text/javascript">
+	<!-- <script type="text/javascript">
 		window.onbeforeunload = function() {
 			window.scrollTo(0, 0);
 		}
-	</script>
+	</script> -->
 
 	<div id="header">
 		<div id="title">
@@ -92,7 +92,7 @@
 		</div>
 
 		<div id="menu">
-			<div style="margin: auto; display: -webkit-box;">
+			<div style="margin: auto; display: -webkit-box; width: -moz-fit-content;">
 				<a class="menubutton" href="/">Home</a>
 				<a class="menubutton" href="/create/">Plan your trip</a>
 				<a id="menubutton" class="menubutton-actived" href="">Profile</a>

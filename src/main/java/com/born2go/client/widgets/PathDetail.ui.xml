@@ -95,6 +95,22 @@
 	.PathDetail-Obj8:hover {
 		color: gray !important;
 	}
+	
+	.PathDetail-Obj9 {
+		font-size: 15px; 
+		line-height: 1.6em; 
+		/*
+		display: block; 
+		display: -webkit-box; 
+		-webkit-line-clamp: 10;
+		-webkit-box-orient: vertical; 
+		text-overflow: ellipsis;
+		max-height: 270px; 
+		*/
+		overflow: hidden;  
+		margin-top: 15px; 
+		margin-bottom: 30px;
+	}
 	</ui:style>
 	<g:HTMLPanel styleName="{style.PathDetail-Obj1}">
 		<table>
@@ -108,7 +124,9 @@
 						<g:Label styleName="font-blackTitleLarge {style.PathDetail-Obj5}">Post by</g:Label>
 						<g:Anchor styleName="font-blackTitleLarge {style.PathDetail-Obj6}" ui:field="lbPoster"></g:Anchor>
 					</g:HTMLPanel>
-					<p ui:field="htmlContent" style="font-size: 15px; line-height: 1.6em;" />
+					
+					<g:HTML ui:field="htmlContent" styleName="{style.PathDetail-Obj9}"></g:HTML>
+						
 					<g:HTMLPanel ui:field="postControl">
 						<g:Anchor title="Delete this post" ui:field="btnDeletePost" styleName="{style.PathDetail-Obj8}"><i class="fa fa-trash fa-2x"></i></g:Anchor>
 					</g:HTMLPanel>

@@ -12,6 +12,11 @@ html {
 	background-size: cover;
 }
 
+p{
+	-webkit-margin-before: 0em;
+  	-webkit-margin-after: 0.8em;
+}
+
 #header {
 	width: 100%;
 	background-color: rgba(48, 27, 12, 1);
@@ -32,7 +37,7 @@ html {
 	display: -webkit-inline-box;
 	width: 100%;
 	margin-top: 20px;
-	margin-bottom: 15px;
+	padding-bottom: 15px;
 }
 
 #content {

@@ -245,6 +245,8 @@ public class PathView extends Composite {
 						htmlPathTable.add(pathDetail);
 						getPathPhoto(path, pathDetail);
 						listPathsDetail.add(pathDetail);
+						if(theTrip.getPoster().getUserID().toString().equals(TripShare.user_id)) 
+							pathDetail.addPostControl();
 					}
 				}
 				@Override

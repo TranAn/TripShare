@@ -201,7 +201,7 @@ public class PathCreate extends Composite {
 		scrollPathPhotos.getElement().setAttribute("id", "scrollPathPhotos");
 		lbCountPhotos.getElement().setAttribute("id", "lbCountPhotos");
 		
-		txbDescription.getElement().setPropertyString("placeholder", "Hãy viết lại nhật ký, hay cảm xúc của bạn về chuyến đi!");
+		txbDescription.getElement().setPropertyString("placeholder", "Write your feeling now, or about the story of your best memory on the journey!");
 		
 		DOM.setElementProperty(pathPhotoUpload.getElement(), "multiple", "multiple"); 
 		

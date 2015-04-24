@@ -82,8 +82,8 @@ public class CreateTrip extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 		mapContainer.add(TripShare.tripMap.getMapView());
 		
-		txbName.getElement().setPropertyString("placeholder", "Tên chuyến đi của bạn");
-		txbDescription.getElement().setPropertyString("placeholder", "Mô tả chuyến đi của bạn!");
+		txbName.getElement().setPropertyString("placeholder", "Name of your journey");
+		txbDescription.getElement().setPropertyString("placeholder", "Let's talk about the plan for your trip!");
 		txbDeparture.setValue(new Date());
 		
 		final Autocomplete autocomplete = Autocomplete
@@ -139,7 +139,7 @@ public class CreateTrip extends Composite {
 	List<TextBox> destinationBoxMap = new ArrayList<TextBox>();
 	
 	public TextBox addDestination() {
-		final Label lb = new Label("Điểm đến:");
+		final Label lb = new Label("Destination point:");
 		final TextBox txb = new TextBox();
 		final Anchor btn1 = new Anchor();
 		final Anchor btn = new Anchor();
@@ -150,6 +150,8 @@ public class CreateTrip extends Composite {
 		btn.setStyleName("greenbutton CreateTrip-Obj12");
 		btn1.getElement().setInnerHTML("<i class='fa fa-picture-o fa-lg'></i>");
 		btn.getElement().setInnerHTML("<i class='fa fa-times fa-lg'></i>");
+		btn1.setTitle("Find tourist place");
+		btn.setTitle("Remove destination point");
 		
 		htmlDestinationBox.add(lb);
 		htmlDestinationBox.add(txb);

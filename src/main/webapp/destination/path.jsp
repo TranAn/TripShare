@@ -19,6 +19,43 @@
 <!-- with a "Quirks Mode" doctype may lead to some -->
 <!-- differences in layout.                        -->
 
+<%!
+public void redirectHomeUrl(HttpServletResponse response) {
+	String site = new String("/");
+	response.setStatus(response.SC_MOVED_TEMPORARILY);
+	response.setHeader("Location", site);
+}
+%>
+
+<%
+	//Global variable
+	Path path = new Path();
+	String pathId = "";
+	String pathTitle = "";
+	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d hh:mm:ss");
+	Picture pathPicture = new Picture();
+	//Get variable
+	if (request.getPathInfo() == null || request.getPathInfo().length() <= 1) {
+		redirectHomeUrl(response);
+	} else {
+		pathId = request.getPathInfo().replaceAll("/", "");
+		DataServiceImpl service = new DataServiceImpl();
+		path = service.findPart(Long.valueOf(pathId));
+		if (path == null) {
+			redirectHomeUrl(response);
+		} else {
+			pathTitle = (path.getTitle() == null ? path.getLocate().getAddressName() : path.getTitle());
+			List<Long> gallery = path.getGallery();	
+			pathPicture.setServeUrl("");
+			if(gallery != null && !gallery.isEmpty()) {
+				List<Picture> listPicture = service.listPicture(gallery);
+				if(listPicture.size() > 0) 
+					pathPicture = listPicture.get(0);
+			}
+		}
+	}
+%>
+
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -36,7 +73,12 @@
 <!--                                           -->
 <!-- Any title is fine                         -->
 <!--                                           -->
-<title>Destination</title>
+<title><%=pathTitle%></title>
+<meta property="og:title" content="<%=pathTitle%>" />
+<meta property="og:type" content="article" />
+<meta property="og:image" content="<%=pathPicture.getServeUrl()%>" />
+<meta property="og:url" content="" />
+<meta property="og:description" content='<%=path.getDescription().replace("\n", "").replace("\r", "")%>' />
 
 <!--                                           -->
 <!-- This script loads your compiled module.   -->
@@ -92,7 +134,7 @@
 		</div>
 
 		<div id="menu">
-			<div style="margin: auto; display: -webkit-box;">
+			<div style="margin: auto; display: -webkit-box; width: -moz-fit-content;">
 				<a class="menubutton-actived" href="/">Home</a>
 				<a class="menubutton" href="/create/">Plan your trip</a>
 				<a id="menubutton" class="menubutton" onclick="loginFacebook()">Sign in Facebook</a>
@@ -104,59 +146,23 @@
 	<div id="content">
 		<div class="pathInfo">
 			<div>
-				<%!public void redirectHomeUrl(HttpServletResponse response) {
-					String site = new String("/");
-					response.setStatus(response.SC_MOVED_TEMPORARILY);
-					response.setHeader("Location", site);
-				}%>
-
-				<%
-					if (request.getPathInfo() == null || request.getPathInfo().length() <= 1) {
-						redirectHomeUrl(response);
-					} else {
-						String pathId = request.getPathInfo().replaceAll("/", "");
-						DataServiceImpl service = new DataServiceImpl();
-						Path path = service.findPart(Long.valueOf(pathId));
-						if (path == null) {
-							redirectHomeUrl(response);
-						} else {
-				%>
+				<!-- Add content -->
 				<table style="width: 100%;">
 					<tr>
 						<td valign="top" style="padding-right: 10px;">
 							<div class="left_rightPath">
-								<div class="font_4 ">
-								<%if(path.getTitle() != null) { %>
-									<%=path.getTitle()%>
-								<%} else { %>
-									<%=path.getLocate().getAddressName()%>
-								<% } %>
-								</div>
+								<div class="font_4 "><%=pathTitle%></div>
 								<div style="height: 40px;">
-									<%
-										java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d hh:mm:ss");
-									%>
-									<p class="font_9">
-										Post by: <a href="/profile/<%=path.getPoster().getUserID()%>"><%=path.getPoster().getUserName()%></a>
-									</p>
-									<p class="font_9">
-										Date post:
-										<%=df.format(path.getCreateDate())%></p>
+								<p class="font_9">
+									Post by: <a href="/profile/<%=path.getPoster().getUserID()%>"><%=path.getPoster().getUserName()%></a>
+								</p>
+								<p class="font_9">Date post:<%=df.format(path.getCreateDate())%>
+								</p>
 								</div>
 								<div style="background: whitesmoke;min-height: 10px;padding: 15px 0px;">
-									<%
-										List<Long> gallery = path.getGallery();
-																																																				
-										if(gallery != null && !gallery.isEmpty()){
-											List<Picture> listPicture = service.listPicture(gallery);
-											if(listPicture.size() > 0) {
-											 	Picture randomP = listPicture.get(0);																																													/* out.println("Results for:<b> " + totalRow + size + "</b>"); */
-									%>
-									<img src="<%=randomP.getServeUrl()%>" class="one_imageView">
-									<%
-										}
-											}
-									%>
+								<%if(!pathPicture.getServeUrl().equals("")){%>									
+								<img src="<%=pathPicture.getServeUrl()%>" class="one_imageView">	
+								<%}%>																				
 								</div>
 
 								<br/>
@@ -237,13 +243,6 @@
 						</td>
 					</tr>
 				</table>
-				
-				<%
-						}																										
-					}
-				%>
-
-				<!-- End of jsp content -->
 			</div>
 		</div>
 	</div>
