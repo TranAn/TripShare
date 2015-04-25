@@ -13,6 +13,7 @@ import com.born2go.client.widgets.ProfileView;
 import com.born2go.client.widgets.TravelMap;
 import com.born2go.client.widgets.TravelMap.Listener;
 import com.born2go.client.widgets.ViewFullPath;
+import com.born2go.shared.Trip;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -71,6 +72,23 @@ public class TripShare implements EntryPoint {
 			String userID = Window.Location.getPath().replaceAll("/profile/","");
 			if (userID.length() != 0) {
 				profileView.showProfileView(userID);
+			}
+		}
+		
+		if (RootPanel.get("mtripMap") != null) {
+			RootPanel.get("mtripMap").add(tripMap.getMapView());
+			String idJourney = Window.Location.getPath().replaceAll("/journey/","");
+			if (idJourney.length() != 0) {
+				Long idTrip = Long.parseLong(idJourney);
+				dataService.findTrip(idTrip, new AsyncCallback<Trip>() {
+					@Override
+					public void onSuccess(Trip result) {
+						tripMap.drawTheJourney(result.getJourney().getDirections(),
+								result.getJourney().getLocates());
+					}
+					@Override
+					public void onFailure(Throwable caught) {}
+				});
 			}
 		}
 		

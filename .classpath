@@ -6,7 +6,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry excluding="ckeditor/|create/|destination/|journey/|mobile/|myjs/|resources/|profile/" kind="src" path="src/main/webapp"/>
+	<classpathentry excluding="ckeditor/|create/|destination/|journey/|mobile/|myjs/|resources/|profile/|mtrip/" kind="src" path="src/main/webapp"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
 			<attribute name="optional" value="true"/>
