@@ -1,4 +1,5 @@
 <%@ page import="com.google.gwt.user.client.Window"%>
+<%@ page import="com.born2go.shared.Trip"%>
 <%@ page import="com.born2go.shared.Path"%>
 <%@ page import="com.born2go.shared.Picture"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
@@ -29,12 +30,13 @@ public void redirectHomeUrl(HttpServletResponse response) {
 
 <%
 	//Global variable
+	Trip trip = new Trip();
 	Path path = new Path();
 	String pathId = "";
 	String pathTitle = "";
 	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d hh:mm:ss");
 	Picture pathPicture = new Picture();
-	//Get variable
+	//Get the data 
 	if (request.getPathInfo() == null || request.getPathInfo().length() <= 1) {
 		redirectHomeUrl(response);
 	} else {
@@ -52,6 +54,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 				if(listPicture.size() > 0) 
 					pathPicture = listPicture.get(0);
 			}
+			trip = service.findTrip(path.getTripId());
 		}
 	}
 %>
@@ -77,7 +80,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 <meta property="og:title" content="<%=pathTitle%>" />
 <meta property="og:type" content="article" />
 <meta property="og:image" content="<%=pathPicture.getServeUrl()%>" />
-<meta property="og:url" content="" />
+<meta property="og:url" content="http://born2go-b.appspot.com/destination/<%= pathId %>" />
 <meta property="og:description" content='<%=path.getDescription().replace("\n", "").replace("\r", "")%>' />
 
 <!--                                           -->
@@ -113,23 +116,19 @@ public void redirectHomeUrl(HttpServletResponse response) {
 			application to display correctly.</div>
 	</noscript>
 
-	<script type="text/javascript">
+	<!-- <script type="text/javascript">
 		window.onbeforeunload = function() {
 			window.scrollTo(0, 0);
 		}
-	</script>
+	</script> -->
 
 	<div id="header">
 		<div id="title">
 			<center>
-				<span
-					style="margin-right: 20px; letter-spacing: 0.3em; font: normal normal normal 14px/1.3em 'Open Sans', sans-serif"><font
-					color="#fffbf8">finding your trip</font></span> <span
-					style="line-height: 1.1em; font: normal normal normal 55px/1.1em Play, sans-serif; color: #fffbf8">Trip&nbsp;<strong>Share</strong></span>
-					<img src="/resources/1427111517_palm_tree.png" height="42"
-					width="42" /> <span
-					style="margin-left: 20px; letter-spacing: 0.3em; font: normal normal normal 14px/1.3em 'Open Sans', sans-serif"><font
-					color="#fffbf8">share with your friend</font></span>
+			<span style="margin-right:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">Plan your trips</font></span>
+			<span style="line-height: 1.1em; font:normal normal normal 55px/1.1em Play,sans-serif; color:#fffbf8">Trip&nbsp;<strong>Share</strong></span>
+			<img src="/resources/1427111517_palm_tree.png" height="42" width="42" /> 
+			<span style="margin-left:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">Share the moments</font></span>
 			</center>
 		</div>
 
@@ -151,7 +150,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 					<tr>
 						<td valign="top" style="padding-right: 10px;">
 							<div class="left_rightPath">
-								<div class="font_4 "><%=pathTitle%></div>
+								<div id="pathTitle" class="font_4 "><%=pathTitle%></div>
 								<div style="height: 40px;">
 								<p class="font_9">
 									Post by: <a href="/profile/<%=path.getPoster().getUserID()%>"><%=path.getPoster().getUserName()%></a>
@@ -170,9 +169,15 @@ public void redirectHomeUrl(HttpServletResponse response) {
 								<div id="pathDescription">
 									<p style="font-size: 15px; line-height: 1.6em; white-space: pre-line;"><%=path.getDescription()%></p>
 								</div>
-								<!--  -->
+								<!-- Trip info -->
+								<div style="height: 20px; padding-top: 10px;">
+									<p class="font_9">
+									On Journey: <a href="/journey/<%=trip.getId()%>"><%=trip.getName()%></a>
+									</p>
+								</div>
+								<!-- Toolbar -->
 								<div style="height: 55px;">
-									<div class="font-blackTitleLarge" style="float: left;margin-top: 30px; color: gray;">Gallery:</div>
+									<div class="font-blackTitleLarge" style="position: absolute; float: left;margin-top: 30px; color: gray;">Gallery:</div>
 									<div id="pathUploadTool" style="position: relative; float: right; top: 15px; font-size: small;"> 													
 									</div>	
 									<div id="pathEditTool" style="position: relative; float: right; top: 15px; font-size: small; margin-right: 10px;">

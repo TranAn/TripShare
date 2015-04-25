@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ViewFullPath extends Composite {
@@ -178,13 +179,19 @@ public class ViewFullPath extends Composite {
 		//remove content
 		DOM.getElementById("pathDescription").setInnerHTML("");
 		DOM.getElementById("pathEditTool").setInnerHTML("");
+		DOM.getElementById("pathTitle").setInnerHTML("");
 		//add editor
+		final TextBox txbPathTitle = new TextBox();
+		txbPathTitle.setText(path.getTitle());
+		txbPathTitle.setStyleName("font_4");
+		txbPathTitle.getElement().setAttribute("style", "width:99%; text-indent: 5px;");
+		RootPanel.get("pathTitle").add(txbPathTitle);
 		HTMLPanel newContainer = new HTMLPanel("");
 		RootPanel.get("pathDescription").add(newContainer);
 		final CKEditor editor = new CKEditor(getCKConfig());
 		newContainer.add(editor);
 		editor.setData(ViewFullPath.path.getDescription());
-		Window.scrollTo(0, newContainer.getElement().getAbsoluteTop()-50);
+		Window.scrollTo(0, 85);
 		//add edit tool
 		Label btnSave = new Label();
 		Label btnCancel = new Label();
@@ -206,6 +213,7 @@ public class ViewFullPath extends Composite {
 			public void onClick(ClickEvent event) {
 				TripShare.loadBox.center();
 				Path viewPath = ViewFullPath.path;
+				viewPath.setTitle(txbPathTitle.getText());
 				viewPath.setDescription(editor.getData());
 				TripShare.dataService.updatePart(viewPath, new AsyncCallback<Path>() {
 					@Override
@@ -228,11 +236,16 @@ public class ViewFullPath extends Composite {
 		//remove content
 		DOM.getElementById("pathDescription").setInnerHTML("");
 		DOM.getElementById("pathEditTool").setInnerHTML("");
+		DOM.getElementById("pathTitle").setInnerHTML("");
 		//add static content
+		Label title = new Label();
+		title.setText(path.getTitle());
+		title.setStyleName("font_4");
+		RootPanel.get("pathTitle").add(title);
 		HTMLPanel newContainer = new HTMLPanel("");
 		RootPanel.get("pathDescription").add(newContainer);
 		newContainer.getElement().setInnerHTML(ViewFullPath.path.getDescription());
-		Window.scrollTo(0, newContainer.getElement().getAbsoluteTop()-50);
+		Window.scrollTo(0, 85);
 		Label btnEdit = new Label();
 		btnEdit.setStyleName("PhotoUpload-Obj2");
 		btnEdit.getElement().setInnerHTML("<i style='margin-right:5px;' class='fa fa-pencil fa-lg'></i>Edit");

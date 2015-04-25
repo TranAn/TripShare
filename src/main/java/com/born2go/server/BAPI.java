@@ -165,7 +165,10 @@ public class BAPI extends HttpServlet implements Servlet{
 				resp.setContentType("application/json; charset=utf-8");
 			}
 			else if (action.compareToIgnoreCase("getUploadUrl") == 0){
-				result = getUploadUrl();
+				String mode = req.getParameter("mode");
+				if (mode != null)
+					result = getUploadUrl(true);
+				else result = getUploadUrl(false);
 				resp.setContentType("text/html; charset=utf-8");
 			}
 			else if (action.compareToIgnoreCase("getSetting") == 0){
@@ -275,8 +278,9 @@ public class BAPI extends HttpServlet implements Servlet{
 		return json;
 	}
 
-	private String getUploadUrl(){
-		//return blobstoreService.createUploadUrl("api");
+	private String getUploadUrl(boolean mode){
+		if (mode == false)
+			return blobstoreService.createUploadUrl("api");
 		String html = "<html>";
 		html += "<head>";
 		html += "<title>File Uploading Form</title>";

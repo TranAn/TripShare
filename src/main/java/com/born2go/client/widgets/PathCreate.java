@@ -339,6 +339,7 @@ public class PathCreate extends Composite {
 		TripShare.loadBox.center();
 		Path path = new Path();
 		locate.setAddressName(txbLocation.getText());
+		path.setTitle(txbLocation.getText());
 		path.setLocate(locate);
 		path.setCreateDate(txbTimeline.getValue());
 		if(!isRichTextEdit) {

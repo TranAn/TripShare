@@ -118,10 +118,10 @@
 	<div id="header">
 		<div id="title">
 			<center>
-			<span style="margin-right:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">finding your trip</font></span>
+			<span style="margin-right:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">Plan your trips</font></span>
 			<span style="line-height: 1.1em; font:normal normal normal 55px/1.1em Play,sans-serif; color:#fffbf8">Trip&nbsp;<strong>Share</strong></span>
 			<img src="/resources/1427111517_palm_tree.png" height="42" width="42" /> 
-			<span style="margin-left:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">share with your friend</font></span>
+			<span style="margin-left:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">Share the moments</font></span>
 			</center>
 		</div>
 

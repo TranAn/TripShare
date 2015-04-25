@@ -146,7 +146,7 @@ public class PathView extends Composite {
 					@Override
 					public void onSuccess(Path result) {
 						TripShare.loadBox.hide();
-						String title = result.getLocate().getAddressName()+ " - " + TripShare.dateFormat(result.getCreateDate());
+						String title = (result.getTitle())+ " - " + TripShare.dateFormat(result.getCreateDate());
 						Poster poster = new Poster();
 						if(result.getPoster() != null)
 							poster = result.getPoster();
@@ -230,7 +230,7 @@ public class PathView extends Composite {
 					listPaths.addAll(result);
 					for(int i=result.size()-1; i>=0; i--) {
 						Path path = result.get(i);
-						String title = path.getLocate().getAddressName()+ " - " + TripShare.dateFormat(path.getCreateDate());
+						String title = (path.getTitle() == null ? path.getLocate().getAddressName() : path.getTitle())+ " - " + TripShare.dateFormat(path.getCreateDate());
 						Poster poster = new Poster();
 						if(path.getPoster() != null)
 							poster = path.getPoster();
