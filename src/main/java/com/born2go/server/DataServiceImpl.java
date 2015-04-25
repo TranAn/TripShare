@@ -187,8 +187,8 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	public String getLongLiveToken(String accessToken) throws Exception{
 		String url = "https://graph.facebook.com/oauth/access_token?"  
 				+ "grant_type=fb_exchange_token&"
-				+ "client_id=386540048195283&"
-				+ "client_secret=e46d1a5f49dfa88cce1e3396526d8cd6&"
+				+ "client_id=1636504239911870&"
+				+ "client_secret=ce5b4aede58568aba92aafb894b91c49&"
 				+ "fb_exchange_token="+ accessToken;
 		 
 		URL obj = new URL(url);

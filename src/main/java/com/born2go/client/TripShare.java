@@ -108,7 +108,7 @@ public class TripShare implements EntryPoint {
 
 	private native void checkUserStatus() /*-{
 	    $wnd.FB.init({
-	      appId      : '386540048195283',
+	      appId      : '1636504239911870',
 	      cookie	 : true,
 	      xfbml      : true,
 	      version    : 'v2.2'

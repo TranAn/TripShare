@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ViewFullPath extends Composite {
@@ -178,7 +179,11 @@ public class ViewFullPath extends Composite {
 		//remove content
 		DOM.getElementById("pathDescription").setInnerHTML("");
 		DOM.getElementById("pathEditTool").setInnerHTML("");
+		DOM.getElementById("pathTitle").setInnerHTML("");
 		//add editor
+		TextBox txbPathTitle = new TextBox();
+		txbPathTitle.setText(path.getTitle());
+		RootPanel.get("pathTitle").add(txbPathTitle);
 		HTMLPanel newContainer = new HTMLPanel("");
 		RootPanel.get("pathDescription").add(newContainer);
 		final CKEditor editor = new CKEditor(getCKConfig());

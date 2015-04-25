@@ -77,7 +77,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 <meta property="og:title" content="<%=pathTitle%>" />
 <meta property="og:type" content="article" />
 <meta property="og:image" content="<%=pathPicture.getServeUrl()%>" />
-<meta property="og:url" content="" />
+<meta property="og:url" content="http://born2go-b.appspot.com/destination/<%= pathId %>" />
 <meta property="og:description" content='<%=path.getDescription().replace("\n", "").replace("\r", "")%>' />
 
 <!--                                           -->
@@ -151,7 +151,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 					<tr>
 						<td valign="top" style="padding-right: 10px;">
 							<div class="left_rightPath">
-								<div class="font_4 "><%=pathTitle%></div>
+								<div id="pathTitle" class="font_4 "><%=pathTitle%></div>
 								<div style="height: 40px;">
 								<p class="font_9">
 									Post by: <a href="/profile/<%=path.getPoster().getUserID()%>"><%=path.getPoster().getUserName()%></a>
