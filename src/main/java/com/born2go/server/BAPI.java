@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.born2go.shared.Path;
 import com.born2go.shared.Picture;
 import com.born2go.shared.Trip;
@@ -28,6 +31,8 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
 
@@ -115,13 +120,25 @@ public class BAPI extends HttpServlet implements Servlet{
 			newPost.setDescription(postHtml);
 			Path insertedPost = dataService.insertPart(newPost, tripID, accessToken);
 			
-			resp.setContentType("text/html; charset=utf-8");
-			if (insertedPost != null){
-				String result = getPathContentByID(insertedPost.getId());
-				resp.getWriter().write(result);
-			} else {
-				resp.getWriter().write(postHtml);
+			JSONObject myObj = new JSONObject();
+			
+			resp.setContentType("application/json; charset=utf-8");
+
+			try {
+				if (insertedPost != null){
+					String result = getPathContentByID(insertedPost.getId());
+					myObj.append("status", "ok");
+					myObj.append("content", result);
+				} else {
+					myObj.append("status", "error");
+					myObj.append("content", postHtml);
+					
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			resp.getWriter().write(myObj.toString());
 		}
 	}
 
@@ -168,7 +185,8 @@ public class BAPI extends HttpServlet implements Servlet{
 				String mode = req.getParameter("mode");
 				if (mode != null)
 					result = getUploadUrl(true);
-				else result = getUploadUrl(false);
+				else 
+					result = getUploadUrl(false);
 				resp.setContentType("text/html; charset=utf-8");
 			}
 			else if (action.compareToIgnoreCase("getSetting") == 0){
@@ -295,7 +313,7 @@ public class BAPI extends HttpServlet implements Servlet{
 		
 		html += "<input type=\"text\" name=\"trip_id\" value=\"123456789\">";
 		html += "<br>";
-		html += "<input type=\"text\" name=\"path_id\" value=\"0\">";
+		html += "<input type=\"text\" name=\"post_id\" value=\"0\">";
 		html += "<br>";
 		html += "Status to update:<br>";
 		html += "<input type=\"text\" name=\"post_content\">";
@@ -307,7 +325,7 @@ public class BAPI extends HttpServlet implements Servlet{
 		html += "</form>";
 		html += "</body>";
 		html += "</html>";
-		
+	
 		return html;
 	}
 	

@@ -8,7 +8,7 @@
 
 	<properties>
 		<javaRuntime>1.7</javaRuntime>
-		<appengine.target.version>1.9.9</appengine.target.version>
+		<appengine.target.version>1.9.18</appengine.target.version>
 		<gwtVersion>2.7.0</gwtVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<appengine.home>${user.home}/.m2/repository/com/google/appengine/appengine-java-sdk/${appengine.target.version}/appengine-java-sdk-${appengine.target.version}</appengine.home>
@@ -27,12 +27,15 @@
 			<artifactId>gwt-user</artifactId>
 			<version>${gwtVersion}</version>
 			<scope>provided</scope>
+<<<<<<< Updated upstream
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-dev</artifactId>
 			<version>${gwtVersion}</version>
 			<scope>provided</scope>
+=======
+>>>>>>> Stashed changes
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
@@ -66,12 +69,13 @@
 			<version>2.4.0</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		
+		<!-- <dependency>
 			<groupId>com.google.appengine</groupId>
 			<artifactId>appengine-api-labs</artifactId>
 			<version>${appengine.target.version}</version>
-			<!-- <scope>test</scope> -->
-		</dependency>
+		</dependency> -->
+		
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
@@ -80,7 +84,11 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
+<<<<<<< Updated upstream
 			<version>20090211</version>
+=======
+			<version>20141113</version>
+>>>>>>> Stashed changes
 		</dependency>
 
 		<!-- Test Dependencies -->
