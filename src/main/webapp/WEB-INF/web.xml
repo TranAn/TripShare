@@ -88,11 +88,11 @@
 	
 	<servlet>
 		<servlet-name>MobileWeb</servlet-name>
-		<jsp-file>/mobile/mView.jsp</jsp-file>
+		<jsp-file>/mtrip/mTripView.jsp</jsp-file>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>MobileWeb</servlet-name>
-		<url-pattern>/mobile/*</url-pattern>
+		<url-pattern>/mtrip/*</url-pattern>
 	</servlet-mapping>
 
 	<!-- Appstats -->
