@@ -55,7 +55,7 @@ public class PathCreate extends Composite {
 	@UiField Anchor btnRichTextEdit;
 	
 	Long tripId;
-	Locate locate = new Locate();
+	Locate locate;
 	boolean isHandlerUploadEvent = false;
 	boolean isRichTextEdit = false;
 	
@@ -338,7 +338,6 @@ public class PathCreate extends Composite {
 	void onBtnPostClick(ClickEvent event) {
 		TripShare.loadBox.center();
 		Path path = new Path();
-		locate.setAddressName(txbLocation.getText());
 		path.setTitle(txbLocation.getText());
 		path.setLocate(locate);
 		path.setCreateDate(txbTimeline.getValue());
@@ -385,7 +384,7 @@ public class PathCreate extends Composite {
 		htmlPathPhotos.getElement().setInnerHTML("");
 		lbCountPhotos.setText("0 / Photos");
 		formUpload.reset();
-		locate = new Locate();
+		locate = null;
 		if(listener != null)
 			listener.onClose();
 	}

@@ -230,7 +230,11 @@ public class PathView extends Composite {
 					listPaths.addAll(result);
 					for(int i=result.size()-1; i>=0; i--) {
 						Path path = result.get(i);
-						String title = (path.getTitle() == null ? path.getLocate().getAddressName() : path.getTitle())+ " - " + TripShare.dateFormat(path.getCreateDate());
+						String title = "";
+						if(path.getTitle() != null)
+							title = path.getTitle()+ " - " + TripShare.dateFormat(path.getCreateDate()); 
+						else if(path.getLocate() != null)
+							title = path.getLocate().getAddressName()+ " - " + TripShare.dateFormat(path.getCreateDate());
 						Poster poster = new Poster();
 						if(path.getPoster() != null)
 							poster = path.getPoster();

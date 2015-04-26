@@ -82,13 +82,16 @@ public class PathDetail extends Composite {
 	}
 	
 	public static native String truncateText(String content) /*-{
-		var shortText = content    // get the text within the div
-		    .trim()    // remove leading and trailing spaces
-		    .substring(0, 1200)    // get first 600 characters
-		    .split(" ") // separate characters into an array of words
-		    .slice(0, -1)    // remove the last full or partial word
-		    .join(" ") + "..."; // combine into a single string and append "..."
-		return shortText;
+		if(content.trim().length > 1201) {
+			var shortText = content    // get the text within the div
+			    .trim()    // remove leading and trailing spaces
+			    .substring(0, 1200)    // get first 600 characters
+			    .split(" ") // separate characters into an array of words
+			    .slice(0, -1)    // remove the last full or partial word
+			    .join(" ") + "..."; // combine into a single string and append "..."
+			return shortText;
+		} else 
+			return content;
 	}-*/;
 	
 	public void addPostControl() {

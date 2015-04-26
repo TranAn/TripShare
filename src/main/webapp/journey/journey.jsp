@@ -146,7 +146,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Add Content here -->
 	<div id="content">
 		<div id="tripInfo" class="tripInfo">
@@ -213,7 +213,7 @@
 		<div id="tripcontent" class="tripContent"></div>
 		
 		<div id="commentBox" class="commentBox">
-		<div class="fb-comments" data-width="100%" data-href="http://born2go-b.appspot.com/journey/<%= tripId %>" data-numposts="5" data-colorscheme="light" data-order-by="reverse_time"></div>
+		<div class="fb-comments" data-width="100%" data-href="http://born2go-b.appspot.com/journey/<%= tripId %>" data-numposts="5" data-colorscheme="light" data-order-by="reverse_time" data-version="v2.3"></div>
 		<% } %> 
 	</div>
 	</div>

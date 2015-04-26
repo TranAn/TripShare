@@ -46,7 +46,10 @@ public void redirectHomeUrl(HttpServletResponse response) {
 		if (path == null) {
 			redirectHomeUrl(response);
 		} else {
-			pathTitle = (path.getTitle() == null ? path.getLocate().getAddressName() : path.getTitle());
+			if(path.getTitle() != null)
+				pathTitle = path.getTitle(); 
+			else if(path.getLocate() != null)
+				pathTitle = path.getLocate().getAddressName();
 			List<Long> gallery = path.getGallery();	
 			pathPicture.setServeUrl("");
 			if(gallery != null && !gallery.isEmpty()) {
@@ -54,7 +57,10 @@ public void redirectHomeUrl(HttpServletResponse response) {
 				if(listPicture.size() > 0) 
 					pathPicture = listPicture.get(0);
 			}
-			trip = service.findTrip(path.getTripId());
+			if(path.getTripId() != null)
+				trip = service.findTrip(path.getTripId());
+			else
+				trip.setName("");
 		}
 	}
 %>
@@ -192,7 +198,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 										data-show-faces="true" data-share="true"></div>
 									<div class="fb-comments" data-width="100%"
 										data-href="http://born2go-b.appspot.com/destination/<%= pathId %>"
-										data-numposts="5" data-colorscheme="light" data-order-by="reverse_time"></div>
+										data-numposts="5" data-colorscheme="light" data-order-by="reverse_time" data-version="v2.3"></div>
 								</div>
 							</div>
 						</td>

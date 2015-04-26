@@ -13,8 +13,8 @@ html {
 }
 
 p{
-	-webkit-margin-before: 0em;
-  	-webkit-margin-after: 0.8em;
+	margin: 0px;
+ 	margin-bottom: 0.8em;
 }
 
 #header {

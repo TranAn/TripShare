@@ -77,31 +77,3 @@ function setUserInfo(userId, userName) {
 	menuProfile.setAttribute('href', profileHref);
 }
 
-function addSharingMeta(title, imgUrl, link, description) {
-	var meta_Type = document.createElement('meta');
-	meta_Type.setAttribute("property","og:type");
-	meta_Type.content = "article";
-	document.getElementsByTagName('head')[0].appendChild(meta_Type);
-	
-	var meta_Title = document.createElement('meta');
-	meta_Title.setAttribute("property","og:title");
-	meta_Title.content = title;
-	document.getElementsByTagName('head')[0].appendChild(meta_Title);
-	document.title = title;
-	
-	var meta_ImgUrl = document.createElement('meta');
-	meta_ImgUrl.setAttribute("property","og:image");
-	meta_ImgUrl.content = imgUrl;
-	document.getElementsByTagName('head')[0].appendChild(meta_ImgUrl);
-	
-	var meta_Link = document.createElement('meta');
-	meta_Link.setAttribute("property","og:url");
-	meta_Link.content = link;
-	document.getElementsByTagName('head')[0].appendChild(meta_Link);
-	
-	var meta_Description = document.createElement('meta');
-	meta_Description.setAttribute("property","og:description");
-	meta_Description.content = description;
-	document.getElementsByTagName('head')[0].appendChild(meta_Description);
-}
-

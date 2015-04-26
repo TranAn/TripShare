@@ -298,7 +298,7 @@ public class BAPI extends HttpServlet implements Servlet{
 
 	private String getUploadUrl(boolean mode){
 		if (mode == false)
-			return blobstoreService.createUploadUrl("api");
+			return blobstoreService.createUploadUrl("/api");
 		String html = "<html>";
 		html += "<head>";
 		html += "<title>File Uploading Form</title>";
