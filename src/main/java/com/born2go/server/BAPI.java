@@ -54,29 +54,31 @@ public class BAPI extends HttpServlet implements Servlet{
 		List<BlobKey> blobKeys = blobs.get("file");
 		boolean error = false;
 		String postHtml ="";
+		String result;
+		
+		//We get trip_id, post_id, post_content first
+		String tripStr = req.getParameter("trip_id");
+		String postStr = req.getParameter("post_id");
+		if (tripStr == null) tripStr = "0";
+		if (postStr == null) postStr = "0";
+		
+		Long tripID, postID;
+		try {
+			tripID = Long.valueOf(tripStr);
+			postID = Long.valueOf(postStr);
+		} catch (NumberFormatException e) {
+			deleteBlobKeysOnError(blobKeys, resp);
+			return;
+		}
+		
+		if (tripID == 0){
+			deleteBlobKeysOnError(blobKeys, resp);
+			return;
+		}
+		
+		postHtml += req.getParameter("post_content") + "<br>";
 		
 		if(blobKeys != null) {
-			String tripStr = req.getParameter("trip_id");
-			String postStr = req.getParameter("post_id");
-			if (tripStr == null) tripStr = "0";
-			if (postStr == null) postStr = "0";
-			
-			Long tripID, postID;
-			try {
-				tripID = Long.valueOf(tripStr);
-				postID = Long.valueOf(postStr);
-			} catch (NumberFormatException e) {
-				deleteBlobKeysOnError(blobKeys, resp);
-				return;
-			}
-			
-			if (tripID == 0){
-				deleteBlobKeysOnError(blobKeys, resp);
-				return;
-			}
-			
-			postHtml += req.getParameter("post_content") + "<br>";
-			
 			for(BlobKey key: blobKeys) {
 				// get file name on blob info
 				BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(key);
@@ -114,34 +116,39 @@ public class BAPI extends HttpServlet implements Servlet{
 					blobstoreService.delete(key);
 				}
 			}
-			//It's time to create new post
-			String accessToken = req.getParameter("access_token");
-			Path newPost = new Path();
-			newPost.setDescription(postHtml);
-			Path insertedPost = dataService.insertPart(newPost, tripID, accessToken);
-			
-			JSONObject myObj = new JSONObject();
-			
-			resp.setContentType("application/json; charset=utf-8");
-
-			try {
-				if (insertedPost != null){
-					String result = getPathContentByID(insertedPost.getId());
-					myObj.append("status", "ok");
-					myObj.append("content", result);
-				} else {
-					myObj.append("status", "error");
-					myObj.append("content", postHtml);
-					
-				}
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			resp.getWriter().write(myObj.toString());
 		}
+		
+		//It's time to create new post
+		String accessToken = req.getParameter("access_token");
+		Path newPost = new Path();
+		newPost.setDescription(postHtml);
+		Path insertedPost = dataService.insertPart(newPost, tripID, accessToken);
+		
+		JSONObject myObj = new JSONObject();
+		
+		resp.setContentType("application/json; charset=utf-8");
+
+		if (insertedPost != null){
+			String content = getPathContentByID(insertedPost.getId());
+			result = createJSONResult("ok", "No error", content);
+		} else {
+			result = createJSONResult("error", "Can't insert new post. It's supposed trip_id is invalid.", postHtml);
+		}
+		resp.getWriter().write(result);
 	}
 
+	private String createJSONResult(String status, String err_msg, String content){
+		JSONObject myObj = new JSONObject();
+		try {
+			myObj.append("status", status);
+			myObj.append("err_msg", err_msg);
+			myObj.append("content", content);
+		} catch (JSONException e) {
+			return "{\"status\":\"error\",\"err_msg\":\"Something's wrong in createJSONResult\",\"content\":\"\"}";
+		}
+		return myObj.toString();
+	}
+	
 	private void deleteBlobKeysOnError(List<BlobKey> blobKeys, HttpServletResponse resp) throws IOException{
 		if (blobKeys == null)
 			return;
@@ -149,7 +156,7 @@ public class BAPI extends HttpServlet implements Servlet{
 			blobstoreService.delete(key);
 		}
 		resp.setContentType("text/html; charset=utf-8");
-		resp.getWriter().write("{\"status\": false,\"error: Something's wrong\"}");
+		resp.getWriter().write(createJSONResult("error", "Something's wrong - deleteBlobKeysOnError", ""));
 	}
 	
 	/**
