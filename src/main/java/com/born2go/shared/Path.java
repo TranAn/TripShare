@@ -93,5 +93,14 @@ public class Path implements Serializable {
 	public void setTripId(Long tripId) {
 		this.tripId = tripId;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		Path path = (Path) o;
+		if (this.id.equals(path.getId()))
+			return true;
+		else
+			return false;
+	}
 
 }

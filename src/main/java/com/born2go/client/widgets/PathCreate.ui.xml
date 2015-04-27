@@ -157,7 +157,7 @@
 				<g:Label text="Title:" width="55px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>
 				</td>
 				<td style="padding-left: 5px;">
-				<g:TextBox width="" ui:field="txbLocation" height=""/>
+				<g:TextBox width="" ui:field="txbTitle" height=""/>
 				</td>
 				<td style="padding-top: 5px;">
 				<g:Label text="Time:" width="70px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>

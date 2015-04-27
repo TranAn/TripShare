@@ -83,11 +83,11 @@ public void redirectHomeUrl(HttpServletResponse response) {
 <!-- Any title is fine                         -->
 <!--                                           -->
 <title><%=pathTitle%></title>
-<meta property="og:title" content="<%=pathTitle%>" />
+<meta property="og:title" content="<%=pathTitle.replaceAll("\"", "\'")%>" />
 <meta property="og:type" content="article" />
 <meta property="og:image" content="<%=pathPicture.getServeUrl()%>" />
 <meta property="og:url" content="http://born2go-b.appspot.com/destination/<%= pathId %>" />
-<meta property="og:description" content='<%=path.getDescription().replace("\n", "").replace("\r", "")%>' />
+<meta property="og:description" content='<%=path.getDescription().replaceAll("\'", "\"").replace("\n", "").replace("\r", "")%>' />
 
 <!--                                           -->
 <!-- This script loads your compiled module.   -->

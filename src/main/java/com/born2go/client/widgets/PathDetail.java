@@ -108,5 +108,10 @@ public class PathDetail extends Composite {
 		if(listener != null)
 			listener.onDeletePost(this);
 	}
+	
+	public void updatePath(String title, String content) {
+		lbTitle.setText(title);
+		htmlContent.setHTML(truncateText(content));
+	}
 
 }

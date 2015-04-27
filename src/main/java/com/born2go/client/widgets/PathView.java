@@ -73,15 +73,15 @@ public class PathView extends Composite {
 	
 	static Long tripId;
 	
-	TripInfo tripInfo;
-	PathCreate pathCreate = new PathCreate();
-	PhotoUpload photoUpload = new PhotoUpload();
-	
 	List<Path> listPaths = new ArrayList<Path>();
 	List<PathDetail> listPathsDetail = new ArrayList<PathDetail>();
 	
+	private TripInfo tripInfo;
+	private PathCreate pathCreate = new PathCreate();
+	private PhotoUpload photoUpload = new PhotoUpload();
 	private Trip theTrip;
 	private boolean isPoster = false;
+	private boolean isOpenPathCreate = false;
 
 	public PathView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -118,10 +118,16 @@ public class PathView extends Composite {
 			public void onWindowScroll(ScrollEvent event) {
 				if(event.getScrollTop() >= pathViewForm.getElement().getAbsoluteTop()) {
 					htmlPathToolbar.setStyleName("PathView-Obj4");
-					dummyNode.setHeight("95px");
+					if(!isOpenPathCreate)
+						dummyNode.setHeight("95px");
+					else {
+						if(dummyNode.getOffsetHeight() == 0)
+							dummyNode.setHeight("395px");
+					}
 				}
 				else {	
-					pathViewForm.getElement().insertFirst(htmlPathToolbar.getElement());
+					if(!pathViewForm.getElement().isOrHasChild(htmlPathToolbar.getElement()))
+						pathViewForm.getElement().insertFirst(htmlPathToolbar.getElement());
 					htmlPathToolbar.setStyleName("PathView-Obj3");
 					dummyNode.setHeight("0px");
 				}
@@ -138,34 +144,51 @@ public class PathView extends Composite {
 			@Override
 			public void onClose() {
 				btnUpload.setVisible(true);
+				isOpenPathCreate = false;
+				if(dummyNode.getOffsetHeight() == 395)
+					dummyNode.setHeight("95px");
 			}
 			@Override
 			public void createPathSuccess(Long newPathId) {
 				TripShare.loadBox.center();
 				TripShare.dataService.findPart(newPathId, new AsyncCallback<Path>() {
 					@Override
-					public void onSuccess(Path result) {
+					public void onSuccess(final Path result) {
 						TripShare.loadBox.hide();
-						String title = (result.getTitle())+ " - " + TripShare.dateFormat(result.getCreateDate());
-						Poster poster = new Poster();
-						if(result.getPoster() != null)
-							poster = result.getPoster();
-						PathDetail pathDetail = new PathDetail(result.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), result.getDescription());
-						pathDetail.addPostControl();
-						pathDetail.setListener(new PathDetail.Listener() {
-							@Override
-							public void onDeletePost(PathDetail pathDetail) {
-								htmlPathTable.remove(pathDetail);
-								listPathsDetail.remove(pathDetail);
-							}
-						});
-						if(listPathsDetail.isEmpty())
-							htmlPathTable.add(pathDetail);
-						else
-							htmlPathTable.insert(pathDetail, 0);
-						getPathPhoto(result, pathDetail);
-						listPathsDetail.add(0, pathDetail);
-						pathDetail.setStyleName("PathDetail-Obj1 fadeIn");
+						if(listPaths.contains(result)) {
+							PathDetail existPathDetail = listPathsDetail.get(listPaths.size() - listPaths.indexOf(result) - 1);
+							String title = (result.getTitle())+ " - " + TripShare.dateFormat(result.getCreateDate());
+							existPathDetail.updatePath(title, result.getDescription());
+							getPathPhoto(result, existPathDetail);
+							listPaths.set(listPaths.indexOf(result), result);
+							pathCreate.getListPaths(listPaths);
+						} else {
+							String title = (result.getTitle())+ " - " + TripShare.dateFormat(result.getCreateDate());
+							Poster poster = new Poster();
+							if(result.getPoster() != null)
+								poster = result.getPoster();
+							PathDetail pathDetail = new PathDetail(result.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), result.getDescription());
+							pathDetail.addPostControl();
+							pathDetail.setListener(new PathDetail.Listener() {
+								@Override
+								public void onDeletePost(PathDetail pathDetail) {
+									htmlPathTable.remove(pathDetail);
+									listPathsDetail.remove(pathDetail);
+									listPaths.remove(result);
+									pathCreate.getListPaths(listPaths);
+								}
+							});
+							if(listPathsDetail.isEmpty())
+								htmlPathTable.add(pathDetail);
+							else
+								htmlPathTable.insert(pathDetail, 0);
+							getPathPhoto(result, pathDetail);
+							pathDetail.setStyleName("PathDetail-Obj1 fadeIn");
+							//---
+							listPathsDetail.add(0, pathDetail);
+							listPaths.add(result);
+							pathCreate.getListPaths(listPaths);
+						}
 					}
 					@Override
 					public void onFailure(Throwable caught) {
@@ -194,17 +217,12 @@ public class PathView extends Composite {
 		}
 	}
 	
-	public void removePathDetail(PathDetail pathDetail) {
-		htmlPathTable.remove(pathDetail);
-		listPathsDetail.remove(pathDetail);
-	}
-	
 	public void setDirectionResult(DirectionsResult directionResult) {
 		tripInfo.setDirectionResult(directionResult);
 	}
 	
 	public void getTrip(final Long tripId) {
-		this.tripId = tripId;
+		PathView.tripId = tripId;
 		TripShare.dataService.findTrip(tripId, new AsyncCallback<Trip>() {
 			@Override
 			public void onSuccess(Trip result) {
@@ -228,8 +246,9 @@ public class PathView extends Composite {
 				@Override
 				public void onSuccess(List<Path> result) {
 					listPaths.addAll(result);
+					pathCreate.getListPaths(listPaths);
 					for(int i=result.size()-1; i>=0; i--) {
-						Path path = result.get(i);
+						final Path path = result.get(i);
 						String title = "";
 						if(path.getTitle() != null)
 							title = path.getTitle()+ " - " + TripShare.dateFormat(path.getCreateDate()); 
@@ -244,13 +263,16 @@ public class PathView extends Composite {
 							public void onDeletePost(PathDetail pathDetail) {
 								htmlPathTable.remove(pathDetail);
 								listPathsDetail.remove(pathDetail);
+								listPaths.remove(path);
+								pathCreate.getListPaths(listPaths);
 							}
 						});
 						htmlPathTable.add(pathDetail);
 						getPathPhoto(path, pathDetail);
-						listPathsDetail.add(pathDetail);
 						if(theTrip.getPoster().getUserID().toString().equals(TripShare.user_id)) 
 							pathDetail.addPostControl();
+						//---
+						listPathsDetail.add(pathDetail);
 					}
 				}
 				@Override
@@ -342,6 +364,7 @@ public class PathView extends Composite {
 					pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3WideOpen");
 				}
 			};timer.schedule(200);
+			isOpenPathCreate = true;
 		}
 	}
 

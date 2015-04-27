@@ -1,6 +1,7 @@
 package com.born2go.client.widgets;
 
 import java.util.Date;
+import java.util.List;
 
 import com.axeiya.gwtckeditor.client.CKConfig;
 import com.axeiya.gwtckeditor.client.CKConfig.TOOLBAR_OPTIONS;
@@ -11,6 +12,8 @@ import com.born2go.client.TripShare;
 import com.born2go.shared.Locate;
 import com.born2go.shared.Path;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -38,7 +41,7 @@ public class PathCreate extends Composite {
 	private static Binder uiBinder = GWT.create(Binder.class);
 	
 	@UiField HTMLPanel container;
-	@UiField TextBox txbLocation;
+	@UiField TextBox txbTitle;
 	@UiField DateBox txbTimeline;
 	@UiField Anchor btnPost;
 	@UiField StretchyTextArea txbDescription;
@@ -69,6 +72,7 @@ public class PathCreate extends Composite {
 	}
 	
 	private Listener listener;
+	private Path updatePath;
 	
 	public void setListener(Listener listener) {
 		this.listener = listener;
@@ -168,26 +172,11 @@ public class PathCreate extends Composite {
 		ckf.setToolbar(t);
 		return ckf;
 	}
-	
-//	public void reAddCKEditor() {
-//		String saveText = txbRichDescription.getData();
-//		txbRichDescription.removeFromParent();
-//		txbRichDescription = null;
-//		txbRichDescription = new CKEditor(getCKConfig());
-//		txbRichDescription.setData(saveText);
-//		editTextBox.add(txbRichDescription);
-//		if(!isRichTextEdit)
-//			txbRichDescription.setVisible(false);
-//	}
 
 	public PathCreate() {
 		initWidget(uiBinder.createAndBindUi(this));
-//		this.setVisible(false);
 		lbPostTo.addItem("new");
-//		txbRichDescription = new CKEditor(getCKConfig());
-//		editTextBox.add(txbRichDescription);
-//		txbRichDescription.setVisible(false);
-		
+
 		formUpload.setEncoding(FormPanel.ENCODING_MULTIPART);
 		formUpload.setMethod(FormPanel.METHOD_POST);
 		
@@ -206,7 +195,6 @@ public class PathCreate extends Composite {
 		DOM.setElementProperty(pathPhotoUpload.getElement(), "multiple", "multiple"); 
 		
 		formUpload.addSubmitCompleteHandler(new SubmitCompleteHandler() {
-			
 			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event) {
 				TripShare.loadBox.hide();
@@ -217,7 +205,7 @@ public class PathCreate extends Composite {
 		});
 		
 //		final Autocomplete autocomplete = Autocomplete.create(
-//				(InputElement) (Element) txbLocation.getElement());
+//				(InputElement) (Element) txbTitle.getElement());
 //		autocomplete.addPlaceChangedListener(new PlaceChangedHandler() {
 //			public void handle() {
 //				PlaceResult place = autocomplete.getPlace();
@@ -237,6 +225,29 @@ public class PathCreate extends Composite {
 //				}
 //			}
 //		});
+	}
+	
+	public void getListPaths(final List<Path> list_paths) {
+		lbPostTo.clear();
+		lbPostTo.addItem("new");
+		for(Path path: list_paths) {
+			lbPostTo.addItem(path.getTitle());
+		}
+		lbPostTo.addChangeHandler(new ChangeHandler() {
+			@Override
+			public void onChange(ChangeEvent event) {
+				if(lbPostTo.getSelectedIndex() == 0) {
+					updatePath = null;
+					txbTitle.setText("");
+					txbTimeline.setEnabled(true);
+				}
+				else {
+					updatePath = list_paths.get(lbPostTo.getSelectedIndex() - 1);
+					txbTitle.setText(updatePath.getTitle());
+					txbTimeline.setEnabled(false);
+				}
+			}
+		});
 	}
 	
 	public void handlerUploadEvent() {
@@ -311,12 +322,11 @@ public class PathCreate extends Composite {
 	public void setTripId(Long tripId) {
 		this.tripId = tripId;
 		txbTimeline.setValue(new Date());
-		txbLocation.setFocus(true);
+		txbTitle.setFocus(true);
 	}
 
 	public void uploadPhoto(final Long tripId, final Long pathId) {
 		TripShare.dataService.getUploadUrl(new AsyncCallback<String>() {
-			
 			@Override
 			public void onSuccess(String result) {
 				formUpload.setAction(result.toString());
@@ -325,7 +335,6 @@ public class PathCreate extends Composite {
 				boxPathId.setValue(pathId);
 				formUpload.submit();
 			}
-			
 			@Override
 			public void onFailure(Throwable caught) {
 				TripShare.loadBox.hide();
@@ -337,40 +346,74 @@ public class PathCreate extends Composite {
 	@UiHandler("btnPost")
 	void onBtnPostClick(ClickEvent event) {
 		TripShare.loadBox.center();
-		Path path = new Path();
-		path.setTitle(txbLocation.getText());
-		path.setLocate(locate);
-		path.setCreateDate(txbTimeline.getValue());
-		if(!isRichTextEdit) {
-			if(txbRichDescription != null) {
-				txbRichDescription.setData(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
+		if(updatePath == null) {
+			Path path = new Path();
+			path.setTitle(txbTitle.getText());
+//			path.setLocate(locate);
+			path.setCreateDate(txbTimeline.getValue());
+			if(!isRichTextEdit) {
+				if(txbRichDescription != null) {
+					txbRichDescription.setData(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
+					path.setDescription(txbRichDescription.getData());
+				} else 
+					path.setDescription("<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
+			}
+			else
 				path.setDescription(txbRichDescription.getData());
-			} else 
-				path.setDescription(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
-		}
-		else
-			path.setDescription(txbRichDescription.getData());
-		TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
-			@Override
-			public void onSuccess(Path result) {
-				if(result != null)
-					uploadPhoto(tripId, result.getId());
-				else {
+			TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
+				@Override
+				public void onSuccess(Path result) {
+					if(result != null)
+						uploadPhoto(tripId, result.getId());
+					else {
+						TripShare.loadBox.hide();
+						Window.alert(TripShare.ERROR_MESSAGE);
+					}		
+				}
+				@Override
+				public void onFailure(Throwable caught) {
 					TripShare.loadBox.hide();
 					Window.alert(TripShare.ERROR_MESSAGE);
-				}		
+				}
+			});
+		} 
+		else {
+			updatePath.setTitle(txbTitle.getText());
+			if(!isRichTextEdit) {
+				if(txbRichDescription != null) {
+					txbRichDescription.setData(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
+					updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbRichDescription.getData()+ "</p>");
+				} else 
+					updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
 			}
-			@Override
-			public void onFailure(Throwable caught) {
-				TripShare.loadBox.hide();
-				Window.alert(TripShare.ERROR_MESSAGE);
-			}
-		});
+			else
+				updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbRichDescription.getData()+ "</p>");
+			TripShare.dataService.updatePart(updatePath, new AsyncCallback<Path>() {
+				@Override
+				public void onSuccess(Path result) {
+					if(result != null)
+						uploadPhoto(tripId, result.getId());
+					else {
+						TripShare.loadBox.hide();
+						Window.alert(TripShare.ERROR_MESSAGE);
+					}	
+				}
+				@Override
+				public void onFailure(Throwable caught) {
+					TripShare.loadBox.hide();
+					Window.alert(TripShare.ERROR_MESSAGE);
+				}
+			});
+		}
 	}
 	
 	void cancelPost() {
 		this.setStyleName("PathCreate-Obj3");
-		txbLocation.setText("");
+		lbPostTo.setSelectedIndex(0);
+		updatePath = null;
+		txbTitle.setText("");
+		txbTimeline.setEnabled(true);
+		txbTitle.setText("");
 		txbTimeline.getElement().setInnerHTML("");
 		btnRichTextEdit.removeStyleName("PathCreate-Obj16");
 		txbDescription.setText("");
@@ -412,7 +455,7 @@ public class PathCreate extends Composite {
 //						@Override
 //						public void handle(JsArray<GeocoderResult> a, GeocoderStatus b) {
 //							String address = a.get(0).getFormattedAddress();
-//							txbLocation.setText(address);
+//							txbTitle.setText(address);
 //							locate.setLatLng(l);
 //						}
 //					});
