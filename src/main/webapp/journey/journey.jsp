@@ -176,8 +176,8 @@
 									</div>
 									<div class="font-blackTitleLarge">Itinerary:</div>
 									<div class="trip-destinations">
-									<img src="/resources/red-spotlight.png" style="width:22px;height:30px;vertical-align: middle;"/> 
-									<span style="margin-left:5px"><%=trip.getJourney().getLocates().get(0).getAddressName()%></span>
+										<img src="/resources/red-spotlight.png" style="width:22px;height:30px;vertical-align: middle;"/> 
+										<span style="margin-left:5px"><%=trip.getJourney().getLocates().get(0).getAddressName()%></span>
 									</div>
 								<%
 									for (int i = 1; i < trip.getJourney().getLocates().size(); i++) {
@@ -188,8 +188,11 @@
 								%>
 									<div class="font-blackTitleLarge" style="margin-top:25px;">Departure date:</div>
 									<%SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MMM d hh:mm:ss");%>
-									<div style="font-size:15px;"><%= dateFormat.format(trip.getDepartureDate()) %></div>
-									
+									<div class="trip-destinations">
+										<img src="/resources/1430221613_schedule.png" style="width:22px;height:30px;vertical-align: middle;"/> 
+										<span style="margin-left:5px"><%= dateFormat.format(trip.getDepartureDate()) %></span>
+									</div>
+									<%-- <div style="font-size:15px;"><%= dateFormat.format(trip.getDepartureDate()) %></div> --%>			
 								</td>
 								<td valign="top" height="1">
 									<div id="tripMap" class="tripMap" style="width: 500px; height: 100%; margin-left: 10px; min-height: 400px; max-height: 500px; border:1px solid gray;"></div>
@@ -200,7 +203,7 @@
 									<td colspan="2">
 										<div class="tripInfoBorder"></div>
 										<div class="font-blackTitleLarge" style="margin-top:30px;">Journey description:</div>
-										<p style="white-space: pre-line; font-size: 15px; line-height: 1.6em;"><%= trip.getDescription() %></p>
+										<div style="font-size: 15px; line-height: 1.6em;"><%= trip.getDescription() %></div>
 									</td>
 								</tr>
 								</table>

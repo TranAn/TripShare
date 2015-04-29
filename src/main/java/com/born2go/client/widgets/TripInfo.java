@@ -3,6 +3,11 @@ package com.born2go.client.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.axeiya.gwtckeditor.client.CKConfig;
+import com.axeiya.gwtckeditor.client.CKConfig.TOOLBAR_OPTIONS;
+import com.axeiya.gwtckeditor.client.CKEditor;
+import com.axeiya.gwtckeditor.client.Toolbar;
+import com.axeiya.gwtckeditor.client.ToolbarLine;
 import com.born2go.client.TripShare;
 import com.born2go.shared.Journey;
 import com.born2go.shared.Journey.Point;
@@ -23,7 +28,6 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -40,19 +44,20 @@ public class TripInfo extends Composite {
 			.create(TripInfoUiBinder.class);
 	
 	@UiField TextBox txbName;
-	@UiField Label lbPoster;
+	@UiField Anchor lbPoster;
 	@UiField HTMLPanel htmlDestinationTable;
 	@UiField DateBox txbDepartureDate;
-	@UiField StretchyTextArea txbDescription;
 	@UiField TextBox txbOrigin;
 	@UiField HTMLPanel mapTable;
 	@UiField Anchor btnAddPart;
+	@UiField HTMLPanel editContent;
 	
 	Locate originPoint;
 	List<Locate> listDestinationPoint = new ArrayList<Locate>();
 	List<Point> directions = new ArrayList<Point>();
 	
 	private Trip trip;
+	private boolean isEdit = true;
 
 	interface TripInfoUiBinder extends UiBinder<Widget, TripInfo> {
 	}
@@ -92,6 +97,100 @@ public class TripInfo extends Composite {
 		journey.setDirections(directions);
 		return journey;
 	}
+	
+	CKEditor txbRichDescription;
+	
+	public CKConfig getCKConfig() {
+		// Creates a new config, with FULL preset toolbar as default
+		CKConfig ckf = new CKConfig();
+		
+		// Setting background color
+		ckf.setUiColor("#f6f7f8");
+		
+		// Setting size
+//		ckf.setHeight("180px");
+		ckf.setResizeMinHeight(180);
+
+		// Creating personalized toolbar
+		ToolbarLine line1 = new ToolbarLine();
+//		line1.add(TOOLBAR_OPTIONS.Source);
+//		line1.add(TOOLBAR_OPTIONS._);
+		line1.add(TOOLBAR_OPTIONS.Undo);
+		line1.add(TOOLBAR_OPTIONS.Redo);
+
+		// Creates the toolbar
+		Toolbar t = new Toolbar();
+		t.add(line1);
+		t.addSeparator();
+
+		// Define the second line
+		TOOLBAR_OPTIONS[] t2 = { TOOLBAR_OPTIONS.Bold, TOOLBAR_OPTIONS.Italic,
+				TOOLBAR_OPTIONS.Underline, TOOLBAR_OPTIONS._,
+				TOOLBAR_OPTIONS.RemoveFormat, TOOLBAR_OPTIONS._ };
+		ToolbarLine line2 = new ToolbarLine();
+		line2.addAll(t2);
+		t.add(line2);
+		t.addSeparator();
+
+		// Define the third line
+//		TOOLBAR_OPTIONS[] t3 = { TOOLBAR_OPTIONS.Find, TOOLBAR_OPTIONS.Replace, };
+//		ToolbarLine line3 = new ToolbarLine();
+//		line3.addAll(t3);
+//		t.add(line3);
+//		t.addSeparator();
+
+		// Define the second line
+		TOOLBAR_OPTIONS[] t4 = {
+		TOOLBAR_OPTIONS.JustifyLeft, TOOLBAR_OPTIONS.JustifyCenter,
+				TOOLBAR_OPTIONS.JustifyRight, TOOLBAR_OPTIONS.JustifyBlock };
+		
+		ToolbarLine line4 = new ToolbarLine();
+		line4.addAll(t4);
+		t.add(line4);
+		t.addSeparator();
+
+		ToolbarLine line5 = new ToolbarLine();
+		line5.add(TOOLBAR_OPTIONS.Link);
+		line5.add(TOOLBAR_OPTIONS.Unlink);
+		t.add(line5);
+		t.addSeparator();
+
+		ToolbarLine line6 = new ToolbarLine();
+		line6.add(TOOLBAR_OPTIONS.Image);
+		line6.add(TOOLBAR_OPTIONS.Smiley);
+		t.add(line6);
+		t.addSeparator();
+
+//		ToolbarLine line7 = new ToolbarLine();
+//		line7.add(TOOLBAR_OPTIONS.Styles);
+//		t.add(line7);
+//
+//		ToolbarLine line8 = new ToolbarLine();
+//		line8.add(TOOLBAR_OPTIONS.Format);
+//		t.add(line8);
+//		t.addSeparator();
+
+		ToolbarLine line9 = new ToolbarLine();
+		line9.add(TOOLBAR_OPTIONS.Font);
+		t.add(line9);
+		t.addSeparator();
+
+		ToolbarLine line10 = new ToolbarLine();
+		line10.add(TOOLBAR_OPTIONS.FontSize);
+		t.add(line10);
+		t.addSeparator();
+
+		ToolbarLine line11 = new ToolbarLine();
+		line11.add(TOOLBAR_OPTIONS.TextColor);
+//		line11.add(TOOLBAR_OPTIONS.SpecialChar);
+		line11.add(TOOLBAR_OPTIONS.Maximize);
+		t.add(line11);
+		t.addSeparator();
+		
+		// Set the toolbar to the config (replace the FULL preset toolbar)
+		ckf.setToolbar(t);
+		return ckf;
+	}
 
 	public TripInfo() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -113,14 +212,25 @@ public class TripInfo extends Composite {
 		mapTable.clear();
 		mapTable.add(TripShare.tripMap.getMapView());
 		txbName.setText(trip.getName());
-		if(trip.getPoster() != null)
-			lbPoster.setText("Create by "+ trip.getPoster().getUserName());
+		if(trip.getPoster() != null) {
+			lbPoster.setText(trip.getPoster().getUserName());
+			lbPoster.setHref("/profile/"+ trip.getPoster().getUserID());
+		}
 		else
-			lbPoster.setText("Create by Tester");
+			lbPoster.setText("Tester");
 		txbDepartureDate.setValue(trip.getDepartureDate());
-		txbDescription.setValue(trip.getDescription());
-		txbDescription.setHeight("");
-		txbDescription.setVisible(true);
+		//
+		editContent.clear();
+		if(isEdit) {
+			txbRichDescription = new CKEditor(getCKConfig());
+			editContent.add(txbRichDescription);
+			txbRichDescription.setData(trip.getDescription());
+			isEdit = false;
+		}
+		else {
+			isEdit = true;
+			editContent.getElement().setInnerHTML(trip.getDescription());
+		}
 		//
 		originPoint = trip.getJourney().getLocates().get(0);
 		txbOrigin.setText(trip.getJourney().getLocates().get(0).getAddressName());
@@ -197,21 +307,19 @@ public class TripInfo extends Composite {
 		TripShare.loadBox.center();
 		trip.setName(txbName.getText());
 		trip.setDepartureDate(txbDepartureDate.getValue());
-		trip.setDescription(txbDescription.getText());
+		trip.setDescription(txbRichDescription.getData());
 		trip.setJourney(getJourney());
 		TripShare.dataService.updateTrip(trip, new AsyncCallback<Trip>() {
-			
 			@Override
 			public void onSuccess(Trip result) {
 				TripShare.loadBox.hide();
 				if(listener != null)
 					listener.onUpdateTrip(result);
 			}
-			
 			@Override
 			public void onFailure(Throwable caught) {
 				TripShare.loadBox.hide();
-				Window.alert("!: Đã có lỗi xảy ra, vui lòng tải lại trang.");
+				Window.alert(TripShare.ERROR_MESSAGE);
 			}
 		});
 	}
@@ -224,8 +332,6 @@ public class TripInfo extends Composite {
 			t.addStyleName("TripInfo-Disable");
 		}
 		txbDepartureDate.addStyleName("TripInfo-Disable");
-		txbDescription.addStyleName("TripInfo-Disable");
-		txbDescription.removeStyleName("TripInfo-Obj8Edit");
 		btnAddPart.removeFromParent();
 		for(Anchor a: listBtnRemoveDestination) {
 			a.removeFromParent();

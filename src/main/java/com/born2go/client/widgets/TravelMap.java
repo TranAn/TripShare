@@ -234,8 +234,12 @@ public class TravelMap {
 		    	 else {
 		    		 if(index == 0)
 		    			 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), true, true);
-		    		 else
-		    			 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, true);
+		    		 else {
+		    			 if(index == locates.size() - 1)
+		    				 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, true);
+		    			 else
+		    				 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, false);
+		    		 }
 		    		 index++;
 		    	 }
 		     }

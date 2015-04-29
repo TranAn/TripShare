@@ -5,6 +5,7 @@
 	<ui:style>
 	@external .TripInfo-Obj3Edit, .TripInfo-Obj5, .TripInfo-Obj4, .TripInfo-Obj6, .TripInfo-Obj8Edit, .TripInfo-Disable;
 	.TripInfo-Obj1 {
+		position: relative;
 		width: 500px;
 		height: 100%;
 		margin-left: 10px;
@@ -28,7 +29,8 @@
 		font-family: museo-w01-700, serif;
 		color: rgb(56, 119, 127);
 		padding: 6px;
-		width: 95%;
+		min-width: 230px;
+		width: 430px;
 	}
 	
 	.TripInfo-Obj3Edit {	
@@ -38,7 +40,8 @@
 	.TripInfo-Obj4 {
 		font-size: 15px;
 		margin-left: 5px;
-		min-width: 70%;
+		min-width: 200px;
+		width: 300px;
 		margin-bottom: 15px;
 	}
 	
@@ -51,14 +54,17 @@
 	.TripInfo-Obj6 {
 		font-size: 15px;
 		margin-left: 9px;
-		min-width: 70%;
+		min-width: 200px;
+		width: 300px;
 		margin-bottom: 15px;
 	}
 	
 	.TripInfo-Obj7 {
 		font-size: 15px;
-		width: 95%;
+		min-width: 200px;
+		width: 300px;
 		margin-bottom: 15px;
+		margin-left: 5px;
 	}
 	
 	.TripInfo-Obj8 {
@@ -83,10 +89,35 @@
 	
 	.TripInfo-Obj9 {
 		margin-bottom: 20px;
+		display: inline-flex;
+	}
+	
+	.TripInfo-Obj10 {
+		font-size: 15px; 
+		line-height: 1.6em;
+	}
+	
+	.TripInfo-Obj11 {
 		font-size: 15px;
 		font-family: museo-w01-700,serif; 
 		color:silver; 
 		font-style: italic;
+		margin-bottom: 0px;
+		margin-right: 4px;
+	}
+	
+	.TripInfo-Obj12 {
+		font-size: 15px;
+		font-family: museo-w01-700,serif; 
+		color: silver !important; 
+		font-style: italic;
+		margin-bottom: 0px;
+	}
+	
+	.TripInfo-Obj12:hover {
+		cursor: pointer;
+		text-decoration: underline;
+		color: blue !important;
 	}
 	</ui:style>
 	<g:HTMLPanel>
@@ -100,7 +131,10 @@
 						<g:TextBox
 							styleName="gwt-TextBox font-blackTitleLarge {style.TripInfo-Obj3} TripInfo-Obj3Edit"
 							ui:field="txbName"></g:TextBox>
-						<g:Label styleName="font-blackTitleLarge {style.TripInfo-Obj9}" ui:field="lbPoster"></g:Label>
+						<g:HTMLPanel styleName="{style.TripInfo-Obj9}">
+							<g:Label styleName="font-blackTitleLarge {style.TripInfo-Obj11}">Create by</g:Label>
+							<g:Anchor styleName="font-blackTitleLarge {style.TripInfo-Obj12}" ui:field="lbPoster"></g:Anchor>
+						</g:HTMLPanel>
 						<div class="font-blackTitleLarge">Itinerary:</div>
 						<div class="trip-destinations">
 							<img src="/resources/red-spotlight.png" style="width:22px;height:30px;vertical-align: top;" />
@@ -111,9 +145,12 @@
 							<i class="fa fa-plus fa-lg"></i>
 						</g:Anchor>
 						<div class="font-blackTitleLarge" style="margin-top:25px;">Departure date:</div>
-						<p1:DateBox ui:field="txbDepartureDate"
-							styleName="gwt-TextBox {style.TripInfo-Obj7}" />
+						<div class="trip-destinations">
+							<img src="/resources/1430221613_schedule.png" style="width:22px;height:30px;vertical-align: top;" />
+							<p1:DateBox ui:field="txbDepartureDate" styleName="gwt-TextBox {style.TripInfo-Obj7}" />
+						</div>
 					</td>
+					
 					<td valign="top" height="1">
 						<g:HTMLPanel ui:field="mapTable" styleName="{style.TripInfo-Obj1}"></g:HTMLPanel>
 					</td>
@@ -123,8 +160,8 @@
 					<td colspan="2">
 						<div class="tripInfoBorder"></div>
 						<div class="font-blackTitleLarge" style="margin-top:30px;">Journey description:</div>
-						<p2:StretchyTextArea ui:field="txbDescription"
-							styleName="gwt-TextBox {style.TripInfo-Obj8} TripInfo-Obj8Edit" visible="false"/>
+						<g:HTMLPanel ui:field="editContent" styleName="{style.TripInfo-Obj10}">
+						</g:HTMLPanel>
 					</td>
 				</tr>
 			</table>

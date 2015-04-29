@@ -2,6 +2,7 @@ package com.born2go.client.widgets;
 
 import com.born2go.client.TripShare;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -10,7 +11,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
@@ -26,7 +26,7 @@ public class PathDetail extends Composite {
 	@UiField Anchor lbTitle;
 	@UiField Anchor lbPoster;
 	@UiField Image picture;
-	@UiField HTML htmlContent;
+	@UiField ParagraphElement htmlContent;
 	@UiField Anchor btnDeletePost;
 	@UiField HTMLPanel postControl;
 	
@@ -57,7 +57,7 @@ public class PathDetail extends Composite {
 		lbTitle.setHref("/destination/"+ id);
 		lbPoster.setText(postBy);
 		lbPoster.setHref("/profile/"+ posterId);
-		htmlContent.setHTML(truncateText(content));
+		htmlContent.setInnerHTML(truncateText(content));
 		
 		btnDeletePost.addClickHandler(new ClickHandler() {
 			@Override
@@ -82,10 +82,10 @@ public class PathDetail extends Composite {
 	}
 	
 	public static native String truncateText(String content) /*-{
-		if(content.trim().length > 1201) {
+		if(content.trim().length > 901) {
 			var shortText = content    // get the text within the div
 			    .trim()    // remove leading and trailing spaces
-			    .substring(0, 1200)    // get first 600 characters
+			    .substring(0, 900)    // get first 600 characters
 			    .split(" ") // separate characters into an array of words
 			    .slice(0, -1)    // remove the last full or partial word
 			    .join(" ") + "..."; // combine into a single string and append "..."
@@ -111,7 +111,7 @@ public class PathDetail extends Composite {
 	
 	public void updatePath(String title, String content) {
 		lbTitle.setText(title);
-		htmlContent.setHTML(truncateText(content));
+		htmlContent.setInnerHTML(truncateText(content));
 	}
 
 }

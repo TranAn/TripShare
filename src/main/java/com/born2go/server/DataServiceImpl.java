@@ -116,8 +116,8 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public Path findPart(Long idPart) {
-		Path oldData = ofy().load().type(Path.class).id(idPart).now();
-		return oldData;
+		exportPart = ofy().load().type(Path.class).id(idPart).now();
+		return exportPart;
 	}
 
 	@Override

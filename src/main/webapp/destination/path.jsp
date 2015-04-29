@@ -87,7 +87,9 @@ public void redirectHomeUrl(HttpServletResponse response) {
 <meta property="og:type" content="article" />
 <meta property="og:image" content="<%=pathPicture.getServeUrl()%>" />
 <meta property="og:url" content="http://born2go-b.appspot.com/destination/<%= pathId %>" />
+<%if(path.getDescription() != null) { %>
 <meta property="og:description" content='<%=path.getDescription().replaceAll("\'", "\"").replace("\n", "").replace("\r", "")%>' />
+<%;} %>
 
 <!--                                           -->
 <!-- This script loads your compiled module.   -->
@@ -158,16 +160,19 @@ public void redirectHomeUrl(HttpServletResponse response) {
 							<div class="left_rightPath">
 								<div id="pathTitle" class="font_4 "><%=pathTitle%></div>
 								<div style="height: 40px;">
+								<%if(path.getPoster() != null) {%>
 								<p class="font_9">
 									Post by: <a href="/profile/<%=path.getPoster().getUserID()%>"><%=path.getPoster().getUserName()%></a>
 								</p>
-								<p class="font_9">Date post:<%=df.format(path.getCreateDate())%>
-								</p>
+								<%;} %>
+								<%if(path.getCreateDate() != null) {%>
+								<p class="font_9">Date post:<%=df.format(path.getCreateDate())%></p>
+								<%;} %>
 								</div>
 								<div style="background: whitesmoke;min-height: 10px;padding: 15px 0px;">
-								<%if(!pathPicture.getServeUrl().equals("")){%>									
+								<%if(pathPicture.getServeUrl() != null && !pathPicture.getServeUrl().equals("")) {%>									
 								<img src="<%=pathPicture.getServeUrl()%>" class="one_imageView">	
-								<%}%>																				
+								<%} %>																				
 								</div>
 
 								<br/>
