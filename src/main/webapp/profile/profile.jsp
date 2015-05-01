@@ -4,7 +4,6 @@
 <%@ page import="com.born2go.shared.Picture"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ page import="java.util.List"%>
-
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@ page import="com.born2go.shared.Picture"%>
@@ -45,7 +44,7 @@
 <!-- If you add any GWT meta tags, they must   -->
 <!-- be added before this line.                -->
 <!--                                           -->
-<script type="text/javascript" language="javascript" src="../tripshare/tripshare.nocache.js"></script>
+<script type="text/javascript" language="javascript" src="/tripshare/tripshare.nocache.js"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false;key=AIzaSyCwX2qpyTev25qwNaBxFXBbgIhbPtFeLHw"></script>
 <script type="text/javascript" src="/myjs/facebookConnect.js"></script>
 <script src="http://connect.facebook.net/en_US/all.js"></script>

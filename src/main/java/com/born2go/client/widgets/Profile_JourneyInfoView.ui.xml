@@ -85,7 +85,6 @@
 	}
 	
 	.JourneyInfoView-Obj11 {
-		white-space: pre-line; 
 		font-size: 15px; 
 		line-height: 1.6em;
 		margin-top: 10px;
@@ -105,7 +104,7 @@
 						ui:field="lbTitle" />
 					</div>
 					<g:HTMLPanel styleName="{style.JourneyInfoView-Obj7}">
-						<g:Label styleName="font-blackTitleLarge {style.JourneyInfoView-Obj5}">Date post</g:Label>
+						<g:Label styleName="font-blackTitleLarge {style.JourneyInfoView-Obj5}">Date post: </g:Label>
 						<g:Label styleName="font-blackTitleLarge {style.JourneyInfoView-Obj5}"
 							ui:field="lbPoster"></g:Label>
 					</g:HTMLPanel>

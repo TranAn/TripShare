@@ -5,10 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 import com.axeiya.gwtckeditor.client.CKConfig;
+import com.axeiya.gwtckeditor.client.CKConfig.TOOLBAR_OPTIONS;
 import com.axeiya.gwtckeditor.client.CKEditor;
 import com.axeiya.gwtckeditor.client.Toolbar;
 import com.axeiya.gwtckeditor.client.ToolbarLine;
-import com.axeiya.gwtckeditor.client.CKConfig.TOOLBAR_OPTIONS;
 import com.born2go.client.TripShare;
 import com.born2go.shared.Journey;
 import com.born2go.shared.Journey.Point;
@@ -40,7 +40,7 @@ import com.google.maps.gwt.client.places.Autocomplete;
 import com.google.maps.gwt.client.places.Autocomplete.PlaceChangedHandler;
 import com.google.maps.gwt.client.places.PlaceResult;
 
-public class CreateTrip extends Composite {
+public class Create_CreateTrip extends Composite {
 
 	private static CreateTripUiBinder uiBinder = GWT
 			.create(CreateTripUiBinder.class);
@@ -61,7 +61,7 @@ public class CreateTrip extends Composite {
 	@UiField Label lbDestination;
 	@UiField HTMLPanel editTextBox;
 
-	interface CreateTripUiBinder extends UiBinder<Widget, CreateTrip> {
+	interface CreateTripUiBinder extends UiBinder<Widget, Create_CreateTrip> {
 	}
 	
 	Locate originPoint;
@@ -181,7 +181,7 @@ public class CreateTrip extends Composite {
 			TripShare.tripMap.findDirection(originPoint.getLatLng(), destinationPoint.getLatLng(), null);
 	}
 
-	public CreateTrip() {
+	public Create_CreateTrip() {
 		initWidget(uiBinder.createAndBindUi(this));
 		mapContainer.add(TripShare.tripMap.getMapView());
 		

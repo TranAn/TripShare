@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
-public class PathCreate extends Composite {
+public class Journey_PathCreate extends Composite {
 
 	private static Binder uiBinder = GWT.create(Binder.class);
 	
@@ -62,7 +62,7 @@ public class PathCreate extends Composite {
 	boolean isHandlerUploadEvent = false;
 	boolean isRichTextEdit = false;
 	
-	interface Binder extends UiBinder<Widget, PathCreate> {
+	interface Binder extends UiBinder<Widget, Journey_PathCreate> {
 	}
 
 	public interface Listener {
@@ -173,7 +173,7 @@ public class PathCreate extends Composite {
 		return ckf;
 	}
 
-	public PathCreate() {
+	public Journey_PathCreate() {
 		initWidget(uiBinder.createAndBindUi(this));
 		lbPostTo.addItem("new");
 
@@ -218,10 +218,10 @@ public class PathCreate extends Composite {
 //			@Override
 //			public void onChange(ChangeEvent event) {
 //				if(txbDescription.getElement().getClientHeight() >= 360) {
-//					txbDescription.addStyleName("PathCreate-Obj6ScrollAble");
+//					txbDescription.addStyleName("Journey_PathCreate-Obj6ScrollAble");
 //				}
 //				else {
-//					txbDescription.removeStyleName("PathCreate-Obj6ScrollAble");
+//					txbDescription.removeStyleName("Journey_PathCreate-Obj6ScrollAble");
 //				}
 //			}
 //		});

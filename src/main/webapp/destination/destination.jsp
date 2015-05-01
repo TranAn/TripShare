@@ -96,11 +96,11 @@ public void redirectHomeUrl(HttpServletResponse response) {
 <!-- If you add any GWT meta tags, they must   -->
 <!-- be added before this line.                -->
 <!--                                           -->
-<script type="text/javascript" language="javascript"src="../tripshare/tripshare.nocache.js"></script>
+<script type="text/javascript" language="javascript"src="/tripshare/tripshare.nocache.js"></script>
 <script type="text/javascript"src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false;key=AIzaSyCwX2qpyTev25qwNaBxFXBbgIhbPtFeLHw"></script>
 <script type="text/javascript" src="/myjs/facebookConnect.js"></script>
 <script type="text/javascript"src="http://slideshow.triptracker.net/slide.js"></script>
-<script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="/resources/ckeditor/ckeditor.js"></script>
 <script src="http://connect.facebook.net/en_US/all.js"></script>
 
 </head>

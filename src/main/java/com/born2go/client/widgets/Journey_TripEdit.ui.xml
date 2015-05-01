@@ -3,8 +3,8 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client"
 	xmlns:p2="urn:import:com.born2go.client.widgets">
 	<ui:style>
-	@external .TripInfo-Obj3Edit, .TripInfo-Obj5, .TripInfo-Obj4, .TripInfo-Obj6, .TripInfo-Obj8Edit, .TripInfo-Disable;
-	.TripInfo-Obj1 {
+	@external .TripEdit-Obj3Edit, .TripEdit-Obj5, .TripEdit-Obj4, .TripEdit-Obj6, .TripEdit-Obj8Edit, .TripEdit-Disable;
+	.TripEdit-Obj1 {
 		position: relative;
 		width: 500px;
 		height: 100%;
@@ -18,13 +18,13 @@
 		overflow: hidden;
 	}
 	
-	.TripInfo-Obj2 {
+	.TripEdit-Obj2 {
 		color: gray;
 		padding: 5px 8px;
 		text-shadow: none;
 	}
 	
-	.TripInfo-Obj3 {
+	.TripEdit-Obj3 {
 		font-size: 30px;
 		font-family: museo-w01-700, serif;
 		color: rgb(56, 119, 127);
@@ -33,11 +33,11 @@
 		width: 430px;
 	}
 	
-	.TripInfo-Obj3Edit {	
+	.TripEdit-Obj3Edit {	
 		font-size: 25px;
 	}
 	
-	.TripInfo-Obj4 {
+	.TripEdit-Obj4 {
 		font-size: 15px;
 		margin-left: 5px;
 		min-width: 200px;
@@ -45,13 +45,13 @@
 		margin-bottom: 15px;
 	}
 	
-	.TripInfo-Obj5 {
+	.TripEdit-Obj5 {
 		width: 22px;
 		height: 30px;
 		vertical-align: top;
 	}
 	
-	.TripInfo-Obj6 {
+	.TripEdit-Obj6 {
 		font-size: 15px;
 		margin-left: 9px;
 		min-width: 200px;
@@ -59,7 +59,7 @@
 		margin-bottom: 15px;
 	}
 	
-	.TripInfo-Obj7 {
+	.TripEdit-Obj7 {
 		font-size: 15px;
 		min-width: 200px;
 		width: 300px;
@@ -67,7 +67,7 @@
 		margin-left: 5px;
 	}
 	
-	.TripInfo-Obj8 {
+	.TripEdit-Obj8 {
 		font-size: 15px;
 		width: 99%;
 		padding: 5px;
@@ -76,28 +76,28 @@
 		line-height: 1.6em;
 	}
 	
-	.TripInfo-Obj8Edit {
+	.TripEdit-Obj8Edit {
 		margin-bottom: 15px;
 		resize: vertical;
 	}
 	
-	.TripInfo-Disable {
+	.TripEdit-Disable {
 		border: none;
   		padding: 0px;
   		pointer-events: none;
 	}
 	
-	.TripInfo-Obj9 {
+	.TripEdit-Obj9 {
 		margin-bottom: 20px;
 		display: inline-flex;
 	}
 	
-	.TripInfo-Obj10 {
+	.TripEdit-Obj10 {
 		font-size: 15px; 
 		line-height: 1.6em;
 	}
 	
-	.TripInfo-Obj11 {
+	.TripEdit-Obj11 {
 		font-size: 15px;
 		font-family: museo-w01-700,serif; 
 		color:silver; 
@@ -106,7 +106,7 @@
 		margin-right: 4px;
 	}
 	
-	.TripInfo-Obj12 {
+	.TripEdit-Obj12 {
 		font-size: 15px;
 		font-family: museo-w01-700,serif; 
 		color: silver !important; 
@@ -114,7 +114,7 @@
 		margin-bottom: 0px;
 	}
 	
-	.TripInfo-Obj12:hover {
+	.TripEdit-Obj12:hover {
 		cursor: pointer;
 		text-decoration: underline;
 		color: blue !important;
@@ -129,30 +129,30 @@
 				<tr>
 					<td valign="top" style="width:100%">
 						<g:TextBox
-							styleName="gwt-TextBox font-blackTitleLarge {style.TripInfo-Obj3} TripInfo-Obj3Edit"
+							styleName="gwt-TextBox font-blackTitleLarge {style.TripEdit-Obj3} TripEdit-Obj3Edit"
 							ui:field="txbName"></g:TextBox>
-						<g:HTMLPanel styleName="{style.TripInfo-Obj9}">
-							<g:Label styleName="font-blackTitleLarge {style.TripInfo-Obj11}">Create by</g:Label>
-							<g:Anchor styleName="font-blackTitleLarge {style.TripInfo-Obj12}" ui:field="lbPoster"></g:Anchor>
+						<g:HTMLPanel styleName="{style.TripEdit-Obj9}">
+							<g:Label styleName="font-blackTitleLarge {style.TripEdit-Obj11}">Create by</g:Label>
+							<g:Anchor styleName="font-blackTitleLarge {style.TripEdit-Obj12}" ui:field="lbPoster"></g:Anchor>
 						</g:HTMLPanel>
 						<div class="font-blackTitleLarge">Itinerary:</div>
 						<div class="trip-destinations">
 							<img src="/resources/red-spotlight.png" style="width:22px;height:30px;vertical-align: top;" />
-							<g:TextBox ui:field="txbOrigin" styleName="gwt-TextBox {style.TripInfo-Obj4}"></g:TextBox>
+							<g:TextBox ui:field="txbOrigin" styleName="gwt-TextBox {style.TripEdit-Obj4}"></g:TextBox>
 						</div>
 						<g:HTMLPanel ui:field="htmlDestinationTable"></g:HTMLPanel>
-						<g:Anchor ui:field="btnAddPart" styleName="greenbutton {style.TripInfo-Obj2}">
+						<g:Anchor ui:field="btnAddPart" styleName="greenbutton {style.TripEdit-Obj2}">
 							<i class="fa fa-plus fa-lg"></i>
 						</g:Anchor>
 						<div class="font-blackTitleLarge" style="margin-top:25px;">Departure date:</div>
 						<div class="trip-destinations">
 							<img src="/resources/1430221613_schedule.png" style="width:22px;height:30px;vertical-align: top;" />
-							<p1:DateBox ui:field="txbDepartureDate" styleName="gwt-TextBox {style.TripInfo-Obj7}" />
+							<p1:DateBox ui:field="txbDepartureDate" styleName="gwt-TextBox {style.TripEdit-Obj7}" />
 						</div>
 					</td>
 					
 					<td valign="top" height="1">
-						<g:HTMLPanel ui:field="mapTable" styleName="{style.TripInfo-Obj1}"></g:HTMLPanel>
+						<g:HTMLPanel ui:field="mapTable" styleName="{style.TripEdit-Obj1}"></g:HTMLPanel>
 					</td>
 				</tr>
 				
@@ -160,7 +160,7 @@
 					<td colspan="2">
 						<div class="tripInfoBorder"></div>
 						<div class="font-blackTitleLarge" style="margin-top:30px;">Journey description:</div>
-						<g:HTMLPanel ui:field="editContent" styleName="{style.TripInfo-Obj10}">
+						<g:HTMLPanel ui:field="editContent" styleName="{style.TripEdit-Obj10}">
 						</g:HTMLPanel>
 					</td>
 				</tr>

@@ -38,7 +38,7 @@ import com.google.maps.gwt.client.places.Autocomplete;
 import com.google.maps.gwt.client.places.Autocomplete.PlaceChangedHandler;
 import com.google.maps.gwt.client.places.PlaceResult;
 
-public class TripInfo extends Composite {
+public class Journey_TripEdit extends Composite {
 
 	private static TripInfoUiBinder uiBinder = GWT
 			.create(TripInfoUiBinder.class);
@@ -59,7 +59,7 @@ public class TripInfo extends Composite {
 	private Trip trip;
 	private boolean isEdit = true;
 
-	interface TripInfoUiBinder extends UiBinder<Widget, TripInfo> {
+	interface TripInfoUiBinder extends UiBinder<Widget, Journey_TripEdit> {
 	}
 	
 	public interface Listener {
@@ -192,7 +192,7 @@ public class TripInfo extends Composite {
 		return ckf;
 	}
 
-	public TripInfo() {
+	public Journey_TripEdit() {
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		final Autocomplete autocomplete = Autocomplete
@@ -260,9 +260,9 @@ public class TripInfo extends Composite {
 		final HTMLPanel tripDestination = new HTMLPanel("");
 		tripDestination.setStyleName("trip-destinations");
 		Image marker = new Image("/resources/green-spotlight.png");
-		marker.setStyleName("TripInfo-Obj5");
+		marker.setStyleName("TripEdit-Obj5");
 		final TextBox txbDestination = new TextBox();
-		txbDestination.setStyleName("gwt-TextBox TripInfo-Obj6");
+		txbDestination.setStyleName("gwt-TextBox TripEdit-Obj6");
 		txbDestination.setText(address);
 		final Anchor btnRemove = new Anchor();
 		btnRemove.setStyleName("greenbutton CreateTrip-Obj12");
@@ -325,13 +325,13 @@ public class TripInfo extends Composite {
 	}
 
 	public void setDisable() {
-		txbName.addStyleName("TripInfo-Disable");
-		txbName.removeStyleName("TripInfo-Obj3Edit");
-		txbOrigin.addStyleName("TripInfo-Disable");
+		txbName.addStyleName("TripEdit-Disable");
+		txbName.removeStyleName("TripEdit-Obj3Edit");
+		txbOrigin.addStyleName("TripEdit-Disable");
 		for(TextBox t: destinationBoxMap) {
-			t.addStyleName("TripInfo-Disable");
+			t.addStyleName("TripEdit-Disable");
 		}
-		txbDepartureDate.addStyleName("TripInfo-Disable");
+		txbDepartureDate.addStyleName("TripEdit-Disable");
 		btnAddPart.removeFromParent();
 		for(Anchor a: listBtnRemoveDestination) {
 			a.removeFromParent();

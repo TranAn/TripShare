@@ -6,13 +6,14 @@ import org.timepedia.exporter.client.ExporterUtil;
 
 import com.born2go.client.rpc.DataService;
 import com.born2go.client.rpc.DataServiceAsync;
-import com.born2go.client.widgets.CreateTrip;
+import com.born2go.client.widgets.BetaTripSample;
+import com.born2go.client.widgets.Create_CreateTrip;
+import com.born2go.client.widgets.Destination_EditToolBar;
+import com.born2go.client.widgets.Journey_PathView;
 import com.born2go.client.widgets.LoadingBox;
-import com.born2go.client.widgets.PathView;
-import com.born2go.client.widgets.ProfileView;
+import com.born2go.client.widgets.Profile_ProfileView;
 import com.born2go.client.widgets.TravelMap;
 import com.born2go.client.widgets.TravelMap.Listener;
-import com.born2go.client.widgets.ViewFullPath;
 import com.born2go.shared.Trip;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
@@ -33,10 +34,10 @@ public class TripShare implements EntryPoint {
 	public static String access_token;
 	public static String user_id;
 	
-	static final CreateTrip createTrip = new CreateTrip();
-	static final PathView pathView = new PathView();
-	static final ViewFullPath viewFullPath = new ViewFullPath();
-	static final ProfileView profileView = new ProfileView();
+	static final Create_CreateTrip createTrip = new Create_CreateTrip();
+	static final Journey_PathView pathView = new Journey_PathView();
+	static final Destination_EditToolBar viewFullPath = new Destination_EditToolBar();
+	static final Profile_ProfileView profileView = new Profile_ProfileView();
 	
 	public static String ERROR_MESSAGE = "!: Đã có lỗi xảy ra, vui lòng tải lại trang.";
 
@@ -93,9 +94,10 @@ public class TripShare implements EntryPoint {
 		}
 		
 		if (RootPanel.get("betaTrip") != null) {
-			BetaTrip trip = new BetaTrip();
+			BetaTripSample trip = new BetaTripSample();
 			RootPanel.get("betaTrip").add(trip);
 		}
+		
 		//--- User, login handler ---
 		exportGwtClass();
 		checkUserStatus();

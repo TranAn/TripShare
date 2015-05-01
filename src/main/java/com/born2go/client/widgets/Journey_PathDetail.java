@@ -15,12 +15,12 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-public class PathDetail extends Composite {
+public class Journey_PathDetail extends Composite {
 
 	private static PathDetailUiBinder uiBinder = GWT
 			.create(PathDetailUiBinder.class);
 
-	interface PathDetailUiBinder extends UiBinder<Widget, PathDetail> {
+	interface PathDetailUiBinder extends UiBinder<Widget, Journey_PathDetail> {
 	}
 	
 	@UiField Anchor lbTitle;
@@ -35,7 +35,7 @@ public class PathDetail extends Composite {
 	boolean isAddDeletePost = false;
 	
 	public interface Listener {
-		void onDeletePost(PathDetail pathDetail);
+		void onDeletePost(Journey_PathDetail pathDetail);
 	}
 	
 	private Listener listener;
@@ -44,7 +44,7 @@ public class PathDetail extends Composite {
 		this.listener = listener;
 	}
 	
-	public PathDetail(final Long pathId, String pictureUrl, String title, String postBy, String posterId, String content) {
+	public Journey_PathDetail(final Long pathId, String pictureUrl, String title, String postBy, String posterId, String content) {
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		postControl.remove(btnDeletePost);

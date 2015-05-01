@@ -21,12 +21,12 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class JourneyInfoView extends Composite {
+public class Profile_JourneyInfoView extends Composite {
 
 	private static JourneyInfoViewUiBinder uiBinder = GWT
 			.create(JourneyInfoViewUiBinder.class);
 
-	interface JourneyInfoViewUiBinder extends UiBinder<Widget, JourneyInfoView> {
+	interface JourneyInfoViewUiBinder extends UiBinder<Widget, Profile_JourneyInfoView> {
 	}
 
 	@UiField
@@ -44,7 +44,7 @@ public class JourneyInfoView extends Composite {
 	@UiField
 	Label btnViewDetail;
 
-	public JourneyInfoView(String urlPicture, Trip trip) {
+	public Profile_JourneyInfoView(String urlPicture, Trip trip) {
 		initWidget(uiBinder.createAndBindUi(this));
 		picture.setUrl(urlPicture);
 		lbTitle.setText(trip.getName());

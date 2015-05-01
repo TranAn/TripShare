@@ -30,12 +30,12 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.maps.gwt.client.DirectionsResult;
 
-public class PathView extends Composite {
+public class Journey_PathView extends Composite {
 
 	private static PathViewUiBinder uiBinder = GWT
 			.create(PathViewUiBinder.class);
 
-	interface PathViewUiBinder extends UiBinder<Widget, PathView> {
+	interface PathViewUiBinder extends UiBinder<Widget, Journey_PathView> {
 	}
 	
 	@UiField
@@ -74,16 +74,16 @@ public class PathView extends Composite {
 	static Long tripId;
 	
 	List<Path> listPaths = new ArrayList<Path>();
-	List<PathDetail> listPathsDetail = new ArrayList<PathDetail>();
+	List<Journey_PathDetail> listPathsDetail = new ArrayList<Journey_PathDetail>();
 	
-	private TripInfo tripInfo;
-	private PathCreate pathCreate = new PathCreate();
+	private Journey_TripEdit tripInfo;
+	private Journey_PathCreate pathCreate = new Journey_PathCreate();
 	private PhotoUpload photoUpload = new PhotoUpload();
 	private Trip theTrip;
 	private boolean isPoster = false;
 	private boolean isOpenPathCreate = false;
 
-	public PathView() {
+	public Journey_PathView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		htmlPathCreate.add(pathCreate);
 		listArrange.addItem("Newest");
@@ -132,7 +132,7 @@ public class PathView extends Composite {
 					dummyNode.setHeight("0px");
 				}
 				
-				for(PathDetail pathDetail: listPathsDetail) {
+				for(Journey_PathDetail pathDetail: listPathsDetail) {
 					if(event.getScrollTop() + Window.getClientHeight() > pathDetail.getElement().getAbsoluteTop()) {
 						pathDetail.setStyleName("PathDetail-Obj1 fadeIn");
 					}
@@ -140,7 +140,7 @@ public class PathView extends Composite {
 			}
 		});
 		
-		pathCreate.setListener(new PathCreate.Listener() {
+		pathCreate.setListener(new Journey_PathCreate.Listener() {
 			@Override
 			public void onClose() {
 				btnUpload.setVisible(true);
@@ -156,7 +156,7 @@ public class PathView extends Composite {
 					public void onSuccess(final Path result) {
 						TripShare.loadBox.hide();
 						if(listPaths.contains(result)) {
-							PathDetail existPathDetail = listPathsDetail.get(listPaths.size() - listPaths.indexOf(result) - 1);
+							Journey_PathDetail existPathDetail = listPathsDetail.get(listPaths.size() - listPaths.indexOf(result) - 1);
 							String title = (result.getTitle())+ " - " + TripShare.dateFormat(result.getCreateDate());
 							existPathDetail.updatePath(title, result.getDescription());
 							getPathPhoto(result, existPathDetail);
@@ -167,11 +167,11 @@ public class PathView extends Composite {
 							Poster poster = new Poster();
 							if(result.getPoster() != null)
 								poster = result.getPoster();
-							PathDetail pathDetail = new PathDetail(result.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), result.getDescription());
+							Journey_PathDetail pathDetail = new Journey_PathDetail(result.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), result.getDescription());
 							pathDetail.addPostControl();
-							pathDetail.setListener(new PathDetail.Listener() {
+							pathDetail.setListener(new Journey_PathDetail.Listener() {
 								@Override
-								public void onDeletePost(PathDetail pathDetail) {
+								public void onDeletePost(Journey_PathDetail pathDetail) {
 									htmlPathTable.remove(pathDetail);
 									listPathsDetail.remove(pathDetail);
 									listPaths.remove(result);
@@ -209,7 +209,7 @@ public class PathView extends Composite {
 				btnEdit.removeStyleName("PathView-Obj14");
 				btnPost.removeStyleName("PathView-Obj14");
 				btnUpload.removeStyleName("PathView-Obj14");
-				for(PathDetail pd: listPathsDetail)
+				for(Journey_PathDetail pd: listPathsDetail)
 					pd.addPostControl();
 			}
 			else
@@ -222,7 +222,7 @@ public class PathView extends Composite {
 	}
 	
 	public void getTrip(final Long tripId) {
-		PathView.tripId = tripId;
+		Journey_PathView.tripId = tripId;
 		TripShare.dataService.findTrip(tripId, new AsyncCallback<Trip>() {
 			@Override
 			public void onSuccess(Trip result) {
@@ -257,10 +257,10 @@ public class PathView extends Composite {
 						Poster poster = new Poster();
 						if(path.getPoster() != null)
 							poster = path.getPoster();
-						PathDetail pathDetail = new PathDetail(path.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), path.getDescription());
-						pathDetail.setListener(new PathDetail.Listener() {
+						Journey_PathDetail pathDetail = new Journey_PathDetail(path.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), path.getDescription());
+						pathDetail.setListener(new Journey_PathDetail.Listener() {
 							@Override
-							public void onDeletePost(PathDetail pathDetail) {
+							public void onDeletePost(Journey_PathDetail pathDetail) {
 								htmlPathTable.remove(pathDetail);
 								listPathsDetail.remove(pathDetail);
 								listPaths.remove(path);
@@ -282,7 +282,7 @@ public class PathView extends Composite {
 			});
 	}
 	
-	void getPathPhoto(Path path, final PathDetail pathDetail) {
+	void getPathPhoto(Path path, final Journey_PathDetail pathDetail) {
 		if(path.getGallery().isEmpty()) {}
 		else {
 			int index = (int) (Math.random() * path.getGallery().size()) + 0;
@@ -312,10 +312,10 @@ public class PathView extends Composite {
 			editToolbar.setVisible(true);
 			DOM.getElementById("commentBox").setAttribute("style", "display:none");
 			DOM.getElementById("tripInfo").setInnerHTML("");
-			tripInfo = new TripInfo();
+			tripInfo = new Journey_TripEdit();
 			RootPanel.get("tripInfo").add(tripInfo);
 			tripInfo.setTrip(theTrip);
-			tripInfo.setListener(new TripInfo.Listener() {			
+			tripInfo.setListener(new Journey_TripEdit.Listener() {			
 				@Override
 				public void onUpdateTrip(Trip updateTrip) {
 					theTrip = updateTrip;
@@ -333,7 +333,7 @@ public class PathView extends Composite {
 		editToolbar.setVisible(false);
 		DOM.getElementById("commentBox").setAttribute("style", "");
 		htmlPathToolbar.removeStyleName("PathView-Obj13");
-		for(PathDetail pathDetail: listPathsDetail) {
+		for(Journey_PathDetail pathDetail: listPathsDetail) {
 			pathDetail.setStyleName("PathDetail-Obj1");
 		}
 		tripInfo.setTrip(theTrip);

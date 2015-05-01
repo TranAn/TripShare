@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ProfileView extends Composite {
+public class Profile_ProfileView extends Composite {
 
 	private static ProfileViewUiBinder uiBinder = GWT
 			.create(ProfileViewUiBinder.class);
@@ -22,10 +22,10 @@ public class ProfileView extends Composite {
 	@UiField
 	VerticalPanel verDetails;
 
-	interface ProfileViewUiBinder extends UiBinder<Widget, ProfileView> {
+	interface ProfileViewUiBinder extends UiBinder<Widget, Profile_ProfileView> {
 	}
 
-	public ProfileView() {
+	public Profile_ProfileView() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 	
@@ -36,7 +36,7 @@ public class ProfileView extends Composite {
 				if(!result.isEmpty())
 					verDetails.clear();
 				for(Trip trip: result) {
-					JourneyInfoView journeyInfoView = new JourneyInfoView("/resources/Travel tips2_resize.jpg", trip);
+					Profile_JourneyInfoView journeyInfoView = new Profile_JourneyInfoView("/resources/Travel tips2_resize.jpg", trip);
 					verDetails.add(journeyInfoView);
 				}
 			}
@@ -70,7 +70,7 @@ public class ProfileView extends Composite {
 //							if (urlPicture.contains(emtryPicture))
 //								urlPicture = "/resources/1427111517_palm_tree.png";
 //							Trip trip = entry.getValue();
-//							journeyInfoView = new JourneyInfoView(urlPicture,
+//							journeyInfoView = new Profile_JourneyInfoView(urlPicture,
 //									trip);
 //							verDetails.add(journeyInfoView);
 //

@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ViewFullPath extends Composite {
+public class Destination_EditToolBar extends Composite {
 
 	private static ViewFullPathUiBinder uiBinder = GWT
 			.create(ViewFullPathUiBinder.class);
@@ -38,7 +38,7 @@ public class ViewFullPath extends Composite {
 	@UiField
 	FlexTable flextImages;
 
-	interface ViewFullPathUiBinder extends UiBinder<Widget, ViewFullPath> {
+	interface ViewFullPathUiBinder extends UiBinder<Widget, Destination_EditToolBar> {
 	}
 
 	List<String> urls;
@@ -46,7 +46,7 @@ public class ViewFullPath extends Composite {
 	
 	public static Path path;
 
-	public ViewFullPath() {
+	public Destination_EditToolBar() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 	
@@ -168,7 +168,7 @@ public class ViewFullPath extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				PhotoUpload photoUpload = new PhotoUpload();
-				photoUpload.uploadFor(ViewFullPath.path.getTripId(), ViewFullPath.path.getId());
+				photoUpload.uploadFor(Destination_EditToolBar.path.getTripId(), Destination_EditToolBar.path.getId());
 				photoUpload.center();
 				photoUpload.handlerUploadEvent();
 			}
@@ -190,7 +190,7 @@ public class ViewFullPath extends Composite {
 		RootPanel.get("pathDescription").add(newContainer);
 		final CKEditor editor = new CKEditor(getCKConfig());
 		newContainer.add(editor);
-		editor.setData(ViewFullPath.path.getDescription());
+		editor.setData(Destination_EditToolBar.path.getDescription());
 		Window.scrollTo(0, 85);
 		//add edit tool
 		Label btnSave = new Label();
@@ -212,14 +212,14 @@ public class ViewFullPath extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				TripShare.loadBox.center();
-				Path viewPath = ViewFullPath.path;
+				Path viewPath = Destination_EditToolBar.path;
 				viewPath.setTitle(txbPathTitle.getText());
 				viewPath.setDescription(editor.getData());
 				TripShare.dataService.updatePart(viewPath, new AsyncCallback<Path>() {
 					@Override
 					public void onSuccess(Path result) {
 						TripShare.loadBox.hide();
-						ViewFullPath.path = result;
+						Destination_EditToolBar.path = result;
 						cancelEdit();
 					}
 					@Override
@@ -244,7 +244,7 @@ public class ViewFullPath extends Composite {
 		RootPanel.get("pathTitle").add(title);
 		HTMLPanel newContainer = new HTMLPanel("");
 		RootPanel.get("pathDescription").add(newContainer);
-		newContainer.getElement().setInnerHTML(ViewFullPath.path.getDescription());
+		newContainer.getElement().setInnerHTML(Destination_EditToolBar.path.getDescription());
 		Window.scrollTo(0, 85);
 		Label btnEdit = new Label();
 		btnEdit.setStyleName("PhotoUpload-Obj2");
