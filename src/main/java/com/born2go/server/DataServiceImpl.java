@@ -19,6 +19,7 @@ import com.born2go.shared.Picture;
 import com.born2go.shared.Poster;
 import com.born2go.shared.Trip;
 import com.born2go.shared.User;
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -284,10 +285,32 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public void deletePicture(Long idPicture) {
-//		Picture p = findPicture(idPicture);
-//		BlobKey blobKey = new BlobKey(p.getKey());
-//		blobstoreService.delete(blobKey);
-//		ofy().delete().entity(p);
+		Picture p = findPicture(idPicture);
+		if(p != null) {
+			//Delete blob
+			BlobKey blobKey = new BlobKey(p.getKey());
+			blobStoreService.delete(blobKey);
+			//Delete link on Trip of on Path
+			if(p.getOnPath() == null) {
+				Trip trip = ofy().load().type(Trip.class).id(p.getOnTrip()).now();
+				if(trip != null)
+					trip.getGallery().remove(p.getId());
+				ofy().save().entity(trip);
+			}
+			else {
+				Path path = ofy().load().type(Path.class).id(p.getOnPath()).now();
+				if(path != null) {
+					if(path.getGallery().get(path.getFeaturedPhoto()).equals(idPicture))
+						path.setFeaturedPhoto(null);
+					else if(path.getGallery().indexOf(idPicture) < path.getFeaturedPhoto())
+						path.setFeaturedPhoto(path.getFeaturedPhoto() - 1);
+					path.getGallery().remove(p.getId());
+				}
+				ofy().save().entity(path);
+			}
+			//Delete picture
+			ofy().delete().entity(p);
+		}
 	}
 	
 }

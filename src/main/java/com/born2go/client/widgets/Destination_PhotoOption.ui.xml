@@ -1,0 +1,52 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	.PhotoOption_Obj1 {
+		background-color: #f6f7f8;
+		border: 1px #e9eaed solid;
+		padding: 15px;
+	}
+	
+	.PhotoOption_Obj2 {
+		background-color: #ffffff;
+		border: 1px #e9eaed solid;
+		padding: 15px;
+	}
+	
+	.PhotoOption_Obj3 {
+		margin: auto;
+		width: -moz-fit-content;
+		margin-top: 25px;
+		padding-left: 10px;
+		display: table;
+	}
+	
+	.PhotoOption_Obj4 {
+		margin-right: 10px;
+	}
+	
+	.PhotoOption_Obj5 {
+		float: left;
+	}
+	
+	.PhotoOption_Obj6 {
+		float: left;
+		margin-left: 10px;
+	}
+	</ui:style>
+	<g:HTMLPanel width="400px" height="">
+		<g:HTMLPanel height="16px" styleName="{style.PhotoOption_Obj1}">
+			<g:Label text="Chose your option" styleName="font-blackTitleNormal {style.PhotoOption_Obj5}"/>
+			<g:Image url="/resources/loading.gif" styleName="{style.PhotoOption_Obj6}" width="30px" height="18px" ui:field="imgUploading" visible="false"/>
+		</g:HTMLPanel>
+		
+		<g:HTMLPanel height="80px" styleName="{style.PhotoOption_Obj2}">
+			<g:HTMLPanel styleName="{style.PhotoOption_Obj3}">
+				<g:Anchor ui:field="btnView" styleName="greenbutton {style.PhotoOption_Obj4}">View</g:Anchor>
+				<g:Anchor ui:field="btnSetFeaturedPhoto" styleName="greenbutton {style.PhotoOption_Obj4}">Set Featured Photo</g:Anchor>
+				<g:Anchor ui:field="btnDelete" styleName="greenbutton {style.PhotoOption_Obj4}">Delete</g:Anchor>
+			</g:HTMLPanel>
+		</g:HTMLPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

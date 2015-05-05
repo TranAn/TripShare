@@ -58,6 +58,10 @@
 	
 	.JourneyInfoView-Obj7 {
 		display: inline-flex;
+		display: -webkit-inline-box;
+	  	display: -webkit-inline-flex;
+	  	display: -ms-inline-flexbox;
+	  	-webkit-align-self: auto;
 		margin-bottom: 10px;
 	}
 	

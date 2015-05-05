@@ -42,18 +42,21 @@ public class Destination_EditToolBar extends Composite {
 	}
 
 	List<String> urls;
-	List<Image> listImages;
 	
-	public static Path path;
+	private Path path;
+	private boolean isPoster = false;
 
 	public Destination_EditToolBar() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 	
 	public void checkPermission() {
-		if(TripShare.user_id != null && path != null)
-			if(path.getPoster().getUserID().toString().equals(TripShare.user_id))
+		if(TripShare.user_id != null && path != null) {
+			if(path.getPoster().getUserID().toString().equals(TripShare.user_id)) {
 				addEditor();
+				isPoster = true;
+			}
+		}
 	}
 	
 	public CKConfig getCKConfig() {
@@ -168,7 +171,7 @@ public class Destination_EditToolBar extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				PhotoUpload photoUpload = new PhotoUpload();
-				photoUpload.uploadFor(Destination_EditToolBar.path.getTripId(), Destination_EditToolBar.path.getId());
+				photoUpload.uploadFor(path.getTripId(), path.getId());
 				photoUpload.center();
 				photoUpload.handlerUploadEvent();
 			}
@@ -190,7 +193,7 @@ public class Destination_EditToolBar extends Composite {
 		RootPanel.get("pathDescription").add(newContainer);
 		final CKEditor editor = new CKEditor(getCKConfig());
 		newContainer.add(editor);
-		editor.setData(Destination_EditToolBar.path.getDescription());
+		editor.setData(path.getDescription());
 		Window.scrollTo(0, 85);
 		//add edit tool
 		Label btnSave = new Label();
@@ -212,14 +215,14 @@ public class Destination_EditToolBar extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				TripShare.loadBox.center();
-				Path viewPath = Destination_EditToolBar.path;
+				Path viewPath = path;
 				viewPath.setTitle(txbPathTitle.getText());
 				viewPath.setDescription(editor.getData());
 				TripShare.dataService.updatePart(viewPath, new AsyncCallback<Path>() {
 					@Override
 					public void onSuccess(Path result) {
 						TripShare.loadBox.hide();
-						Destination_EditToolBar.path = result;
+						path = result;
 						cancelEdit();
 					}
 					@Override
@@ -244,7 +247,7 @@ public class Destination_EditToolBar extends Composite {
 		RootPanel.get("pathTitle").add(title);
 		HTMLPanel newContainer = new HTMLPanel("");
 		RootPanel.get("pathDescription").add(newContainer);
-		newContainer.getElement().setInnerHTML(Destination_EditToolBar.path.getDescription());
+		newContainer.getElement().setInnerHTML(path.getDescription());
 		Window.scrollTo(0, 85);
 		Label btnEdit = new Label();
 		btnEdit.setStyleName("PhotoUpload-Obj2");
@@ -285,7 +288,7 @@ public class Destination_EditToolBar extends Composite {
 		});
 	}
 
-	public void addImages(List<Picture> listPicture) {
+	public void addImages(final List<Picture> listPicture) {
 		flextImages.clear();
 		if (listPicture.size() > 0) {
 			int totalRow = 0;
@@ -296,7 +299,7 @@ public class Destination_EditToolBar extends Composite {
 				totalRow = (size / 4) + 1;
 			}
 			urls = new ArrayList<String>();
-			listImages = new ArrayList<Image>();
+			final List<Image> listImages = new ArrayList<Image>();
 			for (int i = 0; i < totalRow; i++) {
 				if (size > 0) {
 					for (int j = 0; j < 4; j++) {
@@ -307,20 +310,93 @@ public class Destination_EditToolBar extends Composite {
 							image.setStyleName("imageView");
 							flextImages.setWidget(i, j, image);
 							listImages.add(image);
-
 						}
 						size = size - 1;
 					}
 				}
 			}
 			for (final Image image : listImages) {
-				final String photosUri = getString(urls);
 				image.addClickHandler(new ClickHandler() {
-
 					@Override
-					public void onClick(ClickEvent event) {
-						int index = urls.indexOf(image.getUrl());
-						openGallery(photosUri, index);
+					public void onClick(ClickEvent event) {					
+						if(isPoster) {
+							final Destination_PhotoOption option = new Destination_PhotoOption();
+							option.center();
+							option.addStyleName("fadeIn");
+							option.setListener(new Destination_PhotoOption.Listener() {
+								@Override
+								public void onViewClick() {
+									option.hide();
+									int index = urls.indexOf(image.getUrl());
+									String photosUri = getString(urls);
+									openGallery(photosUri, index);
+								}
+								
+								@Override
+								public void onSetFeaturedPhotoClick() {
+									option.startLoading();
+									final int index = listPicture.size() - 1 - urls.indexOf(image.getUrl());
+									path.setFeaturedPhoto(index);
+									TripShare.dataService.updatePart(path, new AsyncCallback<Path>() {
+										@Override
+										public void onSuccess(Path result) {
+											option.hide();
+											option.endLoading();
+											DOM.getElementById("destination_featured_photo").setAttribute("src", listPicture.get(index).getServeUrl());
+										}
+										
+										@Override
+										public void onFailure(Throwable caught) {
+											option.hide();
+											option.endLoading();
+											Window.alert(TripShare.ERROR_MESSAGE);
+										}
+									});
+								}
+								
+								@Override
+								public void onDeleteClick() {
+									option.startLoading();
+									final int index = listPicture.size() - 1 - urls.indexOf(image.getUrl());
+									TripShare.dataService.deletePicture(path.getGallery().get(index), new AsyncCallback<Void>() {								
+										@Override
+										public void onSuccess(Void result) {
+											option.hide();
+											option.endLoading();
+											listPicture.remove(index);
+											listImages.remove(urls.indexOf(image.getUrl()));
+											urls.remove(image.getUrl());
+											path.getGallery().remove(index);
+											flextImages.clear();
+											int imageIndex = 0;
+											int row = 0;
+											int col = 0;
+											while(imageIndex < listImages.size()) {
+												if(col > 3) {
+													row++;
+													col = 0;
+												}
+												flextImages.setWidget(row, col, listImages.get(imageIndex));
+												imageIndex++;
+												col++;
+											}
+										}
+										
+										@Override
+										public void onFailure(Throwable caught) {
+											option.hide();
+											option.endLoading();
+											Window.alert(TripShare.ERROR_MESSAGE);
+										}
+									});
+								}
+							});
+						}
+						else {
+							int index = urls.indexOf(image.getUrl());
+							String photosUri = getString(urls);
+							openGallery(photosUri, index);
+						}
 					}
 				});
 			}

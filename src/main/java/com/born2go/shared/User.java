@@ -16,10 +16,11 @@ public class User implements Serializable {
 
 	@Id
 	String id;
-	String userName;
-	Date joinDate;
 	
 	List<Long> myTrips = new ArrayList<Long>();
+	
+	String userName;
+	Date joinDate;
 
 	public User() {
 		super();

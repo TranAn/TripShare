@@ -25,6 +25,7 @@ public class Path implements Serializable {
 	Date createDate;
 	Locate locate;
 	String description;
+	Integer featuredPhoto;
 	
 	public Path() {
 		super();
@@ -94,6 +95,14 @@ public class Path implements Serializable {
 		this.tripId = tripId;
 	}
 	
+	public Integer getFeaturedPhoto() {
+		return featuredPhoto;
+	}
+
+	public void setFeaturedPhoto(Integer featuredPhoto) {
+		this.featuredPhoto = featuredPhoto;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		Path path = (Path) o;

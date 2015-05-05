@@ -128,7 +128,7 @@ public class TripShare implements EntryPoint {
 
 	private native void checkUserStatus() /*-{
 	    $wnd.FB.init({
-	      appId      : '386540048195283',
+	      appId      : '1636504239911870',
 	      cookie	 : true,
 	      xfbml      : true,
 	      version    : 'v2.3'
@@ -168,17 +168,17 @@ public class TripShare implements EntryPoint {
 		else {
 			pathView.checkPermission();
 			viewFullPath.checkPermission();
-			dataService.getLongLiveToken(accessToken, new AsyncCallback<String>() {
-				@Override
-				public void onSuccess(String result) {
-					if(result != null && !result.isEmpty())
-						access_token = result;
-				}
-				@Override
-				public void onFailure(Throwable caught) {
-					// TODO Auto-generated method stub
-				}
-			});
+//			dataService.getLongLiveToken(accessToken, new AsyncCallback<String>() {
+//				@Override
+//				public void onSuccess(String result) {
+//					if(result != null && !result.isEmpty())
+//						access_token = result;
+//				}
+//				@Override
+//				public void onFailure(Throwable caught) {
+//					// TODO Auto-generated method stub
+//				}
+//			});
 		}
 	}
 

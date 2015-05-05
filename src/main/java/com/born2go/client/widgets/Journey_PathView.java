@@ -285,19 +285,25 @@ public class Journey_PathView extends Composite {
 	void getPathPhoto(Path path, final Journey_PathDetail pathDetail) {
 		if(path.getGallery().isEmpty()) {}
 		else {
-			int index = (int) (Math.random() * path.getGallery().size()) + 0;
-			Long displayPhotoId = path.getGallery().get(index);
-			TripShare.dataService.findPicture(displayPhotoId, new AsyncCallback<Picture>() {
-				@Override
-				public void onSuccess(Picture result) {
-					if(result != null)
-						pathDetail.setDisplayPhoto(result.getServeUrl());
-				}				
-				@Override
-				public void onFailure(Throwable caught) {
-					// TODO Auto-generated method stub
-				}
-			});
+			Long displayPhotoId = null;
+			if(path.getFeaturedPhoto() != null)
+				displayPhotoId = path.getGallery().get(path.getFeaturedPhoto());
+			else
+				if(path.getGallery() != null)
+					displayPhotoId = path.getGallery().get(0);
+			if(displayPhotoId != null) {
+				TripShare.dataService.findPicture(displayPhotoId, new AsyncCallback<Picture>() {
+					@Override
+					public void onSuccess(Picture result) {
+						if(result != null)
+							pathDetail.setDisplayPhoto(result.getServeUrl());
+					}				
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+					}
+				});
+			}
 		}
 	}
 

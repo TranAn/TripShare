@@ -53,9 +53,12 @@ public void redirectHomeUrl(HttpServletResponse response) {
 			List<Long> gallery = path.getGallery();	
 			pathPicture.setServeUrl("");
 			if(gallery != null && !gallery.isEmpty()) {
-				List<Picture> listPicture = service.listPicture(gallery);
-				if(listPicture.size() > 0) 
-					pathPicture = listPicture.get(0);
+				if(path.getFeaturedPhoto() == null) {
+					pathPicture = service.findPicture(path.getGallery().get(0));
+				}
+				else {
+					pathPicture = service.findPicture(path.getGallery().get(path.getFeaturedPhoto()));
+				}
 			}
 			if(path.getTripId() != null)
 				trip = service.findTrip(path.getTripId());
@@ -171,7 +174,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 								</div>
 								<div style="background: whitesmoke;min-height: 10px;padding: 15px 0px;">
 								<%if(pathPicture.getServeUrl() != null && !pathPicture.getServeUrl().equals("")) {%>									
-								<img src="<%=pathPicture.getServeUrl()%>" class="one_imageView">	
+								<img id="destination_featured_photo" src="<%=pathPicture.getServeUrl()%>" class="one_imageView">	
 								<%} %>																				
 								</div>
 
@@ -268,5 +271,9 @@ public void redirectHomeUrl(HttpServletResponse response) {
 	<div id="footer" style="width: 100%">
 		<center>© Copyright 2015, Born2Go.</center>
 	</div>
+	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://arrow.scrolltotop.com/arrow50.js"></script>
+	<noscript>Not seeing a <a href="http://www.scrolltotop.com/">Scroll to Top Button</a>? Go to our FAQ page for more info.</noscript>
 </body>
 </html>

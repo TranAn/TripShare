@@ -90,6 +90,10 @@
 	.TripEdit-Obj9 {
 		margin-bottom: 20px;
 		display: inline-flex;
+  		display: -webkit-inline-box;
+  		display: -webkit-inline-flex;
+  		display: -ms-inline-flexbox;
+  		-webkit-align-self: auto;
 	}
 	
 	.TripEdit-Obj10 {

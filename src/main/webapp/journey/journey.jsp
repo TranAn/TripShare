@@ -168,7 +168,7 @@
 								<tr>
 								<td valign="top" style="width:100%">
 									<div class="font-blackTitleLarge" style="font-size: 30px;font-family: museo-w01-700,serif; color:rgb(56, 119, 127)"><%=trip.getName()%></div>
-									<div style="display: inline-flex;">
+									<div style="display: inline-flex; display: -webkit-inline-box; display: -webkit-inline-flex; display: -ms-inline-flexbox; -webkit-align-self: auto;">
 										<div class="font-blackTitleLarge" style="margin-bottom: 20px;margin-right: 4px;font-size: 15px;font-family: museo-w01-700,serif; color:silver; font-style: italic;">Create by</div>
 										<a href="/profile/<%=trip.getPoster().getUserID()%>" class="font-blackTitleLarge link" style="margin-bottom: 20px;font-size: 15px;font-family: museo-w01-700,serif; color:silver; font-style: italic;"><%=(trip.getPoster()!=null?trip.getPoster().getUserName():"Tester")%></a>
 									</div>
