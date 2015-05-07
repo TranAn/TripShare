@@ -85,7 +85,7 @@ public class LoginDialog extends DialogBox {
 			} else {
 				 
 			}
-		});
+		}, {scope: 'public_profile,user_friends'});
 	}-*/;
 
 }

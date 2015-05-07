@@ -5,6 +5,8 @@
 	@external .CreateTrip-Obj5, .CreateTrip-Obj6, .CreateTrip-Obj7, .CreateTrip-Obj12, .CreateTrip-Obj13;
 	.CreateTrip-Obj2 {
 		margin-top: 20px;
+		margin-left: 2px;
+  		margin-bottom: 5px;
 	}
 	
 	.CreateTrip-Obj1 {
@@ -101,11 +103,26 @@
 	
 	.CreateTrip-Obj15 {
 		margin-bottom: 5px;
-		max-width: 80%;
-		width: 80%;
+		width: 100%;
 		min-height: 160px;
 		resize: none;
 		overflow: hidden;
+	}
+	
+	.CreateTrip-Obj16 {
+		float: left;
+		width: 80%;
+	}
+	
+	.CreateTrip-Obj17 {
+		display: table;
+		width: 100%;
+	}
+	
+	.CreateTrip-Obj18 {
+		float:left;
+		margin-left: 15px;
+		margin-top: 1px;
 	}
 	</ui:style>
 	<g:HTMLPanel styleName="{style.CreateTrip-Obj1}">
@@ -123,21 +140,28 @@
 						<g:TextBox ui:field="txbDestination" styleName="gwt-TextBox {style.CreateTrip-Obj7}" width="80%"/>
 						<g:Anchor title="Find tourist place" styleName="greenbutton {style.CreateTrip-Obj6}"><i class="fa fa-picture-o fa-lg"></i></g:Anchor>
 						<g:HTMLPanel ui:field="htmlDestinationBox" styleName="{style.CreateTrip-Obj11}" />
+						
 						<g:HTMLPanel>
 							<g:Anchor ui:field="btnAddPart" title="Add destination point" styleName="greenbutton {style.CreateTrip-Obj6}" ><i class="fa fa-plus fa-lg"></i></g:Anchor>
-							<g:Anchor ui:field="btnRichTextEdit" title="Rich text" styleName="greenbutton {style.CreateTrip-Obj6}" ><i class="fa fa-font fa-lg"></i></g:Anchor>
+							<g:Anchor ui:field="btnAddFriend" title="Add your friend" styleName="greenbutton {style.CreateTrip-Obj6}" ><i class="fa fa-user fa-lg"></i></g:Anchor>
 						</g:HTMLPanel>
 						<g:Label text="Departure date:" styleName="font-blackTitleNormal {style.CreateTrip-Obj10}" />
 						<p1:DateBox width="80%" height="18px" ui:field="txbDeparture" styleName="gwt-TextBox {style.CreateTrip-Obj7}"/>
+						
 						<g:Label text="Journey description:" styleName="font-blackTitleNormal {style.CreateTrip-Obj8}" />
-						<g:HTMLPanel ui:field="editTextBox">
-							<p2:StretchyTextArea width="80%" ui:field="txbDescription" styleName="gwt-TextBox {style.CreateTrip-Obj15}"/>
+						<g:HTMLPanel styleName="{style.CreateTrip-Obj17}">
+							<g:HTMLPanel styleName="{style.CreateTrip-Obj16}" ui:field="editTextBox">
+								<p2:StretchyTextArea ui:field="txbDescription" styleName="gwt-TextBox {style.CreateTrip-Obj15}"/>
+							</g:HTMLPanel>
+							<g:Anchor ui:field="btnRichTextEdit" title="Rich text" styleName="greenbutton {style.CreateTrip-Obj6} {style.CreateTrip-Obj18}" ><i class="fa fa-font fa-lg"></i></g:Anchor>
 						</g:HTMLPanel>
+						
 						<g:HTMLPanel styleName="{style.CreateTrip-Obj2}">
 							<g:Anchor ui:field="btnCreateTrip" styleName="greenbutton">Create your journey</g:Anchor>
 						</g:HTMLPanel>
 					</g:HTMLPanel>
 				</td>
+				
 				<td valign="top" height="1">
 					<g:HTMLPanel ui:field="mapContainer" height="500px" styleName="{style.CreateTrip-Obj4}"/>
 				</td>

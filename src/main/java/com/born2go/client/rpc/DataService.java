@@ -41,6 +41,8 @@ public interface DataService extends RemoteService {
 	public void insertUser(User user);
 
 	public User findUser(String idUser);
+	
+	public List<User> listOfUser(List<String> idsUser);
 
 	public User updateUser(User user);
 

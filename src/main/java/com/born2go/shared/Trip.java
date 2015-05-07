@@ -22,7 +22,7 @@ public class Trip implements Serializable {
 	Long id;
 	
 	Poster poster;
-	List<Long> companion = new ArrayList<Long>(); //Member sharing the same trip
+	List<Poster> companion = new ArrayList<Poster>(); //Member sharing the same trip
 	List<Long> destination = new ArrayList<Long>(); //Segments ID list
 	List<Long> gallery = new ArrayList<Long>();		//Photos list
 	
@@ -61,11 +61,11 @@ public class Trip implements Serializable {
 		this.poster = poster;
 	}
 
-	public List<Long> getCompanion() {
+	public List<Poster> getCompanion() {
 		return companion;
 	}
 
-	public void setCompanion(List<Long> companion) {
+	public void setCompanion(List<Poster> companion) {
 		this.companion = companion;
 	}
 

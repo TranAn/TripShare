@@ -40,4 +40,13 @@ public class Poster implements Serializable {
 		this.userImg = userImg;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		Poster poster = (Poster) o;
+		if (this.userID.equals(poster.getUserID()))
+			return true;
+		else
+			return false;
+	}
+	
 }

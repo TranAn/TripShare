@@ -240,6 +240,13 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
+	public List<User> listOfUser(List<String> idsUser) {
+		Map<String, User> mapUsers = ofy().load().type(User.class).ids(idsUser);
+		List<User> result = new ArrayList<User>(mapUsers.values());
+		return result;
+	}
+
+	@Override
 	public User updateUser(User user) {
 		User oldData = findUser(user.getId());
 		if (oldData != null) {

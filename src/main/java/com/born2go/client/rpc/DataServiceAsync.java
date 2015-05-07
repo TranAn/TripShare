@@ -39,6 +39,8 @@ public interface DataServiceAsync {
 	void insertUser(User user, AsyncCallback<Void> callback);
 
 	void findUser(String idUser, AsyncCallback<User> callback);
+	
+	void listOfUser(List<String> idsUser, AsyncCallback<List<User>> callback);
 
 	void updateUser(User user, AsyncCallback<User> callback);
 

@@ -37,7 +37,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d hh:mm:ss");
 	Picture pathPicture = new Picture();
 	//Get the data 
-	if (request.getPathInfo() == null || request.getPathInfo().length() <= 1) {
+	if (request.getPathInfo() == null || request.getPathInfo().length() < 1) {
 		redirectHomeUrl(response);
 	} else {
 		pathId = request.getPathInfo().replaceAll("/", "");

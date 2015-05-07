@@ -229,6 +229,9 @@ public class Journey_PathView extends Composite {
 				if(result != null) {
 					theTrip = result;
 					TripShare.tripMap.drawTheJourney(result.getJourney().getDirections(), result.getJourney().getLocates());
+					CompanionTable companionTable = new CompanionTable();
+					companionTable.setTrip(theTrip);
+					RootPanel.get("companion_table").add(companionTable);
 					getThePaths(result.getDestination());
 					checkPermission();
 				}

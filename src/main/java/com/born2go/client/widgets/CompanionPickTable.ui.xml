@@ -1,0 +1,53 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.cellview.client">
+	<ui:style>
+	.FriendTable_Obj1 {
+		background-color: #f6f7f8;
+		border: 1px #e9eaed solid;
+		padding: 15px;
+	}
+	
+	.FriendTable_Obj2 {
+		background-color: #ffffff;
+		min-height: 100px;
+		max-height: 380px;
+		overflow-x: hidden !important;
+	}
+	
+	.FriendTable_Obj3 {
+		background-color: #f6f7f8;
+		border: 1px #e9eaed solid;
+		padding: 8px;
+	}
+	
+	.FriendTable_Obj4 {
+		float: right;
+		margin-right: 5px;
+	}
+	
+	.FriendTable_Obj5 {
+		color: aliceblue;
+  		padding: 6px 10px;
+  		margin-left: 10px;
+  		float: right;
+  		margin-top: 3px;
+	}
+	</ui:style>
+	<g:HTMLPanel width="400px">
+		<g:HTMLPanel height="16px" styleName="{style.FriendTable_Obj1}">
+			<g:Label text="Chose your friends" styleName="font-blackTitleNormal"/>
+		</g:HTMLPanel>
+		
+		<g:ScrollPanel ui:field="sclContent" styleName="{style.FriendTable_Obj2}">
+			<p1:CellTable ui:field="talbeFriends" width="100%" height="100%" />
+		</g:ScrollPanel>
+		
+		<g:HTMLPanel ui:field="htmlFooter" styleName="{style.FriendTable_Obj3}" height="35px">
+			<g:HorizontalPanel styleName="{style.FriendTable_Obj4}">
+				<g:Anchor ui:field="btnSave"  styleName="greenbutton {style.FriendTable_Obj5}" > Save</g:Anchor>
+				<g:Anchor ui:field="btnCancel"  styleName="greenbutton {style.FriendTable_Obj5}" > Cancel</g:Anchor> 
+			</g:HorizontalPanel>
+		</g:HTMLPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

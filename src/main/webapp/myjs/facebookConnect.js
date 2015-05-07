@@ -1,6 +1,6 @@
 /*window.fbAsyncInit = function() {
     FB.init({
-      appId      : '386540048195283',
+      appId      : '1636504239911870',
       cookie	 : true,
       xfbml      : true,
       version    : 'v2.3'
@@ -60,7 +60,7 @@ function loginFacebook() {
 			 var facebookApi = new GWTExport.FacebookApi();
 			 facebookApi.getAccessToken("","");
 		}
-	});
+	}, {scope: 'public_profile,user_friends'});
 }
 
 function logoutfacebook() {
