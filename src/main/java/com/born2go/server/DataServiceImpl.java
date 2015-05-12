@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import com.born2go.client.rpc.DataService;
 import com.born2go.shared.Path;
@@ -47,6 +48,15 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 				user.getMyTrips().add(exportTrip.getId());
 				ofy().save().entity(user);
 			}
+			if(!trip.getCompanion().isEmpty()) {
+				for(Poster p: trip.getCompanion()) {
+					User u = ofy().load().type(User.class).id(p.getUserID().toString()).now();
+					if(u != null) {
+						u.getMyTrips().add(exportTrip.getId());
+						ofy().save().entity(u);
+					}
+				}
+			}
 			return exportTrip;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,6 +81,24 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	public Trip updateTrip(Trip trip) {
 		Trip oldTrip = findTrip(trip.getId());
 		if (oldTrip != null) {
+			for(Poster p: oldTrip.getCompanion()) {
+				if(!trip.getCompanion().contains(p)) {
+					User user = ofy().load().type(User.class).id(p.getUserID().toString()).now();
+					if(user != null) {
+						user.getMyTrips().remove(exportTrip.getId());
+						ofy().save().entity(user);
+					}
+				}
+			}
+			for(Poster p: trip.getCompanion()) {
+				if(!oldTrip.getCompanion().contains(p)) {
+					User user = ofy().load().type(User.class).id(p.getUserID().toString()).now();
+					if(user != null) {
+						user.getMyTrips().add(exportTrip.getId());
+						ofy().save().entity(user);
+					}
+				}
+			}
 			Key<Trip> key = ofy().save().entity(trip).now();
 			exportTrip = ofy().load().key(key).now();
 		} else
@@ -100,6 +128,9 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 					part.setPoster(poster);
 				}
 				part.setTripId(tripId);
+				String preshortHtml = part.getDescription().replaceAll("(?i)<br[^>]*>", "br2n").replaceAll("</p>", "br2nbr2n");
+				//.replaceAll("&nbsp;", "br2nbr2n")
+				part.setShortDescription(Jsoup.parse(preshortHtml).text());
 				Key<Path> key = ofy().save().entity(part).now();
 				exportPart = ofy().load().key(key).now();
 				//--
@@ -132,6 +163,11 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	public Path updatePart(Path part) {
 		Path oldData = findPart(part.getId());
 		if (oldData != null) {
+			if(!oldData.getDescription().equals(part.getDescription())) {
+				String preshortHtml = part.getDescription().replaceAll("(?i)<br[^>]*>", "br2n").replaceAll("</p>", "br2nbr2n");
+				//.replaceAll("&nbsp;", "br2nbr2n")
+				part.setShortDescription(Jsoup.parse(preshortHtml).text());
+			}
 			Key<Path> key = ofy().save().entity(part).now();
 			exportPart = ofy().load().key(key).now();
 		} else
@@ -179,7 +215,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		JSONObject myObj = new JSONObject(response.toString());
 		Poster poster = new Poster();
 		poster.setUserID(myObj.getLong("id"));
-		poster.setUserName(myObj.getString("first_name")+ " "+ myObj.getString("last_name"));
+		poster.setUserName(myObj.getString("name"));
 		
 		return poster;
 	}
@@ -307,10 +343,10 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 			else {
 				Path path = ofy().load().type(Path.class).id(p.getOnPath()).now();
 				if(path != null) {
-					if(path.getGallery().get(path.getFeaturedPhoto()).equals(idPicture))
-						path.setFeaturedPhoto(null);
-					else if(path.getGallery().indexOf(idPicture) < path.getFeaturedPhoto())
-						path.setFeaturedPhoto(path.getFeaturedPhoto() - 1);
+//					if(path.getGallery().get(path.getFeaturedPhoto()).equals(idPicture))
+//						path.setFeaturedPhoto(null);
+//					else if(path.getGallery().indexOf(idPicture) < path.getFeaturedPhoto())
+//						path.setFeaturedPhoto(path.getFeaturedPhoto() - 1);
 					path.getGallery().remove(p.getId());
 				}
 				ofy().save().entity(path);

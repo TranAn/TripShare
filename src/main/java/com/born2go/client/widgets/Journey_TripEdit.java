@@ -9,9 +9,11 @@ import com.axeiya.gwtckeditor.client.CKEditor;
 import com.axeiya.gwtckeditor.client.Toolbar;
 import com.axeiya.gwtckeditor.client.ToolbarLine;
 import com.born2go.client.TripShare;
+import com.born2go.client.widgets.Create_HandlerJsonListFriends.ListFriends;
 import com.born2go.shared.Journey;
 import com.born2go.shared.Journey.Point;
 import com.born2go.shared.Locate;
+import com.born2go.shared.Poster;
 import com.born2go.shared.Trip;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
@@ -51,6 +53,9 @@ public class Journey_TripEdit extends Composite {
 	@UiField HTMLPanel mapTable;
 	@UiField Anchor btnAddPart;
 	@UiField HTMLPanel editContent;
+	@UiField Anchor btnAddFriend;
+	@UiField HTMLPanel companion_table;
+	@UiField Image imgPoster;
 	
 	Locate originPoint;
 	List<Locate> listDestinationPoint = new ArrayList<Locate>();
@@ -58,6 +63,8 @@ public class Journey_TripEdit extends Composite {
 	
 	private Trip trip;
 	private boolean isEdit = true;
+	
+	static CompanionTable companionTable = new CompanionTable();
 
 	interface TripInfoUiBinder extends UiBinder<Widget, Journey_TripEdit> {
 	}
@@ -108,8 +115,8 @@ public class Journey_TripEdit extends Composite {
 		ckf.setUiColor("#f6f7f8");
 		
 		// Setting size
-//		ckf.setHeight("180px");
-		ckf.setResizeMinHeight(180);
+		ckf.setHeight("250px");
+		ckf.setResizeMinHeight(250);
 
 		// Creating personalized toolbar
 		ToolbarLine line1 = new ToolbarLine();
@@ -205,6 +212,8 @@ public class Journey_TripEdit extends Composite {
 				findTheJourney();
 			}
 		});
+		
+		companion_table.add(companionTable);
 	}
 	
 	public void setTrip(Trip trip) {
@@ -218,7 +227,12 @@ public class Journey_TripEdit extends Composite {
 		}
 		else
 			lbPoster.setText("Tester");
+		imgPoster.setUrl("https://graph.facebook.com/"+ trip.getPoster().getUserID()+ "/picture?width=25&height=25");
 		txbDepartureDate.setValue(trip.getDepartureDate());
+		//
+		companionTable.setTrip(trip.getCompanion());
+		listCompanion.clear();
+		listCompanion.addAll(trip.getCompanion());
 		//
 		editContent.clear();
 		if(isEdit) {
@@ -308,6 +322,7 @@ public class Journey_TripEdit extends Composite {
 		trip.setName(txbName.getText());
 		trip.setDepartureDate(txbDepartureDate.getValue());
 		trip.setDescription(txbRichDescription.getData());
+		trip.setCompanion(listCompanion);
 		trip.setJourney(getJourney());
 		TripShare.dataService.updateTrip(trip, new AsyncCallback<Trip>() {
 			@Override
@@ -333,6 +348,7 @@ public class Journey_TripEdit extends Composite {
 		}
 		txbDepartureDate.addStyleName("TripEdit-Disable");
 		btnAddPart.removeFromParent();
+		btnAddFriend.removeFromParent();
 		for(Anchor a: listBtnRemoveDestination) {
 			a.removeFromParent();
 		}
@@ -346,5 +362,44 @@ public class Journey_TripEdit extends Composite {
 		else
 			htmlDestinationTable.add(addDestination(""));
 	}
+	
+	@UiHandler("btnAddFriend")
+	void onBtnAddFriendClick(ClickEvent event) {
+		getFriendList();
+	}
+	
+	private static List<Poster> listCompanion = new ArrayList<Poster>();
+	
+	static void takeListFriends(String jsonListFriends) {
+		jsonListFriends = "{\"listFriends\":" + jsonListFriends + "}";
+		Create_HandlerJsonListFriends handlerJson = new Create_HandlerJsonListFriends();
+		ListFriends LF = handlerJson.deserializeFromJson(jsonListFriends);
+		CompanionPickTable ftable = new CompanionPickTable();
+		ftable.setListener(new CompanionPickTable.Listener() {
+			@Override
+			public void onSaveClick(List<Poster> friendsId) {
+				listCompanion.clear();
+				listCompanion.addAll(friendsId);
+				companionTable.setTrip(friendsId);
+//				if(!friendsId.isEmpty()) 
+//					DOM.getElementById("btnAddFriend").addClassName("PathCreate-Obj16");
+//				else
+//					DOM.getElementById("btnAddFriend").removeClassName("PathCreate-Obj16");
+			}
+		});
+		ftable.setListFriend(LF.getListFriends(), listCompanion);
+		ftable.setPopupPosition(Window.getClientWidth()/2 - 200, Window.getScrollTop()+ 180);
+		ftable.addStyleName("fadeIn");
+		ftable.show();
+	}
+	
+	static native String getFriendList() /*-{
+		$wnd.FB.api("/me/friends", function (response) {
+	  		if (response && !response.error) {
+	    		var jsonString = $wnd.JSON.stringify(response.data);
+	    		@com.born2go.client.widgets.Journey_TripEdit::takeListFriends(Ljava/lang/String;)(jsonString);
+	  		}
+		});
+	}-*/;
 	
 }

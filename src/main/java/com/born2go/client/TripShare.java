@@ -161,7 +161,7 @@ public class TripShare implements EntryPoint {
 		}, true);
 	}-*/;
 
-	public static void getAccessToken(String accessToken, String userId) throws Exception {
+	public static void getAccessToken(String accessToken, String userId) {
 		access_token = accessToken;
 		user_id = userId;
 		if(access_token.isEmpty()) {}

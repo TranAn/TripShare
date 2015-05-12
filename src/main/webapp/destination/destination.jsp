@@ -35,7 +35,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 	String pathId = "";
 	String pathTitle = "";
 	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d hh:mm:ss");
-	Picture pathPicture = new Picture();
+	String pathPicture = "";
 	//Get the data 
 	if (request.getPathInfo() == null || request.getPathInfo().length() < 1) {
 		redirectHomeUrl(response);
@@ -51,13 +51,12 @@ public void redirectHomeUrl(HttpServletResponse response) {
 			else if(path.getLocate() != null)
 				pathTitle = path.getLocate().getAddressName();
 			List<Long> gallery = path.getGallery();	
-			pathPicture.setServeUrl("");
 			if(gallery != null && !gallery.isEmpty()) {
-				if(path.getFeaturedPhoto() == null) {
-					pathPicture = service.findPicture(path.getGallery().get(0));
+				if(path.getAvatar() == null) {
+					pathPicture = service.findPicture(path.getGallery().get(0)).getServeUrl();
 				}
 				else {
-					pathPicture = service.findPicture(path.getGallery().get(path.getFeaturedPhoto()));
+					pathPicture = path.getAvatar();
 				}
 			}
 			if(path.getTripId() != null)
@@ -88,7 +87,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 <title><%=pathTitle%></title>
 <meta property="og:title" content="<%=pathTitle.replaceAll("\"", "\'")%>" />
 <meta property="og:type" content="article" />
-<meta property="og:image" content="<%=pathPicture.getServeUrl()%>" />
+<meta property="og:image" content="<%=pathPicture%>" />
 <meta property="og:url" content="http://born2go-b.appspot.com/destination/<%= pathId %>" />
 <%if(path.getDescription() != null) { %>
 <meta property="og:description" content='<%=path.getDescription().replaceAll("\'", "\"").replace("\n", "").replace("\r", "")%>' />
@@ -160,7 +159,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 				<table style="width: 100%;">
 					<tr>
 						<td valign="top" style="padding-right: 10px;">
-							<div class="left_rightPath">
+							<div class="left_Path">
 								<div id="pathTitle" class="font_4 "><%=pathTitle%></div>
 								<div style="height: 40px;">
 								<%if(path.getPoster() != null) {%>
@@ -173,14 +172,14 @@ public void redirectHomeUrl(HttpServletResponse response) {
 								<%;} %>
 								</div>
 								<div style="background: whitesmoke;min-height: 10px;padding: 15px 0px;">
-								<%if(pathPicture.getServeUrl() != null && !pathPicture.getServeUrl().equals("")) {%>									
-								<img id="destination_featured_photo" src="<%=pathPicture.getServeUrl()%>" class="one_imageView">	
+								<%if(!pathPicture.equals("")) {%>									
+								<img id="destination_featured_photo" src="<%=pathPicture+"=s1600"%>" class="one_imageView">	
 								<%} %>																				
 								</div>
 
 								<br/>
 								<!-- Editor content -->
-								<div id="pathDescription">
+								<div id="pathDescription" style=" overflow: auto;">
 									<p style="font-size: 15px; line-height: 1.6em; white-space: pre-line;"><%=path.getDescription()%></p>
 								</div>
 								<!-- Trip info -->
@@ -211,8 +210,8 @@ public void redirectHomeUrl(HttpServletResponse response) {
 							</div>
 						</td>
 						
-						<td valign="top" style="width: 240px;">
-							<div class="left_rightPath">
+						<td valign="top">
+							<div class="right_Path">
 								<div>
 									<div style="margin-top: 20px;" class="font_6">ONTRIP
 										POSTS:</div>

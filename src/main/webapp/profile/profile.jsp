@@ -20,6 +20,32 @@
 <!-- with a "Quirks Mode" doctype may lead to some -->
 <!-- differences in layout.                        -->
 
+<%!
+public void redirectHomeUrl(HttpServletResponse response) {
+	String site = new String("/");
+	response.setStatus(response.SC_MOVED_TEMPORARILY);
+	response.setHeader("Location", site);
+}
+%>
+
+<%
+	User user = new User();
+	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d");
+	if (request.getPathInfo() == null
+			|| request.getPathInfo().length() == 0) {
+		redirectHomeUrl(response);
+	} else {
+		String userId = request.getPathInfo().replaceAll("/", "");
+		DataServiceImpl service = new DataServiceImpl();
+		user = service.findUser(userId);
+		if (user == null) {
+			redirectHomeUrl(response);
+		} else {
+		}
+	}
+%>
+				
+
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -99,32 +125,11 @@
 	<div id="content">
 		<div style="position: relative; margin: auto; width: 75%; min-width: 900px; height: auto !important;">
 			<div>
-				<%!public void redirectHomeUrl(HttpServletResponse response) {
-					String site = new String("/");
-					response.setStatus(response.SC_MOVED_TEMPORARILY);
-					response.setHeader("Location", site);
-				}%>
-
-				<%
-					if (request.getPathInfo() == null
-							|| request.getPathInfo().length() == 0) {
-						redirectHomeUrl(response);
-					} else {
-						String userId = request.getPathInfo().replaceAll("/", "");
-						DataServiceImpl service = new DataServiceImpl();
-						User user = service.findUser(userId);
-						if (user == null) {
-							redirectHomeUrl(response);
-						} else {
-				%>
-				<%
-					java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d");
-				%>
 				<table cellspacing="10">
 					<tr>
 						<td valign="top" style="min-width: 240px;">
 							<div class="profile_form" style=" min-height: 250px;">
-								<img src="https://graph.facebook.com/<%=userId%>/picture?type=normal" style="width: 50%; height: auto; background: #fff; border: 1px solid #ccc; display: block; margin: auto;" />
+								<img src="https://graph.facebook.com/<%=user.getId()%>/picture?type=normal" style="width: 50%; height: auto; background: #fff; border: 1px solid #ccc; display: block; margin: auto;" />
 								<div class="font_4" style="margin-top: 20px; text-align: center; font-size: 17px;"><%=user.getUserName()%></div>
 								<table style="width: 100%;" cellspacing='5'>
 									<tr>
@@ -132,7 +137,7 @@
 										<% if(user.getJoinDate() != null) { %>
 										<td><%=df.format(user.getJoinDate())%></td>
 										<%;} else { %>
-										<td>from Stone Age</td>
+										<td>Stone Age</td>
 										<%;} %>
 									</tr>
 									<tr>
@@ -140,6 +145,7 @@
 										<td><%=user.getMyTrips().size()%></td>
 									</tr>
 								</table>
+								<div style="margin-top: 10px; margin-bottom:5px; text-align: center; font-size: 14px; padding: 6px 15px;" class="greenbutton" onclick="logoutfacebook()">Log Out</span>
 							</div>
 						</td>
 						<td valign="top" style="width: 100%;">
@@ -147,10 +153,6 @@
 						</td>
 					</tr>
 				</table>
-				<%
-					}
-					}
-				%>
 				<!-- End of jsp content -->
 			</div>
 		</div>

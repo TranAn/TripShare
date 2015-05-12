@@ -6,11 +6,15 @@ import com.born2go.client.TripShare;
 import com.born2go.shared.Trip;
 import com.born2go.shared.User;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -21,22 +25,69 @@ public class Profile_ProfileView extends Composite {
 	
 	@UiField
 	VerticalPanel verDetails;
+	@UiField
+	ListBox lstbViewOption;
+	@UiField
+	Label lbNoJourneyFound;
 
 	interface ProfileViewUiBinder extends UiBinder<Widget, Profile_ProfileView> {
 	}
+	
+	private String profileId;
+	private List<Trip> listTrips;
 
 	public Profile_ProfileView() {
 		initWidget(uiBinder.createAndBindUi(this));
+		lstbViewOption.addItem("All");
+		lstbViewOption.addItem("Owned Trip");
+		lstbViewOption.addItem("Joined Trip");
+		
+		lstbViewOption.addChangeHandler(new ChangeHandler() {
+			@Override
+			public void onChange(ChangeEvent event) {
+				verDetails.clear();
+				int countTripDisplay = 0;
+				if(lstbViewOption.getSelectedIndex() == 0) {
+					for(int i = listTrips.size()-1; i >=0; i--) {
+						Profile_JourneyInfoView journeyInfoView = new Profile_JourneyInfoView("/resources/Travel tips2_resize.jpg", listTrips.get(i));
+						verDetails.add(journeyInfoView);
+						countTripDisplay++;
+					}
+				} 
+				else if (lstbViewOption.getSelectedIndex() == 1) {
+					for(int i = listTrips.size()-1; i >=0; i--) {
+						if(listTrips.get(i).getPoster().getUserID().toString().equals(profileId)) {
+							Profile_JourneyInfoView journeyInfoView = new Profile_JourneyInfoView("/resources/Travel tips2_resize.jpg", listTrips.get(i));
+							verDetails.add(journeyInfoView);
+							countTripDisplay++;
+						}
+					}
+				}
+				else if (lstbViewOption.getSelectedIndex() == 2) {
+					for(int i = listTrips.size()-1; i >=0; i--) {
+						if(!listTrips.get(i).getPoster().getUserID().toString().equals(profileId)) {
+							Profile_JourneyInfoView journeyInfoView = new Profile_JourneyInfoView("/resources/Travel tips2_resize.jpg", listTrips.get(i));
+							verDetails.add(journeyInfoView);
+							countTripDisplay++;
+						}
+					}
+				}
+				if(countTripDisplay == 0) {
+					verDetails.add(lbNoJourneyFound);
+				}
+			}
+		});
 	}
 	
 	void getJourneysOfUser(User user) {
 		TripShare.dataService.listOfTrip(user.getMyTrips(), new AsyncCallback<List<Trip>>() {
 			@Override
 			public void onSuccess(List<Trip> result) {
+				listTrips = result;
 				if(!result.isEmpty())
-					verDetails.clear();
-				for(Trip trip: result) {
-					Profile_JourneyInfoView journeyInfoView = new Profile_JourneyInfoView("/resources/Travel tips2_resize.jpg", trip);
+					verDetails.remove(lbNoJourneyFound);
+				for(int i = result.size()-1; i >=0; i--) {
+					Profile_JourneyInfoView journeyInfoView = new Profile_JourneyInfoView("/resources/Travel tips2_resize.jpg", result.get(i));
 					verDetails.add(journeyInfoView);
 				}
 			}
@@ -48,6 +99,7 @@ public class Profile_ProfileView extends Composite {
 	}
 
 	public void showProfileView(final String userID) {
+		profileId = userID;
 		TripShare.dataService.findUser(userID, new AsyncCallback<User>() {
 			@Override
 			public void onSuccess(User result) {
@@ -59,44 +111,6 @@ public class Profile_ProfileView extends Composite {
 				// TODO Auto-generated method stub
 			}
 		});
-//		userID = "userId";
-//		TripShare.dataService.findTrip_Picture(userID,
-//				new AsyncCallback<Map<String, Trip>>() {
-//
-//					@Override
-//					public void onSuccess(Map<String, Trip> result) {
-//						for (Map.Entry<String, Trip> entry : result.entrySet()) {
-//							String urlPicture = entry.getKey();
-//							if (urlPicture.contains(emtryPicture))
-//								urlPicture = "/resources/1427111517_palm_tree.png";
-//							Trip trip = entry.getValue();
-//							journeyInfoView = new Profile_JourneyInfoView(urlPicture,
-//									trip);
-//							verDetails.add(journeyInfoView);
-//
-//						}
-//					}
-//
-//					@Override
-//					public void onFailure(Throwable caught) {
-//
-//					}
-//				});
-//		TripShare.dataService.findUser(userID, new AsyncCallback<User>() {	
-//			@Override
-//			public void onSuccess(User result) {
-//				if(result == null)
-//					Window.Location.assign("/");
-//				else {
-//					iconProfile.setUrl("https://graph.facebook.com/"+userID+"/picture?type=normal");
-//					getFacebookUserInfo(userID);
-//				}
-//			}
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				// TODO Auto-generated method stub
-//			}
-//		});
 	}
 
 }

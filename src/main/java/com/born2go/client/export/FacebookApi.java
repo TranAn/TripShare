@@ -5,6 +5,7 @@ import org.timepedia.exporter.client.ExportPackage;
 import org.timepedia.exporter.client.Exportable;
 
 import com.born2go.client.TripShare;
+import com.born2go.client.widgets.LoginDialog;
 import com.born2go.shared.User;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -29,7 +30,14 @@ public class FacebookApi implements Exportable {
 		});
 	}
 	
-	public void getAccessToken(String accessToken, String userId) throws Exception {
+	public void logIn() {
+		if(TripShare.access_token == null || TripShare.access_token.isEmpty())
+			LoginDialog.LoginFacebook();
+		/*else
+			Window.Location.assign("/profile/"+ TripShare.user_id);*/
+	}
+	
+	public void getAccessToken(String accessToken, String userId) {
 		TripShare.getAccessToken(accessToken, userId);
 	}
 

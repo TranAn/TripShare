@@ -42,7 +42,11 @@ public class Profile_JourneyInfoView extends Composite {
 	@UiField
 	VerticalPanel verLocate;
 	@UiField
-	Label btnViewDetail;
+	Anchor btnViewDetail;
+	@UiField
+	Image posterPicture;
+	@UiField
+	Anchor posterName;
 
 	public Profile_JourneyInfoView(String urlPicture, Trip trip) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -50,6 +54,9 @@ public class Profile_JourneyInfoView extends Composite {
 		lbTitle.setText(trip.getName());
 		lbTitle.setHref("/journey/"+trip.getId());
 		lbPoster.setText(TripShare.dateFormat(trip.getCreateDate()));
+		posterPicture.setUrl("https://graph.facebook.com/"+ trip.getPoster().getUserID().toString()+ "/picture?width=25&height=25");
+		posterName.setText(trip.getPoster().getUserName());
+		posterName.setHref("/profile/"+ trip.getPoster().getUserID().toString());
 		// set des for trip
 		setLocate(trip);
 		String content = trip.getDescription();
@@ -63,7 +70,7 @@ public class Profile_JourneyInfoView extends Composite {
 		btnViewDetail.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				btnViewDetail.setVisible(false);
+//				btnViewDetail.setVisible(false);
 				htmlContent.setVisible(true);
 			}
 		});
@@ -78,8 +85,10 @@ public class Profile_JourneyInfoView extends Composite {
 			TripShare.dataService.findPicture(displayPhotoId, new AsyncCallback<Picture>() {
 				@Override
 				public void onSuccess(Picture result) {
-					if(result != null)
+					if(result != null) {
 						picture.setUrl(result.getServeUrl());
+						picture.addStyleName("JourneyInfoView-Obj15");
+					}
 				}
 				@Override
 				public void onFailure(Throwable caught) {

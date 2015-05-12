@@ -191,6 +191,7 @@ public class Create_CreateTrip extends Composite {
 		
 		txbName.getElement().setPropertyString("placeholder", "Name of your journey");
 		txbDescription.getElement().setPropertyString("placeholder", "Let's talk about the plan for your trip!");
+		txbDescription.getElement().setAttribute("spellcheck", "false");
 		txbDeparture.setValue(new Date());
 		btnAddFriend.getElement().setAttribute("id", "btnAddFriend");
 		

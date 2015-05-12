@@ -15,7 +15,6 @@
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));*/
 
-  
 function checkUserStatus() {
 	FB.getLoginStatus(function(response) {
 		if (response.status === 'connected') {
@@ -44,7 +43,9 @@ function saveFacebookCookie(accessToken) {
 }
 
 function loginFacebook() {
-	FB.login(function(response) {
+	 var facebookApi = new GWTExport.FacebookApi();
+	 facebookApi.logIn();
+	/*FB.login(function(response) {
 		if (response.authResponse) {
 			var userId = response.authResponse.userID;
 			var accessToken = response.authResponse.accessToken;
@@ -60,19 +61,18 @@ function loginFacebook() {
 			 var facebookApi = new GWTExport.FacebookApi();
 			 facebookApi.getAccessToken("","");
 		}
-	}, {scope: 'public_profile,user_friends'});
+	}, {scope: 'public_profile,user_friends'});*/
 }
 
 function logoutfacebook() {
 	FB.logout(function(response) {
-		/*document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC";*/
+		window.location = "/";
 	});
 }
 
 function setUserInfo(userId, userName) {
 	var menuProfile = document.getElementById('menubutton');
 	menuProfile.innerHTML = "Profile";
-	menuProfile.removeEventListener("click", loginFacebook);
 	var profileHref =  "/profile/"+ userId;
 	menuProfile.setAttribute('href', profileHref);
 }

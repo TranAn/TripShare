@@ -25,7 +25,8 @@ public class Path implements Serializable {
 	Date createDate;
 	Locate locate;
 	String description;
-	Integer featuredPhoto;
+	String shortDescription;
+	String avatar;
 	
 	public Path() {
 		super();
@@ -94,13 +95,21 @@ public class Path implements Serializable {
 	public void setTripId(Long tripId) {
 		this.tripId = tripId;
 	}
-	
-	public Integer getFeaturedPhoto() {
-		return featuredPhoto;
+
+	public String getAvatar() {
+		return avatar;
 	}
 
-	public void setFeaturedPhoto(Integer featuredPhoto) {
-		this.featuredPhoto = featuredPhoto;
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public String getShortDescription() {
+		return shortDescription;
+	}
+
+	public void setShortDescription(String shortDescription) {
+		this.shortDescription = shortDescription;
 	}
 
 	@Override

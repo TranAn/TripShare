@@ -132,6 +132,7 @@
 	.PathCreate-Obj16 {
 		background-color: #D05944;
 		color: white !important;
+		font-weight: bold;
 	}
 	
 	.PathCreate-Obj17 {
@@ -154,7 +155,7 @@
 				<td style="border-right: 1px dotted silver; padding-left: 20px;"></td>
 				<!--  -->
 				<td style="padding-top: 5px;">
-				<g:Label text="Title:" width="55px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>
+				<g:Label text="Title (*):" ui:field="lbTitle" width="55px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>
 				</td>
 				<td style="padding-left: 5px;">
 				<g:TextBox width="" ui:field="txbTitle" height=""/>

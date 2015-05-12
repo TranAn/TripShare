@@ -174,9 +174,10 @@
 				<td valign="top" style="width:100%">
 					<div class="font-blackTitleLarge" style="font-size: 30px;font-family: museo-w01-700,serif; color:rgb(56, 119, 127)"><%=trip.getName()%></div>
 					<div style="display: inline-flex; display: -webkit-inline-box; display: -webkit-inline-flex; display: -ms-inline-flexbox; -webkit-align-self: auto;">
-						<div class="font-blackTitleLarge" style="margin-bottom: 20px;margin-right: 4px;font-size: 15px;font-family: museo-w01-700,serif; color:silver; font-style: italic;">Create by</div>
+						<div class="font-blackTitleLarge" style="margin-top: 12px;margin-bottom: 20px;margin-right: 4px;font-size: 15px;font-family: museo-w01-700,serif; color:gray; font-style: italic;">Create by:</div>
 						<%if(trip.getPoster() != null) {%>
-						<a href="/profile/<%=trip.getPoster().getUserID()%>" class="font-blackTitleLarge link" style="margin-bottom: 20px;font-size: 15px;font-family: museo-w01-700,serif; color:silver; font-style: italic;"><%=(trip.getPoster()!=null?trip.getPoster().getUserName():"Tester")%></a>
+						<a href="/profile/<%=trip.getPoster().getUserID()%>" class="font-blackTitleLarge link" style="margin-top: 12px;;margin-bottom: 20px;font-size: 15px;font-family: museo-w01-700,serif; color: cornflowerblue; font-style: italic;"><%=(trip.getPoster()!=null?trip.getPoster().getUserName():"Tester")%></a>
+						<img style="border: 1px silver solid;border-radius: 20px;overflow: hidden;margin-left: 8px;margin-bottom: 15px;" src="https://graph.facebook.com/<%=trip.getPoster().getUserID()%>/picture?width=25&height=25" />
 						<%} %>
 					</div>
 					<div class="font-blackTitleLarge">Itinerary:</div>

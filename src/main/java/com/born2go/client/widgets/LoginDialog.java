@@ -60,8 +60,7 @@ public class LoginDialog extends DialogBox {
 			@Override
 			public void onSuccess(Void result) {
 				TripShare.loadBox.hide();
-				TripShare.access_token = accessToken;
-				TripShare.user_id = userId;
+				TripShare.getAccessToken(accessToken, userId);
 			}
 			
 			@Override
@@ -78,6 +77,8 @@ public class LoginDialog extends DialogBox {
 				var userId = response.authResponse.userID;
 				var accessToken = response.authResponse.accessToken;
 				$wnd.document.getElementById('menubutton').innerHTML = "Profile";
+				var profileHref =  "/profile/"+ userId;
+				$wnd.document.getElementById('menubutton').setAttribute('href', profileHref);
 			    // Call instance method saveNewFacebookUser() on this
 				$wnd.FB.api('/me', function(response) {
 					@com.born2go.client.widgets.LoginDialog::saveNewFacebookUser(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)(accessToken,userId,response.name);

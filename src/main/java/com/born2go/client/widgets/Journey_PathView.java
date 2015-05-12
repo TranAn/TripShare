@@ -81,6 +81,7 @@ public class Journey_PathView extends Composite {
 	private PhotoUpload photoUpload = new PhotoUpload();
 	private Trip theTrip;
 	private boolean isPoster = false;
+	private boolean isAdmin = false;
 	private boolean isOpenPathCreate = false;
 
 	public Journey_PathView() {
@@ -143,6 +144,7 @@ public class Journey_PathView extends Composite {
 		pathCreate.setListener(new Journey_PathCreate.Listener() {
 			@Override
 			public void onClose() {
+				btnPost.removeStyleName("PathCreate-Obj16");
 				btnUpload.setVisible(true);
 				isOpenPathCreate = false;
 				if(dummyNode.getOffsetHeight() == 395)
@@ -157,17 +159,17 @@ public class Journey_PathView extends Composite {
 						TripShare.loadBox.hide();
 						if(listPaths.contains(result)) {
 							Journey_PathDetail existPathDetail = listPathsDetail.get(listPaths.size() - listPaths.indexOf(result) - 1);
-							String title = (result.getTitle())+ " - " + TripShare.dateFormat(result.getCreateDate());
+							String title = (result.getTitle());
 							existPathDetail.updatePath(title, result.getDescription());
 							getPathPhoto(result, existPathDetail);
 							listPaths.set(listPaths.indexOf(result), result);
 							pathCreate.getListPaths(listPaths);
 						} else {
-							String title = (result.getTitle())+ " - " + TripShare.dateFormat(result.getCreateDate());
+							String title = (result.getTitle());
 							Poster poster = new Poster();
 							if(result.getPoster() != null)
 								poster = result.getPoster();
-							Journey_PathDetail pathDetail = new Journey_PathDetail(result.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), result.getDescription());
+							Journey_PathDetail pathDetail = new Journey_PathDetail(result, result.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), result.getDescription());
 							pathDetail.addPostControl();
 							pathDetail.setListener(new Journey_PathDetail.Listener() {
 								@Override
@@ -201,10 +203,15 @@ public class Journey_PathView extends Composite {
 	}
 	
 	public void checkPermission() {
-		if(TripShare.user_id == null || theTrip == null)
+		if(TripShare.user_id == null || theTrip == null) {
+			isAdmin = false;
 			isPoster = false;
+		}
 		else {
+			Poster p = new Poster();
+			p.setUserID(Long.valueOf(TripShare.user_id));
 			if(theTrip.getPoster().getUserID().toString().equals(TripShare.user_id)) {
+				isAdmin = true;
 				isPoster = true;
 				btnEdit.removeStyleName("PathView-Obj14");
 				btnPost.removeStyleName("PathView-Obj14");
@@ -212,8 +219,20 @@ public class Journey_PathView extends Composite {
 				for(Journey_PathDetail pd: listPathsDetail)
 					pd.addPostControl();
 			}
-			else
+			else if(theTrip.getCompanion().contains(p)) {
+				isPoster = true;
+//				btnEdit.removeStyleName("PathView-Obj14");
+				btnPost.removeStyleName("PathView-Obj14");
+				btnUpload.removeStyleName("PathView-Obj14");
+				for(Journey_PathDetail pd: listPathsDetail) {
+					if(pd.getPath().getPoster().getUserID().toString().equals(TripShare.user_id))
+						pd.addPostControl();
+				}
+			}
+			else {
+				isAdmin = false;
 				isPoster = false;
+			}
 		}
 	}
 	
@@ -230,8 +249,9 @@ public class Journey_PathView extends Composite {
 					theTrip = result;
 					TripShare.tripMap.drawTheJourney(result.getJourney().getDirections(), result.getJourney().getLocates());
 					CompanionTable companionTable = new CompanionTable();
-					companionTable.setTrip(theTrip);
-					RootPanel.get("companion_table").add(companionTable);
+					companionTable.setTrip(theTrip.getCompanion());
+					if(RootPanel.get("companion_table") != null)
+						RootPanel.get("companion_table").add(companionTable);
 					getThePaths(result.getDestination());
 					checkPermission();
 				}
@@ -254,13 +274,13 @@ public class Journey_PathView extends Composite {
 						final Path path = result.get(i);
 						String title = "";
 						if(path.getTitle() != null)
-							title = path.getTitle()+ " - " + TripShare.dateFormat(path.getCreateDate()); 
+							title = path.getTitle(); 
 						else if(path.getLocate() != null)
-							title = path.getLocate().getAddressName()+ " - " + TripShare.dateFormat(path.getCreateDate());
+							title = path.getLocate().getAddressName();
 						Poster poster = new Poster();
 						if(path.getPoster() != null)
 							poster = path.getPoster();
-						Journey_PathDetail pathDetail = new Journey_PathDetail(path.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), path.getDescription());
+						Journey_PathDetail pathDetail = new Journey_PathDetail(path, path.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), path.getDescription());
 						pathDetail.setListener(new Journey_PathDetail.Listener() {
 							@Override
 							public void onDeletePost(Journey_PathDetail pathDetail) {
@@ -272,7 +292,8 @@ public class Journey_PathView extends Composite {
 						});
 						htmlPathTable.add(pathDetail);
 						getPathPhoto(path, pathDetail);
-						if(theTrip.getPoster().getUserID().toString().equals(TripShare.user_id)) 
+						if(theTrip.getPoster().getUserID().toString().equals(TripShare.user_id)
+								|| path.getPoster().getUserID().toString().equals(TripShare.user_id)) 
 							pathDetail.addPostControl();
 						//---
 						listPathsDetail.add(pathDetail);
@@ -288,31 +309,30 @@ public class Journey_PathView extends Composite {
 	void getPathPhoto(Path path, final Journey_PathDetail pathDetail) {
 		if(path.getGallery().isEmpty()) {}
 		else {
-			Long displayPhotoId = null;
-			if(path.getFeaturedPhoto() != null)
-				displayPhotoId = path.getGallery().get(path.getFeaturedPhoto());
-			else
-				if(path.getGallery() != null)
-					displayPhotoId = path.getGallery().get(0);
-			if(displayPhotoId != null) {
-				TripShare.dataService.findPicture(displayPhotoId, new AsyncCallback<Picture>() {
-					@Override
-					public void onSuccess(Picture result) {
-						if(result != null)
-							pathDetail.setDisplayPhoto(result.getServeUrl());
-					}				
-					@Override
-					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
-					}
-				});
+			if(path.getAvatar() != null)
+				pathDetail.setDisplayPhoto(path.getAvatar());
+			else {
+				Long displayPhotoId = path.getGallery().get(0);
+				if(displayPhotoId != null) {
+					TripShare.dataService.findPicture(displayPhotoId, new AsyncCallback<Picture>() {
+						@Override
+						public void onSuccess(Picture result) {
+							if(result != null)
+								pathDetail.setDisplayPhoto(result.getServeUrl());
+						}				
+						@Override
+						public void onFailure(Throwable caught) {
+							// TODO Auto-generated method stub
+						}
+					});
+				}
 			}
 		}
 	}
 
 	@UiHandler("btnEdit")
 	void onBtnEditClick(ClickEvent event) {
-		if(isPoster) {
+		if(isAdmin) {
 			Window.scrollTo(0, 0);
 			htmlPathToolbar.addStyleName("PathView-Obj13");
 			htmlPathTable.setVisible(false);
@@ -363,6 +383,7 @@ public class Journey_PathView extends Composite {
 	@UiHandler("btnPost")
 	void onBtnPostClick(ClickEvent event) {
 		if(isPoster) {
+			btnPost.addStyleName("PathCreate-Obj16");
 			pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3Open");
 			btnUpload.setVisible(false);
 			pathCreate.setTripId(tripId);

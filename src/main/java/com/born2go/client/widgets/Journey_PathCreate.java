@@ -56,6 +56,8 @@ public class Journey_PathCreate extends Composite {
 	@UiField HTMLPanel editTextBox;
 	@UiField ListBox lbPostTo;
 	@UiField Anchor btnRichTextEdit;
+	@UiField Anchor btnFindYourLocation;
+	@UiField Label lbTitle;
 	
 	Long tripId;
 	Locate locate;
@@ -191,6 +193,7 @@ public class Journey_PathCreate extends Composite {
 		lbCountPhotos.getElement().setAttribute("id", "lbCountPhotos");
 		
 		txbDescription.getElement().setPropertyString("placeholder", "Write your feeling now, or about the story of your best memory on the journey!");
+		txbDescription.getElement().setAttribute("spellcheck", "false");
 		
 		DOM.setElementProperty(pathPhotoUpload.getElement(), "multiple", "multiple"); 
 		
@@ -203,6 +206,8 @@ public class Journey_PathCreate extends Composite {
 				cancelPost();
 			}
 		});
+		
+		btnFindYourLocation.addStyleName("PathView-Obj14");
 		
 //		final Autocomplete autocomplete = Autocomplete.create(
 //				(InputElement) (Element) txbTitle.getElement());
@@ -345,65 +350,67 @@ public class Journey_PathCreate extends Composite {
 	
 	@UiHandler("btnPost")
 	void onBtnPostClick(ClickEvent event) {
-		TripShare.loadBox.center();
-		if(updatePath == null) {
-			Path path = new Path();
-			path.setTitle(txbTitle.getText());
-//			path.setLocate(locate);
-			path.setCreateDate(txbTimeline.getValue());
-			if(!isRichTextEdit) {
-				if(txbRichDescription != null) {
-					txbRichDescription.setData(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
+		if(VerifiedField()) {
+			TripShare.loadBox.center();
+			if(updatePath == null) {
+				Path path = new Path();
+				path.setTitle(txbTitle.getText());
+	//			path.setLocate(locate);
+				path.setCreateDate(txbTimeline.getValue());
+				if(!isRichTextEdit) {
+					if(txbRichDescription != null) {
+						txbRichDescription.setData(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
+						path.setDescription(txbRichDescription.getData());
+					} else 
+						path.setDescription("<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
+				}
+				else
 					path.setDescription(txbRichDescription.getData());
-				} else 
-					path.setDescription("<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
-			}
-			else
-				path.setDescription(txbRichDescription.getData());
-			TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
-				@Override
-				public void onSuccess(Path result) {
-					if(result != null)
-						uploadPhoto(tripId, result.getId());
-					else {
+				TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
+					@Override
+					public void onSuccess(Path result) {
+						if(result != null)
+							uploadPhoto(tripId, result.getId());
+						else {
+							TripShare.loadBox.hide();
+							Window.alert(TripShare.ERROR_MESSAGE);
+						}		
+					}
+					@Override
+					public void onFailure(Throwable caught) {
 						TripShare.loadBox.hide();
 						Window.alert(TripShare.ERROR_MESSAGE);
-					}		
+					}
+				});
+			} 
+			else {
+				updatePath.setTitle(txbTitle.getText());
+				if(!isRichTextEdit) {
+					if(txbRichDescription != null) {
+						txbRichDescription.setData(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
+						updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbRichDescription.getData()+ "</p>");
+					} else 
+						updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
 				}
-				@Override
-				public void onFailure(Throwable caught) {
-					TripShare.loadBox.hide();
-					Window.alert(TripShare.ERROR_MESSAGE);
-				}
-			});
-		} 
-		else {
-			updatePath.setTitle(txbTitle.getText());
-			if(!isRichTextEdit) {
-				if(txbRichDescription != null) {
-					txbRichDescription.setData(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
+				else
 					updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbRichDescription.getData()+ "</p>");
-				} else 
-					updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
-			}
-			else
-				updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbRichDescription.getData()+ "</p>");
-			TripShare.dataService.updatePart(updatePath, new AsyncCallback<Path>() {
-				@Override
-				public void onSuccess(Path result) {
-					if(result != null)
-						uploadPhoto(tripId, result.getId());
-					else {
+				TripShare.dataService.updatePart(updatePath, new AsyncCallback<Path>() {
+					@Override
+					public void onSuccess(Path result) {
+						if(result != null)
+							uploadPhoto(tripId, result.getId());
+						else {
+							TripShare.loadBox.hide();
+							Window.alert(TripShare.ERROR_MESSAGE);
+						}	
+					}
+					@Override
+					public void onFailure(Throwable caught) {
 						TripShare.loadBox.hide();
 						Window.alert(TripShare.ERROR_MESSAGE);
-					}	
-				}
-				@Override
-				public void onFailure(Throwable caught) {
-					TripShare.loadBox.hide();
-					Window.alert(TripShare.ERROR_MESSAGE);
-				}
-			});
+					}
+				});
+			}
 		}
 	}
 	
@@ -412,6 +419,7 @@ public class Journey_PathCreate extends Composite {
 		lbPostTo.setSelectedIndex(0);
 		updatePath = null;
 		txbTitle.setText("");
+		lbTitle.setStyleName("font-blackTitleNormal");
 		txbTimeline.setEnabled(true);
 		txbTitle.setText("");
 		txbTimeline.getElement().setInnerHTML("");
@@ -498,6 +506,16 @@ public class Journey_PathCreate extends Composite {
 			txbRichDescription.setData(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
 			isRichTextEdit = !isRichTextEdit;
 		}
+	}
+	
+	boolean VerifiedField() {
+		boolean isFieldComplete = true;
+		if(txbTitle.getText().isEmpty()) {
+			lbTitle.setStyleName("font-redTitleNormal");
+			txbTitle.setFocus(true);
+			isFieldComplete = false;
+		} 
+		return isFieldComplete;
 	}
 	
 }

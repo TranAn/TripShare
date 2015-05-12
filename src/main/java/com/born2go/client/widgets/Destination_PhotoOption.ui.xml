@@ -44,7 +44,7 @@
 		<g:HTMLPanel height="80px" styleName="{style.PhotoOption_Obj2}">
 			<g:HTMLPanel styleName="{style.PhotoOption_Obj3}">
 				<g:Anchor ui:field="btnView" styleName="greenbutton {style.PhotoOption_Obj4}">View</g:Anchor>
-				<g:Anchor ui:field="btnSetFeaturedPhoto" styleName="greenbutton {style.PhotoOption_Obj4}">Set Featured Photo</g:Anchor>
+				<g:Anchor ui:field="btnSetFeaturedPhoto" styleName="greenbutton {style.PhotoOption_Obj4}">Set Avatar</g:Anchor>
 				<g:Anchor ui:field="btnDelete" styleName="greenbutton {style.PhotoOption_Obj4}">Delete</g:Anchor>
 			</g:HTMLPanel>
 		</g:HTMLPanel>

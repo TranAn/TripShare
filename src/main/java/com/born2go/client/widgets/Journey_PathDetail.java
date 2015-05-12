@@ -1,6 +1,7 @@
 package com.born2go.client.widgets;
 
 import com.born2go.client.TripShare;
+import com.born2go.shared.Path;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -13,6 +14,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Journey_PathDetail extends Composite {
@@ -29,10 +31,15 @@ public class Journey_PathDetail extends Composite {
 	@UiField ParagraphElement htmlContent;
 	@UiField Anchor btnDeletePost;
 	@UiField HTMLPanel postControl;
-	
+	@UiField Image imgPoster;
+	@UiField Label lbDatePost;
+	@UiField Anchor btnExpandACollapse;
+
+	Path path;
 	Long pathId;
 	
 	boolean isAddDeletePost = false;
+	boolean isViewDetail = false;
 	
 	public interface Listener {
 		void onDeletePost(Journey_PathDetail pathDetail);
@@ -44,11 +51,23 @@ public class Journey_PathDetail extends Composite {
 		this.listener = listener;
 	}
 	
-	public Journey_PathDetail(final Long pathId, String pictureUrl, String title, String postBy, String posterId, String content) {
-		initWidget(uiBinder.createAndBindUi(this));
+	public Journey_PathDetail(final Path path, final Long pathId, String pictureUrl, String title, String postBy, String posterId, String content) {
 		
+		initWidget(uiBinder.createAndBindUi(this));
 		postControl.remove(btnDeletePost);
 		
+//		Event.setEventListener(btnExpandACollapse.getElement(), new EventListener() {
+//	            @Override
+//	            public void onBrowserEvent(Event event) {
+//	                String string = event.getType();
+//	                if(string.equalsIgnoreCase("click")) {
+//	                	
+//	                }
+//	            }
+//	        });
+//	    Event.sinkEvents(btnExpandACollapse.getElement(), Event.ONCLICK);
+		
+		this.path = path;
 		this.pathId = pathId;
 		picture.setUrl(pictureUrl);
 		lbTitle.setText(title);
@@ -57,7 +76,9 @@ public class Journey_PathDetail extends Composite {
 		lbTitle.setHref("/destination/"+ id);
 		lbPoster.setText(postBy);
 		lbPoster.setHref("/profile/"+ posterId);
-		htmlContent.setInnerHTML(truncateText(content));
+		imgPoster.setUrl("https://graph.facebook.com/"+ posterId+ "/picture?width=25&height=25");
+		lbDatePost.setText(TripShare.dateFormat(path.getCreateDate()));
+		htmlContent.setInnerHTML(truncateText(path.getShortDescription().replaceAll("br2n", "<br/>")));
 		
 		btnDeletePost.addClickHandler(new ClickHandler() {
 			@Override
@@ -79,13 +100,33 @@ public class Journey_PathDetail extends Composite {
 				}
 			}
 		});
+		
+		btnExpandACollapse.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if(!isViewDetail) {
+					picture.setVisible(false);
+					htmlContent.setInnerHTML(path.getDescription());
+					btnExpandACollapse.setTitle("Collapse");
+					btnExpandACollapse.getElement().setInnerHTML("<i class=\"fa fa-compress fa-2x\"></i>");
+				}
+				else {
+					picture.setVisible(true);
+					htmlContent.setInnerHTML(truncateText(path.getShortDescription().replaceAll("br2n", "<br/>")));
+					btnExpandACollapse.setTitle("View detail");
+					btnExpandACollapse.getElement().setInnerHTML("<i class=\"fa fa-eye fa-2x\"></i>");
+					Window.scrollTo(0, picture.getAbsoluteTop());
+				}
+				isViewDetail = !isViewDetail;
+			}
+		});
 	}
 	
 	public static native String truncateText(String content) /*-{
-		if(content.trim().length > 901) {
+		if(content.trim().length > 701) {
 			var shortText = content    // get the text within the div
 			    .trim()    // remove leading and trailing spaces
-			    .substring(0, 900)    // get first 600 characters
+			    .substring(0, 700)    // get first 600 characters
 			    .split(" ") // separate characters into an array of words
 			    .slice(0, -1)    // remove the last full or partial word
 			    .join(" ") + "..."; // combine into a single string and append "..."
@@ -98,6 +139,7 @@ public class Journey_PathDetail extends Composite {
 		if(!isAddDeletePost)
 			postControl.add(btnDeletePost);
 		isAddDeletePost = true;
+		btnExpandACollapse.addStyleName("PathDetail-Obj13");
 	}
 	
 	public void setDisplayPhoto(String src) {
@@ -112,6 +154,10 @@ public class Journey_PathDetail extends Composite {
 	public void updatePath(String title, String content) {
 		lbTitle.setText(title);
 		htmlContent.setInnerHTML(truncateText(content));
+	}
+	
+	public Path getPath() {
+		return path;
 	}
 
 }

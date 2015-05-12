@@ -55,7 +55,8 @@ public class UploadService extends HttpServlet implements Servlet {
 			    	if(req.getParameter("pathId") != null && !req.getParameter("pathId").isEmpty())
 			    		file.setOnPath(Long.valueOf(req.getParameter("pathId").replaceAll(",", "")));
 			    	file.setKey(key.getKeyString());
-			    	file.setServeUrl(imagesService.getServingUrl(ServingUrlOptions.Builder.withBlobKey(key)) + "=s1600");
+			    	String serveUrl = imagesService.getServingUrl(ServingUrlOptions.Builder.withBlobKey(key));
+			    	file.setServeUrl(serveUrl);
 					Key<Picture> keyPicture = ofy().save().entity(file).now();
 					Picture exportPicture = ofy().load().key(keyPicture).now();
 					//save id on trip or path
@@ -72,6 +73,8 @@ public class UploadService extends HttpServlet implements Servlet {
 						Path path = ofy().load().type(Path.class).id(pathid).now();
 						if(path != null) {
 							path.getGallery().add(exportPicture.getId());
+							if(path.getAvatar() == null)
+								path.setAvatar(serveUrl);
 							ofy().save().entity(path);
 						}
 					}

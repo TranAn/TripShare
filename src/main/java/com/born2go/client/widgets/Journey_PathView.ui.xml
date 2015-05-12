@@ -28,8 +28,7 @@
 	
 	.PathView-Obj4 {
 		position: fixed;
-		width: 75.8%;
- 		max-width: 1024px;
+		width: 1024px;
 		top: 0px;
 		border: 2px solid #a1a1a1;
 		border-top: none;

@@ -336,7 +336,7 @@ public class Destination_EditToolBar extends Composite {
 								public void onSetFeaturedPhotoClick() {
 									option.startLoading();
 									final int index = listPicture.size() - 1 - urls.indexOf(image.getUrl());
-									path.setFeaturedPhoto(index);
+									path.setAvatar(image.getUrl());
 									TripShare.dataService.updatePart(path, new AsyncCallback<Path>() {
 										@Override
 										public void onSuccess(Path result) {
@@ -416,7 +416,7 @@ public class Destination_EditToolBar extends Composite {
 		var viewer = new $wnd.PhotoViewer();
 		var URIs = photosUri.split(";");
 		for(var i = 0; i < URIs.length-1; i++) {
-			viewer.add(URIs[i]);
+			viewer.add(URIs[i]+"=s1600");
 		}
 		viewer.show(index);
 	}-*/;

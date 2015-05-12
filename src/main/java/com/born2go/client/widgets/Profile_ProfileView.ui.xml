@@ -3,22 +3,47 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
 	.ProfileView-Obj1 {
-		
+		border-bottom: 2px silver dotted;
 	}
 	
 	.ProfileView-Obj2 {
 		font-family: "Times New Roman", Times, serif;
 		font-size: 20px;
 		font-weight: bold;
-		padding-top: 10px;
+		padding-top: 20px;
 		padding-bottom: 10px;
-		border-bottom: 2px silver dotted;
+	}
+	
+	.ProfileView-Obj3 {
+		float: left;
+		margin-top: 8px;
+		margin-right: 10px;
+	}
+	
+	.ProfileView-Obj4 {
+		color: gray;
+		float: left;
+  		font-size: 20px;
+  		margin-top: 5px;
+	}
+	
+	.ProfileView-Obj5 {
+		float: right;
 	}
 	</ui:style>
 
 	<g:HTMLPanel>
+		<g:HTMLPanel width="100%" height="50px" styleName="{style.ProfileView-Obj1}">
+			<g:Label styleName="font-blackTitleNormal {style.ProfileView-Obj4}">Journeys Info</g:Label>
+			<g:HTMLPanel styleName="{style.ProfileView-Obj5}">
+				<g:Label styleName="font-blackTitleNormal {style.ProfileView-Obj3}">View by:</g:Label>
+				<g:ListBox width="150px" height="30px" ui:field="lstbViewOption"></g:ListBox>
+			</g:HTMLPanel>
+		</g:HTMLPanel>
+			
 		<g:VerticalPanel width="100%" ui:field="verDetails">
-			<g:Label text="No journey found!" styleName="{style.ProfileView-Obj2}" />
+			
+			<g:Label ui:field="lbNoJourneyFound"  text="No journey found!" styleName="{style.ProfileView-Obj2}" />
 		</g:VerticalPanel>
 	</g:HTMLPanel>
 
