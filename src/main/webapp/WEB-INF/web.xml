@@ -83,6 +83,16 @@
 		<url-pattern>/profile/*</url-pattern>
 	</servlet-mapping>
 	
+	<!-- Mobile JSP Servlet -->
+	<servlet>
+		<servlet-name>HomeMobileWeb</servlet-name>
+		<jsp-file>/mhome/mhome.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HomeMobileWeb</servlet-name>
+		<url-pattern>/mhome/*</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>MobileWeb</servlet-name>
 		<jsp-file>/mtrip/mTripView.jsp</jsp-file>
@@ -90,6 +100,24 @@
 	<servlet-mapping>
 		<servlet-name>MobileWeb</servlet-name>
 		<url-pattern>/mtrip/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>PathMobileWeb</servlet-name>
+		<jsp-file>/mdestination/mpath.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PathMobileWeb</servlet-name>
+		<url-pattern>/mdestination/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ProfileMobileWeb</servlet-name>
+		<jsp-file>/mprofile/mprofile.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ProfileMobileWeb</servlet-name>
+		<url-pattern>/mprofile/*</url-pattern>
 	</servlet-mapping>
 
 	<!-- Appstats -->

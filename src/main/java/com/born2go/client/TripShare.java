@@ -76,8 +76,8 @@ public class TripShare implements EntryPoint {
 			}
 		}
 		
-		if (RootPanel.get("mtripMap") != null) {
-			RootPanel.get("mtripMap").add(tripMap.getMapView());
+		if (RootPanel.get("mtripmap") != null) {
+			RootPanel.get("mtripmap").add(tripMap.getMapView());
 			String idJourney = Window.Location.getPath().replaceAll("/journey/","");
 			if (idJourney.length() != 0) {
 				Long idTrip = Long.parseLong(idJourney);
@@ -128,7 +128,7 @@ public class TripShare implements EntryPoint {
 
 	private native void checkUserStatus() /*-{
 	    $wnd.FB.init({
-	      appId      : '1636504239911870',
+	      appId      : '386540048195283',
 	      cookie	 : true,
 	      xfbml      : true,
 	      version    : 'v2.3'
@@ -168,17 +168,22 @@ public class TripShare implements EntryPoint {
 		else {
 			pathView.checkPermission();
 			viewFullPath.checkPermission();
-//			dataService.getLongLiveToken(accessToken, new AsyncCallback<String>() {
-//				@Override
-//				public void onSuccess(String result) {
-//					if(result != null && !result.isEmpty())
-//						access_token = result;
-//				}
-//				@Override
-//				public void onFailure(Throwable caught) {
-//					// TODO Auto-generated method stub
-//				}
-//			});
+			try {
+				dataService.getLongLiveToken(accessToken, new AsyncCallback<String>() {
+					@Override
+					public void onSuccess(String result) {
+						if(result != null && !result.isEmpty())
+							access_token = result;
+					}
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+					}
+				});
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

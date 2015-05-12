@@ -1,5 +1,4 @@
 <%@page import="com.born2go.shared.Path"%>
-<%@page import="com.born2go.shared.Picture"%>
 <%@ page import="com.born2go.shared.Trip"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ page import="java.util.List"%>
@@ -17,25 +16,26 @@
 		response.setHeader("Location", site);
 	}%>
 <%
-	if (request.getPathInfo() == null || request.getPathInfo().length() <= 1);  
-	/* redirectHomeUrl(response); */
+	if (request.getPathInfo() == null || request.getPathInfo().length() <= 1)  
+			redirectHomeUrl(response);
 		 
-	else {
-	String tripId = request.getPathInfo().replaceAll("/", "");
-	
-	try{
-		Long id = Long.valueOf(tripId);
-		DataServiceImpl service = new DataServiceImpl();
-		Trip trip = service.findTrip(id);
-		if (trip == null)  ;
-		/* redirectHomeUrl(response); */
-	    else {		
-	    	SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy MMM d hh:mm:ss");
-	    	 
-			String urlFacebook = request.getRequestURL().toString();
-			String dateCreate = "Ngày tạo " + dateFormat1.format( trip.getCreateDate());
-			String poster = "Người tạo " + trip.getPoster().getUserName();
-			String departureDate = dateFormat1.format( trip.getDepartureDate());
+		else {
+			String tripId = request.getPathInfo().replaceAll("/", "");
+			
+			try{
+				Long id = Long.valueOf(tripId);
+				DataServiceImpl service = new DataServiceImpl();
+				Trip trip = service.findTrip(id);
+				if (trip == null)  
+						redirectHomeUrl(response);
+			    else {		
+			    	SimpleDateFormat dateFormat1 = new SimpleDateFormat(
+		                					"yyyy MMM d hh:mm:ss");
+			    	 
+					String urlFacebook = request.getRequestURL().toString();
+					String dateCreate = "Ngày tạo " + dateFormat1.format( trip.getCreateDate());
+					String poster = "Người tạo " + trip.getPoster().getUserName();
+					String departureDate = dateFormat1.format( trip.getDepartureDate());
 %>
 <!doctype html>
 <!-- The DOCTYPE declaration above will set the    -->
@@ -114,137 +114,124 @@
 			Your web browser must have JavaScript enabled in order for this
 			application to display correctly.</div>
 	</noscript>
+
 	<script type="text/javascript">
 		window.onbeforeunload = function() {
 			window.scrollTo(0, 0);
 		}
 	</script>
-	<%@include file="../mcommon/mheader.jsp"%>
+	<%@include file="mheader.jsp"%>
 	<!-- Add Content here -->
 	<div class="mcontent">
-		<div class="mnametrip">
-			<h1><%=trip.getName()%></h1>
-		</div>
-		<div class="mitalictext">
-			<%=dateCreate%></div>
-		<div class="mitalictext">
-			<%=poster%></div>
-		<div class="mpadB10"></div>
-		<div class="mtripmap" id="mtripmap"></div>
-		<div class="mitinerary">
-			<h3>Hành trình:</h3>
-		</div>
-
-		<div class="mtrip-destinations">
-			<img src="/resources/red-spotlight.png" /> <span><%=trip.getJourney().getLocates().get(0)
+		<div>
+			<div class="mnametrip">
+				<h1><%=trip.getName()%></h1>
+			</div>
+			<div class="mitalictext">
+				<%=dateCreate%></div>
+			<div class="mitalictext">
+				<%=poster%></div>
+			<div class="mpadB10"></div>
+			<div class="mtripmap" id="mtripmap"></div>
+			<div class="mitinerary">
+				<h3>Hành trình:</h3>
+			</div>
+			<div class="mtrip-destinations">
+				<img src="/resources/red-spotlight.png" /> <span><%=trip.getJourney().getLocates().get(0)
 							.getAddressName()%></span>
-		</div>
-		<%
-			for (int i = 1; i < trip.getJourney().getLocates().size(); i++) 
-																																													     					{
-		%>
-		<div class="mtrip-destinations">
-			<img src="/resources/green-spotlight.png" /> <span> <%=trip.getJourney().getLocates().get(i)
+			</div>
+			<%
+				for (int i = 1; i < trip.getJourney().getLocates().size(); i++) 
+																																												     					{
+			%>
+			<div class="mtrip-destinations">
+				<img src="/resources/green-spotlight.png" /> <span> <%=trip.getJourney().getLocates().get(i)
 								.getAddressName()%>
-			</span>
-		</div>
-		<%
-			}
-		%>
-		<div class="mitinerary">
-			<h3>Ngày khởi hành:</h3>
-		</div>
-		<div class="mdepartureDate">
-			<%=departureDate%>
-		</div>
-		<div class="mitinerary">
-			<h3>Giới thiệu về chuyến đi:</h3>
-		</div>
-		<p class="mparagraptext">
-			<%=trip.getDescription()%>
-		</p>
-		<div class="mListPath">
-			<%
-				List<Long> idsPath = trip.getDestination();
-									if(idsPath != null && !idsPath.isEmpty()){
-										List<Path> listPaths = service.listOfPath(idsPath);
-										if(listPaths != null && !listPaths.isEmpty()){
-			%>
-			<div class="mlistpath">
-				<h3>Những chặng dừng chân:</h3>
+				</span>
 			</div>
-
 			<%
-				for(int i = 0; i< listPaths.size(); i++)
-																																																	{
-																																																		Path path = listPaths.get(i);
+				}
 			%>
-			<div class="mblock">
-				<h2><%=path.getLocate().getAddressName()%></h2>
-				<table cellpadding="0" cellspacing="0" border="0"
-					style="line-height: 17px">
-					<tr>
-						<td style="padding-right: 5px">
-							<div class="mitalictext">Date post</div>
-						</td>
-						<td>
-							<div class="mitalictext"><%=dateFormat1.format(path.getCreateDate())%></div>
-						</td>
-					</tr>
-					<tr>
-						<td style="padding-right: 5px"><div class="mitalictext">Create
-								by</div></td>
-						<td><div class="mitalictext"><%=(trip.getPoster() != null ? trip.getPoster()
+			<div class="mitinerary">
+				<h3>Ngày khởi hành:</h3>
+			</div>
+			<div class="mdepartureDate">
+				<%=departureDate%>
+			</div>
+			<div class="mitinerary">
+				<h3>Giới thiệu về chuyến đi:</h3>
+			</div>
+			<p class="mparagraptext">
+				<%=trip.getDescription()%>
+			</p>
+			<div class="mListPath">
+				<%
+					List<Long> idsPath = trip.getDestination();
+					if(idsPath != null && !idsPath.isEmpty()){
+						List<Path> listPaths = service.listOfPath(idsPath);
+						if(listPaths != null && !listPaths.isEmpty()){										
+				%>
+				<div class="mlistpath">
+					<h3>Những chặng dừng chân:</h3>
+				</div>
+
+				<%
+					for(int i = 0; i< listPaths.size(); i++)
+																																													{
+																																														Path path = listPaths.get(i);
+				%>
+				<div class="mblock">
+					<h2><%=path.getLocate().getAddressName()%></h2>
+					<table cellpadding="0" cellspacing="0" border="0"
+						style="line-height: 17px">
+						<tr>
+							<td style="padding-right: 5px">
+								<div class="mitalictext">Date post</div>
+							</td>
+							<td>
+								<div class="mitalictext"><%=dateFormat.format(path.getCreateDate())%></div>
+							</td>
+						</tr>
+						<tr>
+							<td style="padding-right: 5px"><div class="mitalictext">Create
+									by</div></td>
+							<td><div class="mitalictext"><%=(trip.getPoster() != null ? trip.getPoster()
 							.getUserName() : "Tester")%></div></td>
-					</tr>
-				</table>
-				<p class="mparagraptext">
-					<%=path.getDescription()%>
-				</p>
+						</tr>
+					</table>
+					<p class="mparagraptext">
+						<%=path.getDescription()%>
+
+					</p>
+
+				</div>
+				<%
+					}
+				%>
+
+				<%
+					}																																																								}
+				%>
 			</div>
 			<%
 				}
+			}
+			 catch (Exception e){
+					redirectHomeUrl(response);
+ 										}
+		}															
 			%>
+		</div>
 
-			<%
-				}																																																								}
-			%>
-		</div>
-		<!-- show gallery -->
-		<%
-			if(trip.getGallery() != null && !trip.getGallery().isEmpty()){
-				List<Long> idsPicture = trip.getGallery();
-				List<Picture> gallery = service.listPicture(idsPicture);
-				if(gallery != null && !gallery.isEmpty())
-				{
-		%>
-		<div class="view_more">Album ảnh</div>
-		<%
-			for(int i = 0; i < gallery.size(); i++ ){
-			Picture p = gallery.get(i);
-			if( p != null ){
-				String serveUrl = p.getServeUrl();
-		%>
-		<div class="image_gallery">
-			<img alt="" src=<%=serveUrl%>>
-		</div>
-		<%
-			}
-				}
-			}
-			}
-		%>
-		<%
-			}
-				}
-				 catch (Exception e){
-						System.out.println(e.getMessage());
-			 										}
-					}
-		%>
 		<!-- End of jsp content -->
 	</div>
+	<div id = "sidebar"></div>
+
+
+
 	<br />
-	<%@include file="../mcommon/mfooter.jsp"%>
+
+	<%@include file="mfooter.jsp"%>
+
 </body>
 </html>

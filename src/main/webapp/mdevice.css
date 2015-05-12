@@ -1,0 +1,220 @@
+* {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+figure.image img {
+	width: 100% !important;
+	height: auto !important;
+}
+
+body {
+	margin: 0;
+}
+
+.seoHeader {
+	float: left;
+	font-size: 11px;
+	font-weight: 400;
+	padding: 25px 0 0;
+}
+
+.mheader {
+	width: 100%;
+	z-index: 99999;
+	background-color: rgba(48, 27, 12, 1);
+	height: 60px;
+}
+
+.header-action a {
+	width: 45px;
+	height: 40px;
+	float: left;
+	padding-top: 15px;
+	padding-left: 10px;
+}
+
+.seoHeader h1 {
+	font-size: 25px;
+	font-weight: 400;
+	color: white;
+	margin: 0;
+}
+
+.logo {
+	float: left;
+	padding-top: 10px;
+	padding-left: 5px;
+}
+
+}
+.mfooter {
+	font-weight: bold;
+	padding-top: 10px;
+	height: 25px;
+	width: 100%;
+	text-align: center;
+	background-color: rgba(48, 27, 12, 1);
+	color: white;
+}
+
+#mfooter {
+	font-weight: bold;
+	padding-top: 10px;
+	height: 25px;
+	width: 100%;
+	text-align: center;
+	background-color: rgba(48, 27, 12, 1);
+	color: white;
+}
+
+.mcontent {
+	padding: 0px 13px 13px;
+	background-color: white;
+}
+
+.mnametrip h1 {
+	font-size: 24px;
+	color: rgb(56, 119, 127);
+}
+
+.mitalictext {
+	font-size: 16px;
+	padding-bottom: 10px;
+	color: gray;
+	font-style: italic;
+}
+
+.mpadB10 {
+	padding-bottom: 10px;
+}
+
+.mtripmap {
+	width: 95%;
+	height: 300px;
+	border: 3px solid #a1a1a1;
+	margin: auto;
+	padding: 1px;
+}
+
+.mitinerary h3 {
+	font-size: 19px;
+	margin: 0;
+	padding-top: 10px;
+}
+
+.mitinerary h2 {
+	font-size: 20px;
+	margin: 0;
+	padding-top: 20px;
+}
+
+.mlistpath h3 {
+	font-size: 23px;
+	margin: 0;
+	padding: 10px;
+	border: solid 1px lightskyblue;
+	background-color: lightskyblue;
+	margin-bottom: 20px;
+}
+
+.mtrip-destinations {
+	margin: 5px 0px;
+	font-size: 15px;
+}
+
+.mtrip-destinations img {
+	width: 22px;
+	height: 30px;
+	vertical-align: middle;
+}
+
+.mtrip-destinations span {
+	margin-left: 5px
+}
+
+p {
+	text-align: justify;
+	color: #333;
+	line-height: 150%;
+	font-size: 17px;
+	white-space: pre-line;
+	margin-top: 0px;
+}
+
+.mdepartureDate {
+	color: #000;
+	font-size: 15px;
+	padding: 10px 0px;
+}
+
+.mblock {
+	border-top: 5px dotted rgba(161, 161, 161, 1);
+	padding-bottom: 20px;
+}
+
+.mblock h2 {
+	margin-bottom: 20px;
+	margin-top: 10px;
+	color: rgb(56, 119, 127);
+	font-weight: bold;
+	margin-top: 20px;
+}
+
+ul {
+	padding-left: 0px !important;
+	padding-bottom: 10px;
+	border-bottom: solid 1px;
+}
+
+ul li {
+	border-top: solid 2px #a1a1a1;
+	display: block;
+	overflow: hidden;
+	padding: 5px 0;
+	margin-top: 10px;
+}
+
+.imgdefault {
+	width: 100%
+}
+
+.imgdefault a {
+	display: inline;
+	overflow: hidden;
+}
+
+.imgdefault a img {
+	float: left;
+	padding: 20px 20px 20px 0px;
+	height: 150px;
+	width: 150px;
+}
+
+.header-action a i {
+	color: white;
+}
+
+.image_gallery {
+	position: relative;
+	-webkit-border-radius: 3px;
+	margin: 10px 0 0 0;
+	overflow: hidden;
+	width: 100%;
+	background: #fff;
+	border: 1px solid #e5e5e5;
+}
+
+.image_gallery img {
+	border: 0;
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
+  height: auto;
+}
+.view_more {
+  border-radius: 3px;
+  background-color: #e9e9e9;
+  font: normal 16px/12px arial;
+  color: #666;
+  padding: 12px;
+}

@@ -15,7 +15,7 @@
 	.JourneyInfoView-Obj2 {
 		border: 1px solid #a1a1a1;
 		margin-right: 20px;
-  		padding: 5px;
+  		padding: 8px;
 	}
 	
 	.JourneyInfoView-Obj3 {
@@ -129,6 +129,7 @@
 	.JourneyInfoView-Obj15 {
 		border: none;
 		background: wheat;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 	}
 	</ui:style>
 	<g:HTMLPanel styleName="{style.JourneyInfoView-Obj1}">
@@ -138,7 +139,7 @@
 					<g:Image styleName="{style.JourneyInfoView-Obj2}" width="100%"
 						height="auto" ui:field="picture" />
 				</td>
-				<td valign="top" style="padding-left: 20px;">
+				<td valign="top" style="padding-left: 30px;">
 					<div style="margin-bottom: 10px;">
 					<g:Anchor styleName="{style.JourneyInfoView-Obj3}" text="Where and When?"
 						ui:field="lbTitle" />

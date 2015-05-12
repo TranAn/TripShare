@@ -78,7 +78,10 @@ public class Journey_PathDetail extends Composite {
 		lbPoster.setHref("/profile/"+ posterId);
 		imgPoster.setUrl("https://graph.facebook.com/"+ posterId+ "/picture?width=25&height=25");
 		lbDatePost.setText(TripShare.dateFormat(path.getCreateDate()));
-		htmlContent.setInnerHTML(truncateText(path.getShortDescription().replaceAll("br2n", "<br/>")));
+		if(path.getShortDescription() != null)
+			htmlContent.setInnerHTML(truncateText(path.getShortDescription().replaceAll("br2n", "<br/>")));
+		else
+			htmlContent.setInnerHTML(truncateText(path.getDescription()));
 		
 		btnDeletePost.addClickHandler(new ClickHandler() {
 			@Override
@@ -115,7 +118,7 @@ public class Journey_PathDetail extends Composite {
 					htmlContent.setInnerHTML(truncateText(path.getShortDescription().replaceAll("br2n", "<br/>")));
 					btnExpandACollapse.setTitle("View detail");
 					btnExpandACollapse.getElement().setInnerHTML("<i class=\"fa fa-eye fa-2x\"></i>");
-					Window.scrollTo(0, picture.getAbsoluteTop());
+					Window.scrollTo(0, picture.getAbsoluteTop()-50);
 				}
 				isViewDetail = !isViewDetail;
 			}
