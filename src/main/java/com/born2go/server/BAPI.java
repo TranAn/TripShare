@@ -39,6 +39,8 @@ public class BAPI extends HttpServlet implements Servlet{
 			.getBlobstoreService();
 	private ImagesService imagesService = ImagesServiceFactory.getImagesService();
 	
+	Integer verNum = 1;
+	
 	/* Upload from mobile app here
 	 * 
 	 */
@@ -54,13 +56,16 @@ public class BAPI extends HttpServlet implements Servlet{
 		//We get trip_id, post_id, post_content first
 		String tripStr = req.getParameter("trip_id");
 		String postStr = req.getParameter("post_id");
+		String verStr = req.getParameter("v");
 		if (tripStr == null) tripStr = "0";
 		if (postStr == null) postStr = "0";
+		if (verStr	== null) verStr = "1";
 		
 		Long tripID, postID;
 		try {
-			tripID = Long.valueOf(tripStr);
-			postID = Long.valueOf(postStr);
+			tripID = Long.parseLong(tripStr);
+			postID = Long.parseLong(postStr);
+			verNum = Integer.parseInt(verStr);
 		} catch (NumberFormatException e) {
 			deleteBlobKeysOnError(blobKeys, resp);
 			return;
@@ -169,10 +174,18 @@ public class BAPI extends HttpServlet implements Servlet{
 		String result = "";
 		String action = req.getParameter("action");
 		String id = req.getParameter("id");
+		String verStr = req.getParameter("v");
+		if (verStr == null) verStr = "1";
 		
 		try {
+			verNum = Integer.parseInt(verStr);
+			
 			if (action.compareToIgnoreCase("getPath") == 0){
 				result = getPathContentByID(Long.parseLong(id));
+				resp.setContentType("text/html; charset=utf-8");
+			}
+			else if (action.compareToIgnoreCase("getPost") == 0){
+				result = getPostContentByID(Long.parseLong(id));
 				resp.setContentType("text/html; charset=utf-8");
 			}
 			else if (action.compareToIgnoreCase("getTrip") == 0){
@@ -201,7 +214,7 @@ public class BAPI extends HttpServlet implements Servlet{
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			result = "Error! Something is wrong: id = " + id;
+			result = "Error! Something is wrong: id = " + id + ", version = " + verStr;
 		}
 		resp.getWriter().write(result);
 	}
@@ -230,6 +243,7 @@ public class BAPI extends HttpServlet implements Servlet{
     resp.setHeader("Born2Go", "Welcome");
     out.write(result);*/
 	
+	
 	/**
 	 * 
 	 * @param id
@@ -250,6 +264,20 @@ public class BAPI extends HttpServlet implements Servlet{
 		}
 		return html;
 	}
+	
+	private String getPostContentByID(Long id){
+		String jsonRet = "";
+		Path post = dataService.findPart(id);
+		if (post != null){
+			Gson gson = new Gson();
+			jsonRet = gson.toJson(post);
+		}
+		else{
+			jsonRet = createJSONResult("false", "Post ID: " + id + "doesn't exist", "");
+		}
+		return jsonRet;
+	}
+	
 	/**
 	 * 
 	 * @param id
@@ -257,7 +285,29 @@ public class BAPI extends HttpServlet implements Servlet{
 	 * @return
 	 * 	Page json show the Trip or Error (if status is false)
 	 */
+
 	private String getTripByID(Long id){
+		switch (verNum){
+		case 2: 
+			return getTripByIDv2(id);
+		default:
+			return getTripByIDv1(id);
+		}
+		
+	}
+	private String getTripByIDv1(Long id){
+		String json = "";
+		Trip trip = dataService.findTrip(id);
+		if (trip != null){
+			Gson gson = new Gson();
+			json = gson.toJson(trip);
+		} else{
+			json = "{\"status\": false,\"error\": \"Trip ID: " + id + "doesn't exist\"}";
+		}
+		return json;
+	}
+	
+	private String getTripByIDv2(Long id){ /* Not a line changed */
 		String json = "";
 		Trip trip = dataService.findTrip(id);
 		if (trip != null){
@@ -280,20 +330,26 @@ public class BAPI extends HttpServlet implements Servlet{
 			
 			Gson gson = new Gson();
 			
-			for(Path path: paths){
-				if (path != null){
-					html = "<h2>" + path.getTitle() + "</h2><br>";
-					
-					html = path.getDescription();
-				}
-				else{
-					html = "<h2>" + id + "</h2><br> This post is not exist. That's all we know :(";
-				}
-				posts.add(html);
+			if (verNum == 2){
+				json = gson.toJson(paths);
 			}
-			json = gson.toJson(posts);
+			else {
+				for(Path path: paths){
+					if (path != null){
+						html = "<h2>" + path.getTitle() + "</h2><br>";
+						
+						html = path.getDescription();
+					}
+					else{
+						html = "<h2>" + id + "</h2><br> This post is not exist. That's all we know :(";
+					}
+					posts.add(html);
+				}
+				json = gson.toJson(posts);
+			}
+			
 		} else{
-			json = "{\"status\": false,\"error\": \"Trip ID: " + id + "doesn't exist\"}";
+			json = createJSONResult("false", "Trip ID: " + id + "doesn't exist","");
 		}
 		return json;
 	}
