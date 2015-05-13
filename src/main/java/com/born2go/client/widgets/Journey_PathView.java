@@ -272,7 +272,7 @@ public class Journey_PathView extends Composite {
 					pathCreate.getListPaths(listPaths);
 					for(int i=result.size()-1; i>=0; i--) {
 						final Path path = result.get(i);
-						String title = "";
+						String title = "?";
 						if(path.getTitle() != null)
 							title = path.getTitle(); 
 						else if(path.getLocate() != null)

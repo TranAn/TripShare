@@ -77,7 +77,8 @@ public class Journey_PathDetail extends Composite {
 		lbPoster.setText(postBy);
 		lbPoster.setHref("/profile/"+ posterId);
 		imgPoster.setUrl("https://graph.facebook.com/"+ posterId+ "/picture?width=25&height=25");
-		lbDatePost.setText(TripShare.dateFormat(path.getCreateDate()));
+		if(path.getCreateDate() != null)
+			lbDatePost.setText(TripShare.dateFormat(path.getCreateDate()));
 		if(path.getShortDescription() != null)
 			htmlContent.setInnerHTML(truncateText(path.getShortDescription().replaceAll("br2n", "<br/>")));
 		else
