@@ -52,10 +52,12 @@ public class BAPI extends HttpServlet implements Servlet{
 		boolean error = false;
 		String postHtml ="";
 		String result;
+		Path realPost = null;
 		
 		//We get trip_id, post_id, post_content first
 		String tripStr = req.getParameter("trip_id");
 		String postStr = req.getParameter("post_id");
+		String titleStr= req.getParameter("title");
 		String verStr = req.getParameter("v");
 		if (tripStr == null) tripStr = "0";
 		if (postStr == null) postStr = "0";
@@ -76,15 +78,24 @@ public class BAPI extends HttpServlet implements Servlet{
 			return;
 		}
 		
+		if (postID != 0){//Get current post content if we are updating
+			realPost = dataService.findPart(postID);
+			if (realPost != null){
+				postHtml = realPost.getDescription();
+			}
+		}
+		
 		postHtml += req.getParameter("post_content") + "<br>";
 		
 		if(blobKeys != null) {
+			BlobInfoFactory blobInfoFac = new BlobInfoFactory();
 			for(BlobKey key: blobKeys) {
 				// get file name on blob info
-				BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(key);
+				BlobInfo blobInfo = blobInfoFac.loadBlobInfo(key);
 				long size = blobInfo.getSize();
 				if(size > 0){
-					String encodedFilename = URLEncoder.encode(blobInfo.getFilename(), "utf-8");
+					String filename = blobInfo.getFilename();
+					String encodedFilename = URLEncoder.encode(filename, "utf-8");
 			    	encodedFilename.replaceAll("\\+", "%20");
 			    	// set fileupload info
 			    	Picture file = new Picture();
@@ -93,8 +104,18 @@ public class BAPI extends HttpServlet implements Servlet{
 			    	file.setKey(key.getKeyString());
 			    	String servingUrl = imagesService.getServingUrl(ServingUrlOptions.Builder.withBlobKey(key)); 
 			    	file.setServeUrl(servingUrl);
-			    	postHtml += "<img alt=\"\" src=\"" + servingUrl + "\" /> <br>";
 			    	
+			    	/* Sample CKEditor image tag
+			    	<div style="text-align:center">
+			    	<figure class="image" style="display:inline-block"><img alt="" height="339" src="http://lh3.googleusercontent.com/fDBkW3tMY4k0Hxg-lHSDhYJ21ti3lrn4hAp9nUG8NWeWA2eM9onDt5XSApr8te06wgrGlp-gpvmVhUqQmnwVSw=s1600" width="605" />
+			    	<figcaption>Đợi mồi ...</figcaption>
+			    	</figure>
+			    	</div>*/
+			    	//postHtml += "<img alt=\"\" src=\"" + servingUrl + "\" /> <br>";
+			    	postHtml += "<div style=\"text-align:center\"> <figure class=\"image\" style=\"display:inline-block\"><img src=\"";
+			    	postHtml += servingUrl;
+			    	postHtml += "\" /> <figcaption>" + filename + "</figcaption></figure></div>";
+			    			
 					Key<Picture> keyPicture = ofy().save().entity(file).now();
 					Picture exportPicture = ofy().load().key(keyPicture).now();
 					//save id on trip or path
@@ -118,13 +139,19 @@ public class BAPI extends HttpServlet implements Servlet{
 			}
 		}
 		
-		//It's time to create new post
+		//It's time to create new post if nessesary
 		String accessToken = req.getParameter("access_token");
-		Path newPost = new Path();
-		newPost.setDescription(postHtml);
-		Path insertedPost = dataService.insertPart(newPost, tripID, accessToken);
-		
-		JSONObject myObj = new JSONObject();
+		Path insertedPost;
+		if (realPost == null){
+			realPost = new Path();
+			realPost.setDescription(postHtml);
+			realPost.setTitle(titleStr);
+			insertedPost = dataService.insertPart(realPost, tripID, accessToken);
+		}
+		else {
+			realPost.setTitle(titleStr);
+			insertedPost = dataService.updatePart(realPost);
+		}
 		
 		resp.setContentType("application/json; charset=utf-8");
 
@@ -133,6 +160,10 @@ public class BAPI extends HttpServlet implements Servlet{
 			result = createJSONResult("ok", "No error", content);
 		} else {
 			result = createJSONResult("error", "Can't insert new post. It's supposed trip_id is invalid.", postHtml);
+			//We have to clean up photos
+			if(blobKeys != null) {
+				blobstoreService.delete((BlobKey[])blobKeys.toArray());
+			}
 		}
 		resp.getWriter().write(result);
 	}
@@ -368,15 +399,19 @@ public class BAPI extends HttpServlet implements Servlet{
 				"\" method=\"post\" enctype=\"multipart/form-data\">";
 		html += "<input type=\"file\" name=\"file\" size=\"50\" />";
 		html += "<br />";
-		
-		html += "<input type=\"text\" name=\"trip_id\" value=\"123456789\">";
+		html += "Trip ID: ";
+		html += "<input type=\"text\" name=\"trip_id\" value=\"0\">";
 		html += "<br>";
+		html += "Post ID: ";
 		html += "<input type=\"text\" name=\"post_id\" value=\"0\">";
 		html += "<br>";
-		html += "Status to update:<br>";
+		html += "Title: ";
+		html += "<input type=\"text\" name=\"title\" value=\"0\">";
+		html += "<br>";
+		html += "Post content: ";
 		html += "<input type=\"text\" name=\"post_content\">";
 		html += "<br>";
-		html += "Access Token:<br>";
+		html += "Access Token:";
 		html += "<input type=\"text\" name=\"access_token\">";
 		
 		html += "<input type=\"submit\" value=\"Upload File\" />";
