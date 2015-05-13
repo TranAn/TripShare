@@ -15,19 +15,24 @@
 	if (request.getPathInfo() == null
 			|| request.getPathInfo().length() <= 1) {
 		redirectHomeUrl(response);
-	} 
-	else {
+	} else {
 		String patId = request.getPathInfo().replaceAll("/", "");
+		Long idPath = null;
 		try {
-			Long id = Long.valueOf(patId);
+			idPath = Long.parseLong(patId);
+		} catch (NumberFormatException e) {
+			idPath = null;
+			redirectHomeUrl(response);
+		}
+		 
+		if (idPath != null) {
 			DataServiceImpl service = new DataServiceImpl();
-			Path path = service.findPart(id);
+			Path path = service.findPart(idPath);
 			if (path == null)
 				redirectHomeUrl(response);
 			else {
 				String urlFacebook = request.getRequestURL().toString();
-				String title = path.getLocate().getAddressName()
-						+ " chia sẻ khoảnh khắc";
+				String title = path.getLocate().getAddressName();
 %>
 <!doctype html>
 <!-- The DOCTYPE declaration above will set the    -->
@@ -114,39 +119,37 @@
 	<%@ include file="../mcommon/mheader.jsp"%>
 	<!-- Add Content here -->
 	<div class="mcontent">
-			<div class="mnametrip">
-				<h1><%=path.getLocate().getAddressName()%></h1>
-			</div>
-			<table cellpadding="0" cellspacing="0" border="0"
-				style="line-height: 17px">
-				<tr>
-					<td style="padding-right: 5px">
-						<div class="mitalictext">Date post</div>
-					</td>
-					<td>
-						<div class="mitalictext"><%=dateFormat.format(path.getCreateDate())%></div>
-					</td>
-				</tr>
-				<tr>
-					<td style="padding-right: 5px"><div class="mitalictext">Create
-							by</div></td>
-					<td><div class="mitalictext"><%=(path.getPoster() != null ? path.getPoster()
+		<div class="mnametrip">
+			<h1><%=path.getLocate().getAddressName()%></h1>
+		</div>
+		<table cellpadding="0" cellspacing="0" border="0"
+			style="line-height: 17px">
+			<tr>
+				<td style="padding-right: 5px">
+					<div class="mitalictext">Date post</div>
+				</td>
+				<td>
+					<div class="mitalictext"><%=dateFormat.format(path.getCreateDate())%></div>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding-right: 5px"><div class="mitalictext">Created
+						by</div></td>
+				<td><div class="mitalictext"><%=(path.getPoster() != null ? path.getPoster()
 								.getUserName() : "Tester")%></div></td>
-				</tr>
-			</table>
-			<div class="mitinerary">
-				<h3>Mô tả:</h3>
-			</div>
-			<p class="mparagraptext">
-				<%=path.getDescription()%>
-			</p>
-			<%
+			</tr>
+		</table>
+		<div class="mitinerary">
+			<h3>Description:</h3>
+		</div>
+		<p class="mparagraptext">
+			<%=path.getDescription()%>
+		</p>
+		<%
+			}
 				}
-					} catch (Exception e) {
-						System.out.println(e.getMessage());
-					}
-				}
-			%>
+			}
+		%>
 		<!-- End of jsp content -->
 	</div>
 	<br />

@@ -17,25 +17,32 @@
 		response.setHeader("Location", site);
 	}%>
 <%
-	if (request.getPathInfo() == null || request.getPathInfo().length() <= 1);  
-	/* redirectHomeUrl(response); */
+	if (request.getPathInfo() == null || request.getPathInfo().length() <= 1)  
+
+	  redirectHomeUrl(response);  
 		 
 	else {
 	String tripId = request.getPathInfo().replaceAll("/", "");
-	
+	Long idTrip = null;
 	try{
-		Long id = Long.valueOf(tripId);
+		idTrip = Long.valueOf(tripId);
+	}
+	catch (NumberFormatException e){
+		idTrip = null;
+		redirectHomeUrl(response);
+	}
+	 if(idTrip != null){
 		DataServiceImpl service = new DataServiceImpl();
-		Trip trip = service.findTrip(id);
-		if (trip == null)  ;
-		/* redirectHomeUrl(response); */
+		Trip trip = service.findTrip(idTrip);
+		if (trip == null)   
+		  redirectHomeUrl(response);  
 	    else {		
 	    	SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy MMM d hh:mm:ss");
 	    	 
-			String urlFacebook = request.getRequestURL().toString();
-			String dateCreate = "Ngày tạo " + dateFormat1.format( trip.getCreateDate());
-			String poster = "Người tạo " + trip.getPoster().getUserName();
-			String departureDate = dateFormat1.format( trip.getDepartureDate());
+	String urlFacebook = request.getRequestURL().toString();
+	String dateCreate = "Date post " + dateFormat1.format( trip.getCreateDate());
+	String poster = "Created by " + trip.getPoster().getUserName();
+	String departureDate = dateFormat1.format( trip.getDepartureDate());
 %>
 <!doctype html>
 <!-- The DOCTYPE declaration above will set the    -->
@@ -152,13 +159,13 @@
 			}
 		%>
 		<div class="mitinerary">
-			<h3>Ngày khởi hành:</h3>
+			<h3>Departure date:</h3>
 		</div>
 		<div class="mdepartureDate">
 			<%=departureDate%>
 		</div>
 		<div class="mitinerary">
-			<h3>Giới thiệu về chuyến đi:</h3>
+			<h3>Journey description:</h3>
 		</div>
 		<p class="mparagraptext">
 			<%=trip.getDescription()%>
@@ -166,21 +173,24 @@
 		<div class="mListPath">
 			<%
 				List<Long> idsPath = trip.getDestination();
-									if(idsPath != null && !idsPath.isEmpty()){
-										List<Path> listPaths = service.listOfPath(idsPath);
-										if(listPaths != null && !listPaths.isEmpty()){
+														if(idsPath != null && !idsPath.isEmpty()){
+															List<Path> listPaths = service.listOfPath(idsPath);
+															if(listPaths != null && !listPaths.isEmpty()){
 			%>
 			<div class="mlistpath">
-				<h3>Những chặng dừng chân:</h3>
+				<h3>List posts:</h3>
 			</div>
 
 			<%
 				for(int i = 0; i< listPaths.size(); i++)
-																																																	{
-																																																		Path path = listPaths.get(i);
+									{
+										Path path = listPaths.get(i);
+										String hrefShow = "/destination/"+ path.getId().toString();
 			%>
 			<div class="mblock">
-				<h2><%=path.getLocate().getAddressName()%></h2>
+				<h2>
+					<a href=<%=hrefShow%>><%=path.getLocate().getAddressName()%></a>
+				</h2>
 				<table cellpadding="0" cellspacing="0" border="0"
 					style="line-height: 17px">
 					<tr>
@@ -192,7 +202,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td style="padding-right: 5px"><div class="mitalictext">Create
+						<td style="padding-right: 5px"><div class="mitalictext">Created
 								by</div></td>
 						<td><div class="mitalictext"><%=(trip.getPoster() != null ? trip.getPoster()
 							.getUserName() : "Tester")%></div></td>
@@ -218,7 +228,7 @@
 				if(gallery != null && !gallery.isEmpty())
 				{
 		%>
-		<div class="view_more">Album ảnh</div>
+		<div class="view_more">Gallery</div>
 		<%
 			for(int i = 0; i < gallery.size(); i++ ){
 			Picture p = gallery.get(i);
@@ -236,10 +246,7 @@
 		%>
 		<%
 			}
-				}
-				 catch (Exception e){
-						System.out.println(e.getMessage());
-			 										}
+			 }
 					}
 		%>
 		<!-- End of jsp content -->
