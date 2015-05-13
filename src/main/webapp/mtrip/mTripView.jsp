@@ -139,7 +139,7 @@
 		<div class="mpadB10"></div>
 		<div class="mtripmap" id="mtripmap"></div>
 		<div class="mitinerary">
-			<h3>Hành trình:</h3>
+			<h3>Itinerary:</h3>
 		</div>
 
 		<div class="mtrip-destinations">
