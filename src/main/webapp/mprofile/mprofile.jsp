@@ -13,19 +13,26 @@
 		response.setHeader("Location", site);
 	}%>
 <%
-	if (request.getPathInfo() == null
-		|| request.getPathInfo().length() <= 1) {
-	redirectHomeUrl(response);
-		} else {
-	String userId = request.getPathInfo().replaceAll("/", "");
-	try {
-		Long id = Long.valueOf(userId);
-		DataServiceImpl service = new DataServiceImpl();
-		User user = service.findUser(id.toString());
-		if (user == null)
-	redirectHomeUrl(response);
-		else {
-	String headerText = "Những chuyến đi của " + user.getUserName();
+	if (request.getPathInfo() == null || request.getPathInfo().length() <= 1) {
+		redirectHomeUrl(response);
+	} else {
+		String userId = request.getPathInfo().replaceAll("/", "");
+		Long idUser = null;
+		try{
+			idUser = Long.parseLong( userId);
+		}
+		catch(NumberFormatException e){
+			idUser = null;
+			redirectHomeUrl(response);
+		}
+		if(idUser != null)
+		{
+			DataServiceImpl service = new DataServiceImpl();
+			User user = service.findUser(idUser.toString());
+			if (user == null)
+				redirectHomeUrl(response);
+			else {
+				String headerText = "Journeys of " + user.getUserName();
 %>
 <!doctype html>
 <!-- The DOCTYPE declaration above will set the    -->
@@ -111,59 +118,56 @@
 	<%@include file="../mcommon/mheader.jsp"%>
 	<!-- Add Content here -->
 	<div class="mcontent">
-			<div class="mitinerary">
-				<h2><%=headerText%></h2>
-			</div>
-			<ul>
-				<%
-					List<Trip> trips = new ArrayList<Trip>();
-					if(user.getMyTrips() != null && !user.getMyTrips().isEmpty())
-					{
-						trips = service.listOfTrip(user.getMyTrips());
-						if(trips != null && !trips.isEmpty()){
-							for(int i = 0; i < trips.size(); i++){
-							Trip trip = trips.get(i);
-							String des = trip.getDescription();
-							String textShow = null;
-							 
-							String hrefShow = "/journey/"+ trip.getId().toString();
-							if(des != null && des.length()!= 0 ){
-								if(des.length()< 200)
-									textShow = des;
-								else
-									textShow = des.substring(0, 200) + "...";
-							}
-							String dateCreate = "Ngày tạo " + dateFormat.format( trip.getCreateDate());						
-				%>
-				<li>
-					<div class="mnametrip">
-						<h1>
-							<a href=<%=hrefShow%>><%=trip.getName()%></a>
-						</h1>
-					</div>
-					<div class="mitalictext">
-						<%=dateCreate%></div>
-					<div class="imgdefault">
-						<a><img alt="Du lịch thế giới"
-							src="/resources/Travel tips2.jpg"
-							style="color: rgb(56, 119, 127);"></a>
-						<p class="mparagraptext">
-							<%=textShow%>
-						</p>
-					</div>
-				</li>
-			</ul>
+		<div class="mitinerary">
+			<h2><%=headerText%></h2>
+		</div>
+		<ul>
 			<%
-				}
+				List<Trip> trips = new ArrayList<Trip>();
+						if(user.getMyTrips() != null && !user.getMyTrips().isEmpty())
+						{
+							trips = service.listOfTrip(user.getMyTrips());
+							if(trips != null && !trips.isEmpty()){
+								for(int i = 0; i < trips.size(); i++){
+								Trip trip = trips.get(i);
+								String des = trip.getDescription();
+								String textShow = null;
+								 
+								String hrefShow = "/journey/"+ trip.getId().toString();
+								if(des != null && des.length()!= 0 ){
+									if(des.length()< 200)
+										textShow = des;
+									else
+										textShow = des.substring(0, 200) + "...";
+								}
+								String dateCreate = "Date create " + dateFormat.format( trip.getCreateDate());
+			%>
+			<li>
+				<div class="mnametrip">
+					<h1>
+						<a href=<%=hrefShow%>><%=trip.getName()%></a>
+					</h1>
+				</div>
+				<div class="mitalictext">
+					<%=dateCreate%></div>
+				<div class="imgdefault">
+					<a><img alt="Du lịch thế giới"
+						src="/resources/Travel tips2.jpg"
+						style="color: rgb(56, 119, 127);"></a>
+					<p class="mparagraptext">
+						<%=textShow%>
+					</p>
+				</div>
+			</li>
+		</ul>
+		<%}
+			}
 									}
 								}
 							}
-						} catch (NumberFormatException e) {
 						 
-							System.out.println(e.getMessage());
-						}
 							}
-			%>
+		%>
 		<!-- End of jsp content -->
 	</div>
 	<br />

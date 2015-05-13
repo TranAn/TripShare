@@ -8,7 +8,7 @@
 
 	<properties>
 		<javaRuntime>1.7</javaRuntime>
-		<appengine.target.version>1.9.9</appengine.target.version>
+		<appengine.target.version>1.8.9</appengine.target.version>
 		<gwtVersion>2.7.0</gwtVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<appengine.home>${user.home}/.m2/repository/com/google/appengine/appengine-java-sdk/${appengine.target.version}/appengine-java-sdk-${appengine.target.version}</appengine.home>
@@ -164,7 +164,7 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>compile</goal>
+							<!-- <goal>compile</goal> -->
 							<goal>test</goal>
 							<!-- <goal>generateAsync</goal> -->
 						</goals>

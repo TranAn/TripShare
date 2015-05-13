@@ -6,10 +6,7 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.text.SimpleDateFormat"%>
 
-<%
-	DataServiceImpl service = new DataServiceImpl();
-	List<Trip> trips = new ArrayList<Trip>();
-%>
+
 <!doctype html>
 <!-- The DOCTYPE declaration above will set the    -->
 <!-- browser's rendering engine into               -->
@@ -97,31 +94,32 @@
 	<%@include file="../mcommon/mheader.jsp"%>
 	<!-- Add Content here -->
 	<div class="mcontent">
-		<div style="margin-top: 20px;">
+		<br/>
 			<div id="mtripmap" class="mtripmap"></div>
 			<div class="mListPath" style="border-top-style: dotted solid;">
 				<%
-					if(trips != null && !trips.isEmpty())
-					{
+					List<Trip> trips = new ArrayList<Trip>();
+							if(trips != null && !trips.isEmpty())
+							{
 				%>
 				<div class="mitinerary">
-					<h2>Trip nổi bật:</h2>
+					<h2>Journeys hot:</h2>
 				</div>
 				<ul>
 					<%
 						for(int i = 0; i< trips.size(); i++)
-						{
-							Trip trip = trips.get(i);
-							String des =  trip.getDescription();
-							String textShow = null;
-							 
-							String hrefShow = "/journey/"+ trip.getId().toString();
-							if(des != null && des.length()!= 0 ){
-								if(des.length()< 200)
-									textShow = des;
-								else
-									textShow = des.substring(0, 200) + "...";
-							}																						
+									{
+										Trip trip = trips.get(i);
+										String des =  trip.getDescription();
+										String textShow = null;
+										 
+										String hrefShow = "/journey/"+ trip.getId().toString();
+										if(des != null && des.length()!= 0 ){
+											if(des.length()< 200)
+												textShow = des;
+											else
+												textShow = des.substring(0, 200) + "...";
+										}
 					%>
 					<li>
 						<div class="mnametrip">
@@ -140,7 +138,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="padding-right: 5px"><div class="mitalictext">Create
+								<td style="padding-right: 5px"><div class="mitalictext">Created
 										by</div></td>
 								<td><div class="mitalictext"><%=(trip.getPoster() != null ? trip.getPoster()
 							.getUserName() : "Tester")%></div></td>
@@ -157,12 +155,12 @@
 					</li>
 					<%
 						}
-																																																																																								}
+																																																																																											}
 					%>
 				</ul>
 			</div>
 			<!-- End of jsp content -->
-		</div>
+		 
 	</div>
 	<br />
 	<%@include file="../mcommon/mfooter.jsp"%>
