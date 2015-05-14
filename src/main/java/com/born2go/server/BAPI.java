@@ -5,6 +5,7 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -55,18 +56,25 @@ public class BAPI extends HttpServlet implements Servlet{
 		Path realPost = null;
 		
 		//We get trip_id, post_id, post_content first
-		String tripStr = req.getParameter("trip_id");
-		String postStr = req.getParameter("post_id");
-		String titleStr= req.getParameter("title");
+		String tripStr 	  = req.getParameter("trip_id");
+		String postStr 	  = req.getParameter("post_id");
+		String titleStr	  = req.getParameter("title");
+		String createdStr = req.getParameter("created_date");
+		
 		String verStr = req.getParameter("v");
 		if (tripStr == null) tripStr = "0";
 		if (postStr == null) postStr = "0";
+		if (createdStr == null) {
+			Date now_t = new Date();
+			createdStr = Long.toString(now_t.getTime());
+		}
 		if (verStr	== null) verStr = "1";
 		
-		Long tripID, postID;
+		Long tripID, postID, createdTime;
 		try {
 			tripID = Long.parseLong(tripStr);
 			postID = Long.parseLong(postStr);
+			createdTime = Long.parseLong(createdStr);
 			verNum = Integer.parseInt(verStr);
 		} catch (NumberFormatException e) {
 			deleteBlobKeysOnError(blobKeys, resp);
@@ -75,6 +83,9 @@ public class BAPI extends HttpServlet implements Servlet{
 		
 		if (tripID == 0){
 			deleteBlobKeysOnError(blobKeys, resp);
+//			resp.setContentType("application/json; charset=utf-8");
+//			result = createJSONResult("false", "Can't post to TripID = 0", "");
+//			resp.getWriter().write(result);
 			return;
 		}
 		
@@ -146,10 +157,12 @@ public class BAPI extends HttpServlet implements Servlet{
 			realPost = new Path();
 			realPost.setDescription(postHtml);
 			realPost.setTitle(titleStr);
+			realPost.setCreateDate(new Date(createdTime));
 			insertedPost = dataService.insertPart(realPost, tripID, accessToken);
 		}
 		else {
 			realPost.setTitle(titleStr);
+			realPost.setCreateDate(new Date(createdTime));
 			insertedPost = dataService.updatePart(realPost);
 		}
 		
@@ -183,9 +196,7 @@ public class BAPI extends HttpServlet implements Servlet{
 	private void deleteBlobKeysOnError(List<BlobKey> blobKeys, HttpServletResponse resp) throws IOException{
 		if (blobKeys == null)
 			return;
-		for (BlobKey key: blobKeys) {
-			blobstoreService.delete(key);
-		}
+		blobstoreService.delete((BlobKey[])blobKeys.toArray());
 		resp.setContentType("text/html; charset=utf-8");
 		resp.getWriter().write(createJSONResult("error", "Something's wrong - deleteBlobKeysOnError", ""));
 	}
