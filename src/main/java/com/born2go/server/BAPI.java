@@ -83,6 +83,9 @@ public class BAPI extends HttpServlet implements Servlet{
 		
 		if (tripID == 0){
 			deleteBlobKeysOnError(blobKeys, resp);
+//			resp.setContentType("application/json; charset=utf-8");
+//			result = createJSONResult("false", "Can't post to TripID = 0", "");
+//			resp.getWriter().write(result);
 			return;
 		}
 		
@@ -193,9 +196,7 @@ public class BAPI extends HttpServlet implements Servlet{
 	private void deleteBlobKeysOnError(List<BlobKey> blobKeys, HttpServletResponse resp) throws IOException{
 		if (blobKeys == null)
 			return;
-		for (BlobKey key: blobKeys) {
-			blobstoreService.delete(key);
-		}
+		blobstoreService.delete((BlobKey[])blobKeys.toArray());
 		resp.setContentType("text/html; charset=utf-8");
 		resp.getWriter().write(createJSONResult("error", "Something's wrong - deleteBlobKeysOnError", ""));
 	}
