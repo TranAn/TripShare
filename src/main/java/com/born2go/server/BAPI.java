@@ -78,13 +78,13 @@ public class BAPI extends HttpServlet implements Servlet{
 			verNum = Integer.parseInt(verStr.trim());
 		} catch (NumberFormatException e) {
 			deleteBlobKeysOnError(blobKeys, resp);
-			System.out.print("trip_id = " + tripStr + " , post_id = " + postStr + ", created_date = " + createdStr);
+			//System.out.print("trip_id = " + tripStr + " , post_id = " + postStr + ", created_date = " + createdStr);
 			return;
 		}
 		
 		if (tripID == 0){
 			deleteBlobKeysOnError(blobKeys, resp);
-			System.out.print("trip_id = " + tripStr);
+			//System.out.print("trip_id = " + tripStr);
 //			resp.setContentType("application/json; charset=utf-8");
 //			result = createJSONResult("false", "Can't post to TripID = 0", "");
 //			resp.getWriter().write(result);
@@ -97,6 +97,8 @@ public class BAPI extends HttpServlet implements Servlet{
 				postHtml = realPost.getDescription();
 			}
 		}
+		//Debug only
+		//postHtml += "trip_id = " + tripStr + " , post_id = " + postStr + ", created_date = " + createdStr;
 		
 		postHtml += req.getParameter("post_content") + "<br>";
 		
@@ -172,13 +174,15 @@ public class BAPI extends HttpServlet implements Servlet{
 		resp.setContentType("application/json; charset=utf-8");
 
 		if (insertedPost != null){
-			String content = getPathContentByID(insertedPost.getId());
-			result = createJSONResult("ok", "No error", content);
+			//String content = getPathContentByID(insertedPost.getId());
+			//result = createJSONResult("ok", "No error", content);
+			Gson gson = new Gson();
+			result = gson.toJson(insertedPost);
 		} else {
 			result = createJSONResult("error", "Can't insert new post. It's supposed trip_id is invalid.", postHtml);
 			//We have to clean up photos
 			if(blobKeys != null) {
-				blobstoreService.delete((BlobKey[])blobKeys.toArray());
+				blobstoreService.delete(blobKeys.toArray(new BlobKey[0]));
 			}
 		}
 		resp.getWriter().write(result);
@@ -187,9 +191,9 @@ public class BAPI extends HttpServlet implements Servlet{
 	private String createJSONResult(String status, String err_msg, String content){
 		JSONObject myObj = new JSONObject();
 		try {
-			myObj.append("status", status);
-			myObj.append("err_msg", err_msg);
-			myObj.append("content", content);
+			myObj.put("status", status);
+			myObj.put("err_msg", err_msg);
+			myObj.put("content", content);
 		} catch (JSONException e) {
 			return "{\"status\":\"error\",\"err_msg\":\"Something's wrong in createJSONResult\",\"content\":\"\"}";
 		}
@@ -198,7 +202,7 @@ public class BAPI extends HttpServlet implements Servlet{
 	
 	private void deleteBlobKeysOnError(List<BlobKey> blobKeys, HttpServletResponse resp) throws IOException{
 		if (blobKeys != null)
-			blobstoreService.delete((BlobKey[])blobKeys.toArray());
+			blobstoreService.delete(blobKeys.toArray(new BlobKey[0]));
 		resp.setContentType("text/html; charset=utf-8");
 		resp.getWriter().write(createJSONResult("error", "Something's wrong - deleteBlobKeysOnError", ""));
 	}
@@ -259,6 +263,8 @@ public class BAPI extends HttpServlet implements Servlet{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			result = "Error! Something is wrong: id = " + id + ", version = " + verStr;
+		} catch (NullPointerException e){
+			result = createJSONResult("false", "NPE in doGet","It seems you didn't provide `action` param???");
 		}
 		resp.getWriter().write(result);
 	}
