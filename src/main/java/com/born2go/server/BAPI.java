@@ -174,8 +174,10 @@ public class BAPI extends HttpServlet implements Servlet{
 		resp.setContentType("application/json; charset=utf-8");
 
 		if (insertedPost != null){
-			String content = getPathContentByID(insertedPost.getId());
-			result = createJSONResult("ok", "No error", content);
+			//String content = getPathContentByID(insertedPost.getId());
+			//result = createJSONResult("ok", "No error", content);
+			Gson gson = new Gson();
+			result = gson.toJson(insertedPost);
 		} else {
 			result = createJSONResult("error", "Can't insert new post. It's supposed trip_id is invalid.", postHtml);
 			//We have to clean up photos
