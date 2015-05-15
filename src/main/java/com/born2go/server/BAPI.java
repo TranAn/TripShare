@@ -72,17 +72,19 @@ public class BAPI extends HttpServlet implements Servlet{
 		
 		Long tripID, postID, createdTime;
 		try {
-			tripID = Long.parseLong(tripStr);
-			postID = Long.parseLong(postStr);
-			createdTime = Long.parseLong(createdStr);
-			verNum = Integer.parseInt(verStr);
+			tripID = Long.parseLong(tripStr.trim());
+			postID = Long.parseLong(postStr.trim());
+			createdTime = Long.parseLong(createdStr.trim());
+			verNum = Integer.parseInt(verStr.trim());
 		} catch (NumberFormatException e) {
 			deleteBlobKeysOnError(blobKeys, resp);
+			System.out.print("trip_id = " + tripStr + " , post_id = " + postStr + ", created_date = " + createdStr);
 			return;
 		}
 		
 		if (tripID == 0){
 			deleteBlobKeysOnError(blobKeys, resp);
+			System.out.print("trip_id = " + tripStr);
 //			resp.setContentType("application/json; charset=utf-8");
 //			result = createJSONResult("false", "Can't post to TripID = 0", "");
 //			resp.getWriter().write(result);
@@ -162,7 +164,8 @@ public class BAPI extends HttpServlet implements Servlet{
 		}
 		else {
 			realPost.setTitle(titleStr);
-			realPost.setCreateDate(new Date(createdTime));
+			realPost.setDescription(postHtml);
+			//realPost.setCreateDate(new Date(createdTime));
 			insertedPost = dataService.updatePart(realPost);
 		}
 		
@@ -194,9 +197,8 @@ public class BAPI extends HttpServlet implements Servlet{
 	}
 	
 	private void deleteBlobKeysOnError(List<BlobKey> blobKeys, HttpServletResponse resp) throws IOException{
-		if (blobKeys == null)
-			return;
-		blobstoreService.delete((BlobKey[])blobKeys.toArray());
+		if (blobKeys != null)
+			blobstoreService.delete((BlobKey[])blobKeys.toArray());
 		resp.setContentType("text/html; charset=utf-8");
 		resp.getWriter().write(createJSONResult("error", "Something's wrong - deleteBlobKeysOnError", ""));
 	}
