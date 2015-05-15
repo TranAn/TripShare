@@ -2,6 +2,7 @@ package com.born2go.client.widgets;
 
 import com.born2go.client.TripShare;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.LabelElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -12,6 +13,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -34,6 +36,8 @@ public class PhotoUpload extends DialogBox {
 	@UiField LongBox boxPathId;
 	@UiField Label lbPhotosCount;
 	@UiField Image imgUploading;
+	@UiField Anchor pick_files;
+	@UiField Label lbUploadProgress;
 	
 	boolean isHandlerUploadEvent = false;
 
@@ -47,16 +51,18 @@ public class PhotoUpload extends DialogBox {
 		setGlassEnabled(true);
 		setAnimationEnabled(true);
 		
-		formUpload.setEncoding(FormPanel.ENCODING_MULTIPART);
-		formUpload.setMethod(FormPanel.METHOD_POST);
+//		formUpload.setEncoding(FormPanel.ENCODING_MULTIPART);
+//		formUpload.setMethod(FormPanel.METHOD_POST);
 		
 		fileUpload.setName("filesUpload");
 		boxTripId.setName("tripId");
 		boxPathId.setName("pathId");
 	
 		fileUpload.getElement().setAttribute("id", "fileUpload");
-		imageTable.getElement().setAttribute("id", "imageTable");
+		imageTable.getElement().setAttribute("id", "container");
 		lbPhotosCount.getElement().setAttribute("id", "lbPhotosCount");
+		pick_files.getElement().setAttribute("id", "pick_files");
+		lbUploadProgress.getElement().setAttribute("id", "lbUploadProgress");
 		
 		DOM.setElementProperty(fileUpload.getElement(), "multiple", "multiple"); 
 		
@@ -84,10 +90,11 @@ public class PhotoUpload extends DialogBox {
 	}
 	
 	public void handlerUploadEvent() {
-		if(!isHandlerUploadEvent) {
-			handleFileSelect();
-			isHandlerUploadEvent = true;
-		}
+		getPlupLoad();
+//		if(!isHandlerUploadEvent) {
+//			handleFileSelect();
+//			isHandlerUploadEvent = true;
+//		}
 	}
 	
 	public static native void handleFileSelect() /*-{
@@ -114,8 +121,7 @@ public class PhotoUpload extends DialogBox {
 		        return function(e) {
 		          // Render thumbnail.
 		          var span = document.createElement('span');
-		          span.innerHTML = ['<img class="PhotoUpload-Obj11" src="', e.target.result,
-		                            '" title="', escape(theFile.name), '"/>'].join('');
+		          span.innerHTML = ['<img class="PhotoUpload-Obj11" src="', e.target.result,'" title="', escape(theFile.name), '"/>'].join('');
 		          $wnd.document.getElementById('imageTable').insertBefore(span, null);
 		        };
 		      })(f);
@@ -165,8 +171,7 @@ public class PhotoUpload extends DialogBox {
 			
 			@Override
 			public void onSuccess(String result) {
-				formUpload.setAction(result.toString());
-				formUpload.submit();
+				startPlupLoad(result);
 			}
 			
 			@Override
@@ -176,4 +181,121 @@ public class PhotoUpload extends DialogBox {
 			}
 		});
 	}
+	
+	public static native void startPlupLoad(String uploadUrl) /*-{
+		var upload_url = uploadUrl;
+		$wnd.uploader.settings.url = upload_url;
+		$wnd.uploader.start();
+	}-*/;
+	
+	public static native void updatePlupLoad(String uploadUrl) /*-{
+		var upload_url = uploadUrl;
+		$wnd.uploader.settings.url = upload_url;
+	}-*/;
+	
+	public static void updateUploaderUrl() {
+		TripShare.dataService.getUploadUrl(new AsyncCallback<String>() {
+			@Override
+			public void onSuccess(String result) {
+				updatePlupLoad(result);
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("!: Failed to get blob service upload url.");
+			}
+		});
+	};
+	
+	public static native void getPlupLoad() /*-{
+		var files_remaining;          
+	  	$wnd.uploader = new $wnd.plupload.Uploader({
+		    runtimes : 'flash',
+		    container: $wnd.document.getElementById('container'), // ... or DOM Element itself
+		    browse_button : 'pick_files', // you can pass in id...
+		    url : '/',
+		    use_query_string: false,
+		    dragdrop: true,
+		     
+		    filters : {
+		        max_file_size : '5mb',
+		        mime_types: [
+		            {title : "Image files", extensions : "jpg,png"}  
+		        ]
+		    },
+		 
+		    // Flash settings
+		    flash_swf_url : '/resources/plupload/Moxie.swf',
+		 
+		    // Silverlight settings
+//		    silverlight_xap_url : '/plupload/js/Moxie.xap',
+		    
+		    // PreInit events, bound before any internal events
+	        preinit : {
+	            Init: function(up, info) {
+	            },
+	 
+	            UploadFile: function(up, file) {
+	            	if(files_remaining > 1)
+			    		@com.born2go.client.widgets.PhotoUpload::updateUploaderUrl()();
+	            }
+	        },
+		 
+		    init: {
+		        PostInit: function() {			        
+		        },
+		        
+		        QueueChanged: function(up) {
+	            	files_remaining = $wnd.uploader.files.length;
+	            	$wnd.document.getElementById('lbPhotosCount').innerHTML = files_remaining + " / Photos";
+	        	},
+		 
+		        FilesAdded: function(up, files) {
+ 				   $wnd.plupload.each(files, function(file) {
+						var img = new $wnd.o.Image();
+						                  
+	                    img.onload = function() {
+	                        // create a thumb placeholder
+	                        var span = document.createElement('span');
+	                        span.id = this.uid;	                      
+	                        span.className = "PhotoUpload-Obj11";                       
+	                        $wnd.document.getElementById('container').insertBefore(span, null);
+	                     
+	                        // embed the actual thumbnail
+	                        var widthcrop = 300;
+	                        var heightcrop = widthcrop / (this.width/this.height);
+	                        this.embed(span.id, {	  
+	                            width: widthcrop,
+	                            height: heightcrop,
+	                            crop: true
+	                        });
+	                    };
+	                    
+	                    // drop thumbnails at different angles (optional eye candy)
+	                    img.onembedded = function() {
+	                        $wnd.plupload.each(['', '-ms-', '-webkit-', '-o-', '-moz-'], function(prefix) {
+	                            $wnd.document.getElementById(img.uid).style[prefix + 'transform'] = 'rotate('+ (Math.floor(Math.random() * 6) - 3) + 'deg)';
+	                        });
+	                    };
+	                    
+	                    img.load(file.getSource());
+				  });
+		        },		      	
+		 
+		        UploadProgress: function(up, file) {
+		            $wnd.document.getElementById('lbUploadProgress').innerHTML = '<span>' + file.percent + "%</span>";
+		        },
+		        
+		        FileUploaded: function(up, file, info) {
+	                files_remaining--;
+	            },
+		 
+		        Error: function(up, err) {
+		            $wnd.document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + err.message;
+		        }
+		    }
+		});
+		 
+		$wnd.uploader.init();
+	}-*/;
 }

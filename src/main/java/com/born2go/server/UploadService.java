@@ -38,7 +38,7 @@ public class UploadService extends HttpServlet implements Servlet {
 			throws ServletException, IOException {
 		
 		Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(req);
-		List<BlobKey> blobKeys = blobs.get("filesUpload");
+		List<BlobKey> blobKeys = blobs.get("pick_files");
 		
 		if(blobKeys != null) {
 			for(BlobKey key: blobKeys) {

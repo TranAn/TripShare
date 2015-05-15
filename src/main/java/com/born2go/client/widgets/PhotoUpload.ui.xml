@@ -93,6 +93,10 @@
 	}
 	
 	.PhotoUpload-Obj11 {
+		
+	}
+	
+	.PhotoUpload-Obj11 img {
 		max-width: 125px;
 		max-height: 102px;
 		height: 102px;
@@ -116,22 +120,25 @@
 		<g:HTMLPanel height="16px" styleName="{style.PhotoUpload-Obj1}" width="">
 			<g:Label text="Upload Photos" styleName="font-blackTitleNormal {style.PhotoUpload-Obj12}"/>
 			<g:Image url="/resources/loading.gif" styleName="{style.PhotoUpload-Obj13}" width="30px" height="18px" ui:field="imgUploading" visible="false"/>
+			<g:Label ui:field="lbUploadProgress">0%</g:Label>
 		</g:HTMLPanel>
 		
-		<g:FormPanel visible="false" ui:field="formUpload">
-			<g:HTMLPanel>
-				<g:LongBox ui:field="boxTripId" /> 
-				<g:LongBox ui:field="boxPathId" /> 
+		
+			<g:HTMLPanel visible="false">
 				<g:FileUpload width="100%" height="100%" ui:field="fileUpload" />
 			</g:HTMLPanel>
-		</g:FormPanel>
 		
-		<g:ScrollPanel height="140px">
-			<g:HTMLPanel styleName="{style.PhotoUpload-Obj9}" height="100%" ui:field="imageTable">
-				<label for="fileUpload" style="width:100px; height:100px" class="PhotoUpload-Obj10" >
-					<i style="margin-top: 19px;margin-left: 24px;" class="fa fa-plus fa-5x"></i>
-				</label>
-			</g:HTMLPanel>
+		
+		<g:ScrollPanel height="160px">
+			<g:FormPanel ui:field="formUpload">
+				<g:HTMLPanel styleName="{style.PhotoUpload-Obj9}" height="100%" ui:field="imageTable">
+					<g:LongBox ui:field="boxTripId" visible="false"/> 
+					<g:LongBox ui:field="boxPathId" visible="false"/> 
+					<g:Anchor width="100px" height="100px" styleName="PhotoUpload-Obj10" ui:field="pick_files" >
+						<i style="margin-top: 19px;margin-left: 24px;" class="fa fa-plus fa-5x"></i>
+					</g:Anchor>
+				</g:HTMLPanel>
+			</g:FormPanel>
 		</g:ScrollPanel>
 		
 		<g:HTMLPanel styleName="{style.PhotoUpload-Obj6}" height="35px">

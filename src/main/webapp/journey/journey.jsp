@@ -99,6 +99,7 @@
 <script type="text/javascript" src="/myjs/facebookConnect.js"></script>
 <script type="text/javascript" src="http://slideshow.triptracker.net/slide.js"></script>
 <script type="text/javascript" src="/resources/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="/resources/plupload/plupload.full.min.js"></script>
 <script src="http://connect.facebook.net/en_US/all.js"></script>
 
 <!-- <script>
