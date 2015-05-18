@@ -51,7 +51,6 @@
   		margin-left: 10px;
   		float: right;
   		margin-top: 3px;
-  		margin-right: 7px;
 	}
 	
 	.PhotoUpload-Obj6 {
@@ -114,35 +113,38 @@
 	.PhotoUpload-Obj13 {
 		float: left;
 		margin-left: 10px;
+		margin-top: 8px;
+	}
+	
+	.PhotoUpload-Obj14 {
+		font-size: 14px;
+  		color: silver;
+  		margin-left: 8px;
 	}
 	</ui:style>
 	<g:HTMLPanel width="650px" height="">
 		<g:HTMLPanel height="16px" styleName="{style.PhotoUpload-Obj1}" width="">
 			<g:Label text="Upload Photos" styleName="font-blackTitleNormal {style.PhotoUpload-Obj12}"/>
-			<g:Image url="/resources/loading.gif" styleName="{style.PhotoUpload-Obj13}" width="30px" height="18px" ui:field="imgUploading" visible="false"/>
-			<g:Label ui:field="lbUploadProgress">0%</g:Label>
 		</g:HTMLPanel>
 		
-		
-			<g:HTMLPanel visible="false">
-				<g:FileUpload width="100%" height="100%" ui:field="fileUpload" />
-			</g:HTMLPanel>
-		
-		
-		<g:ScrollPanel height="160px">
+		<g:ScrollPanel height="170px">
 			<g:FormPanel ui:field="formUpload">
-				<g:HTMLPanel styleName="{style.PhotoUpload-Obj9}" height="100%" ui:field="imageTable">
-					<g:LongBox ui:field="boxTripId" visible="false"/> 
-					<g:LongBox ui:field="boxPathId" visible="false"/> 
+				<g:HTMLPanel styleName="{style.PhotoUpload-Obj9}" height="100%" ui:field="container">
 					<g:Anchor width="100px" height="100px" styleName="PhotoUpload-Obj10" ui:field="pick_files" >
 						<i style="margin-top: 19px;margin-left: 24px;" class="fa fa-plus fa-5x"></i>
 					</g:Anchor>
+					
+					<g:HTMLPanel styleName="{style.PhotoUpload-Obj9}" height="100%" ui:field="imageTable" />
 				</g:HTMLPanel>
 			</g:FormPanel>
 		</g:ScrollPanel>
 		
 		<g:HTMLPanel styleName="{style.PhotoUpload-Obj6}" height="35px">
 			<g:Label text="0 / Photos" styleName="{style.PhotoUpload-Obj7}" ui:field="lbPhotosCount"/>
+			<g:HorizontalPanel ui:field="uploadingForm" styleName="{style.PhotoUpload-Obj13}" visible="false">
+				<g:Image url="/resources/loading.gif" width="30px" height="18px" ui:field="imgUploading"/>
+				<g:Label ui:field="lbUploadProgress" styleName="{style.PhotoUpload-Obj14}">0%</g:Label>
+			</g:HorizontalPanel>
 			<g:HorizontalPanel styleName="{style.PhotoUpload-Obj4}">
 				<g:Anchor ui:field="btnPost"  styleName="greenbutton {style.PhotoUpload-Obj5}" ><i style="margin-right:5px;" class="fa fa-cloud-upload fa-lg"></i> Upload</g:Anchor>
 				<g:Anchor ui:field="btnCancel"  styleName="greenbutton {style.PhotoUpload-Obj5}" ><i style="margin-right:5px;" class="fa fa-ban fa-lg"></i> Cancel</g:Anchor> 

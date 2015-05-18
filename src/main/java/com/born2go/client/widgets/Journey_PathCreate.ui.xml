@@ -138,7 +138,6 @@
 	.PathCreate-Obj17 {
 		font-style: italic;
 	}
-
 	</ui:style>
 	<g:HTMLPanel ui:field="container" styleName="{style.PathCreate-Obj3}">
 	
@@ -155,7 +154,7 @@
 				<td style="border-right: 1px dotted silver; padding-left: 20px;"></td>
 				<!--  -->
 				<td style="padding-top: 5px;">
-				<g:Label text="Title (*):" ui:field="lbTitle" width="55px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>
+				<g:Label text="Title:" ui:field="lbTitle" width="55px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>
 				</td>
 				<td style="padding-left: 5px;">
 				<g:TextBox width="" ui:field="txbTitle" height=""/>
@@ -193,7 +192,7 @@
 					<g:LongBox ui:field="boxTripId" visible="false"/>
 					<g:LongBox visible="false" ui:field="boxPathId"/>
 					<g:FileUpload width="100%" height="100%" ui:field="pathPhotoUpload" visible="false"/>
-					<label for="pathPhotoUpload" class="PhotoUpload-Obj2">
+					<label for="pathPhotoUpload" class="boxbutton">
 						<i style="margin-right:5px;" class="fa fa-camera fa-lg"></i>
 						Upload Photos
 					</label>

@@ -38,7 +38,9 @@ public class UploadService extends HttpServlet implements Servlet {
 			throws ServletException, IOException {
 		
 		Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(req);
-		List<BlobKey> blobKeys = blobs.get("pick_files");
+		List<BlobKey> blobKeys = blobs.get("file");
+//		System.out.println("Trip Id: "+ req.getParameter("tripId")+ "-----------------------------------");
+//		System.out.println("Path Id: "+ req.getParameter("pathId")+ "-----------------------------------");
 		
 		if(blobKeys != null) {
 			for(BlobKey key: blobKeys) {
@@ -55,7 +57,7 @@ public class UploadService extends HttpServlet implements Servlet {
 			    	if(req.getParameter("pathId") != null && !req.getParameter("pathId").isEmpty())
 			    		file.setOnPath(Long.valueOf(req.getParameter("pathId").replaceAll(",", "")));
 			    	file.setKey(key.getKeyString());
-			    	String serveUrl = imagesService.getServingUrl(ServingUrlOptions.Builder.withBlobKey(key));
+			    	String serveUrl = imagesService.getServingUrl(ServingUrlOptions.Builder.withBlobKey(key)).replace("0.0.0.0", "127.0.0.1");
 			    	file.setServeUrl(serveUrl);
 					Key<Picture> keyPicture = ofy().save().entity(file).now();
 					Picture exportPicture = ofy().load().key(keyPicture).now();

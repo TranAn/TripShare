@@ -78,7 +78,6 @@ public class Journey_PathView extends Composite {
 	
 	private Journey_TripEdit tripInfo;
 	private Journey_PathCreate pathCreate = new Journey_PathCreate();
-	private PhotoUpload photoUpload = new PhotoUpload();
 	private Trip theTrip;
 	private boolean isPoster = false;
 	private boolean isAdmin = false;
@@ -401,9 +400,9 @@ public class Journey_PathView extends Composite {
 	@UiHandler("btnUpload")
 	void onBtnUploadClick(ClickEvent event) {
 		if(isPoster) {
+			PhotoUpload photoUpload = new PhotoUpload();
 			photoUpload.center();
-			photoUpload.uploadFor(tripId, null);
-			photoUpload.handlerUploadEvent();
+			photoUpload.handlerUploadEvent(tripId, null);
 		}
 	}
 

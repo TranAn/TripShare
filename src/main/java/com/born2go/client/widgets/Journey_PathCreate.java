@@ -510,11 +510,11 @@ public class Journey_PathCreate extends Composite {
 	
 	boolean VerifiedField() {
 		boolean isFieldComplete = true;
-		if(txbTitle.getText().isEmpty()) {
-			lbTitle.setStyleName("font-redTitleNormal");
-			txbTitle.setFocus(true);
-			isFieldComplete = false;
-		} 
+//		if(txbTitle.getText().isEmpty()) {
+//			lbTitle.setStyleName("font-redTitleNormal");
+//			txbTitle.setFocus(true);
+//			isFieldComplete = false;
+//		} 
 		return isFieldComplete;
 	}
 	

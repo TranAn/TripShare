@@ -79,7 +79,7 @@ public class TravelMap {
 		PolylineOptions polyLineOption = PolylineOptions.create();
 		polyLineOption.setStrokeColor("blue");
 		polyLineOption.setStrokeOpacity(0.5);
-		polyLineOption.setStrokeWeight(5.0);
+		polyLineOption.setStrokeWeight(8.0);
 		polyline = Polyline.create(polyLineOption);
 		polyline.setMap(theMap);
 		
@@ -146,7 +146,7 @@ public class TravelMap {
 
 	public static void addMarker(final LatLng position, final String info, boolean isOriginPoint, boolean isOpenInfoWindow) {
 		MarkerOptions markerOption = MarkerOptions.create();
-		markerOption.setAnimation(Animation.DROP);
+		markerOption.setAnimation(Animation.BOUNCE);
 		if(!isOriginPoint)
 			markerOption.setIcon("/resources/green-spotlight.png");
 		else

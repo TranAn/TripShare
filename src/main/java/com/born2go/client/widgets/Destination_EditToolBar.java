@@ -153,10 +153,10 @@ public class Destination_EditToolBar extends Composite {
 	
 	void addEditor() {
 		Label btnEdit = new Label();
-		btnEdit.setStyleName("PhotoUpload-Obj2");
+		btnEdit.setStyleName("boxbutton");
 		btnEdit.getElement().setInnerHTML("<i style='margin-right:5px;' class='fa fa-pencil fa-lg'></i>Edit");
 		Label btnUpload = new Label();
-		btnUpload.setStyleName("PhotoUpload-Obj2");
+		btnUpload.setStyleName("boxbutton");
 		btnUpload.getElement().setInnerHTML("<i style='margin-right:5px;' class='fa fa-camera fa-lg'></i>Upload Photos");
 		RootPanel.get("pathEditTool").add(btnEdit);
 		RootPanel.get("pathUploadTool").add(btnUpload);
@@ -171,9 +171,8 @@ public class Destination_EditToolBar extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				PhotoUpload photoUpload = new PhotoUpload();
-				photoUpload.uploadFor(path.getTripId(), path.getId());
 				photoUpload.center();
-				photoUpload.handlerUploadEvent();
+				photoUpload.handlerUploadEvent(path.getTripId(), path.getId());
 			}
 		});
 	}
@@ -198,9 +197,9 @@ public class Destination_EditToolBar extends Composite {
 		//add edit tool
 		Label btnSave = new Label();
 		Label btnCancel = new Label();
-		btnSave.setStyleName("PhotoUpload-Obj2");
+		btnSave.setStyleName("boxbutton");
 		btnSave.getElement().setInnerHTML("<i style='margin-right:5px;' class='fa fa-floppy-o fa-lg'></i>Save");
-		btnCancel.setStyleName("PhotoUpload-Obj2");
+		btnCancel.setStyleName("boxbutton");
 		btnCancel.getElement().setInnerHTML("<i style='margin-right:5px;' class='fa fa-ban fa-lg'></i>Cancel");
 		RootPanel.get("pathEditTool").add(btnSave);
 		RootPanel.get("pathEditTool").add(btnCancel);
@@ -250,7 +249,7 @@ public class Destination_EditToolBar extends Composite {
 		newContainer.getElement().setInnerHTML(path.getDescription());
 		Window.scrollTo(0, 85);
 		Label btnEdit = new Label();
-		btnEdit.setStyleName("PhotoUpload-Obj2");
+		btnEdit.setStyleName("boxbutton");
 		btnEdit.getElement().setInnerHTML("<i style='margin-right:5px;' class='fa fa-pencil fa-lg'></i>Edit");
 		RootPanel.get("pathEditTool").add(btnEdit);
 		//event handler

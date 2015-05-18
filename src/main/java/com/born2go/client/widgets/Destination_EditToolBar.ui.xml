@@ -7,6 +7,7 @@
 	}
 	</ui:style>
 	<g:HTMLPanel ui:field="htmlImages">
-		<g:FlexTable styleName="{style.pointer}" ui:field="flextImages" cellPadding="5"/>
+		<g:FlexTable styleName="{style.pointer}" ui:field="flextImages"
+			cellPadding="5" />
 	</g:HTMLPanel>
 </ui:UiBinder> 

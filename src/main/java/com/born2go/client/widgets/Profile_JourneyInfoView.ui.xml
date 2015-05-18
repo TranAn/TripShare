@@ -162,7 +162,7 @@
 							</g:HorizontalPanel>
 						</g:VerticalPanel>
 					</g:HTMLPanel>
-					<g:Anchor ui:field="btnViewDetail" styleName="PhotoUpload-Obj2 {style.JourneyInfoView-Obj10}"><i style="margin-right:5px;" class="fa fa-eye fa-lg"/>View Description</g:Anchor>
+					<g:Anchor ui:field="btnViewDetail" styleName="boxbutton {style.JourneyInfoView-Obj10}"><i style="margin-right:5px;" class="fa fa-eye fa-lg"/>View Description</g:Anchor>
 				</td>
 			</tr>
 		</table>
