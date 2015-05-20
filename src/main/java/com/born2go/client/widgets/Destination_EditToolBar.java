@@ -68,7 +68,7 @@ public class Destination_EditToolBar extends Composite {
 		
 		// Setting size
 		ckf.setWidth("");
-		ckf.setHeight("250px");
+		ckf.setHeight("");
 
 		// Creating personalized toolbar
 		ToolbarLine line1 = new ToolbarLine();

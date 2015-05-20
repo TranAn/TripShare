@@ -48,6 +48,7 @@
 	//Global variable
 	Trip trip = new Trip();
 	String tripId = "";
+	String tripAvatar = "";
 	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d hh:mm:ss");
 	if (request.getPathInfo() == null
 			|| request.getPathInfo().length() < 1) {
@@ -87,7 +88,14 @@
 <!--                                           -->
 <!-- Any title is fine                         -->
 <!--                                           -->
-<title>Journey</title>
+<title><%=trip.getName()%></title>
+<meta property="og:title" content="<%=trip.getName().replaceAll("\"", "\'")%>" />
+<meta property="og:type" content="article" />
+<meta property="og:image" content="<%= tripAvatar %>" />
+<meta property="og:url" content="http://born2go-b.appspot.com/journey/<%= tripId %>" />
+<%if(trip.getDescription() != null) { %>
+<meta property="og:description" content='<%=trip.getDescription().replaceAll("\'", "\"").replace("\n", "").replace("\r", "")%>' />
+<%;} %>
 
 <!--                                           -->
 <!-- This script loads your compiled module.   -->
@@ -173,6 +181,9 @@
 				<tr>
 				<td valign="top" style="width:100%">
 					<div class="font-blackTitleLarge" style="font-size: 30px;font-family: museo-w01-700,serif; color:rgb(56, 119, 127)"><%=trip.getName()%></div>
+					<div style="float: right; margin-top: 12px;">
+						<div class="fb-like" data-href="http://born2go-b.appspot.com/journey/<%= tripId %>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+					</div>
 					<div style="display: inline-flex; display: -webkit-inline-box; display: -webkit-inline-flex; display: -ms-inline-flexbox; -webkit-align-self: auto;">
 						<div class="font-blackTitleLarge" style="margin-top: 12px;margin-bottom: 20px;margin-right: 4px;font-size: 15px;font-family: museo-w01-700,serif; color:gray; font-style: italic;">Create by:</div>
 						<%if(trip.getPoster() != null) {%>

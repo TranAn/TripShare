@@ -88,7 +88,7 @@ public class Create_CreateTrip extends Composite {
 		
 		// Setting size
 		ckf.setWidth("100%");
-		ckf.setHeight("180px");
+		ckf.setHeight("");
 		ckf.setResizeMinHeight(180);
 
 		// Creating personalized toolbar

@@ -34,7 +34,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 	Path path = new Path();
 	String pathId = "";
 	String pathTitle = "";
-	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d hh:mm:ss");
+	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d - hh:mm:ss");
 	String pathPicture = "";
 	//Get the data 
 	if (request.getPathInfo() == null || request.getPathInfo().length() < 1) {
@@ -179,14 +179,19 @@ public void redirectHomeUrl(HttpServletResponse response) {
 						<td valign="top" style="padding-right: 10px;">
 							<div class="left_Path">
 								<div id="pathTitle" class="font_4 "><%=pathTitle%></div>
-								<div style="height: 40px;">
+								<div style="float: right;">
+									<div class="fb-like" data-href="http://born2go-b.appspot.com/destination/<%= pathId %>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+								</div>
+								<div style="height: 48px;">
 								<%if(path.getPoster() != null) {%>
 								<p class="font_9">
-									Post by: <a href="/profile/<%=path.getPoster().getUserID()%>"><%=path.getPoster().getUserName()%></a>
+									<span>Post by: </span>
+									<a href="/profile/<%=path.getPoster().getUserID()%>"><%=path.getPoster().getUserName()%></a>
+									<img style="border: 1px silver solid;border-radius: 20px;overflow: hidden;margin-left: 8px;margin-bottom: -15px;" src="https://graph.facebook.com/<%=path.getPoster().getUserID()%>/picture?width=25&height=25" />
 								</p>
 								<%;} %>
 								<%if(path.getCreateDate() != null) {%>
-								<p class="font_9">Date post:<%=df.format(path.getCreateDate())%></p>
+								<p class="font_9">Date post: <%=df.format(path.getCreateDate())%></p>
 								<%;} %>
 								</div>
 								<div style="background: whitesmoke;min-height: 10px;padding: 15px 0px;">

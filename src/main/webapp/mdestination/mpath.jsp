@@ -1,4 +1,6 @@
 <%@page import="com.born2go.shared.Path"%>
+<%@page import="com.born2go.shared.Picture"%>
+<%@ page import="java.util.List"%>
 <%@ page import="com.google.gwt.user.client.Window"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ page import="com.google.appengine.api.users.User"%>
@@ -13,26 +15,26 @@
 	}%>
 <%
 	if (request.getPathInfo() == null
-			|| request.getPathInfo().length() <= 1) {
+	|| request.getPathInfo().length() <= 1) {
 		redirectHomeUrl(response);
 	} else {
 		String patId = request.getPathInfo().replaceAll("/", "");
 		Long idPath = null;
 		try {
-			idPath = Long.parseLong(patId);
+	idPath = Long.parseLong(patId);
 		} catch (NumberFormatException e) {
-			idPath = null;
-			redirectHomeUrl(response);
+	idPath = null;
+	redirectHomeUrl(response);
 		}
 		 
 		if (idPath != null) {
-			DataServiceImpl service = new DataServiceImpl();
-			Path path = service.findPart(idPath);
-			if (path == null)
-				redirectHomeUrl(response);
-			else {
-				String urlFacebook = request.getRequestURL().toString();
-				String title = path.getLocate().getAddressName();
+	DataServiceImpl service = new DataServiceImpl();
+	Path path = service.findPart(idPath);
+	if (path == null)
+		redirectHomeUrl(response);
+	else {
+		 
+		String title = path.getTitle();
 %>
 <!doctype html>
 <!-- The DOCTYPE declaration above will set the    -->
@@ -69,8 +71,8 @@
 <!--                                           -->
 <script type="text/javascript" language="javascript"
 	src="../tripshare/tripshare.nocache.js"></script>
-<script src="http://connect.facebook.net/en_US/all.js"></script>
-<script type="text/javascript" src="/myjs/facebookConnect.js"></script>
+<!-- <script src="http://connect.facebook.net/en_US/all.js"></script>
+<script type="text/javascript" src="/myjs/facebookConnect.js"></script>  -->
 <script type="text/javascript"
 	src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false;key=AIzaSyCwX2qpyTev25qwNaBxFXBbgIhbPtFeLHw"></script>
 
@@ -99,11 +101,9 @@
 <!-- to create a completely dynamic UI.        -->
 <!--                                           -->
 <body style="margin: 0px; background: none;">
-	<div id="fb-root"></div>
 	<!-- OPTIONAL: include this if you want history support -->
 	<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
 		style="position: absolute; width: 0; height: 0; border: 0"></iframe>
-
 	<!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
 	<noscript>
 		<div
@@ -120,7 +120,16 @@
 	<!-- Add Content here -->
 	<div class="mcontent">
 		<div class="mnametrip">
-			<h1><%=path.getLocate().getAddressName()%></h1>
+			<%
+				String hrefProfile = "/profile/" + path.getPoster().getUserID().toString();
+				String namePath = null;
+							if(path.getTitle() != null)
+								namePath = path.getTitle();
+							else
+								if(path.getLocate() != null)
+									namePath = path.getLocate().getAddressName();
+			%>
+			<h1><%=namePath%></h1>
 		</div>
 		<table cellpadding="0" cellspacing="0" border="0"
 			style="line-height: 17px">
@@ -135,8 +144,10 @@
 			<tr>
 				<td style="padding-right: 5px"><div class="mitalictext">Created
 						by</div></td>
-				<td><div class="mitalictext"><%=(path.getPoster() != null ? path.getPoster()
-								.getUserName() : "Tester")%></div></td>
+				<td><div class="mitalictext">
+				<a href=<%=hrefProfile %>><%=(path.getPoster() != null ? path.getPoster()
+								.getUserName() : "Tester")%></a>
+				</div></td>
 			</tr>
 		</table>
 		<div class="mitinerary">
@@ -145,7 +156,26 @@
 		<p class="mparagraptext">
 			<%=path.getDescription()%>
 		</p>
+		<!-- show gallery -->
 		<%
+			if(path.getGallery() != null && !path.getGallery().isEmpty()){
+				List<Long> idsPicture = path.getGallery();
+				List<Picture> gallery = service.listPicture(idsPicture);
+				if(gallery != null && !gallery.isEmpty())
+				{
+		%>
+		<div class="view_more">Gallery</div>
+		<%
+			for(int i = 0; i < gallery.size(); i++ ){
+			Picture p = gallery.get(i);
+			if( p != null ){
+				String serveUrl = p.getServeUrl();
+		%>
+		<div class="image_gallery">
+			<img alt="" src=<%=serveUrl%>>
+		</div>
+		<%
+			}}}}
 			}
 				}
 			}

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.axeiya.gwtckeditor.client.CKConfig;
 import com.axeiya.gwtckeditor.client.CKConfig.TOOLBAR_OPTIONS;
-import com.axeiya.gwtckeditor.client.CKEditor;
 import com.axeiya.gwtckeditor.client.Toolbar;
 import com.axeiya.gwtckeditor.client.ToolbarLine;
 import com.born2go.client.TripShare;
@@ -32,6 +31,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.LongBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -80,7 +80,7 @@ public class Journey_PathCreate extends Composite {
 		this.listener = listener;
 	}
 	
-	CKEditor txbRichDescription;
+	TextArea txbRichDescription;
 	
 	public CKConfig getCKConfig() {
 		// Creates a new config, with FULL preset toolbar as default
@@ -92,6 +92,7 @@ public class Journey_PathCreate extends Composite {
 		// Setting size
 		ckf.setWidth("");
 		ckf.setHeight("180px");
+		ckf.setResizeMinHeight(180);
 		ckf.setResizeMaxHeight(250);
 
 		// Creating personalized toolbar
@@ -191,6 +192,8 @@ public class Journey_PathCreate extends Composite {
 		htmlPathPhotos.getElement().setAttribute("id", "htmlPathPhotos");
 		scrollPathPhotos.getElement().setAttribute("id", "scrollPathPhotos");
 		lbCountPhotos.getElement().setAttribute("id", "lbCountPhotos");
+		
+		
 		
 		txbDescription.getElement().setPropertyString("placeholder", "Write your feeling now, or about the story of your best memory on the journey!");
 		txbDescription.getElement().setAttribute("spellcheck", "false");
@@ -358,14 +361,14 @@ public class Journey_PathCreate extends Composite {
 	//			path.setLocate(locate);
 				path.setCreateDate(txbTimeline.getValue());
 				if(!isRichTextEdit) {
-					if(txbRichDescription != null) {
-						txbRichDescription.setData(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
-						path.setDescription(txbRichDescription.getData());
-					} else 
+//					if(txbRichDescription != null) {
+//						txbRichDescription.setText(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
+//						path.setDescription(txbRichDescription.getText());
+//					} else 
 						path.setDescription("<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
 				}
 				else
-					path.setDescription(txbRichDescription.getData());
+					path.setDescription(getDataCustomEditor());
 				TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
 					@Override
 					public void onSuccess(Path result) {
@@ -386,14 +389,14 @@ public class Journey_PathCreate extends Composite {
 			else {
 				updatePath.setTitle(txbTitle.getText());
 				if(!isRichTextEdit) {
-					if(txbRichDescription != null) {
-						txbRichDescription.setData(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
-						updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbRichDescription.getData()+ "</p>");
-					} else 
+//					if(txbRichDescription != null) {
+//						txbRichDescription.setText(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
+//						updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbRichDescription.getText()+ "</p>");
+//					} else 
 						updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
 				}
 				else
-					updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbRichDescription.getData()+ "</p>");
+					updatePath.setDescription(updatePath.getDescription()+ "<p>"+ getDataCustomEditor()+ "</p>");
 				TripShare.dataService.updatePart(updatePath, new AsyncCallback<Path>() {
 					@Override
 					public void onSuccess(Path result) {
@@ -427,8 +430,10 @@ public class Journey_PathCreate extends Composite {
 		txbDescription.setText("");
 		txbDescription.setVisible(true);
 		if(txbRichDescription != null) {
-			txbRichDescription.setData("");
+			txbRichDescription.setText("");
 			txbRichDescription.setVisible(false);
+			DOM.getElementById("cke_txbRichDescription").setAttribute("style", "display:none");
+			setDataCustomEditor("");
 		}
 		isRichTextEdit = false;
 		scrollPathPhotos.setHeight("0px");
@@ -480,9 +485,10 @@ public class Journey_PathCreate extends Composite {
 	@UiHandler("btnRichTextEdit") 
 	void onBtnRichTextEditClick(ClickEvent event) {
 		if(isRichTextEdit) {
-			if(txbRichDescription.getHTML().length() != 0) {
+			if(getDataCustomEditor().length() != 0) {
 				if(Window.confirm("!: Rich text can't convert to normal text, if you continue the text will be clear.")) {
 					txbRichDescription.setVisible(false);
+					DOM.getElementById("cke_txbRichDescription").setAttribute("style", "display:none");
 					txbDescription.setVisible(true);
 					btnRichTextEdit.removeStyleName("PathCreate-Obj16");
 					txbDescription.setText("");
@@ -490,6 +496,7 @@ public class Journey_PathCreate extends Composite {
 				}
 			} else {
 				txbRichDescription.setVisible(false);
+				DOM.getElementById("cke_txbRichDescription").setAttribute("style", "display:none");
 				txbDescription.setVisible(true);
 				btnRichTextEdit.removeStyleName("PathCreate-Obj16");
 				isRichTextEdit = !isRichTextEdit;
@@ -497,16 +504,37 @@ public class Journey_PathCreate extends Composite {
 		}
 		else {
 			if(txbRichDescription == null) {
-				txbRichDescription = new CKEditor(getCKConfig());
+				txbRichDescription = new TextArea();
+				txbRichDescription.getElement().setAttribute("id", "txbRichDescription");
 				editTextBox.add(txbRichDescription);
+				addCustomEditor();
 			}
-			txbRichDescription.setVisible(true);
+			else
+				DOM.getElementById("cke_txbRichDescription").setAttribute("style", "display:");
+//			txbRichDescription.setVisible(true);
 			txbDescription.setVisible(false);
 			btnRichTextEdit.addStyleName("PathCreate-Obj16");
-			txbRichDescription.setData(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
+			String transferText = txbDescription.getText().replaceAll("(\r\n|\n)", "<br />");
+			setDataCustomEditor(transferText);
 			isRichTextEdit = !isRichTextEdit;
 		}
 	}
+	
+	public static native void addCustomEditor() /*-{
+		$wnd.CKEDITOR.replace( 'txbRichDescription', {
+    		customConfig: '/resources/ckeditor/custom_config.js'
+		});
+	}-*/;
+	
+	public static native void setDataCustomEditor(String data) /*-{
+		var d = data;
+		$wnd.CKEDITOR.instances.txbRichDescription.setData(d);
+	}-*/;
+	
+	public static native String getDataCustomEditor() /*-{
+		var data = $wnd.CKEDITOR.instances.txbRichDescription.getData();
+		return data;
+	}-*/;
 	
 	boolean VerifiedField() {
 		boolean isFieldComplete = true;

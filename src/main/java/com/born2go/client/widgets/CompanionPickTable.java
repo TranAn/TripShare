@@ -102,23 +102,23 @@ public class CompanionPickTable extends DialogBox {
 					return false;
 			}
 		};
-		clCheck.setFieldUpdater(new FieldUpdater<Friend, Boolean>() {
-			@Override
-			public void update(int index, Friend object, Boolean value) {
-				selectionModel.setSelected(object, value);
-				String id = object.getId();
-				if (value == false) {
-					Poster p = new Poster();
-					p.setUserID(Long.valueOf(id));
-					listSelected.remove(p);
-				} else {
-					Poster p = new Poster();
-					p.setUserID(Long.valueOf(id));
-					p.setUserName(object.getName());
-					listSelected.add(p);
-				}
-			}
-		});
+//		clCheck.setFieldUpdater(new FieldUpdater<Friend, Boolean>() {
+//			@Override
+//			public void update(int index, Friend object, Boolean value) {
+//				selectionModel.setSelected(object, value);
+//				String id = object.getId();
+//				if (value == false) {
+//					Poster p = new Poster();
+//					p.setUserID(Long.valueOf(id));
+//					listSelected.remove(p);
+//				} else {
+//					Poster p = new Poster();
+//					p.setUserID(Long.valueOf(id));
+//					p.setUserName(object.getName());
+//					listSelected.add(p);
+//				}
+//			}
+//		});
 		talbeFriends.addColumn(clCheck);
 		talbeFriends.setColumnWidth(clCheck, "20px");
 		

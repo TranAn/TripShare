@@ -152,9 +152,9 @@
 				<groupId>com.google.appengine</groupId>
 				<artifactId>appengine-maven-plugin</artifactId>
 				<version>${appengine.target.version}</version>
-				<!-- <configuration>
+				<configuration>
 					<address>0.0.0.0</address>
-				</configuration> -->
+				</configuration>
 			</plugin>
 
 			<plugin>

@@ -115,7 +115,7 @@ public class Journey_TripEdit extends Composite {
 		ckf.setUiColor("#f6f7f8");
 		
 		// Setting size
-		ckf.setHeight("250px");
+		ckf.setHeight("");
 		ckf.setResizeMinHeight(250);
 
 		// Creating personalized toolbar

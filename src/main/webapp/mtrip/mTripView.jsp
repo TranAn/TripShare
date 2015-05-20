@@ -42,6 +42,7 @@
 	String urlFacebook = request.getRequestURL().toString();
 	String dateCreate = "Date post " + dateFormat1.format( trip.getCreateDate());
 	String poster = "Created by " + trip.getPoster().getUserName();
+	String hrefProfile = "/profile/"+ trip.getPoster().getUserID().toString();
 	String departureDate = dateFormat1.format( trip.getDepartureDate());
 %>
 <!doctype html>
@@ -79,8 +80,8 @@
 <!--                                           -->
 <script type="text/javascript" language="javascript"
 	src="../tripshare/tripshare.nocache.js"></script>
-<script src="http://connect.facebook.net/en_US/all.js"></script>
-<script type="text/javascript" src="/myjs/facebookConnect.js"></script>
+<!-- <script src="http://connect.facebook.net/en_US/all.js"></script>
+<script type="text/javascript" src="/myjs/facebookConnect.js"></script> -->
 <script type="text/javascript"
 	src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false;key=AIzaSyCwX2qpyTev25qwNaBxFXBbgIhbPtFeLHw"></script>
 
@@ -109,7 +110,6 @@
 <!-- to create a completely dynamic UI.        -->
 <!--                                           -->
 <body style="margin: 0px; background: none;">
-	<div id="fb-root"></div>
 	<!-- OPTIONAL: include this if you want history support -->
 	<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
 		style="position: absolute; width: 0; height: 0; border: 0"></iframe>
@@ -132,10 +132,25 @@
 		<div class="mnametrip">
 			<h1><%=trip.getName()%></h1>
 		</div>
-		<div class="mitalictext">
-			<%=dateCreate%></div>
-		<div class="mitalictext">
-			<%=poster%></div>
+		<table cellpadding="0" cellspacing="0" border="0"
+			style="line-height: 17px">
+			<tr>
+				<td style="padding-right: 5px">
+					<div class="mitalictext">Date post</div>
+				</td>
+				<td>
+					<div class="mitalictext"><%=dateFormat.format(trip.getCreateDate())%></div>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding-right: 5px"><div class="mitalictext">Created
+						by</div></td>
+				<td><div class="mitalictext">
+				<a href=<%=hrefProfile %>><%=(trip.getPoster() != null ? trip.getPoster()
+								.getUserName() : "Tester")%></a>
+				</div></td>
+			</tr>
+		</table>
 		<div class="mpadB10"></div>
 		<div class="mtripmap" id="mtripmap"></div>
 		<div class="mitinerary">
@@ -143,7 +158,8 @@
 		</div>
 
 		<div class="mtrip-destinations">
-			<img src="/resources/red-spotlight.png" /> <span><%=trip.getJourney().getLocates().get(0)
+			<img src="/resources/red-spotlight.png" /> 
+			<span><%=trip.getJourney().getLocates().get(0)
 							.getAddressName()%></span>
 		</div>
 		<%
@@ -186,10 +202,16 @@
 									{
 										Path path = listPaths.get(i);
 										String hrefShow = "/destination/"+ path.getId().toString();
+										String hrefProfile2 = "/profile/"+ path.getPoster().getUserID().toString();
+										String namePath = null;
+										if(path.getTitle() != null)
+											namePath = path.getTitle();
+										else if( path.getLocate() != null)
+											namePath = path.getLocate().getAddressName();
 			%>
 			<div class="mblock">
 				<h2>
-					<a href=<%=hrefShow%>><%=path.getLocate().getAddressName()%></a>
+					<a href=<%=hrefShow%>><%=namePath%></a>
 				</h2>
 				<table cellpadding="0" cellspacing="0" border="0"
 					style="line-height: 17px">
@@ -204,8 +226,10 @@
 					<tr>
 						<td style="padding-right: 5px"><div class="mitalictext">Created
 								by</div></td>
-						<td><div class="mitalictext"><%=(trip.getPoster() != null ? trip.getPoster()
-							.getUserName() : "Tester")%></div></td>
+						<td>
+						<div class="mitalictext"><a href= <%=hrefProfile2 %>><%=(trip.getPoster() != null ? trip.getPoster()
+							.getUserName() : "Tester")%></a></div>
+						</td>
 					</tr>
 				</table>
 				<p class="mparagraptext">
