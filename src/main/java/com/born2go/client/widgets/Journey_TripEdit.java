@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -233,6 +234,11 @@ public class Journey_TripEdit extends Composite {
 		companionTable.setTrip(trip.getCompanion());
 		listCompanion.clear();
 		listCompanion.addAll(trip.getCompanion());
+		btnAddFriend.getElement().setAttribute("id", "btnAddFriend");
+		if(trip.getCompanion().isEmpty()) 
+			btnAddFriend.removeStyleName("TripEdit_Obj14");
+		else
+			btnAddFriend.addStyleName("TripEdit_Obj14");
 		//
 		editContent.clear();
 		if(isEdit) {
@@ -381,10 +387,10 @@ public class Journey_TripEdit extends Composite {
 				listCompanion.clear();
 				listCompanion.addAll(friendsId);
 				companionTable.setTrip(friendsId);
-//				if(!friendsId.isEmpty()) 
-//					DOM.getElementById("btnAddFriend").addClassName("PathCreate-Obj16");
-//				else
-//					DOM.getElementById("btnAddFriend").removeClassName("PathCreate-Obj16");
+				if(!friendsId.isEmpty()) 
+					DOM.getElementById("btnAddFriend").addClassName("TripEdit_Obj14");
+				else
+					DOM.getElementById("btnAddFriend").removeClassName("TripEdit_Obj14");
 			}
 		});
 		ftable.setListFriend(LF.getListFriends(), listCompanion);

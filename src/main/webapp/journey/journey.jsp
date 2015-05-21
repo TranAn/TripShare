@@ -49,7 +49,7 @@
 	Trip trip = new Trip();
 	String tripId = "";
 	String tripAvatar = "";
-	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d hh:mm:ss");
+	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d - hh:mm:ss");
 	if (request.getPathInfo() == null
 			|| request.getPathInfo().length() < 1) {
 		redirectHomeUrl(response);
@@ -184,6 +184,7 @@
 					<div style="float: right; margin-top: 12px;">
 						<div class="fb-like" data-href="http://born2go-b.appspot.com/journey/<%= tripId %>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
 					</div>
+					
 					<div style="display: inline-flex; display: -webkit-inline-box; display: -webkit-inline-flex; display: -ms-inline-flexbox; -webkit-align-self: auto;">
 						<div class="font-blackTitleLarge" style="margin-top: 12px;margin-bottom: 20px;margin-right: 4px;font-size: 15px;font-family: museo-w01-700,serif; color:gray; font-style: italic;">Create by:</div>
 						<%if(trip.getPoster() != null) {%>
@@ -191,6 +192,7 @@
 						<img style="border: 1px silver solid;border-radius: 20px;overflow: hidden;margin-left: 8px;margin-bottom: 15px;" src="https://graph.facebook.com/<%=trip.getPoster().getUserID()%>/picture?width=25&height=25" />
 						<%} %>
 					</div>
+					
 					<div class="font-blackTitleLarge">Itinerary:</div>
 					<div class="trip-destinations">
 						<img src="/resources/red-spotlight.png" style="width:22px;height:30px;vertical-align: middle;"/> 
@@ -199,29 +201,26 @@
 					<%for (int i = 1; i < trip.getJourney().getLocates().size(); i++) { %>
 					<div class="trip-destinations"><img src="/resources/green-spotlight.png" style="width:22px;height:30px;vertical-align: middle;"/> <span style="margin-left:5px"> <%= trip.getJourney().getLocates().get(i).getAddressName() %> </span></div>
 					<%} %>
-					<div class="font-blackTitleLarge" style="margin-top:25px;">Departure date:</div>
 					
+					<div class="font-blackTitleLarge" style="margin-top:25px;">Departure date:</div>
 					<div class="trip-destinations">
 						<img src="/resources/1430221613_schedule.png" style="width:22px;height:30px;vertical-align: middle;"/> 
 						<span style="margin-left:5px"><%= df.format(trip.getDepartureDate()) %></span>
 					</div>
-					<%-- <div style="font-size:15px;"><%= dateFormat.format(trip.getDepartureDate()) %></div> --%>			
+					
+					<%-- <%if(!trip.getCompanion().isEmpty()) { %> --%>
+					<div class="font-blackTitleLarge" style="margin-top:30px;">Companion:</div>
+					<div class="trip-destinations">
+						<img src="/resources/1432155993_WLM.png" style="width:22px;height:28px;vertical-align: middle;float: left;margin-right: 6px;"/>
+						<div id="companion_table"></div>	
+					</div>	
+					<%-- <%} %>	 --%>
 				</td>
 				
 				<td valign="top" height="1">
 					<div id="tripMap" class="tripMap" style="width: 500px; height: 100%; margin-left: 10px; min-height: 400px; max-height: 500px; border:1px solid gray;"></div>
 				</td>
 				</tr>
-				
-				<%if(!trip.getCompanion().isEmpty()) { %>
-				<tr>
-					<td colspan="2">
-						<div class="tripInfoBorder"></div>
-						<div class="font-blackTitleLarge" style="margin-top:30px;">Companion:</div>
-						<div id="companion_table"></div>
-					</td>
-				</tr>
-				<%} %>
 				
 				<tr>
 					<td colspan="2">

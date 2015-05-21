@@ -13,8 +13,20 @@
 		background: aliceblue;
 		border-radius: 5px;
 	}
+	
+	.CompanionTable_Obj2 {
+		font-size: 15px;
+		font-family: museo-w01-700, serif;
+		font-style: italic;
+		margin-top: 15px;
+		cursor: pointer;
+		font-weight: 700;
+		position: relative;
+		float: left;
+		top: -8px;
+	}
 	</ui:style>
-	<g:HTMLPanel ui:field="container">
+	<g:HTMLPanel ui:field="container" styleName="{style.CompanionTable_Obj2}">
 
 	</g:HTMLPanel>
 </ui:UiBinder> 

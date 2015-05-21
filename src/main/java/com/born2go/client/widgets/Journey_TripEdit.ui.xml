@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client"
 	xmlns:p2="urn:import:com.born2go.client.widgets">
 	<ui:style>
-	@external .TripEdit-Obj3Edit, .TripEdit-Obj5, .TripEdit-Obj4, .TripEdit-Obj6, .TripEdit-Obj8Edit, .TripEdit-Disable;
+	@external .TripEdit-Obj3Edit, .TripEdit-Obj5, .TripEdit-Obj4, .TripEdit-Obj6, .TripEdit-Obj8Edit, .TripEdit-Disable, .TripEdit_Obj14;
 	.TripEdit-Obj1 {
 		position: relative;
 		width: 500px;
@@ -133,6 +133,12 @@
 		margin-left: 8px;
 		margin-bottom: 15px;
 	}
+	
+	.TripEdit_Obj14 {
+		background-color: #D05944;
+		color: white !important;
+		font-weight: bold;
+	}
 	</ui:style>
 	<g:HTMLPanel>
 		<g:HTMLPanel>
@@ -171,18 +177,16 @@
 							<img src="/resources/1430221613_schedule.png" style="width:22px;height:30px;vertical-align: top;" />
 							<p1:DateBox ui:field="txbDepartureDate" styleName="gwt-TextBox {style.TripEdit-Obj7}" />
 						</div>
+						
+						<div class="font-blackTitleLarge" style="margin-top:30px;">Companion:</div>
+						<div class="trip-destinations">
+							<img src="/resources/1432155993_WLM.png" style="width:22px;height:28px;vertical-align: middle;float: left;margin-right: 6px;"/>
+							<g:HTMLPanel ui:field="companion_table"></g:HTMLPanel>
+						</div>
 					</td>
 					
 					<td valign="top" height="1">
 						<g:HTMLPanel ui:field="mapTable" styleName="{style.TripEdit-Obj1}"></g:HTMLPanel>
-					</td>
-				</tr>
-				
-				<tr>
-					<td colspan="2">
-						<div class="tripInfoBorder"></div>
-						<div class="font-blackTitleLarge" style="margin-top:30px;">Companion:</div>
-						<g:HTMLPanel ui:field="companion_table"></g:HTMLPanel>
 					</td>
 				</tr>
 				

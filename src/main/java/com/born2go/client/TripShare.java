@@ -188,7 +188,7 @@ public class TripShare implements EntryPoint {
 	}
 
 	public static final String dateFormat(Date date) {
-		String dateString = "yyyy MMM d hh:mm:ss";
+		String dateString = "yyyy MMM d - hh:mm:ss";
 		DateTimeFormat formatDate = DateTimeFormat.getFormat(dateString);
 		return formatDate.format(date);
 	}
