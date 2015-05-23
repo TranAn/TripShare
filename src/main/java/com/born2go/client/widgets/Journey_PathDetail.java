@@ -34,6 +34,7 @@ public class Journey_PathDetail extends Composite {
 	@UiField Image imgPoster;
 	@UiField Label lbDatePost;
 	@UiField Anchor btnExpandACollapse;
+	@UiField Anchor indexCatalog;
 
 	Path path;
 	Long pathId;
@@ -67,6 +68,7 @@ public class Journey_PathDetail extends Composite {
 //	        });
 //	    Event.sinkEvents(btnExpandACollapse.getElement(), Event.ONCLICK);
 		
+		indexCatalog.getElement().setAttribute("name", "index_"+ path.getId());
 		this.path = path;
 		this.pathId = pathId;
 		picture.setUrl(pictureUrl);

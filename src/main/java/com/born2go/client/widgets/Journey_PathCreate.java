@@ -417,7 +417,7 @@ public class Journey_PathCreate extends Composite {
 		}
 	}
 	
-	void cancelPost() {
+	public void cancelPost() {
 		this.setStyleName("PathCreate-Obj3");
 		lbPostTo.setSelectedIndex(0);
 		updatePath = null;
@@ -430,10 +430,11 @@ public class Journey_PathCreate extends Composite {
 		txbDescription.setText("");
 		txbDescription.setVisible(true);
 		if(txbRichDescription != null) {
+			if(DOM.getElementById("cke_txbRichDescription") != null)
+				DOM.getElementById("cke_txbRichDescription").setAttribute("style", "display:none");
+			destroyCustomEditor();
 			txbRichDescription.setText("");
 			txbRichDescription.setVisible(false);
-			DOM.getElementById("cke_txbRichDescription").setAttribute("style", "display:none");
-			setDataCustomEditor("");
 		}
 		isRichTextEdit = false;
 		scrollPathPhotos.setHeight("0px");
@@ -488,7 +489,8 @@ public class Journey_PathCreate extends Composite {
 			if(getDataCustomEditor().length() != 0) {
 				if(Window.confirm("!: Rich text can't convert to normal text, if you continue the text will be clear.")) {
 					txbRichDescription.setVisible(false);
-					DOM.getElementById("cke_txbRichDescription").setAttribute("style", "display:none");
+					if(DOM.getElementById("cke_txbRichDescription") != null)
+						DOM.getElementById("cke_txbRichDescription").setAttribute("style", "display:none");
 					txbDescription.setVisible(true);
 					btnRichTextEdit.removeStyleName("PathCreate-Obj16");
 					txbDescription.setText("");
@@ -496,7 +498,8 @@ public class Journey_PathCreate extends Composite {
 				}
 			} else {
 				txbRichDescription.setVisible(false);
-				DOM.getElementById("cke_txbRichDescription").setAttribute("style", "display:none");
+				if(DOM.getElementById("cke_txbRichDescription") != null)
+					DOM.getElementById("cke_txbRichDescription").setAttribute("style", "display:none");
 				txbDescription.setVisible(true);
 				btnRichTextEdit.removeStyleName("PathCreate-Obj16");
 				isRichTextEdit = !isRichTextEdit;
@@ -506,11 +509,13 @@ public class Journey_PathCreate extends Composite {
 			if(txbRichDescription == null) {
 				txbRichDescription = new TextArea();
 				txbRichDescription.getElement().setAttribute("id", "txbRichDescription");
-				editTextBox.add(txbRichDescription);
-				addCustomEditor();
+				editTextBox.add(txbRichDescription);	
 			}
-			else
-				DOM.getElementById("cke_txbRichDescription").setAttribute("style", "display:");
+			else {
+				if(DOM.getElementById("cke_txbRichDescription") != null)
+					DOM.getElementById("cke_txbRichDescription").setAttribute("style", "display:");
+			}
+			addCustomEditor();
 //			txbRichDescription.setVisible(true);
 			txbDescription.setVisible(false);
 			btnRichTextEdit.addStyleName("PathCreate-Obj16");
@@ -521,19 +526,37 @@ public class Journey_PathCreate extends Composite {
 	}
 	
 	public static native void addCustomEditor() /*-{
-		$wnd.CKEDITOR.replace( 'txbRichDescription', {
-    		customConfig: '/resources/ckeditor/custom_config.js'
-		});
+		var cke = $wnd.document.getElementById("cke_txbRichDescription");
+		if (cke == null) {
+			$wnd.CKEDITOR.replace( 'txbRichDescription', {
+	    		customConfig: '/resources/ckeditor/custom_config.js'
+			});
+		}
 	}-*/;
 	
 	public static native void setDataCustomEditor(String data) /*-{
-		var d = data;
-		$wnd.CKEDITOR.instances.txbRichDescription.setData(d);
+		var cke = $wnd.document.getElementById("cke_txbRichDescription");
+		if(cke != null) {
+			var d = data;
+			$wnd.CKEDITOR.instances.txbRichDescription.setData(d);
+		}
 	}-*/;
 	
 	public static native String getDataCustomEditor() /*-{
-		var data = $wnd.CKEDITOR.instances.txbRichDescription.getData();
-		return data;
+		var cke = $wnd.document.getElementById("cke_txbRichDescription");
+		if(cke != null) {
+			var data = $wnd.CKEDITOR.instances.txbRichDescription.getData();
+			return data;
+		}
+		else
+			return "";
+	}-*/;
+	
+	public static native void destroyCustomEditor() /*-{
+		var cke = $wnd.document.getElementById("cke_txbRichDescription");
+		if(cke != null) {
+			$wnd.CKEDITOR.instances.txbRichDescription.destroy();
+		}
 	}-*/;
 	
 	boolean VerifiedField() {

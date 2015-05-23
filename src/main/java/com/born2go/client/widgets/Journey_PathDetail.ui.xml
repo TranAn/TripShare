@@ -156,8 +156,15 @@
 	.PathDetail-Obj13 {
   		right: 62px;
 	}
+	
+	.PathDetail_Obj14 {
+  		position: absolute;
+  		left: 0px;
+  		top: -50px;
+	}
 	</ui:style>
 	<g:HTMLPanel styleName="{style.PathDetail-Obj1}">
+		<g:Anchor ui:field="indexCatalog" styleName="{style.PathDetail_Obj14}"></g:Anchor>
 		<g:Image styleName="{style.PathDetail-Obj2}" ui:field="picture"/>
 	
 		<g:Anchor styleName="{style.PathDetail-Obj3}" ui:field="lbTitle" />

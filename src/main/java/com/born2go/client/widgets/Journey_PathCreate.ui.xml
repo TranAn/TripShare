@@ -49,8 +49,8 @@
 	}
 	
 	.PathCreate-Obj6 {
-		padding: 8px;
-		font-size: 14px;
+		padding: 10px;
+		font-size: 13px;
 		box-sizing: border-box;
     	-moz-box-sizing: border-box;
     	-webkit-box-sizing: border-box;
@@ -59,6 +59,9 @@
     	max-height: 250px;
     	/* overflow: hidden; */
     	resize: none;
+    	font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
+    	color: #333;
+    	line-height: 1.6;
 	}
 	
 	.PathCreate-Obj6ScrollAble {
@@ -76,7 +79,7 @@
   		margin-left: 10px;
   		float: right;
   		margin-top: 3px;
-  		margin-right: 7px;
+  		margin-right: 8px;
 	}
 	
 	.PathCreate-Obj9 {
@@ -137,6 +140,14 @@
 	
 	.PathCreate-Obj17 {
 		font-style: italic;
+	}
+	
+	.PathCreate-Obj18 {
+		color: aliceblue;
+  		padding: 6px 10px;
+  		margin-left: 10px;
+  		float: right;
+  		margin-top: 3px;
 	}
 	</ui:style>
 	<g:HTMLPanel ui:field="container" styleName="{style.PathCreate-Obj3}">
@@ -200,7 +211,7 @@
 			</g:FormPanel>
 			<g:Label text="0 / Photos" styleName="{style.PathCreate-Obj13}" ui:field="lbCountPhotos"/>
 			<g:Anchor ui:field="btnCancel"  styleName="greenbutton {style.PathCreate-Obj8}" ><i style="margin-right:5px;" class="fa fa-ban fa-lg"></i> Cancel</g:Anchor>
-			<g:Anchor ui:field="btnPost"  styleName="greenbutton {style.PathCreate-Obj8}" ><i style="margin-right:5px;" class="fa fa-floppy-o fa-lg"></i> Save</g:Anchor>
+			<g:Anchor ui:field="btnPost"  styleName="greenbutton {style.PathCreate-Obj18}" ><i style="margin-right:5px;" class="fa fa-floppy-o fa-lg"></i> Save</g:Anchor>
 		</g:HTMLPanel>
 		
 	</g:HTMLPanel>

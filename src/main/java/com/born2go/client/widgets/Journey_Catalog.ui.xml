@@ -1,0 +1,74 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	@external .Catalog_Obj1, Catalog_Obj1_Open, .Catalog_Obj4, .Catalog_Obj5;
+	.Catalog_Obj1 {
+		margin-top: 5px;
+		position: relative;
+		border-top: none;
+		background-color: #FCFFFF;
+		border-radius: 0px 0px 10px 10px;
+		height: auto !important;
+		overflow-y: hidden;
+		max-height: 0px;
+		transition-property: all;
+		transition-duration: .5s;
+		transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+	}
+	
+	.Catalog_Obj1_Open {
+		max-height: 450px;
+	}
+	
+	.Catalog_Obj2 {
+		background-color: #f6f7f8;
+		border: 1px #e9eaed solid;
+		padding: 15px;
+	}
+	
+	.Catalog_Obj3 {
+		background-color: #ffffff;
+		padding: 10px;
+		padding-bottom: 80px;
+		position: relative;
+	}
+	
+	.Catalog_Obj4 {
+		font-family: museo-w01-700, serif;
+		font-size: 16px;
+		padding: 9px;
+		cursor: pointer;
+	}
+	
+	.Catalog_Obj4:hover img {
+		opacity: 1.0 !important;
+	}
+	
+	.Catalog_Obj4:hover .Catalog_Obj5 {
+		color: black;
+	}
+	
+	.Catalog_Obj5 {
+		color: gray;
+	}
+	
+	.Catalog_Obj5:hover {
+		text-decoration: underline;
+		color: black;
+	}
+	</ui:style>
+	<g:HTMLPanel ui:field="catalog" styleName="{style.Catalog_Obj1}" height="200px">
+		<g:HTMLPanel height="16px" styleName="{style.Catalog_Obj2}"
+			width="">
+			<g:Label text="Book of content" styleName="font-blackTitleNormal" />
+		</g:HTMLPanel>
+
+		<g:ScrollPanel height="360px">
+			<g:HTMLPanel ui:field="htmlContent" styleName="{style.Catalog_Obj3}"></g:HTMLPanel>
+		</g:ScrollPanel>
+		
+		<g:HTMLPanel height="10px" styleName="{style.Catalog_Obj2}" width="">
+		</g:HTMLPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

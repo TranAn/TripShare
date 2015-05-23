@@ -49,13 +49,15 @@ public class Journey_PathView extends Composite {
 	@UiField
 	HTMLPanel facebookComments;
 	@UiField
-	HTMLPanel htmlPathCreate;
+	HTMLPanel htmlControlBottom;
 	@UiField
 	HTMLPanel toolbar;
 	@UiField
 	Anchor btnEdit;
 	@UiField
 	Anchor btnPost;
+	@UiField
+	Anchor btnContent;
 	@UiField
 	Anchor btnGallery;
 	@UiField
@@ -78,14 +80,17 @@ public class Journey_PathView extends Composite {
 	
 	private Journey_TripEdit tripInfo;
 	private Journey_PathCreate pathCreate = new Journey_PathCreate();
+	private Journey_Catalog catalog = new Journey_Catalog();
+	
 	private Trip theTrip;
 	private boolean isPoster = false;
 	private boolean isAdmin = false;
 	private boolean isOpenPathCreate = false;
+	private boolean isOpenCatalog = false;
 
 	public Journey_PathView() {
 		initWidget(uiBinder.createAndBindUi(this));
-		htmlPathCreate.add(pathCreate);
+//		htmlControlBottom.add(pathCreate);
 		listArrange.addItem("Newest");
 		listArrange.addItem("Oldest");
 		btnEdit.addStyleName("PathView-Obj14");
@@ -197,6 +202,14 @@ public class Journey_PathView extends Composite {
 						Window.alert(TripShare.ERROR_MESSAGE);
 					}
 				});
+			}
+		});
+		
+		catalog.setListener(new Journey_Catalog.Listener() {
+			@Override
+			public void onClose() {
+				btnContent.removeStyleName("PathCreate-Obj16");
+				isOpenCatalog = false;
 			}
 		});
 	}
@@ -335,7 +348,7 @@ public class Journey_PathView extends Composite {
 			Window.scrollTo(0, 0);
 			htmlPathToolbar.addStyleName("PathView-Obj13");
 			htmlPathTable.setVisible(false);
-			htmlPathCreate.setVisible(false);
+			htmlControlBottom.setVisible(false);
 			toolbar.setVisible(false);
 			editToolbar.setVisible(true);
 			DOM.getElementById("commentBox").setAttribute("style", "display:none");
@@ -356,7 +369,7 @@ public class Journey_PathView extends Composite {
 	void cancelEdit() {
 		Window.scrollTo(0, 0);
 		htmlPathTable.setVisible(true);
-		htmlPathCreate.setVisible(true);
+		htmlControlBottom.setVisible(true);
 		toolbar.setVisible(true);
 		editToolbar.setVisible(false);
 		DOM.getElementById("commentBox").setAttribute("style", "");
@@ -382,19 +395,64 @@ public class Journey_PathView extends Composite {
 	@UiHandler("btnPost")
 	void onBtnPostClick(ClickEvent event) {
 		if(isPoster) {
+			if(isOpenCatalog) {
+				isOpenCatalog = false;
+				btnContent.removeStyleName("PathCreate-Obj16");
+				catalog.setStyleName("Catalog_Obj1");
+			}
+			//-----
 			btnPost.addStyleName("PathCreate-Obj16");
-			pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3Open");
+			htmlControlBottom.clear();
+			htmlControlBottom.add(pathCreate);
 			btnUpload.setVisible(false);
 			pathCreate.setTripId(tripId);
 			pathCreate.handlerUploadEvent();
-			Timer timer = new Timer () {
+			Timer timer1 = new Timer () {
+				@Override
+				public void run() {
+					pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3Open");
+				}
+			};timer1.schedule(100);
+			Timer timer2 = new Timer () {
 				@Override
 				public void run() {
 					pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3WideOpen");
 				}
-			};timer.schedule(200);
+			};timer2.schedule(400);
 			isOpenPathCreate = true;
 		}
+	}
+	
+	@UiHandler("btnContent")
+	void onBtnContentClick(ClickEvent event) {
+		if(isOpenPathCreate) {
+			isOpenPathCreate = false;
+			pathCreate.cancelPost();
+			btnPost.removeStyleName("PathCreate-Obj16");
+			pathCreate.setStyleName("PathCreate-Obj3");
+			btnUpload.setVisible(true);
+		}
+		//-----
+		if(!isOpenCatalog) {
+			btnContent.addStyleName("PathCreate-Obj16");
+			htmlControlBottom.clear();
+			htmlControlBottom.add(catalog);
+			Timer timer = new Timer () {
+				@Override
+				public void run() {
+					catalog.setStyleName("Catalog_Obj1 Catalog_Obj1_Open");
+				}
+			};timer.schedule(100);
+			List<Path> listContents = new ArrayList<Path>();
+			for(Journey_PathDetail pd: listPathsDetail)
+				listContents.add(pd.getPath());
+			catalog.setCatalog(listContents);
+		}
+		else {
+			btnContent.removeStyleName("PathCreate-Obj16");
+			catalog.setStyleName("Catalog_Obj1");
+		}
+		isOpenCatalog = !isOpenCatalog;
 	}
 
 	@UiHandler("btnUpload")

@@ -168,7 +168,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 										<td><%=user.getMyTrips().size()%></td>
 									</tr>
 								</table>
-								<div style="margin-top: 10px; margin-bottom:5px; text-align: center; font-size: 14px; padding: 6px 15px;" class="greenbutton" onclick="logoutfacebook()">Log Out</span>
+								<div style="margin-top: 10px; margin-bottom:5px; text-align: center; font-size: 13px; padding: 7px 15px;" class="greenbutton" onclick="logoutfacebook()">Log Out</span>
 							</div>
 						</td>
 						<td valign="top" style="width: 100%;">

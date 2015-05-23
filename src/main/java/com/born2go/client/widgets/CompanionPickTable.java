@@ -6,7 +6,6 @@ import java.util.List;
 import com.born2go.client.widgets.Create_HandlerJsonListFriends.Friend;
 import com.born2go.shared.Poster;
 import com.google.gwt.cell.client.CheckboxCell;
-import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.ImageCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.BrowserEvents;

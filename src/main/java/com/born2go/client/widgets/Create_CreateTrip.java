@@ -495,7 +495,7 @@ public class Create_CreateTrip extends Composite {
 		int minusTop = 0;
 		if(LF.getListFriends().size() > 4) 
 			minusTop = 20 * (LF.getListFriends().size() - 4 );
-		ftable.setPopupPosition(Window.getClientWidth()/2 - 200, Window.getScrollTop()+ 180 - minusTop);
+		ftable.setPopupPosition(Window.getClientWidth()/2 - 200, Window.getScrollTop()+ 140 - minusTop);
 		ftable.addStyleName("fadeIn");
 		ftable.show();
 	}

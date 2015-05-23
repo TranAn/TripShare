@@ -79,6 +79,7 @@
 		margin-top: 5px;
 		font-family: "Times New Roman", Times, serif;
 		font-size: 16px; 
+		margin-bottom: 8px;
 	}
 	
 	.JourneyInfoView-Obj10 {
@@ -140,7 +141,7 @@
 						height="auto" ui:field="picture" />
 				</td>
 				<td valign="top" style="padding-left: 30px;">
-					<div style="margin-bottom: 10px;">
+					<div style="margin-bottom: 15px;">
 					<g:Anchor styleName="{style.JourneyInfoView-Obj3}" text="Where and When?"
 						ui:field="lbTitle" />
 					</div>
