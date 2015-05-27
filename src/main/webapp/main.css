@@ -3,14 +3,14 @@
 @-moz-keyframes fadeIn {from { opacity:0;}to {opacity: 1;}}
 @keyframes fadeIn {from { opacity:0;}to {opacity: 1;}}
 
-html {
+/* html {
 	background: url(resources/jonesmichael_1349868867_07.jpg) no-repeat
 		center center fixed;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
-}
+} */
 
 p{
 	margin: 0px;
@@ -20,25 +20,25 @@ p{
 #header {
 	width: 100%;
 	min-width: 1024px;
-	background-color: rgba(48, 27, 12, 1);
+	/* background-color: rgba(48, 27, 12, 1); */
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
 	border-top: 0px solid rgba(48, 27, 12, 1);
 	border-bottom: 0px solid rgba(48, 27, 12, 1);
-	background-color: rgba(48, 27, 12, 1);
+	background-color: #313131;
 	margin-bottom: 50px;
 }
 
 #title {
-	padding-top: 15px;
-	margin-left: 0px;
+	margin-top: 22px;
+	float: left;
+	margin-left: 10px;
 }
 
 #menu {
 	list-style-type: none;
 	display: -webkit-inline-box;
-	width: 100%;
-	margin-top: 20px;
-	padding-bottom: 15px;
+	float: right;
+	height: 130px;
 }
 
 #content {
@@ -61,7 +61,7 @@ p{
 }
 
 #footer {
-	background-color: rgba(48, 27, 12, 1);
+	/* background-color: rgba(48, 27, 12, 1); */
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
 	border-top: 0px solid rgba(56, 119, 127, 1);
 	border-bottom: 0px solid rgba(56, 119, 127, 1);
@@ -71,6 +71,72 @@ p{
 	padding-top: 30px;
 	height: 50px;
 	min-width: 1024px;
+}
+
+.createpage_body {
+	display: block;
+  	position: relative;
+}
+
+.createpage_body:after {
+	content: "";
+  	background: url(resources/Gulls-Sea-Plane-Eiffel-Tower-Statue-Of-Liberty.jpg) no-repeat
+		center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  	opacity: 0.7;
+  	top: 0;
+  	left: 0;
+  	bottom: 0;
+  	right: 0;
+ 	position: absolute;
+  	z-index: -1;   
+}
+
+.profilepage_body {
+	display: block;
+  	position: relative;
+}
+
+.profilepage_body:after {
+	content: "";
+  	background: url(resources/jonesmichael_1349868867_07.jpg) no-repeat
+		center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  	opacity: 1;
+  	top: 0;
+  	left: 0;
+  	bottom: 0;
+  	right: 0;
+ 	position: absolute;
+  	z-index: -1;   
+}
+
+.journeypage_theme {
+	display: block;
+  	position: relative;
+}
+
+.journeypage_theme:after {
+	content: "";
+  	background: url(resources/theme/city_by_the_bay_1232.jpg) no-repeat
+		center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  	opacity: 0.8;
+  	top: 0;
+  	left: 0;
+  	bottom: 0;
+  	right: 0;
+ 	position: absolute;
+  	z-index: -1;   
 }
 
 .fadeIn {
@@ -93,25 +159,25 @@ p{
 
 .menubutton,.menubutton:link,.menubutton:visited {
 	cursor: pointer;
-	background: rgba(48, 27, 12, 1)
+	/* background: #313131
 		url(http://static.parastorage.com/services/skins/2.995.7/images/wysiwyg/core/themes/base/shiny1button_bg.png)
-		center center repeat-x;
-	background-color: rgba(48, 27, 12, 1);
-	border-radius: 5px;
+		center center repeat-x; */
+	background-color: #313131;
 	-webkit-transition: color .5s linear, background-color .5s ease-in-out;
 	-moz-transition: color .5s linear, background-color .5s ease-in-out;
 	-o-transition: color .5s linear, background-color .5s ease-in-out;
 	transition: color .5s linear, background-color .5s ease-in-out;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 	display: inline-block;
 	font: normal normal normal 16px/1.1em Play, sans-serif;
 	color: #FFFBF8 !important;
-	padding: 10px 70px;
-	margin-right: 15px;
+	padding: 57px 20px;
 	text-decoration: none;
 }
 
 .menubutton:hover {
+	background: 
+		url(http://static.parastorage.com/services/skins/2.995.7/images/wysiwyg/core/themes/base/shiny1button_bg.png)
+		center center repeat-x;
 	background-color: rgba(56, 119, 127, 1);
 	-webkit-transition: background-color .25s ease-in-out;
 	-moz-transition: background-color .25s ease-in-out;
@@ -127,17 +193,13 @@ p{
 		url(http://static.parastorage.com/services/skins/2.995.7/images/wysiwyg/core/themes/base/shiny1button_bg.png)
 		center center repeat-x;
 	background-color: rgba(56, 119, 127, 1);
-	border-radius: 5px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 	transition: background-color 0.4s ease 0s;
 	display: inline-block;
 	font: normal normal normal 16px/1.1em Play, sans-serif;
 	color: #FFFBF8 !important;
 	transition: color 0.4s ease 0s;
-	padding: 10px 70px;
-	margin-right: 15px;
+	padding: 57px 20px;
 	text-decoration: none;
-	border-radius: 5px;
 }
 
 .menubutton-actived:hover {
@@ -227,6 +289,7 @@ p{
 	-webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+	margin-top: 40px;
 }
 
 .tripInfoBorder {
@@ -258,7 +321,7 @@ p{
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
 	z-index: -2;
-	margin-bottom: -50px;
+	margin-bottom: 40px;
 }
 
 .fb-comments,.fb-comments * {
@@ -301,6 +364,8 @@ p{
 	width: 76%;
 	max-width: 1000px;
 	height: auto !important;
+	margin-top: 40px;
+	margin-bottom: 80px;
 }
 
 .pathContent {
@@ -368,4 +433,30 @@ ul.a {
 	-webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+}
+
+.fading_box {
+	opacity: 0; /* make things invisible upon start */
+	-webkit-animation: fadeIn ease-in 1;
+	/* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+	-moz-animation: fadeIn ease-in 1;
+	animation: fadeIn ease-in 1;
+	-webkit-animation-fill-mode: forwards;
+	/* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+	-moz-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+	-webkit-animation-duration: 1.2s;
+	-moz-animation-duration: 1.2s;
+	animation-duration: 1.2s;
+	-webkit-animation-delay: 1.2s;
+	-moz-animation-delay: 1.2s;
+	animation-delay: 1.2s;
+}
+
+.profile_img {
+	position: relative;
+  	margin-left: 15px;
+  	margin-top: -30px;
+  	top: 13px;
+  	border-radius: 20px;
 }

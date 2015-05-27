@@ -130,7 +130,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 <!-- you can leave the body empty if you want  -->
 <!-- to create a completely dynamic UI.        -->
 <!--                                           -->
-<body style="margin: 0px; background: none;">
+<body style="margin: 0px; background: none;" class="journeypage_theme">
 
 	<!-- OPTIONAL: include this if you want history support -->
 	<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
@@ -150,21 +150,29 @@ public void redirectHomeUrl(HttpServletResponse response) {
 		}
 	</script> -->
 
-	<div id="header">
-		<div id="title">
-			<center>
-			<span style="margin-right:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">Plan your trips</font></span>
-			<span style="line-height: 1.1em; font:normal normal normal 55px/1.1em Play,sans-serif; color:#fffbf8">Trip&nbsp;<strong>Share</strong></span>
-			<img src="/resources/1427111517_palm_tree.png" height="42" width="42" /> 
-			<span style="margin-left:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">Share the moments</font></span>
-			</center>
-		</div>
-
-		<div id="menu">
-			<div style="margin: auto; display: -webkit-box; width: -moz-fit-content;">
+	<div id="header" style="margin:0px; height: 130px;">
+		<div style="width:86%; margin: auto;">
+			<div id="title">
+				<img style="float:left; height:76px; width:80px;" src="/resources/1427111517_palm_tree.png" />
+				<div style="float:left;  margin-left: 10px;">
+				<div style="margin-bottom: 5px;">
+				<span style="line-height: 1.1em; font:normal normal normal 50px/1.1em Play,sans-serif; color:#fffbf8">Trip&nbsp;<strong>Share</strong></span>
+				</div>
+				<div>
+				<span style="margin-right:20px ;letter-spacing:0.3em; font:normal normal normal 13px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">Plan your trips & Share the moments</font></span>
+				</div>
+				 
+				<!-- <span style="margin-left:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">Share the moments</font></span> -->
+				</div>
+				
+			</div>
+	
+			<div id="menu">
+				<div style="margin:auto; display: -webkit-box; width: -moz-fit-content; overflow: hidden;">
 				<a class="menubutton-actived" href="/">Home</a>
 				<a class="menubutton" href="/create/">Plan your trip</a>
 				<a id="menubutton" class="menubutton" onclick="loginFacebook()">Sign in Facebook</a>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -290,12 +298,13 @@ public void redirectHomeUrl(HttpServletResponse response) {
 
 	<br />
 
-	<div id="footer" style="width: 100%">
-		<center>© Copyright 2015, Born2Go.</center>
+	<div id="footer" style="width: 100%; margin:0px; margin-top: -40px; background-color: #313131;">
+		<div style="color: white; font: 300 14px/14px 'Roboto', sans-serif;width: 336px;margin: auto;"> Born2Go © 2015 All Rights Reserved  |  Privacy policy </div>
 	</div>
 	
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script type="text/javascript" src="http://arrow.scrolltotop.com/arrow50.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script type="text/javascript" src="http://arrow.scrolltotop.com/arrow86.js"></script>
 	<noscript>Not seeing a <a href="http://www.scrolltotop.com/">Scroll to Top Button</a>? Go to our FAQ page for more info.</noscript>
+	
 </body>
 </html>

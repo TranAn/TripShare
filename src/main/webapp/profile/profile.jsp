@@ -105,7 +105,7 @@ public void redirectHomeUrl(HttpServletResponse response) {
 <!-- you can leave the body empty if you want  -->
 <!-- to create a completely dynamic UI.        -->
 <!--                                           -->
-<body style="margin: 0px; background: none;">
+<body style="margin: 0px; background: none;" class="profilepage_body">
 
 	<!-- OPTIONAL: include this if you want history support -->
 	<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
@@ -125,28 +125,36 @@ public void redirectHomeUrl(HttpServletResponse response) {
 		}
 	</script> -->
 
-	<div id="header">
-		<div id="title">
-			<center>
-			<span style="margin-right:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">Plan your trips</font></span>
-			<span style="line-height: 1.1em; font:normal normal normal 55px/1.1em Play,sans-serif; color:#fffbf8">Trip&nbsp;<strong>Share</strong></span>
-			<img src="/resources/1427111517_palm_tree.png" height="42" width="42" /> 
-			<span style="margin-left:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">Share the moments</font></span>
-			</center>
-		</div>
-
-		<div id="menu">
-			<div style="margin: auto; display: -webkit-box; width: -moz-fit-content;">
+	<div id="header" style="margin:0px; height: 130px;">
+		<div style="width:86%; margin: auto;">
+			<div id="title">
+				<img style="float:left; height:76px; width:80px;" src="/resources/1427111517_palm_tree.png" />
+				<div style="float:left;  margin-left: 10px;">
+				<div style="margin-bottom: 5px;">
+				<span style="line-height: 1.1em; font:normal normal normal 50px/1.1em Play,sans-serif; color:#fffbf8">Trip&nbsp;<strong>Share</strong></span>
+				</div>
+				<div>
+				<span style="margin-right:20px ;letter-spacing:0.3em; font:normal normal normal 13px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">Plan your trips & Share the moments</font></span>
+				</div>
+				 
+				<!-- <span style="margin-left:20px ;letter-spacing:0.3em; font:normal normal normal 14px/1.3em 'Open Sans',sans-serif"><font color="#fffbf8">Share the moments</font></span> -->
+				</div>
+				
+			</div>
+	
+			<div id="menu">
+				<div style="margin:auto; display: -webkit-box; width: -moz-fit-content; overflow: hidden;">
 				<a class="menubutton" href="/">Home</a>
 				<a class="menubutton" href="/create/">Plan your trip</a>
-				<a id="menubutton" class="menubutton-actived" href="">Profile</a>
+				<a id="menubutton" class="menubutton-actived" onclick="loginFacebook()">Sign in Facebook</a>
+				</div>
 			</div>
 		</div>
 	</div>
 
 	<!-- Add Content here -->
 	<div id="content">
-		<div style="position: relative; margin: auto; width: 75%; min-width: 900px; height: auto !important;">
+		<div style="position: relative; margin: auto; width: 75%; min-width: 900px; min-height:360px; height: auto !important;margin-top: 40px;margin-bottom: 80px;">
 			<div>
 				<table cellspacing="10">
 					<tr>
@@ -183,8 +191,9 @@ public void redirectHomeUrl(HttpServletResponse response) {
 	
 	<br />
 
-	<div id="footer" style="width: 100%">
-		<center>© Copyright 2015, Born2Go.</center>
+	<div id="footer" style="width: 100%; margin:0px; margin-top: -40px; background-color: #313131;">
+		<div style="color: white; font: 300 14px/14px 'Roboto', sans-serif;width: 336px;margin: auto;"> Born2Go © 2015 All Rights Reserved  |  Privacy policy </div>
 	</div>
+	
 </body>
 </html>

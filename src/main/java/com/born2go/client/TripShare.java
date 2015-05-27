@@ -150,6 +150,10 @@ public class TripShare implements EntryPoint {
 				$wnd.FB.api('/me', function(response) {
 					var menuProfile = $wnd.document.getElementById('menubutton');
 					menuProfile.innerHTML = "Profile";
+					var userImg = new Image(); 
+					userImg.src = "https://graph.facebook.com/"+ userId+ "/picture?width=35&height=35";
+					userImg.className = "profile_img";
+					menuProfile.appendChild(userImg);
 					var profileHref =  "/profile/"+ userId;
 					menuProfile.setAttribute('href', profileHref);
 				});

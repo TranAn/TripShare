@@ -8,7 +8,7 @@
 		position: relative;
 		border: 2px solid #a1a1a1;
 		padding: 20px 20px;
-		background-color: rgba(255, 251, 248, 0.81);
+		background-color: rgba(255, 251, 248, 0.9);
 		border-radius: 10px;
 		height: auto !important;
 		overflow: auto;

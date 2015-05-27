@@ -77,6 +77,10 @@ public class LoginDialog extends DialogBox {
 				var userId = response.authResponse.userID;
 				var accessToken = response.authResponse.accessToken;
 				$wnd.document.getElementById('menubutton').innerHTML = "Profile";
+				var userImg = new Image(); 
+				userImg.src = "https://graph.facebook.com/"+ userId+ "/picture?width=35&height=35";
+				userImg.className = "profile_img";
+				$wnd.document.getElementById('menubutton').appendChild(userImg);
 				var profileHref =  "/profile/"+ userId;
 				$wnd.document.getElementById('menubutton').setAttribute('href', profileHref);
 			    // Call instance method saveNewFacebookUser() on this
