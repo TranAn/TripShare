@@ -146,7 +146,7 @@ public class TravelMap {
 
 	public static void addMarker(final LatLng position, final String info, boolean isOriginPoint, boolean isOpenInfoWindow) {
 		MarkerOptions markerOption = MarkerOptions.create();
-		markerOption.setAnimation(Animation.BOUNCE);
+		markerOption.setAnimation(Animation.DROP);
 		if(!isOriginPoint)
 			markerOption.setIcon("/resources/green-spotlight.png");
 		else
@@ -233,10 +233,10 @@ public class TravelMap {
 		    	 }
 		    	 else {
 		    		 if(index == 0)
-		    			 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), true, true);
+		    			 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), true, false);
 		    		 else {
 		    			 if(index == locates.size() - 1)
-		    				 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, true);
+		    				 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, false);
 		    			 else
 		    				 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, false);
 		    		 }

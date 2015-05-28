@@ -17,6 +17,10 @@ public class Trip implements Serializable {
 	public enum TripStatus {
 		ONGOING, COMPLETED;
 	}
+	
+	public enum Theme {
+		DEFAULT, BEACH_DAWN, BEACH_MORNING, BEACH_SUNSET, CITY, COUNTRY, FOREST, FOREST_WATERFALL, MOUNTAIN_SPRING, MOUNTAIN_WINTER;
+	}
 
 	@Id
 	Long id;
@@ -32,6 +36,8 @@ public class Trip implements Serializable {
 	String description;
 	Journey journey;
 	TripStatus status;
+	Theme theme;
+	
 	
 	public Trip() {
 		super();
@@ -123,6 +129,14 @@ public class Trip implements Serializable {
 
 	public void setStatus(TripStatus status) {
 		this.status = status;
+	}
+
+	public Theme getTheme() {
+		return theme;
+	}
+
+	public void setTheme(Theme theme) {
+		this.theme = theme;
 	}
 	
 }

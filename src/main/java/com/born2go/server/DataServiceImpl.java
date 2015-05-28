@@ -81,6 +81,13 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	public Trip updateTrip(Trip trip) {
 		Trip oldTrip = findTrip(trip.getId());
 		if (oldTrip != null) {
+			// Update theme
+			if(!trip.getTheme().equals(oldTrip.getTheme())) {
+				oldTrip.setTheme(trip.getTheme());
+				ofy().save().entity(oldTrip).now();
+				return oldTrip;
+			}
+			// Update companion---
 			for(Poster p: oldTrip.getCompanion()) {
 				if(!trip.getCompanion().contains(p)) {
 					User user = ofy().load().type(User.class).id(p.getUserID().toString()).now();
@@ -99,6 +106,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 					}
 				}
 			}
+			// Update trip
 			Key<Trip> key = ofy().save().entity(trip).now();
 			exportTrip = ofy().load().key(key).now();
 		} else

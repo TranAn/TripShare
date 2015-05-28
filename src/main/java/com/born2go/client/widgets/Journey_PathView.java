@@ -55,6 +55,8 @@ public class Journey_PathView extends Composite {
 	@UiField
 	Anchor btnEdit;
 	@UiField
+	Anchor btnThemes;
+	@UiField
 	Anchor btnPost;
 	@UiField
 	Anchor btnContent;
@@ -94,6 +96,7 @@ public class Journey_PathView extends Composite {
 		listArrange.addItem("Newest");
 		listArrange.addItem("Oldest");
 		btnEdit.addStyleName("PathView-Obj14");
+		btnThemes.addStyleName("PathView-Obj14");
 		btnPost.addStyleName("PathView-Obj14");
 		btnUpload.addStyleName("PathView-Obj14");
 		
@@ -226,6 +229,7 @@ public class Journey_PathView extends Composite {
 				isAdmin = true;
 				isPoster = true;
 				btnEdit.removeStyleName("PathView-Obj14");
+				btnThemes.removeStyleName("PathView-Obj14");
 				btnPost.removeStyleName("PathView-Obj14");
 				btnUpload.removeStyleName("PathView-Obj14");
 				for(Journey_PathDetail pd: listPathsDetail)
@@ -363,6 +367,16 @@ public class Journey_PathView extends Composite {
 					cancelEdit();
 				}
 			});
+		}
+	}
+	
+	@UiHandler("btnThemes")
+	void onBtnThemesClick(ClickEvent event) {
+		if(isAdmin) {
+			ThemePickTable themePicker = new ThemePickTable(theTrip);
+			themePicker.setPopupPosition(Window.getClientWidth()/2 - 200, Window.getScrollTop()+ 100);
+			themePicker.addStyleName("fadeIn");
+			themePicker.show();
 		}
 	}
 

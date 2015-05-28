@@ -117,14 +117,212 @@ p{
   	z-index: -1;   
 }
 
-.journeypage_theme {
+.journeypage_default_theme {
 	display: block;
   	position: relative;
 }
 
-.journeypage_theme:after {
+.journeypage_default_theme:after {
 	content: "";
-  	background: url(resources/theme/city_by_the_bay_1232.jpg) no-repeat
+  	background: url(resources/themes/Default.jpg) no-repeat
+		center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  	opacity: 0.8;
+  	top: 0;
+  	left: 0;
+  	bottom: 0;
+  	right: 0;
+ 	position: absolute;
+  	z-index: -1;   
+}
+
+.journeypage_beachdawn_theme {
+	display: block;
+  	position: relative;
+}
+
+.journeypage_beachdawn_theme:after {
+	content: "";
+  	background: url(resources/themes/Beach-Dawn.jpg) no-repeat
+		center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  	opacity: 0.8;
+  	top: 0;
+  	left: 0;
+  	bottom: 0;
+  	right: 0;
+ 	position: absolute;
+  	z-index: -1;   
+}
+
+.journeypage_beachmorning_theme {
+	display: block;
+  	position: relative;
+}
+
+.journeypage_beachmorning_theme:after {
+	content: "";
+  	background: url(resources/themes/Beach-Morning.jpg) no-repeat
+		center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  	opacity: 0.8;
+  	top: 0;
+  	left: 0;
+  	bottom: 0;
+  	right: 0;
+ 	position: absolute;
+  	z-index: -1;   
+}
+
+.journeypage_beachsunset_theme {
+	display: block;
+  	position: relative;
+}
+
+.journeypage_beachsunset_theme:after {
+	content: "";
+  	background: url(resources/themes/Beach-Sunset.jpg) no-repeat
+		center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  	opacity: 0.8;
+  	top: 0;
+  	left: 0;
+  	bottom: 0;
+  	right: 0;
+ 	position: absolute;
+  	z-index: -1;   
+}
+
+.journeypage_city_theme {
+	display: block;
+  	position: relative;
+}
+
+.journeypage_city_theme:after {
+	content: "";
+  	background: url(resources/themes/City.jpg) no-repeat
+		center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  	opacity: 0.8;
+  	top: 0;
+  	left: 0;
+  	bottom: 0;
+  	right: 0;
+ 	position: absolute;
+  	z-index: -1;   
+}
+
+.journeypage_country_theme {
+	display: block;
+  	position: relative;
+}
+
+.journeypage_country_theme:after {
+	content: "";
+  	background: url(resources/themes/Country.jpg) no-repeat
+		center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  	opacity: 0.8;
+  	top: 0;
+  	left: 0;
+  	bottom: 0;
+  	right: 0;
+ 	position: absolute;
+  	z-index: -1;   
+}
+
+.journeypage_forest_theme {
+	display: block;
+  	position: relative;
+}
+
+.journeypage_forest_theme:after {
+	content: "";
+  	background: url(resources/themes/Forest.jpg) no-repeat
+		center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  	opacity: 0.8;
+  	top: 0;
+  	left: 0;
+  	bottom: 0;
+  	right: 0;
+ 	position: absolute;
+  	z-index: -1;   
+}
+
+.journeypage_forestwaterfall_theme {
+	display: block;
+  	position: relative;
+}
+
+.journeypage_forestwaterfall_theme:after {
+	content: "";
+  	background: url(resources/themes/Forest-Waterfall.jpg) no-repeat
+		center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  	opacity: 0.8;
+  	top: 0;
+  	left: 0;
+  	bottom: 0;
+  	right: 0;
+ 	position: absolute;
+  	z-index: -1;   
+}
+
+.journeypage_mountainspring_theme {
+	display: block;
+  	position: relative;
+}
+
+.journeypage_mountainspring_theme:after {
+	content: "";
+  	background: url(resources/themes/Mountain-Spring.jpg) no-repeat
+		center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+  	opacity: 0.8;
+  	top: 0;
+  	left: 0;
+  	bottom: 0;
+  	right: 0;
+ 	position: absolute;
+  	z-index: -1;   
+}
+
+.journeypage_mountainwinter_theme {
+	display: block;
+  	position: relative;
+}
+
+.journeypage_mountainwinter_theme:after {
+	content: "";
+  	background: url(resources/themes/Mountain-Winter.jpg) no-repeat
 		center center fixed;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -313,6 +511,7 @@ p{
 	margin: auto;
 	width: 980px;
 	border: 2px solid #a1a1a1;
+	border-bottom: none;
 	padding: 20px 20px;
 	background-color: #FCFFFF;
 	border-radius: 10px 10px 0px 0px;
@@ -321,7 +520,6 @@ p{
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
 	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
 	z-index: -2;
-	margin-bottom: 40px;
 }
 
 .fb-comments,.fb-comments * {

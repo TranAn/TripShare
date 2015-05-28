@@ -47,7 +47,7 @@
 	
 	.PathView-Obj6 {
 		position: relative;
-		top: -5px;
+		top: -8px;
 		float: right;
 		margin-right: 22px;
 	}
@@ -102,6 +102,7 @@
 	<g:HTMLPanel ui:field="pathViewForm">
 		<g:HTMLPanel ui:field="dummyNode"></g:HTMLPanel>
 		<g:HTMLPanel ui:field="htmlPathToolbar" styleName="{style.PathView-Obj3}">
+		
 			<g:HTMLPanel ui:field="toolbar" styleName="{style.PathView-Obj1}">
 				<g:HorizontalPanel styleName="{style.PathView-Obj5}">
 					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="65px" ui:field="btnEdit"><i style="margin-right:5px;" class="fa fa-file-text-o fa-lg"></i> Edit</g:Anchor>
@@ -119,12 +120,14 @@
 					<g:ListBox styleName="gwt-ListBox {style.PathView-Obj8}" height="30px" width="100px" ui:field="listArrange"/>
 				</g:HorizontalPanel>
 			</g:HTMLPanel>
+			
 			<g:HTMLPanel ui:field="editToolbar" styleName="{style.PathView-Obj12}" height="" visible="false">
 				<g:HorizontalPanel styleName="{style.PathView-Obj10}">
 					<g:Anchor ui:field="btnSave"  styleName="greenbutton {style.PathView-Obj9}" ><i style="margin-right:5px;" class="fa fa-floppy-o fa-lg"></i> Save</g:Anchor>
 					<g:Anchor ui:field="btnCancel"  styleName="greenbutton {style.PathView-Obj9}" ><i style="margin-right:5px;" class="fa fa-ban fa-lg"></i> Cancel</g:Anchor>
 				</g:HorizontalPanel>
 			</g:HTMLPanel>
+			
 			<g:HTMLPanel ui:field="htmlControlBottom"></g:HTMLPanel>
 		</g:HTMLPanel>
 	

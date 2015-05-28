@@ -1,0 +1,73 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	.ThemePickTable_Obj1 {
+		background-color: #f6f7f8;
+		border: 1px #e9eaed solid;
+		padding: 15px;
+	}
+	
+	.ThemePickTable_Obj2 {
+		background-color: #ffffff;
+		padding: 20px;
+		padding-left: 25px;
+		position: relative;
+	}
+	
+	.ThemePickTable_Obj3 {
+		background-color: #f6f7f8;
+		border: 1px #e9eaed solid;
+		padding: 8px;
+	}
+	
+	.ThemePickTable_Obj4 {
+		float: right;
+		margin-right: 5px;
+	}
+	
+	.ThemePickTable_Obj5 {
+		color: aliceblue;
+  		padding: 6px 10px;
+  		margin-left: 10px;
+  		float: right;
+  		margin-top: 3px;
+	}
+	
+	.ThemePickTable_Obj6 {
+		width: 200px;
+  		height: 150px;
+  		border: 8px solid whitesmoke;
+  		position: absolute;
+  		top: 15px;
+  		right: 10px;	
+	}
+	</ui:style>
+	<g:HTMLPanel width="400px">
+		<g:HTMLPanel height="16px" styleName="{style.ThemePickTable_Obj1}">
+			<g:Label text="Chose your theme" styleName="font-blackTitleNormal"/>
+		</g:HTMLPanel>
+		
+		<g:HTMLPanel styleName="{style.ThemePickTable_Obj2}">
+			<div style="margin-bottom:10px;"><g:CheckBox ui:field="ck_default" text="Default"></g:CheckBox></div>
+			<div style="margin-bottom:10px;"><g:CheckBox ui:field="ck_beach_dawn" text="Beach Dawn"></g:CheckBox></div>
+			<div style="margin-bottom:10px;"><g:CheckBox ui:field="ck_beach_morning" text="Beach Morning"></g:CheckBox></div>
+			<div style="margin-bottom:10px;"><g:CheckBox ui:field="ck_beach_sunset" text="Beach Sunset"></g:CheckBox></div>
+			<div style="margin-bottom:10px;"><g:CheckBox ui:field="ck_city" text="City"></g:CheckBox></div>
+			<div style="margin-bottom:10px;"><g:CheckBox ui:field="ck_country" text="Country"></g:CheckBox></div>
+			<div style="margin-bottom:10px;"><g:CheckBox ui:field="ck_forest" text="Forest"></g:CheckBox></div>
+			<div style="margin-bottom:10px;"><g:CheckBox ui:field="ck_forest_waterfall" text="Forest Waterfall"></g:CheckBox></div>
+			<div style="margin-bottom:10px;"><g:CheckBox ui:field="ck_mountain_spring" text="Mountain Spring"></g:CheckBox></div>
+			<div style="margin-bottom:10px;"><g:CheckBox ui:field="ck_mountain_winter" text="Mountain Winter"></g:CheckBox></div>
+			
+			<g:Image ui:field="previewImg" styleName="{style.ThemePickTable_Obj6}" title="Theme Preview" url="/resources/themes/Default.jpg"></g:Image>
+		</g:HTMLPanel>
+		
+		<g:HTMLPanel ui:field="htmlFooter" styleName="{style.ThemePickTable_Obj3}" height="35px">
+			<g:HorizontalPanel styleName="{style.ThemePickTable_Obj4}">
+				<g:Anchor ui:field="btnSave"  styleName="greenbutton {style.ThemePickTable_Obj5}" > Save</g:Anchor>
+				<g:Anchor ui:field="btnCancel"  styleName="greenbutton {style.ThemePickTable_Obj5}" > Cancel</g:Anchor> 
+			</g:HorizontalPanel>
+		</g:HTMLPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

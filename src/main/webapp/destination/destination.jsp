@@ -149,6 +149,90 @@ public void redirectHomeUrl(HttpServletResponse response) {
 			window.scrollTo(0, 0);
 		}
 	</script> -->
+	
+	<%
+	if(trip.getTheme() == null) {
+	%>
+		<script type="text/javascript">
+			document.body.className = "journeypage_default_theme";
+		</script>
+	<%
+	}
+	else {
+		switch (trip.getTheme()) {
+		case DEFAULT:
+		%>
+			<script type="text/javascript">
+				document.body.className = "journeypage_default_theme";
+			</script>
+		<%
+			break;
+		case BEACH_DAWN:
+		%>
+			<script type="text/javascript">
+				document.body.className = "journeypage_beachdawn_theme";
+			</script>
+		<%
+			break;
+		case BEACH_MORNING:
+		%>
+			<script type="text/javascript">
+				document.body.className = "journeypage_beachmorning_theme";
+			</script>
+		<%
+			break;
+		case BEACH_SUNSET:
+		%>
+			<script type="text/javascript">
+				document.body.className = "journeypage_beachsunset_theme";
+			</script>
+		<%
+			break;
+		case CITY:
+		%>
+			<script type="text/javascript">
+				document.body.className = "journeypage_city_theme";
+			</script>
+		<%
+			break;
+		case COUNTRY:
+		%>
+			<script type="text/javascript">
+				document.body.className = "journeypage_country_theme";
+			</script>
+		<%
+			break;
+		case FOREST:
+		%>
+			<script type="text/javascript">
+				document.body.className = "journeypage_forest_theme";
+			</script>
+		<%
+			break;
+		case FOREST_WATERFALL:
+		%>
+			<script type="text/javascript">
+				document.body.className = "journeypage_forestwaterfall_theme";
+			</script>
+		<%
+			break;
+		case MOUNTAIN_SPRING:
+		%>
+			<script type="text/javascript">
+				document.body.className = "journeypage_mountainspring_theme";
+			</script>
+		<%
+			break;
+		case MOUNTAIN_WINTER:
+		%>
+			<script type="text/javascript">
+				document.body.className = "journeypage_mountainwinter_theme";
+			</script>
+		<%
+			break;
+		} 
+	}
+	%>
 
 	<div id="header" style="margin:0px; height: 130px;">
 		<div style="width:86%; margin: auto;">
