@@ -32,6 +32,7 @@ public class PhotoUpload extends DialogBox {
 	@UiField Label lbUploadProgress;
 	@UiField HorizontalPanel uploadingForm;
 	@UiField HTMLPanel imageTable;
+//	@UiField HTMLPanel dropzone;
 	
 //	boolean isHandlerUploadEvent = false;
 
@@ -50,6 +51,7 @@ public class PhotoUpload extends DialogBox {
 		pick_files.getElement().setAttribute("id", "pick_files");
 		lbUploadProgress.getElement().setAttribute("id", "lbUploadProgress");
 		imageTable.getElement().setAttribute("id", "imageTable");
+//		dropzone.getElement().setAttribute("id", "dropzone");
 	}
 
 	@Override
@@ -143,9 +145,10 @@ public class PhotoUpload extends DialogBox {
 		    runtimes : 'flash',
 		    container: $wnd.document.getElementById('container'), // ... or DOM Element itself
 		    browse_button : 'pick_files', // you can pass in id...
+//		    drop_element: 'dropzone',
 		    url : '/',
 		    use_query_string: false,
-		    dragdrop: true,
+		   	dragdrop: true,
 		    multipart : true,
 		    
 		    //Enable resize
@@ -197,11 +200,11 @@ public class PhotoUpload extends DialogBox {
 						                  
 	                    img.onload = function() {
 	                        // create a thumb placeholder
-	                        var span = document.createElement('span');
+	                        var span = document.createElement('div');
 	                        span.id = this.uid;	                      
 	                        span.className = "PhotoUpload-Obj11";                       
 	                        $wnd.document.getElementById('imageTable').insertBefore(span, null);
-	                     
+	                        	                     	                  
 	                        // embed the actual thumbnail
 	                        var widthcrop = 300;
 	                        var heightcrop = widthcrop / (this.width/this.height);
@@ -209,14 +212,24 @@ public class PhotoUpload extends DialogBox {
 	                            width: widthcrop,
 	                            height: heightcrop,
 	                            crop: true
-	                        });	                            					
+	                        });	                                               	                       	                  
 	                    };
 	                    
 	                    // drop thumbnails at different angles (optional eye candy)
 	                    img.onembedded = function() {
-	                        $wnd.plupload.each(['', '-ms-', '-webkit-', '-o-', '-moz-'], function(prefix) {
-	                            $wnd.document.getElementById(img.uid).style[prefix + 'transform'] = 'rotate('+ (Math.floor(Math.random() * 6) - 3) + 'deg)';
-	                        });
+//	                        $wnd.plupload.each(['', '-ms-', '-webkit-', '-o-', '-moz-'], function(prefix) {
+//	                            $wnd.document.getElementById(img.uid).style[prefix + 'transform'] = 'rotate('+ (Math.floor(Math.random() * 6) - 3) + 'deg)';
+//	                        });
+ 							// add remove image button
+	                        var removeImg = document.createElement("a");
+	                        var span = 	$wnd.document.getElementById(this.uid);
+	                        span.appendChild(removeImg);
+	                        removeImg.className = "greenbutton PhotoUpload-Obj15";
+	                        removeImg.innerHTML = "<i class='fa fa-times'></i>";
+	                        removeImg.onclick = function(index) {
+	                        	span.parentNode.removeChild(span);
+	                        	$wnd.uploader.removeFile(file);
+	                        };
 	                    };
 	                    
 	                    img.load(file.getSource());

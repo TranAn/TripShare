@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
-	@external .PhotoUpload-Obj2, .PhotoUpload-Obj3, .PhotoUpload-Obj10, .PhotoUpload-Obj11, .PhotoUploadDialog;
+	@external .PhotoUpload-Obj2, .PhotoUpload-Obj3, .PhotoUpload-Obj10, .PhotoUpload-Obj11, .PhotoUploadDialog, .PhotoUpload-Obj15;
 	.PhotoUploadDialog {
 		background: #FCFFFF;
 		border: 2px solid #a1a1a1;
@@ -74,6 +74,11 @@
 	.PhotoUpload-Obj9 {
 		margin-left: 10px;
 		white-space: nowrap;
+		display: inline-flex;
+	  	display: -webkit-inline-box;
+	  	display: -webkit-inline-flex;
+	  	display: -ms-inline-flexbox;
+	  	-webkit-align-self: auto;
 	}
 	
 	.PhotoUpload-Obj10 {
@@ -83,7 +88,7 @@
 		color: silver;
 		cursor: pointer;
 		float: left;
-		margin-right: 5px;
+		margin-right: 0px;
 	}
 	
 	.PhotoUpload-Obj10:hover {
@@ -92,7 +97,10 @@
 	}
 	
 	.PhotoUpload-Obj11 {
-		
+		float: left;
+		margin-top: 2px;
+		margin-bottom: 5px;
+		position: relative;
 	}
 	
 	.PhotoUpload-Obj11 img {
@@ -121,8 +129,19 @@
   		color: silver;
   		margin-left: 8px;
 	}
+	
+	.PhotoUpload-Obj15 {
+		position: absolute;
+  		top: 16px;
+  		right: 10px;
+  		color: silver;
+ 		padding: 1px 3px;
+  		background-color: white;
+  		border-radius: 20px;
+  		text-shadow: none;
+	}
 	</ui:style>
-	<g:HTMLPanel width="650px" height="">
+	<g:HTMLPanel width="670px" height="">
 		<g:HTMLPanel height="16px" styleName="{style.PhotoUpload-Obj1}" width="">
 			<g:Label text="Upload Photos" styleName="font-blackTitleNormal {style.PhotoUpload-Obj12}"/>
 		</g:HTMLPanel>
