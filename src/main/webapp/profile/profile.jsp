@@ -12,6 +12,7 @@
 <%@ page import="com.born2go.shared.User"%>
 <%@ page import="com.born2go.server.DataServiceImpl"%>
 <%@ page import="java.util.ArrayList"%>
+<%@page import="java.io.IOException"%>
 
 <!doctype html>
 <!-- The DOCTYPE declaration above will set the    -->
@@ -44,11 +45,15 @@
 %>
 
 <%!
-public void redirectHomeUrl(HttpServletResponse response) {
-	String site = new String("/");
-	response.setStatus(response.SC_MOVED_TEMPORARILY);
-	response.setHeader("Location", site);
-}
+	//Global functions
+	public void redirectHomeUrl(HttpServletResponse response) {
+		String site = new String("/");	
+		try {
+			response.getWriter().print("<h1>NOT_FOUND</h1>");
+		} catch(IOException e) {}
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		response.setHeader("Location", site);
+	}
 %>
 
 <%
@@ -57,12 +62,14 @@ public void redirectHomeUrl(HttpServletResponse response) {
 	if (request.getPathInfo() == null
 			|| request.getPathInfo().length() == 0) {
 		redirectHomeUrl(response);
+		return;
 	} else {
 		String userId = request.getPathInfo().replaceAll("/", "");
 		DataServiceImpl service = new DataServiceImpl();
 		user = service.findUser(userId);
 		if (user == null) {
 			redirectHomeUrl(response);
+			return;
 		} else {
 		}
 	}

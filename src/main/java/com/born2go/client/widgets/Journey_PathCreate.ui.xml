@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client" xmlns:p2="urn:import:com.born2go.client.widgets">
 	<ui:style>
-	@external .PathCreate-Obj3, .PathCreate-Obj3Open, .PathCreate-Obj3WideOpen, .PathCreate-Obj6ScrollAble, .PathCreate-Obj12, .PathCreate-Obj16;
+	@external .PathCreate-Obj3, .PathCreate-Obj3Open, .PathCreate-Obj3WideOpen, .PathCreate-Obj6ScrollAble, .PathCreate-Obj12, .PathCreate-Obj16, .PathCreate-Obj19, .PathCreate-Obj20;
 	.PathCreate-Obj1 {
 		float: left;
 		width: 30%;
@@ -89,6 +89,11 @@
 	.PathCreate-Obj10 {
 		margin-left: 10px;
 		white-space: nowrap;
+		display: inline-flex;
+	  	display: -webkit-inline-box;
+	  	display: -webkit-inline-flex;
+	  	display: -ms-inline-flexbox;
+	  	-webkit-align-self: auto;
 	}
 	
 	.PathCreate-Obj11 {
@@ -149,8 +154,39 @@
   		float: right;
   		margin-top: 3px;
 	}
+	
+	.PathCreate-Obj19 {
+		float: left;
+		margin-top: -5px;
+		margin-bottom: 5px;
+		position: relative;
+		max-height: 100px;
+		overflow: hidden;
+	}
+	
+	.PathCreate-Obj19 img {
+		max-width: 125px;
+		max-height: 80px;
+		height: 80px;
+ 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  		background-color: rgba(48, 27, 12, 1);
+  		overflow: hidden;
+  		border: 1px solid gray;
+		margin: 13px 5px 0 0;
+	}
+	
+	.PathCreate-Obj20 {
+		position: absolute;
+  		top: 16px;
+  		right: 10px;
+  		color: silver;
+ 		padding: 1px 3px;
+  		background-color: white;
+  		border-radius: 20px;
+  		text-shadow: none;
+	}
 	</ui:style>
-	<g:HTMLPanel ui:field="container" styleName="{style.PathCreate-Obj3}">
+	<g:HTMLPanel ui:field="htmlPathCreate" styleName="{style.PathCreate-Obj3}">
 	
 		<g:HTMLPanel height="35px" styleName="{style.PathCreate-Obj4}">
 			<table style="float:left;">
@@ -198,17 +234,17 @@
 		</g:ScrollPanel>
 		
 		<g:HTMLPanel height="36px" styleName="{style.PathCreate-Obj4}">
-			<g:FormPanel ui:field="formUpload" styleName="{style.PathCreate-Obj9}">
-				<g:HTMLPanel>
-					<g:LongBox ui:field="boxTripId" visible="false"/>
+			<!-- <g:FormPanel ui:field="formUpload" styleName="{style.PathCreate-Obj9}"> -->
+				<g:HTMLPanel ui:field="container" styleName="{style.PathCreate-Obj9}">
+					<!-- <g:LongBox ui:field="boxTripId" visible="false"/>
 					<g:LongBox visible="false" ui:field="boxPathId"/>
-					<g:FileUpload width="100%" height="100%" ui:field="pathPhotoUpload" visible="false"/>
-					<label for="pathPhotoUpload" class="boxbutton">
+					<g:FileUpload width="100%" height="100%" ui:field="pathPhotoUpload" visible="false"/> -->
+					<g:Anchor styleName="boxbutton" ui:field="pick_files">
 						<i style="margin-right:5px;" class="fa fa-camera fa-lg"></i>
 						Upload Photos
-					</label>
+					</g:Anchor>
 				</g:HTMLPanel>
-			</g:FormPanel>
+			<!-- </g:FormPanel> -->
 			<g:Label text="0 / Photos" styleName="{style.PathCreate-Obj13}" ui:field="lbCountPhotos"/>
 			<g:Anchor ui:field="btnCancel"  styleName="greenbutton {style.PathCreate-Obj8}" ><i style="margin-right:5px;" class="fa fa-ban fa-lg"></i> Cancel</g:Anchor>
 			<g:Anchor ui:field="btnPost"  styleName="greenbutton {style.PathCreate-Obj18}" ><i style="margin-right:5px;" class="fa fa-floppy-o fa-lg"></i> Save</g:Anchor>

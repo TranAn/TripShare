@@ -49,48 +49,48 @@ public class ThemePickTable extends DialogBox {
 		
 		if(trip.getTheme() == null) {
 			ck_default.setValue(true);
-			previewImg.setUrl("/resources/themes/Default.jpg");
+			previewImg.setUrl("/resources/themes/Default-thumbnail.jpg");
 		} else {
 			switch (trip.getTheme()) {
 			case DEFAULT:
 				ck_default.setValue(true);
-				previewImg.setUrl("/resources/themes/Default.jpg");
+				previewImg.setUrl("/resources/themes/Default-thumbnail.jpg");
 				break;
 			case BEACH_DAWN:
 				ck_beach_dawn.setValue(true);
-				previewImg.setUrl("/resources/themes/Beach-Dawn.jpg");
+				previewImg.setUrl("/resources/themes/Beach-Dawn-thumbnail.jpg");
 				break;
 			case BEACH_MORNING:
 				ck_beach_morning.setValue(true);
-				previewImg.setUrl("/resources/themes/Beach-Morning.jpg");
+				previewImg.setUrl("/resources/themes/Beach-Morning-thumbnail.jpg");
 				break;
 			case BEACH_SUNSET:
 				ck_beach_sunset.setValue(true);
-				previewImg.setUrl("/resources/themes/Beach-Sunset.jpg");
+				previewImg.setUrl("/resources/themes/Beach-Sunset-thumbnail.jpg");
 				break;
 			case CITY:
 				ck_city.setValue(true);
-				previewImg.setUrl("/resources/themes/City.jpg");
+				previewImg.setUrl("/resources/themes/City-thumbnail.jpg");
 				break;
 			case COUNTRY:
 				ck_country.setValue(true);
-				previewImg.setUrl("/resources/themes/Country.jpg");
+				previewImg.setUrl("/resources/themes/Country-thumbnail.jpg");
 				break;
 			case FOREST:
 				ck_forest.setValue(true);
-				previewImg.setUrl("/resources/themes/Forest.jpg");
+				previewImg.setUrl("/resources/themes/Forest-thumbnail.jpg");
 				break;
 			case FOREST_WATERFALL:
 				ck_forest_waterfall.setValue(true);
-				previewImg.setUrl("/resources/themes/Forest-Waterfall.jpg");
+				previewImg.setUrl("/resources/themes/Forest-Waterfall-thumbnail.jpg");
 				break;
 			case MOUNTAIN_SPRING:
 				ck_mountain_spring.setValue(true);
-				previewImg.setUrl("/resources/themes/Mountain-Spring.jpg");
+				previewImg.setUrl("/resources/themes/Mountain-Spring-thumbnail.jpg");
 				break;
 			case MOUNTAIN_WINTER:
 				ck_mountain_winter.setValue(true);
-				previewImg.setUrl("/resources/themes/Mountain-Winter.jpg");
+				previewImg.setUrl("/resources/themes/Mountain-Winter-thumbnail.jpg");
 				break;
 			}
 		}
@@ -125,7 +125,7 @@ public class ThemePickTable extends DialogBox {
 	void onCKDefaultClick(ClickEvent event) {
 		clearCheck();
 		ck_default.setValue(true);
-		previewImg.setUrl("/resources/themes/Default.jpg");
+		previewImg.setUrl("/resources/themes/Default-thumbnail.jpg");
 		trip.setTheme(Trip.Theme.DEFAULT);
 	}
 	
@@ -133,7 +133,7 @@ public class ThemePickTable extends DialogBox {
 	void onCKBeachDawnClick(ClickEvent event) {
 		clearCheck();
 		ck_beach_dawn.setValue(true);
-		previewImg.setUrl("/resources/themes/Beach-Dawn.jpg");
+		previewImg.setUrl("/resources/themes/Beach-Dawn-thumbnail.jpg");
 		trip.setTheme(Trip.Theme.BEACH_DAWN);
 	}
 	
@@ -141,7 +141,7 @@ public class ThemePickTable extends DialogBox {
 	void onCKBeachMorningClick(ClickEvent event) {
 		clearCheck();
 		ck_beach_morning.setValue(true);
-		previewImg.setUrl("/resources/themes/Beach-Morning.jpg");
+		previewImg.setUrl("/resources/themes/Beach-Morning-thumbnail.jpg");
 		trip.setTheme(Trip.Theme.BEACH_MORNING);
 	}
 	
@@ -149,7 +149,7 @@ public class ThemePickTable extends DialogBox {
 	void onCKBeachSunsetClick(ClickEvent event) {
 		clearCheck();
 		ck_beach_sunset.setValue(true);
-		previewImg.setUrl("/resources/themes/Beach-Sunset.jpg");
+		previewImg.setUrl("/resources/themes/Beach-Sunset-thumbnail.jpg");
 		trip.setTheme(Trip.Theme.BEACH_SUNSET);
 	}
 	
@@ -157,7 +157,7 @@ public class ThemePickTable extends DialogBox {
 	void onCKCityClick(ClickEvent event) {
 		clearCheck();
 		ck_city.setValue(true);
-		previewImg.setUrl("/resources/themes/City.jpg");
+		previewImg.setUrl("/resources/themes/City-thumbnail.jpg");
 		trip.setTheme(Trip.Theme.CITY);
 	}
 	
@@ -165,7 +165,7 @@ public class ThemePickTable extends DialogBox {
 	void onCKCountryClick(ClickEvent event) {
 		clearCheck();
 		ck_country.setValue(true);
-		previewImg.setUrl("/resources/themes/Country.jpg");
+		previewImg.setUrl("/resources/themes/Country-thumbnail.jpg");
 		trip.setTheme(Trip.Theme.COUNTRY);
 	}
 	
@@ -173,7 +173,7 @@ public class ThemePickTable extends DialogBox {
 	void onCKForestClick(ClickEvent event) {
 		clearCheck();
 		ck_forest.setValue(true);
-		previewImg.setUrl("/resources/themes/Forest.jpg");
+		previewImg.setUrl("/resources/themes/Forest-thumbnail.jpg");
 		trip.setTheme(Trip.Theme.FOREST);
 	}
 	
@@ -181,7 +181,7 @@ public class ThemePickTable extends DialogBox {
 	void onCKForestWaterfallClick(ClickEvent event) {
 		clearCheck();
 		ck_forest_waterfall.setValue(true);
-		previewImg.setUrl("/resources/themes/Forest-Waterfall.jpg");
+		previewImg.setUrl("/resources/themes/Forest-Waterfall-thumbnail.jpg");
 		trip.setTheme(Trip.Theme.FOREST_WATERFALL);
 	}
 	
@@ -189,7 +189,7 @@ public class ThemePickTable extends DialogBox {
 	void onCKMountainSpringClick(ClickEvent event) {
 		clearCheck();
 		ck_mountain_spring.setValue(true);
-		previewImg.setUrl("/resources/themes/Mountain-Spring.jpg");
+		previewImg.setUrl("/resources/themes/Mountain-Spring-thumbnail.jpg");
 		trip.setTheme(Trip.Theme.MOUNTAIN_SPRING);
 	}
 	
@@ -197,7 +197,7 @@ public class ThemePickTable extends DialogBox {
 	void onCKMountainWinterClick(ClickEvent event) {
 		clearCheck();
 		ck_mountain_winter.setValue(true);
-		previewImg.setUrl("/resources/themes/Mountain-Winter.jpg");
+		previewImg.setUrl("/resources/themes/Mountain-Winter-thumbnail.jpg");
 		trip.setTheme(Trip.Theme.MOUNTAIN_WINTER);
 	}
 	

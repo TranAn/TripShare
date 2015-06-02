@@ -440,6 +440,7 @@ p{
 	padding: 6px 12px;
 	padding-bottom: 7px;
 	cursor: pointer;
+	color: black;
 }
 
 .boxbutton:hover {

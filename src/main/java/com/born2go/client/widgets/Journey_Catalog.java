@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Journey_Catalog extends Composite {
@@ -26,6 +27,7 @@ public class Journey_Catalog extends Composite {
 	
 	@UiField HTMLPanel catalog;
 	@UiField HTMLPanel htmlContent;
+	@UiField Label totalPost;
 	
 	public interface Listener {
 		void onClose();
@@ -41,8 +43,15 @@ public class Journey_Catalog extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 	
-	public void setCatalog(List<Path> listContents) {
+	public void setCatalog(String title, List<Path> listContents) {
 		htmlContent.clear();
+		HTMLPanel titleHtml = new HTMLPanel("<i class='fa fa-list-ul fa-lg'></i>");
+		titleHtml.setStyleName("Catalog_Obj6");
+		Label titleLb = new Label("");
+		titleLb.setText(title);
+		titleLb.setStyleName("Catalog_Obj7");
+		titleHtml.add(titleLb);
+		htmlContent.add(titleHtml);
 		for(Path p: listContents) {
 			HTML content = new HTML();
 			content.setStyleName("Catalog_Obj4");
@@ -66,10 +75,18 @@ public class Journey_Catalog extends Composite {
 	        });
 			Event.sinkEvents(DOM.getElementById("#index_"+ p.getId()), Event.ONCLICK);
 		}
+		if(listContents.isEmpty()) {
+			HTML content = new HTML();
+			content.setStyleName("Catalog_Obj4");
+			String span = "<span style='margin-left: 20px; color: silver;'>(Empty)</span>";
+			content.setHTML(span);
+			htmlContent.add(content);
+		}
 		Image img = new Image();
 		img.setUrl("/resources/food-diary-resize.jpg");
 		img.getElement().setAttribute("style", "position: absolute; opacity: 0.4; top: 20px; right: 10px; width: 260px;");
 		htmlContent.add(img);
+		totalPost.setText("Total - "+ listContents.size()+ " Posts");
 	}
 
 }

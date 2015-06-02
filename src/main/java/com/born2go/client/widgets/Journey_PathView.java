@@ -415,25 +415,27 @@ public class Journey_PathView extends Composite {
 				catalog.setStyleName("Catalog_Obj1");
 			}
 			//-----
-			btnPost.addStyleName("PathCreate-Obj16");
-			htmlControlBottom.clear();
-			htmlControlBottom.add(pathCreate);
-			btnUpload.setVisible(false);
-			pathCreate.setTripId(tripId);
-			pathCreate.handlerUploadEvent();
-			Timer timer1 = new Timer () {
-				@Override
-				public void run() {
-					pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3Open");
-				}
-			};timer1.schedule(100);
-			Timer timer2 = new Timer () {
-				@Override
-				public void run() {
-					pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3WideOpen");
-				}
-			};timer2.schedule(400);
-			isOpenPathCreate = true;
+			if(!isOpenPathCreate) {
+				btnPost.addStyleName("PathCreate-Obj16");
+				htmlControlBottom.clear();
+				htmlControlBottom.add(pathCreate);
+				btnUpload.setVisible(false);
+				pathCreate.setTripId(tripId);
+				pathCreate.handlerUploadEvent();
+				Timer timer1 = new Timer () {
+					@Override
+					public void run() {
+						pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3Open");
+					}
+				};timer1.schedule(100);
+				Timer timer2 = new Timer () {
+					@Override
+					public void run() {
+						pathCreate.setStyleName("PathCreate-Obj3 PathCreate-Obj3WideOpen");
+					}
+				};timer2.schedule(400);
+				isOpenPathCreate = true;
+			}
 		}
 	}
 	
@@ -460,7 +462,7 @@ public class Journey_PathView extends Composite {
 			List<Path> listContents = new ArrayList<Path>();
 			for(Journey_PathDetail pd: listPathsDetail)
 				listContents.add(pd.getPath());
-			catalog.setCatalog(listContents);
+			catalog.setCatalog(theTrip.getName(), listContents);
 		}
 		else {
 			btnContent.removeStyleName("PathCreate-Obj16");

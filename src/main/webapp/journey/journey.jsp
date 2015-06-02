@@ -1,3 +1,4 @@
+<%@page import="java.io.IOException"%>
 <%@ page import="com.google.gwt.user.client.Window"%>
 <%@ page import="com.born2go.shared.Trip"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
@@ -23,7 +24,7 @@
 		 }
 		 else{
 			 String tripId = request.getPathInfo().replaceAll("/", "");
-			 RequestDispatcher rd = getServletContext().getRequestDispatcher("/mtrip/"+tripId);
+			 RequestDispatcher rd = getServletContext().getRequestDispatcher("/mtrip/"+ tripId);
 				if (rd != null){
 					rd.forward(request, response);
 				}
@@ -38,8 +39,11 @@
 <%!
 	//Global functions
 	public void redirectHomeUrl(HttpServletResponse response) {
-		String site = new String("/");
-		response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+		String site = new String("/");	
+		try {
+			response.getWriter().print("<h1>NOT_FOUND</h1>");
+		} catch(IOException e) {}
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		response.setHeader("Location", site);
 	}
 %>
@@ -53,12 +57,21 @@
 	if (request.getPathInfo() == null
 			|| request.getPathInfo().length() < 1) {
 		redirectHomeUrl(response);
+		return;
 	} else {
 		tripId = request.getPathInfo().replaceAll("/", "");
 		DataServiceImpl service = new DataServiceImpl();
-		trip = service.findTrip(Long.valueOf(tripId));
+		Long trip_id = 1L;
+		try{
+			trip_id = Long.valueOf(tripId);
+		} catch (NumberFormatException e) {
+			redirectHomeUrl(response);
+			return;
+		}
+		trip = service.findTrip(trip_id);
 		if (trip == null) {
 			redirectHomeUrl(response);
+			return;
 		} else {
 		}
 	}
@@ -277,28 +290,31 @@
 						<div class="fb-like" data-href="http://born2go-b.appspot.com/journey/<%= tripId %>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
 					</div>
 					
+					<%if(trip.getPoster() != null) {%>
 					<div style="display: inline-flex; display: -webkit-inline-box; display: -webkit-inline-flex; display: -ms-inline-flexbox; -webkit-align-self: auto;">
 						<div class="font-blackTitleLarge" style="margin-top: 12px;margin-bottom: 20px;margin-right: 4px;font-size: 15px;font-family: museo-w01-700,serif; color:gray; font-style: italic;">Create by:</div>
-						<%if(trip.getPoster() != null) {%>
 						<a href="/profile/<%=trip.getPoster().getUserID()%>" class="font-blackTitleLarge link" style="margin-top: 12px;;margin-bottom: 20px;font-size: 15px;font-family: museo-w01-700,serif; color: cornflowerblue; font-style: italic;"><%=(trip.getPoster()!=null?trip.getPoster().getUserName():"Tester")%></a>
-						<img style="border: 1px silver solid;border-radius: 20px;overflow: hidden;margin-left: 8px;margin-bottom: 15px;" src="https://graph.facebook.com/<%=trip.getPoster().getUserID()%>/picture?width=25&height=25" />
-						<%} %>
+						<img style="border: 1px silver solid;border-radius: 20px;overflow: hidden;margin-left: 8px;margin-bottom: 15px;" src="https://graph.facebook.com/<%=trip.getPoster().getUserID()%>/picture?width=25&height=25" />					
 					</div>
+					<%} %>
 					
+					<%if(trip.getJourney() !=null) {%> 
 					<div class="font-blackTitleLarge">Itinerary:</div>
 					<div class="trip-destinations">
-						<img src="/resources/red-spotlight.png" style="width:22px;height:30px;vertical-align: middle;"/> 
+						<img src="/resources/red-spotlight.png" style="width:22px;height:30px;vertical-align: middle;"/>
 						<span style="margin-left:5px"><%=trip.getJourney().getLocates().get(0).getAddressName()%></span>
 					</div>
 					<%for (int i = 1; i < trip.getJourney().getLocates().size(); i++) { %>
 					<div class="trip-destinations"><img src="/resources/green-spotlight.png" style="width:22px;height:30px;vertical-align: middle;"/> <span style="margin-left:5px"> <%= trip.getJourney().getLocates().get(i).getAddressName() %> </span></div>
-					<%} %>
+					<%} }%>
 					
+					<%if(trip.getDepartureDate() != null) {%>
 					<div class="font-blackTitleLarge" style="margin-top:25px;">Departure date:</div>
 					<div class="trip-destinations">
 						<img src="/resources/1430221613_schedule.png" style="width:22px;height:30px;vertical-align: middle;"/> 
 						<span style="margin-left:5px"><%= df.format(trip.getDepartureDate()) %></span>
 					</div>
+					<%} %>
 					
 					<%-- <%if(!trip.getCompanion().isEmpty()) { %> --%>
 					<div class="font-blackTitleLarge" style="margin-top:30px;">Companion:</div>

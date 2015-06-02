@@ -3,10 +3,6 @@ package com.born2go.client.widgets;
 import java.util.Date;
 import java.util.List;
 
-import com.axeiya.gwtckeditor.client.CKConfig;
-import com.axeiya.gwtckeditor.client.CKConfig.TOOLBAR_OPTIONS;
-import com.axeiya.gwtckeditor.client.Toolbar;
-import com.axeiya.gwtckeditor.client.ToolbarLine;
 import com.born2go.client.TripShare;
 import com.born2go.shared.Locate;
 import com.born2go.shared.Path;
@@ -22,14 +18,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FileUpload;
-import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
-import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.LongBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -40,17 +31,13 @@ public class Journey_PathCreate extends Composite {
 
 	private static Binder uiBinder = GWT.create(Binder.class);
 	
-	@UiField HTMLPanel container;
+	@UiField HTMLPanel htmlPathCreate;
 	@UiField TextBox txbTitle;
 	@UiField DateBox txbTimeline;
 	@UiField Anchor btnPost;
 	@UiField StretchyTextArea txbDescription;
 	@UiField Anchor btnCancel;
-	@UiField FormPanel formUpload;
-	@UiField FileUpload pathPhotoUpload;
 	@UiField HTMLPanel htmlPathPhotos;
-	@UiField LongBox boxTripId;
-	@UiField LongBox boxPathId;
 	@UiField ScrollPanel scrollPathPhotos;
 	@UiField Label lbCountPhotos;
 	@UiField HTMLPanel editTextBox;
@@ -58,10 +45,13 @@ public class Journey_PathCreate extends Composite {
 	@UiField Anchor btnRichTextEdit;
 	@UiField Anchor btnFindYourLocation;
 	@UiField Label lbTitle;
+	@UiField HTMLPanel container;
+	@UiField Anchor pick_files;
 	
 	Long tripId;
+	Long pathID;
 	Locate locate;
-	boolean isHandlerUploadEvent = false;
+	
 	boolean isRichTextEdit = false;
 	
 	interface Binder extends UiBinder<Widget, Journey_PathCreate> {
@@ -82,133 +72,113 @@ public class Journey_PathCreate extends Composite {
 	
 	TextArea txbRichDescription;
 	
-	public CKConfig getCKConfig() {
-		// Creates a new config, with FULL preset toolbar as default
-		CKConfig ckf = new CKConfig();
-		
-		// Setting background color
-		ckf.setUiColor("#f6f7f8");
-		
-		// Setting size
-		ckf.setWidth("");
-		ckf.setHeight("180px");
-		ckf.setResizeMinHeight(180);
-		ckf.setResizeMaxHeight(250);
-
-		// Creating personalized toolbar
-		ToolbarLine line1 = new ToolbarLine();
-		line1.add(TOOLBAR_OPTIONS.Source);
-		line1.add(TOOLBAR_OPTIONS._);
-		line1.add(TOOLBAR_OPTIONS.Undo);
-		line1.add(TOOLBAR_OPTIONS.Redo);
-
-		// Creates the toolbar
-		Toolbar t = new Toolbar();
-		t.add(line1);
-		t.addSeparator();
-
-		// Define the second line
-		TOOLBAR_OPTIONS[] t2 = { TOOLBAR_OPTIONS.Bold, TOOLBAR_OPTIONS.Italic,
-				TOOLBAR_OPTIONS.Underline, TOOLBAR_OPTIONS._,
-				TOOLBAR_OPTIONS.RemoveFormat, TOOLBAR_OPTIONS._ };
-		ToolbarLine line2 = new ToolbarLine();
-		line2.addAll(t2);
-		t.add(line2);
-		t.addSeparator();
-
-		// Define the third line
-		TOOLBAR_OPTIONS[] t3 = { TOOLBAR_OPTIONS.Find, TOOLBAR_OPTIONS.Replace, };
-		ToolbarLine line3 = new ToolbarLine();
-		line3.addAll(t3);
-		t.add(line3);
-		t.addSeparator();
-
-		// Define the second line
-		TOOLBAR_OPTIONS[] t4 = {
-		TOOLBAR_OPTIONS.JustifyLeft, TOOLBAR_OPTIONS.JustifyCenter,
-				TOOLBAR_OPTIONS.JustifyRight, TOOLBAR_OPTIONS.JustifyBlock };
-		
-		ToolbarLine line4 = new ToolbarLine();
-		line4.addAll(t4);
-		t.add(line4);
-		t.addSeparator();
-
-		ToolbarLine line5 = new ToolbarLine();
-		line5.add(TOOLBAR_OPTIONS.Link);
-		line5.add(TOOLBAR_OPTIONS.Unlink);
-		t.add(line5);
-		t.addSeparator();
-
-		ToolbarLine line6 = new ToolbarLine();
-		line6.add(TOOLBAR_OPTIONS.Image);
-		line6.add(TOOLBAR_OPTIONS.Smiley);
-		t.add(line6);
-		t.addSeparator();
-
-		ToolbarLine line7 = new ToolbarLine();
-		line7.add(TOOLBAR_OPTIONS.Styles);
-		t.add(line7);
-
-		ToolbarLine line8 = new ToolbarLine();
-		line8.add(TOOLBAR_OPTIONS.Format);
-		t.add(line8);
-		t.addSeparator();
-
-		ToolbarLine line9 = new ToolbarLine();
-		line9.add(TOOLBAR_OPTIONS.Font);
-		t.add(line9);
-		t.addSeparator();
-
-		ToolbarLine line10 = new ToolbarLine();
-		line10.add(TOOLBAR_OPTIONS.FontSize);
-		t.add(line10);
-		t.addSeparator();
-
-		ToolbarLine line11 = new ToolbarLine();
-		line11.add(TOOLBAR_OPTIONS.TextColor);
-//		line11.add(TOOLBAR_OPTIONS.SpecialChar);
-		line11.add(TOOLBAR_OPTIONS.Maximize);
-		t.add(line11);
-		t.addSeparator();
-		
-		// Set the toolbar to the config (replace the FULL preset toolbar)
-		ckf.setToolbar(t);
-		return ckf;
-	}
+//	public CKConfig getCKConfig() {
+//		// Creates a new config, with FULL preset toolbar as default
+//		CKConfig ckf = new CKConfig();
+//		
+//		// Setting background color
+//		ckf.setUiColor("#f6f7f8");
+//		
+//		// Setting size
+//		ckf.setWidth("");
+//		ckf.setHeight("180px");
+//		ckf.setResizeMinHeight(180);
+//		ckf.setResizeMaxHeight(250);
+//
+//		// Creating personalized toolbar
+//		ToolbarLine line1 = new ToolbarLine();
+//		line1.add(TOOLBAR_OPTIONS.Source);
+//		line1.add(TOOLBAR_OPTIONS._);
+//		line1.add(TOOLBAR_OPTIONS.Undo);
+//		line1.add(TOOLBAR_OPTIONS.Redo);
+//
+//		// Creates the toolbar
+//		Toolbar t = new Toolbar();
+//		t.add(line1);
+//		t.addSeparator();
+//
+//		// Define the second line
+//		TOOLBAR_OPTIONS[] t2 = { TOOLBAR_OPTIONS.Bold, TOOLBAR_OPTIONS.Italic,
+//				TOOLBAR_OPTIONS.Underline, TOOLBAR_OPTIONS._,
+//				TOOLBAR_OPTIONS.RemoveFormat, TOOLBAR_OPTIONS._ };
+//		ToolbarLine line2 = new ToolbarLine();
+//		line2.addAll(t2);
+//		t.add(line2);
+//		t.addSeparator();
+//
+//		// Define the third line
+//		TOOLBAR_OPTIONS[] t3 = { TOOLBAR_OPTIONS.Find, TOOLBAR_OPTIONS.Replace, };
+//		ToolbarLine line3 = new ToolbarLine();
+//		line3.addAll(t3);
+//		t.add(line3);
+//		t.addSeparator();
+//
+//		// Define the second line
+//		TOOLBAR_OPTIONS[] t4 = {
+//		TOOLBAR_OPTIONS.JustifyLeft, TOOLBAR_OPTIONS.JustifyCenter,
+//				TOOLBAR_OPTIONS.JustifyRight, TOOLBAR_OPTIONS.JustifyBlock };
+//		
+//		ToolbarLine line4 = new ToolbarLine();
+//		line4.addAll(t4);
+//		t.add(line4);
+//		t.addSeparator();
+//
+//		ToolbarLine line5 = new ToolbarLine();
+//		line5.add(TOOLBAR_OPTIONS.Link);
+//		line5.add(TOOLBAR_OPTIONS.Unlink);
+//		t.add(line5);
+//		t.addSeparator();
+//
+//		ToolbarLine line6 = new ToolbarLine();
+//		line6.add(TOOLBAR_OPTIONS.Image);
+//		line6.add(TOOLBAR_OPTIONS.Smiley);
+//		t.add(line6);
+//		t.addSeparator();
+//
+//		ToolbarLine line7 = new ToolbarLine();
+//		line7.add(TOOLBAR_OPTIONS.Styles);
+//		t.add(line7);
+//
+//		ToolbarLine line8 = new ToolbarLine();
+//		line8.add(TOOLBAR_OPTIONS.Format);
+//		t.add(line8);
+//		t.addSeparator();
+//
+//		ToolbarLine line9 = new ToolbarLine();
+//		line9.add(TOOLBAR_OPTIONS.Font);
+//		t.add(line9);
+//		t.addSeparator();
+//
+//		ToolbarLine line10 = new ToolbarLine();
+//		line10.add(TOOLBAR_OPTIONS.FontSize);
+//		t.add(line10);
+//		t.addSeparator();
+//
+//		ToolbarLine line11 = new ToolbarLine();
+//		line11.add(TOOLBAR_OPTIONS.TextColor);
+////		line11.add(TOOLBAR_OPTIONS.SpecialChar);
+//		line11.add(TOOLBAR_OPTIONS.Maximize);
+//		t.add(line11);
+//		t.addSeparator();
+//		
+//		// Set the toolbar to the config (replace the FULL preset toolbar)
+//		ckf.setToolbar(t);
+//		return ckf;
+//	}
 
 	public Journey_PathCreate() {
 		initWidget(uiBinder.createAndBindUi(this));
 		lbPostTo.addItem("new");
 
-		formUpload.setEncoding(FormPanel.ENCODING_MULTIPART);
-		formUpload.setMethod(FormPanel.METHOD_POST);
-		
-		pathPhotoUpload.setName("filesUpload");
-		boxTripId.setName("tripId");
-		boxPathId.setName("pathId");
-		
-		formUpload.getElement().setAttribute("id", "formUpload");
-		pathPhotoUpload.getElement().setAttribute("id", "pathPhotoUpload");
 		htmlPathPhotos.getElement().setAttribute("id", "htmlPathPhotos");
 		scrollPathPhotos.getElement().setAttribute("id", "scrollPathPhotos");
 		lbCountPhotos.getElement().setAttribute("id", "lbCountPhotos");
 		
-		
+		container.getElement().setAttribute("id", "post_container");
+		pick_files.getElement().setAttribute("id", "post_pick_files");
 		
 		txbDescription.getElement().setPropertyString("placeholder", "Write your feeling now, or about the story of your best memory on the journey!");
 		txbDescription.getElement().setAttribute("spellcheck", "false");
-		
-		DOM.setElementProperty(pathPhotoUpload.getElement(), "multiple", "multiple"); 
-		
-		formUpload.addSubmitCompleteHandler(new SubmitCompleteHandler() {
-			@Override
-			public void onSubmitComplete(SubmitCompleteEvent event) {
-				TripShare.loadBox.hide();
-				if(listener != null)
-					listener.createPathSuccess(boxPathId.getValue());
-				cancelPost();
-			}
-		});
 		
 		btnFindYourLocation.addStyleName("PathView-Obj14");
 		
@@ -218,19 +188,6 @@ public class Journey_PathCreate extends Composite {
 //			public void handle() {
 //				PlaceResult place = autocomplete.getPlace();
 //				locate.setLatLng(place.getGeometry().getLocation());
-//			}
-//		});
-		
-//		txbDescription.addChangeHandler(new ChangeHandler() {
-//			
-//			@Override
-//			public void onChange(ChangeEvent event) {
-//				if(txbDescription.getElement().getClientHeight() >= 360) {
-//					txbDescription.addStyleName("Journey_PathCreate-Obj6ScrollAble");
-//				}
-//				else {
-//					txbDescription.removeStyleName("Journey_PathCreate-Obj6ScrollAble");
-//				}
 //			}
 //		});
 	}
@@ -259,73 +216,8 @@ public class Journey_PathCreate extends Composite {
 	}
 	
 	public void handlerUploadEvent() {
-		if(!isHandlerUploadEvent) {
-			handleFileSelect();
-			isHandlerUploadEvent = true;
-		}
+		getPlupLoad(this);
 	}
-	
-	public static native void handleFileSelect() /*-{
-		function cancelPhotosUpload() {
-			$wnd.document.getElementById('htmlPathPhotos').innerHTML = "";
-			$wnd.document.getElementById('scrollPathPhotos').style.height = "0px";
-			$wnd.document.getElementById('lbCountPhotos').innerHTML = "0 / Photos";
-			$wnd.document.getElementById('formUpload').reset();
-		}
-		
-		function handleFileSelect(evt) {
-			var htmlPathPhotos = $wnd.document.getElementById('htmlPathPhotos');
-			htmlPathPhotos.innerHTML = "";
-			
-			var files = evt.target.files; // FileList object
-			var countImg = 0;
-	
-		    // Loop through the FileList and render image files as thumbnails.
-		    for (var i = 0, f; f = files[i]; i++) {
-		
-		      // Only process image files.
-		      if (!f.type.match('image.*')) {
-		        continue;
-		      }
-		
-			  countImg = countImg + 1;
-		      var reader = new FileReader();
-		
-		      // Closure to capture the file information.
-		      reader.onload = (function(theFile) {
-		        return function(e) {
-		          // Render thumbnail.
-		          var span = document.createElement('span');
-		          span.innerHTML = ['<img class="PhotoUpload-Obj3" src="', e.target.result,
-		                            '" title="', escape(theFile.name), '"/>'].join('');
-		          htmlPathPhotos.insertBefore(span, null);
-		        };
-		      })(f);
-		
-		      // Read in the image file as a data URL.
-		      reader.readAsDataURL(f);
-		    }
- 
- 			var cancelSpan = document.createElement('span');
- 			cancelSpan.className = "PathCreate-Obj12";
- 			cancelSpan.style.height = "76px";
- 			cancelSpan.style.width = "75px";
- 			cancelSpan.innerHTML = ['<i style="margin-top: 5px;margin-left: 10px;" class="fa fa-ban fa-5x"></i>'].join('');
- 			htmlPathPhotos.insertBefore(cancelSpan, null);
- 			cancelSpan.addEventListener('click', cancelPhotosUpload);
-		    
-		    var scrollPathPhotos = $wnd.document.getElementById('scrollPathPhotos');
-		    if(countImg > 0) {
-		    	scrollPathPhotos.style.height = "100px";
-		    }
-		    else {
-		    	scrollPathPhotos.style.height = "0px";
-		    } 	
-		    $wnd.document.getElementById('lbCountPhotos').innerHTML = countImg + " / Photos";
-	 	}
-		
-		$wnd.document.getElementById('pathPhotoUpload').addEventListener("change", handleFileSelect, false);
-	}-*/;
 	
 	public void setTripId(Long tripId) {
 		this.tripId = tripId;
@@ -337,11 +229,11 @@ public class Journey_PathCreate extends Composite {
 		TripShare.dataService.getUploadUrl(new AsyncCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
-				formUpload.setAction(result.toString());
-				htmlPathPhotos.clear();
-				boxTripId.setValue(tripId);
-				boxPathId.setValue(pathId);
-				formUpload.submit();
+				pathID = pathId;
+				String trip_id = (tripId != null ? tripId.toString() : "");
+				String path_id = (pathId != null ? pathId.toString() : "");
+				updatePlupLoad(trip_id, path_id);
+				startPlupLoad(result);
 			}
 			@Override
 			public void onFailure(Throwable caught) {
@@ -417,6 +309,13 @@ public class Journey_PathCreate extends Composite {
 		}
 	}
 	
+	void handlerUploadComplete() {
+		TripShare.loadBox.hide();
+		cancelPost();
+		if(listener != null)
+			listener.createPathSuccess(pathID);
+	}
+	
 	public void cancelPost() {
 		this.setStyleName("PathCreate-Obj3");
 		lbPostTo.setSelectedIndex(0);
@@ -440,7 +339,7 @@ public class Journey_PathCreate extends Composite {
 		scrollPathPhotos.setHeight("0px");
 		htmlPathPhotos.getElement().setInnerHTML("");
 		lbCountPhotos.setText("0 / Photos");
-		formUpload.reset();
+		removePlupLoad();
 		locate = null;
 		if(listener != null)
 			listener.onClose();
@@ -557,6 +456,171 @@ public class Journey_PathCreate extends Composite {
 		if(cke != null) {
 			$wnd.CKEDITOR.instances.txbRichDescription.destroy();
 		}
+	}-*/;
+	
+	public static native void startPlupLoad(String uploadUrl) /*-{
+		var upload_url = uploadUrl;
+		$wnd.uploader.settings.url = upload_url;
+		$wnd.uploader.start();
+	}-*/;
+	
+	public static native void updatePlupLoad(String uploadUrl) /*-{
+		var upload_url = uploadUrl;
+		$wnd.uploader.settings.url = upload_url;
+	}-*/;
+	
+	public static native void updatePlupLoad(String par1, String par2) /*-{
+		var trip_id = par1;
+		var path_id = par2;
+		$wnd.uploader.settings.multipart_params.tripId = trip_id;
+		$wnd.uploader.settings.multipart_params.pathId = path_id;
+	}-*/;
+	
+	public static native void removePlupLoad() /*-{
+		if($wnd.uploader != null)
+			$wnd.uploader.destroy();
+	}-*/;
+	
+	public static void updateUploaderUrl() {
+		TripShare.dataService.getUploadUrl(new AsyncCallback<String>() {
+			@Override
+			public void onSuccess(String result) {
+				updatePlupLoad(result);
+			}
+	
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("!: Failed to get blob service upload url.");
+			}
+		});
+	};
+	
+	public static native void getPlupLoad(Journey_PathCreate instance) /*-{
+		var files_remaining;          
+	  	$wnd.uploader = new $wnd.plupload.Uploader({
+		    runtimes : 'flash',
+		    container: $wnd.document.getElementById('post_container'), // ... or DOM Element itself
+		    browse_button : 'post_pick_files', // you can pass in id...
+	//	    drop_element: 'dropzone',
+		    url : '/',
+		    use_query_string: false,
+		   	dragdrop: true,
+		    multipart : true,
+		    
+		    //Enable resize
+		    resize: {
+				width: 1366,
+				height: 768
+				},
+		    
+		    //Enable params
+		    multipart_params : {
+				tripId: '',
+				pathId: ''
+			},
+		     
+		    //Enable filter files
+		    filters : {
+		        max_file_size : '5mb',
+		        mime_types: [
+		            {title : "Image files", extensions : "jpg,png"}  
+		        ]
+		    },
+		 
+		    // Flash settings
+		    flash_swf_url : '/resources/plupload/Moxie.swf',
+		    
+		    // PreInit events, bound before any internal events
+	        preinit : {
+	            Init: function(up, info) {
+	            },
+	 
+	            UploadFile: function(up, file) {
+	            	if(files_remaining > 1)
+			    		@com.born2go.client.widgets.Journey_PathCreate::updateUploaderUrl()();
+	            }
+	        },
+		 
+		    init: {
+		        PostInit: function() {			        
+		        },
+		        
+		        QueueChanged: function(up) {
+	            	files_remaining = $wnd.uploader.files.length;
+	            	$wnd.document.getElementById('lbCountPhotos').innerHTML = files_remaining + " / Photos";
+	            	var scrollPathPhotos = $wnd.document.getElementById('scrollPathPhotos');
+		    		if(files_remaining > 0) {
+		    			scrollPathPhotos.style.height = "100px";
+		    		}
+				    else {
+				    	scrollPathPhotos.style.height = "0px";
+				    } 	
+	        	},
+		 
+		        FilesAdded: function(up, files) {
+					   $wnd.plupload.each(files, function(file) {
+						var img = new $wnd.o.Image();
+						                  
+	                    img.onload = function() {
+	                        // create a thumb placeholder
+	                        var span = document.createElement('div');
+	                        span.id = this.uid;	                      
+	                        span.className = "PathCreate-Obj19";                       
+	                        $wnd.document.getElementById('htmlPathPhotos').insertBefore(span, null);
+	                        	                     	                  
+	                        // embed the actual thumbnail
+	                        var heightcrop = 80;
+	                        var widthcrop = heightcrop * (this.width/this.height);
+	                        this.embed(span.id, {	  
+	                            width: widthcrop,
+	                            height: heightcrop,
+	                            crop: true
+	                        });	                                               	                       	                  
+	                    };
+	                    
+	                    // drop thumbnails at different angles (optional eye candy)
+	                    img.onembedded = function() {
+//                        	$wnd.plupload.each(['', '-ms-', '-webkit-', '-o-', '-moz-'], function(prefix) {
+//                            	$wnd.document.getElementById(img.uid).style[prefix + 'transform'] = 'rotate('+ (Math.floor(Math.random() * 6) - 3) + 'deg)';
+//                        	});
+							// add remove image button
+	                        var removeImg = document.createElement("a");
+	                        var span = 	$wnd.document.getElementById(this.uid);
+	                        span.appendChild(removeImg);
+	                        removeImg.className = "greenbutton PathCreate-Obj20";
+	                        removeImg.innerHTML = "<i class='fa fa-times'></i>";
+	                        removeImg.onclick = function(index) {
+	                        	span.parentNode.removeChild(span);
+	                        	$wnd.uploader.removeFile(file);
+	                        };
+	                    };
+	                    
+	                    img.load(file.getSource());
+				  });
+		        },		      	
+		 
+//		        UploadProgress: function(up, file) {
+//		        	var total_files =  $wnd.uploader.files.length;
+//		        	var files_uploaded = total_files - files_remaining;
+//		        	var total_percent = ((file.percent/100 * 1/total_files)*100) + ((files_uploaded * 1/total_files)*100);
+//		            $wnd.document.getElementById('lbUploadProgress').innerHTML = '<span>' + Math.ceil(total_percent) + "%</span>";
+//		        },
+		        
+		        FileUploaded: function(up, file, info) {
+	                files_remaining--;
+	            },
+	            
+	            UploadComplete: function(up, files) {          	
+	         		instance.@com.born2go.client.widgets.Journey_PathCreate::handlerUploadComplete()();	
+	            },
+		 
+		        Error: function(up, err) {
+		            $wnd.document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + err.message;
+		        }
+		    }
+		});
+		 
+		$wnd.uploader.init();
 	}-*/;
 	
 	boolean VerifiedField() {

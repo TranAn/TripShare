@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
-	@external .Catalog_Obj1, Catalog_Obj1_Open, .Catalog_Obj4, .Catalog_Obj5;
+	@external .Catalog_Obj1, Catalog_Obj1_Open, .Catalog_Obj4, .Catalog_Obj5, .Catalog_Obj6, .Catalog_Obj7;
 	.Catalog_Obj1 {
 		margin-top: 5px;
 		position: relative;
@@ -36,7 +36,7 @@
 	
 	.Catalog_Obj4 {
 		font-family: museo-w01-700, serif;
-		font-size: 16px;
+		font-size: 15px;
 		padding: 9px;
 		cursor: pointer;
 	}
@@ -57,18 +57,51 @@
 		text-decoration: underline;
 		color: black;
 	}
+	
+	.Catalog_Obj6 {
+		display: inline-flex;
+		display: -webkit-inline-box;
+		display: -webkit-inline-flex;
+		display: -ms-inline-flexbox;
+		-webkit-align-self: auto;
+		margin-left: 6px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	
+	.Catalog_Obj7 {
+		margin-left: 10px;
+		font-weight: 500;
+		font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+		font-size: 15px;
+		position: relative;
+		top: -2px
+	}
+	
+	.Catalog_Obj8 {
+		float: right;
+		font-weight: 700;
+		font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+		font-size: 13px;
+		color: silver;
+		position: relative;
+		top: -2px;
+	}
 	</ui:style>
-	<g:HTMLPanel ui:field="catalog" styleName="{style.Catalog_Obj1}" height="200px">
+	<g:HTMLPanel ui:field="catalog" styleName="{style.Catalog_Obj1}"
+		height="200px">
 		<g:HTMLPanel height="16px" styleName="{style.Catalog_Obj2}"
 			width="">
 			<g:Label text="Book of content" styleName="font-blackTitleNormal" />
 		</g:HTMLPanel>
 
 		<g:ScrollPanel height="360px">
-			<g:HTMLPanel ui:field="htmlContent" styleName="{style.Catalog_Obj3}"></g:HTMLPanel>
+			<g:HTMLPanel ui:field="htmlContent" styleName="{style.Catalog_Obj3}">
+			</g:HTMLPanel>
 		</g:ScrollPanel>
-		
-		<g:HTMLPanel height="10px" styleName="{style.Catalog_Obj2}" width="">
+
+		<g:HTMLPanel height="10px" styleName="{style.Catalog_Obj2}">
+			<g:Label styleName="{style.Catalog_Obj8}" ui:field="totalPost"></g:Label>
 		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

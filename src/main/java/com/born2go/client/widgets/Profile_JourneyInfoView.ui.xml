@@ -129,7 +129,7 @@
 	
 	.JourneyInfoView-Obj15 {
 		border: none;
-		background: wheat;
+		background: rgba(245, 222, 179, 0.48);
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 	}
 	</ui:style>
