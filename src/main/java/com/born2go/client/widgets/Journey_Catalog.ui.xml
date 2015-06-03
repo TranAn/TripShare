@@ -87,6 +87,14 @@
 		position: relative;
 		top: -2px;
 	}
+	
+	.Catalog_Obj9 {
+		position: absolute;
+		opacity: 0.4;
+		top: 20px;
+		right: 10px;
+		width: 260px;
+	}
 	</ui:style>
 	<g:HTMLPanel ui:field="catalog" styleName="{style.Catalog_Obj1}"
 		height="200px">
@@ -97,6 +105,7 @@
 
 		<g:ScrollPanel height="360px">
 			<g:HTMLPanel ui:field="htmlContent" styleName="{style.Catalog_Obj3}">
+				<g:Image url="/resources/food-diary-resize.jpg" styleName="{style.Catalog_Obj9}"></g:Image>
 			</g:HTMLPanel>
 		</g:ScrollPanel>
 

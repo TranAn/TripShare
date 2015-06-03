@@ -114,13 +114,13 @@ public class Journey_PathDetail extends Composite {
 					picture.setVisible(false);
 					htmlContent.setInnerHTML(path.getDescription());
 					btnExpandACollapse.setTitle("Collapse");
-					btnExpandACollapse.getElement().setInnerHTML("<i class=\"fa fa-compress fa-2x\"></i>");
+					btnExpandACollapse.getElement().setInnerHTML("<i style='position: relative; top: 2px;' class='boxbutton'>Collapse</i>");
 				}
 				else {
 					picture.setVisible(true);
 					htmlContent.setInnerHTML(truncateText(path.getShortDescription().replaceAll("br2n", "<br/>")));
-					btnExpandACollapse.setTitle("View detail");
-					btnExpandACollapse.getElement().setInnerHTML("<i class=\"fa fa-eye fa-2x\"></i>");
+					btnExpandACollapse.setTitle("Read more");
+					btnExpandACollapse.getElement().setInnerHTML("<i style='position: relative; top: 2px;' class='boxbutton'>Read more</i>");
 					Window.scrollTo(0, picture.getAbsoluteTop()-50);
 				}
 				isViewDetail = !isViewDetail;

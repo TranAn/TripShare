@@ -14,6 +14,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -67,6 +68,9 @@ public class PhotoUpload extends DialogBox {
 	}
 	
 	public void handlerUploadEvent(Long tripId, Long pathId) {
+		HTML not_support_flash_warning = new HTML("Your browser need Flash to upload <a target='_blank' href='https://get.adobe.com/flashplayer/'>Download Flash here!</a>");
+		not_support_flash_warning.getElement().setAttribute("style", "margin-top:15px");
+		imageTable.add(not_support_flash_warning);
 		getPlupLoad(this);
 		String trip_id = (tripId != null ? tripId.toString() : "");
 		String path_id = (pathId != null ? pathId.toString() : "");
@@ -105,24 +109,32 @@ public class PhotoUpload extends DialogBox {
 	
 	public static native void startPlupLoad(String uploadUrl) /*-{
 		var upload_url = uploadUrl;
-		$wnd.uploader.settings.url = upload_url;
-		$wnd.uploader.start();
+		if($wnd.uploader != null) {
+			$wnd.uploader.settings.url = upload_url;
+			$wnd.uploader.start();
+		}
 	}-*/;
 	
 	public static native void updatePlupLoad(String uploadUrl) /*-{
 		var upload_url = uploadUrl;
-		$wnd.uploader.settings.url = upload_url;
+		if($wnd.uploader != null) {
+			$wnd.uploader.settings.url = upload_url;
+		}
 	}-*/;
 	
 	public static native void updatePlupLoad(String par1, String par2) /*-{
 		var trip_id = par1;
 		var path_id = par2;
-		$wnd.uploader.settings.multipart_params.tripId = trip_id;
-		$wnd.uploader.settings.multipart_params.pathId = path_id;
+		if($wnd.uploader != null) {
+			$wnd.uploader.settings.multipart_params.tripId = trip_id;
+			$wnd.uploader.settings.multipart_params.pathId = path_id;
+		}
 	}-*/;
 	
 	public static native void removePlupLoad() /*-{
-		$wnd.uploader.destroy();
+		if($wnd.uploader != null) {
+			$wnd.uploader.destroy();
+		}
 	}-*/;
 	
 	public static void updateUploaderUrl() {
@@ -186,7 +198,8 @@ public class PhotoUpload extends DialogBox {
 	        },
 		 
 		    init: {
-		        PostInit: function() {			        
+		        PostInit: function() {			 
+		            $wnd.document.getElementById('imageTable').innerHTML = '';
 		        },
 		        
 		        QueueChanged: function(up) {

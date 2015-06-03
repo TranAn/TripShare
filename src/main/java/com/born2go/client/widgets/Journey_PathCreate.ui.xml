@@ -185,6 +185,19 @@
   		border-radius: 20px;
   		text-shadow: none;
 	}
+	
+	.PathCreate-Obj21:hover {
+		opacity: 0.6;
+		color: black;
+		text-decoration: none;
+		background: white;
+	}
+	
+	.PathCreate-Obj22 {
+		float: left;
+		margin-left: 10px;
+  		margin-top: 10px;
+	}
 	</ui:style>
 	<g:HTMLPanel ui:field="htmlPathCreate" styleName="{style.PathCreate-Obj3}">
 	
@@ -239,13 +252,14 @@
 					<!-- <g:LongBox ui:field="boxTripId" visible="false"/>
 					<g:LongBox visible="false" ui:field="boxPathId"/>
 					<g:FileUpload width="100%" height="100%" ui:field="pathPhotoUpload" visible="false"/> -->
-					<g:Anchor styleName="boxbutton" ui:field="pick_files">
+					<g:Anchor styleName="boxbutton {style.PathCreate-Obj21}" ui:field="pick_files">
 						<i style="margin-right:5px;" class="fa fa-camera fa-lg"></i>
 						Upload Photos
 					</g:Anchor>
 				</g:HTMLPanel>
 			<!-- </g:FormPanel> -->
-			<g:Label text="0 / Photos" styleName="{style.PathCreate-Obj13}" ui:field="lbCountPhotos"/>
+			<g:Label visible="false" text="0 / Photos" styleName="{style.PathCreate-Obj13}" ui:field="lbCountPhotos"/>
+			<g:HTML ui:field="not_support_flash_warning" styleName="{style.PathCreate-Obj22}">Your browser need Flash to upload <a target='_blank' href='https://get.adobe.com/flashplayer/'>Download Flash here!</a></g:HTML>
 			<g:Anchor ui:field="btnCancel"  styleName="greenbutton {style.PathCreate-Obj8}" ><i style="margin-right:5px;" class="fa fa-ban fa-lg"></i> Cancel</g:Anchor>
 			<g:Anchor ui:field="btnPost"  styleName="greenbutton {style.PathCreate-Obj18}" ><i style="margin-right:5px;" class="fa fa-floppy-o fa-lg"></i> Save</g:Anchor>
 		</g:HTMLPanel>

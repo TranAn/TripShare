@@ -421,7 +421,6 @@ public class Journey_PathView extends Composite {
 				htmlControlBottom.add(pathCreate);
 				btnUpload.setVisible(false);
 				pathCreate.setTripId(tripId);
-				pathCreate.handlerUploadEvent();
 				Timer timer1 = new Timer () {
 					@Override
 					public void run() {
@@ -435,6 +434,8 @@ public class Journey_PathView extends Composite {
 					}
 				};timer2.schedule(400);
 				isOpenPathCreate = true;
+				// will return null ponter error when browser not support flash.
+				pathCreate.handlerUploadEvent();
 			}
 		}
 	}

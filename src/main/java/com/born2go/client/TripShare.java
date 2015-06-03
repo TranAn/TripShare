@@ -131,7 +131,7 @@ public class TripShare implements EntryPoint {
 	      appId      : '386540048195283',
 	      cookie	 : true,
 	      xfbml      : true,
-	      version    : 'v2.3'
+	      version    : 'v2.2'
 	    });
 		
 		(function(d, s, id){

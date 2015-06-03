@@ -66,7 +66,7 @@ public class CompanionPickTable extends DialogBox {
 	void initTable() {
 		talbeFriends.setAutoHeaderRefreshDisabled(true);
 		Label lb = new Label("You have no friend use this app.");
-		lb.getElement().setAttribute("style", "margin-top: 25px");
+		lb.getElement().setAttribute("style", "margin-top: 35px");
 		talbeFriends.setEmptyTableWidget(lb);
 		talbeFriends.setPageSize(1000);
 		

@@ -493,9 +493,8 @@ public class Create_CreateTrip extends Composite {
 		});
 		ftable.setListFriend(LF.getListFriends(), listCompanion);
 		int minusTop = 0;
-		if(LF.getListFriends().size() > 4) 
-			minusTop = 20 * (LF.getListFriends().size() - 4 );
-		ftable.setPopupPosition(Window.getClientWidth()/2 - 200, Window.getScrollTop()+ 140 - minusTop);
+		minusTop = 20 * (LF.getListFriends().size());
+		ftable.setPopupPosition(Window.getClientWidth()/2 - 200, Window.getScrollTop()+ 200 - minusTop);
 		ftable.addStyleName("fadeIn");
 		ftable.show();
 	}

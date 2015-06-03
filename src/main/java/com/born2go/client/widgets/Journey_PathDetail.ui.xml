@@ -179,7 +179,7 @@
 		<p ui:field="htmlContent" style="font-size: 15px; line-height: 1.6em; margin-bottom: 30px; text-align: justify;"></p>
 			
 		<g:HTMLPanel ui:field="postControl">
-			<g:Anchor title="View detail" ui:field="btnExpandACollapse" styleName="{style.PathDetail-Obj12}"><i class="fa fa-eye fa-2x"></i></g:Anchor>
+			<g:Anchor title="View detail" ui:field="btnExpandACollapse" styleName="{style.PathDetail-Obj12}"><i style="position: relative; top: 2px;" class="boxbutton">Read more</i> </g:Anchor>
 			<g:Anchor title="Delete this post" ui:field="btnDeletePost" styleName="PathDetail-Obj8"><i class="fa fa-trash fa-2x"></i></g:Anchor>
 		</g:HTMLPanel>
 	</g:HTMLPanel>

@@ -92,8 +92,9 @@
 	}
 	
 	.PhotoUpload-Obj10:hover {
-		background: aliceblue;
+		opacity: 0.6;
 		color: silver;
+		border: 1px dashed gray;
 	}
 	
 	.PhotoUpload-Obj11 {

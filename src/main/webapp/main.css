@@ -39,6 +39,7 @@ p{
 	display: -webkit-inline-box;
 	float: right;
 	height: 130px;
+	overflow: hidden;
 }
 
 #content {
@@ -445,6 +446,7 @@ p{
 
 .boxbutton:hover {
 	background-color: aliceblue;
+	text-decoration: none;
 }
 
 .font-blackTitleNormal {
