@@ -75,8 +75,6 @@ public class UploadService extends HttpServlet implements Servlet {
 						Path path = ofy().load().type(Path.class).id(pathid).now();
 						if(path != null) {
 							path.getGallery().add(exportPicture.getId());
-							if(path.getAvatar() == null)
-								path.setAvatar(serveUrl);
 							ofy().save().entity(path);
 						}
 					}

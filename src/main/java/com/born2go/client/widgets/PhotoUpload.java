@@ -83,12 +83,18 @@ public class PhotoUpload extends DialogBox {
 		imageTable.getElement().setInnerHTML("");
 		lbPhotosCount.setText("0 / Photos");
 		lbUploadProgress.setText("0%");
-		hide();
+//		hide();
+		Window.Location.reload();
 	}
 	
 	@UiHandler("btnCancel")
 	void onBtnCancelClick(ClickEvent event) {
-		cancelUpload();
+		uploadingForm.setVisible(false);
+		removePlupLoad();
+		imageTable.getElement().setInnerHTML("");
+		lbPhotosCount.setText("0 / Photos");
+		lbUploadProgress.setText("0%");
+		hide();
 	}
 	
 	@UiHandler("btnPost")
@@ -230,9 +236,9 @@ public class PhotoUpload extends DialogBox {
 	                    
 	                    // drop thumbnails at different angles (optional eye candy)
 	                    img.onembedded = function() {
-//	                        $wnd.plupload.each(['', '-ms-', '-webkit-', '-o-', '-moz-'], function(prefix) {
-//	                            $wnd.document.getElementById(img.uid).style[prefix + 'transform'] = 'rotate('+ (Math.floor(Math.random() * 6) - 3) + 'deg)';
-//	                        });
+	                        $wnd.plupload.each(['', '-ms-', '-webkit-', '-o-', '-moz-'], function(prefix) {
+	                            $wnd.document.getElementById(img.uid).style[prefix + 'transform'] = 'rotate('+ (Math.floor(Math.random() * 4) - 2) + 'deg)';
+	                        });
  							// add remove image button
 	                        var removeImg = document.createElement("a");
 	                        var span = 	$wnd.document.getElementById(this.uid);

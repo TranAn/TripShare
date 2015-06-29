@@ -5,8 +5,10 @@ import java.util.List;
 import com.born2go.client.TripShare;
 import com.born2go.shared.Path;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
@@ -57,8 +59,8 @@ public class Journey_Catalog extends Composite {
 			content.setStyleName("Catalog_Obj4");
 			String span = "<img src='/resources/1427111517_palm_tree.png' style='height: 22px; width: 22px; vertical-align: bottom; margin-right: 10px; opacity: 0.6;'>";
 			String span1 = "<span class='Catalog_Obj5'><a style='color: black;' href='#index_"+ p.getId()+ "' id='#index_"+ p.getId()+ "'>"+ p.getTitle()+ "</a></span>";
-			String span2 = "<span style='color: silver;'> - by <a href='/profile/"+ p.getPoster().getUserID()+ "' style='font-style: italic;'>"+ p.getPoster().getUserName()+ "</a></span>";
-			String span3 = "<span style='margin-left: 20px; color: silver;'> at "+ TripShare.dateFormat(p.getCreateDate())+ "</span>";
+			String span2 = "<span style='color: gray;'> - by <a href='/profile/"+ p.getPoster().getUserID()+ "' style='font-style: italic; color: cornflowerblue !important;'>"+ p.getPoster().getUserName()+ "</a></span>";
+			String span3 = "<span style='margin-left: 20px; color: gray;'> on: "+ TripShare.dateFormat(p.getCreateDate())+ "</span>";
 			content.setHTML(span+ span1+ span2+ span3);
 			htmlContent.add(content);
 			//add evemt
@@ -78,15 +80,22 @@ public class Journey_Catalog extends Composite {
 		if(listContents.isEmpty()) {
 			HTML content = new HTML();
 			content.setStyleName("Catalog_Obj4");
-			String span = "<span style='margin-left: 20px; color: silver;'>(Empty)</span>";
+			String span = "<span style='margin-left: 20px; color: silver;'>-No Content added-</span>";
 			content.setHTML(span);
 			htmlContent.add(content);
 		}
 		Image img = new Image();
 		img.setUrl("/resources/food-diary-resize.jpg");
-		img.getElement().setAttribute("style", "position: absolute; opacity: 0.4; top: 20px; right: 10px; width: 260px;");
+		img.getElement().setAttribute("style", "position: absolute; opacity: 0.2; top: 20px; right: 10px; width: 260px;");
 		htmlContent.add(img);
 		totalPost.setText("Total - "+ listContents.size()+ " Posts");
+	}
+	
+	@UiHandler("btnClose")
+	void onBtnCloseClick(ClickEvent event){
+		catalog.setStyleName("Catalog_Obj1");
+    	if(listener != null)
+    		listener.onClose();
 	}
 
 }

@@ -58,7 +58,20 @@ p{
 	-webkit-animation-delay: 0.6s;
 	-moz-animation-delay: 0.6s;
 	animation-delay: 0.6s;
-	min-width: 1024px;
+	overflow: hidden;
+}
+
+#left_panel {
+	float: left;
+	margin-left: 140px;
+}
+
+#right_panel {
+	float: left;
+	width: 300px;
+	margin-left: 30px;
+	margin-top: 40px;
+	margin-bottom: 20px;
 }
 
 #footer {
@@ -408,7 +421,6 @@ p{
 .greenbutton,.greenbutton:link,.greenbutton:visited {
 	color: white;
 	text-decoration: none;
-	padding: 10px 15px;
 	background-color: #8FCF45;
 	-webkit-transition: color .5s linear, background-color .5s ease-in-out;
 	-moz-transition: color .5s linear, background-color .5s ease-in-out;
@@ -480,12 +492,12 @@ p{
 
 .tripInfo {
 	position: relative;
-	margin: auto;
-	width: 980px;
+	/* margin: auto; */
+	width: 700px;
 	border: 2px solid #a1a1a1;
 	padding: 20px 20px;
 	background-color: #FCFFFF;
-	border-radius: 10px;
+	border-radius: 10px 10px 0px 0px;
 	height: auto !important;
 	-webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
 	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
@@ -500,8 +512,7 @@ p{
 
 .tripContent {
 	position: relative;
-	margin: auto;
-	width: 1024px;
+	width: 744px;
 }
 
 .trip-destinations {
@@ -510,10 +521,9 @@ p{
 }
 
 .commentBox {
-	position: relative;
 	margin: auto;
-	width: 980px;
-	border: 2px solid #a1a1a1;
+	width: 700px;
+	border: 1px solid #a1a1a1;
 	border-bottom: none;
 	padding: 20px 20px;
 	background-color: #FCFFFF;
@@ -561,12 +571,18 @@ p{
 
 .pathInfo {
 	position: relative;
-	margin: auto;
-	width: 76%;
-	max-width: 1000px;
+	width: 700px;
 	height: auto !important;
-	margin-top: 40px;
+	margin-top: 15px;
 	margin-bottom: 80px;
+	border: 1px solid #a1a1a1;
+	padding: 20px;
+	background-color: #FCFFFF;
+	-webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+	-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+	font-size: 15px;
+	line-height: 1.6em;
 }
 
 .pathContent {
@@ -620,7 +636,7 @@ ul.a {
 }
 
 .imageView {
-	width: 167px;
+	width: 160px;
 	height: 125px;
 	background: #fff;
 	border: 1px solid #ccc;
@@ -660,4 +676,13 @@ ul.a {
   	margin-top: -30px;
   	top: 13px;
   	border-radius: 20px;
+}
+
+.advertise {
+	background-color: rgba(255, 255, 255, 0.9);
+  	border-radius: 10px;
+  	padding: 20px 20px;
+  	border: 2px solid #a1a1a1;
+  	height: 250px;
+  	margin-bottom: 20px;
 }

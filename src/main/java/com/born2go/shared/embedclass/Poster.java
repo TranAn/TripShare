@@ -1,4 +1,4 @@
-package com.born2go.shared;
+package com.born2go.shared.embedclass;
 
 import java.io.Serializable;
 
@@ -8,6 +8,7 @@ public class Poster implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	Long userID;
 	String userName;
 	String userImg;

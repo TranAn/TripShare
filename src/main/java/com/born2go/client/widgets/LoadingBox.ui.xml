@@ -23,6 +23,13 @@
 		top: -30px;
 		margin: auto;
 	}
+	
+	.LoadingBox-Obj5 {
+		position: absolute;
+		top: 74px;
+		right: 45px;
+		font-size: 15px;
+	}
 	</ui:style>
 	<g:HTMLPanel height="190px" width="280px">
 		<g:HTMLPanel width="100px" height="100px"
@@ -32,7 +39,8 @@
 		</g:HTMLPanel>
 		<g:HTMLPanel width="240px" height="160px"
 			styleName="{style.LoadingBox-Obj3}">
-			<g:Image url="/resources/loading2.gif" width="100%" height="100%" />
+			<g:Image url="/resources/loading2.gif" width="100%" height="100%"/>
+			<g:Label ui:field="uploadPercent" styleName="{style.LoadingBox-Obj5}" visible="false">20%</g:Label>
 		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -10,10 +10,10 @@ import com.axeiya.gwtckeditor.client.Toolbar;
 import com.axeiya.gwtckeditor.client.ToolbarLine;
 import com.born2go.client.TripShare;
 import com.born2go.client.widgets.Create_HandlerJsonListFriends.ListFriends;
-import com.born2go.shared.Journey;
-import com.born2go.shared.Journey.Point;
-import com.born2go.shared.Locate;
-import com.born2go.shared.Poster;
+import com.born2go.shared.embedclass.Journey;
+import com.born2go.shared.embedclass.Locate;
+import com.born2go.shared.embedclass.Poster;
+import com.born2go.shared.embedclass.Journey.Point;
 import com.born2go.shared.Trip;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
@@ -285,7 +285,7 @@ public class Journey_TripEdit extends Composite {
 		txbDestination.setStyleName("gwt-TextBox TripEdit-Obj6");
 		txbDestination.setText(address);
 		final Anchor btnRemove = new Anchor();
-		btnRemove.setStyleName("greenbutton CreateTrip-Obj12");
+		btnRemove.setStyleName("greenbutton TripEdit_Obj15");
 		btnRemove.getElement().setInnerHTML("<i class='fa fa-times fa-lg'></i>");
 		final Autocomplete autocomplete2 = Autocomplete
 				.create((InputElement) (Element) txbDestination.getElement());

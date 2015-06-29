@@ -111,6 +111,13 @@ public class Profile_ProfileView extends Composite {
 				// TODO Auto-generated method stub
 			}
 		});
+		
+//		addProfileFriend();
 	}
+	
+//	void addProfileFriend() {
+//		HTMLPanel profileFriendPanel = new HTMLPanel("");
+//		RootPanel.get("profileFriends").add(profileFriendPanel);
+//	}
 
 }

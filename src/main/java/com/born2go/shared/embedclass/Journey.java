@@ -1,4 +1,4 @@
-package com.born2go.shared;
+package com.born2go.shared.embedclass;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.born2go.client.widgets.Create_HandlerJsonListFriends.Friend;
-import com.born2go.shared.Poster;
+import com.born2go.shared.embedclass.Poster;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.ImageCell;
 import com.google.gwt.core.client.GWT;

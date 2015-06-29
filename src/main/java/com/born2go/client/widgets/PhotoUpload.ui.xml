@@ -142,7 +142,7 @@
   		text-shadow: none;
 	}
 	</ui:style>
-	<g:HTMLPanel width="670px" height="">
+	<g:HTMLPanel width="670px" height="272px">
 		<g:HTMLPanel height="16px" styleName="{style.PhotoUpload-Obj1}" width="">
 			<g:Label text="Upload Photos" styleName="font-blackTitleNormal {style.PhotoUpload-Obj12}"/>
 		</g:HTMLPanel>

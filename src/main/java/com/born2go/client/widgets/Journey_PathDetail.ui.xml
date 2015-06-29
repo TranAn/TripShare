@@ -2,14 +2,13 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.dom.client">
 	<ui:style>
-	@external .PathDetail-Obj1, .PathDetail-Obj8, .PathDetail-Obj13;
+	@external .PathDetail-Obj1, .PathDetail-Obj8, .PathDetail-Obj13, .PathDetail_Obj15;
 	.PathDetail-Obj1 {
 		opacity: 0;
 		position: relative;
-		border: 2px solid #a1a1a1;
+		border: 1px solid #a1a1a1;
 		padding: 20px 20px;
 		background-color: rgba(255, 255, 255, 0.9);
-		border-radius: 10px;
 		height: auto !important;
 		overflow: auto;
 		/* -webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
@@ -32,23 +31,20 @@
 	
 	.PathDetail-Obj2 {
 		display: block;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-		background-color: rgba(48, 27, 12, 1);
 		overflow: hidden;
-		border: 1px solid gray;
-		margin-right: 20px;
-		max-width: 300px;
-		min-height: 200px;
-		max-height: 300px;
-		float: left;
-		padding: 10px;
-		background: rgba(245, 222, 179, 0.48);
 		margin-bottom: 10px;
+		/* display: inline-flex;
+	  	display: -webkit-inline-box;
+	  	display: -webkit-inline-flex;
+	  	display: -ms-inline-flexbox;
+	  	-webkit-align-self: auto; */
+	  	padding: 5px;
+	  	width: 100%;
 	}
 	
 	.PathDetail-Obj3 {
 		display: block;
-		margin-bottom: 12px;
+		margin-bottom: 10px;
 		font-size: 22px;
 		font-family: museo-w01-700, serif;
 		color: rgb(56, 119, 127) !important;
@@ -66,7 +62,7 @@
 	}
 	
 	.PathDetail-Obj5 {
-		font-size: 15px;
+		font-size: 14px;
 		font-family: museo-w01-700,serif; 
 		color: gray; 
 		font-style: italic;
@@ -76,7 +72,7 @@
 	}
 	
 	.PathDetail-Obj6 {
-		font-size: 15px;
+		font-size: 14px;
 		font-family: museo-w01-700,serif; 
 		color: cornflowerblue !important; 
 		font-style: italic;
@@ -162,24 +158,78 @@
   		left: 0px;
   		top: -50px;
 	}
+	
+	.PathDetail_Obj15 {
+		float: left;
+  		padding: 8px;
+  		padding-bottom: 25px;
+  		background: rgb(218, 215, 215);
+  		margin-right: 10px;
+	}
+	
+	.PathDetail_Obj16 {
+  		font-size: 14px;
+  		font-family: museo-w01-700, serif;
+  		color: gray;
+  		font-style: italic;
+	}
+	
+	.PathDetail_Obj17 {
+		margin-top: 20px;
+		overflow: hidden;
+	}
+	
+	.PathDetail_Obj18 {
+		float: right;
+	}
+	
+	.PathDetail_Obj19 {
+		float: left;
+		width: 360px;
+  		white-space: nowrap;
+  		overflow: hidden;
+  		text-overflow: ellipsis;
+	}
+	
+	.PathDetail_Obj20 {
+		margin-right: 10px;
+		display: inline-flex;
+		display: -webkit-inline-box;
+	  	display: -webkit-inline-flex;
+	  	display: -ms-inline-flexbox;
+	  	-webkit-align-self: auto;
+	}
 	</ui:style>
 	<g:HTMLPanel styleName="{style.PathDetail-Obj1}">
 		<g:Anchor ui:field="indexCatalog" styleName="{style.PathDetail_Obj14}"></g:Anchor>
-		<g:Image styleName="{style.PathDetail-Obj2}" ui:field="picture"/>
-	
+		
 		<g:Anchor styleName="{style.PathDetail-Obj3}" ui:field="lbTitle" />
 		<g:HTMLPanel styleName="{style.PathDetail-Obj7}">
 			<g:Label styleName="font-blackTitleLarge {style.PathDetail-Obj5}">Post by: </g:Label>
 			<g:Anchor styleName="font-blackTitleLarge {style.PathDetail-Obj6}" ui:field="lbPoster"></g:Anchor>
 			<g:Image styleName="{style.PathDetail-Obj10}" ui:field="imgPoster"></g:Image>
-			<g:Label styleName="font-blackTitleLarge {style.PathDetail-Obj5} {style.PathDetail-Obj11}">On: </g:Label>
+			<g:Label styleName="font-blackTitleLarge {style.PathDetail-Obj5} {style.PathDetail-Obj11}">on: </g:Label>
 			<g:Label styleName="font-blackTitleLarge {style.PathDetail-Obj5}" ui:field="lbDatePost"></g:Label>
 		</g:HTMLPanel>
 		
-		<p ui:field="htmlContent" style="font-size: 15px; line-height: 1.6em; margin-bottom: 30px; text-align: justify;"></p>
+		<g:HTMLPanel styleName="{style.PathDetail-Obj2}" ui:field="pictureTable" visible="false"></g:HTMLPanel>
+		<!-- <g:Image styleName="{style.PathDetail-Obj2}" ui:field="picture"/> -->
+		
+		<g:HTMLPanel styleName="{style.PathDetail_Obj17}">
+			<g:Label ui:field="txbLocation" styleName="font-blackTitleLarge {style.PathDetail_Obj16} {style.PathDetail_Obj19}"></g:Label>
+			<g:HorizontalPanel styleName="{style.PathDetail_Obj18}">
+				<g:HTMLPanel styleName="{style.PathDetail_Obj20}">
+					<i style="opacity:1; color:gray; margin-top: 1px; margin-right: 3px;" class="fa fa-comment fa-lg"></i>
+					<g:Label styleName="font-blackTitleLarge {style.PathDetail_Obj16}">0</g:Label>
+				</g:HTMLPanel>
+				<g:Label ui:field="txbPhotos" styleName="font-blackTitleLarge {style.PathDetail_Obj16}"></g:Label>	
+			</g:HorizontalPanel>
+		</g:HTMLPanel>
+		
+		<p ui:field="htmlContent" style="font-size: 14px; line-height: 1.6em; margin-bottom: 30px; text-align: justify; padding: 10px 5px"></p>
 			
 		<g:HTMLPanel ui:field="postControl">
-			<g:Anchor title="View detail" ui:field="btnExpandACollapse" styleName="{style.PathDetail-Obj12}"><i style="position: relative; top: 2px;" class="boxbutton">Read more</i> </g:Anchor>
+			<g:Anchor ui:field="btnExpandACollapse" styleName="{style.PathDetail-Obj12}"><i style="position: relative; top: 2px;" class="boxbutton">Read more</i> </g:Anchor>
 			<g:Anchor title="Delete this post" ui:field="btnDeletePost" styleName="PathDetail-Obj8"><i class="fa fa-trash fa-2x"></i></g:Anchor>
 		</g:HTMLPanel>
 	</g:HTMLPanel>

@@ -3,7 +3,7 @@ package com.born2go.client.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.born2go.shared.Locate;
+import com.born2go.shared.embedclass.Locate;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.geolocation.client.Geolocation;
 import com.google.gwt.geolocation.client.Position;
@@ -44,10 +44,11 @@ public class TravelMap {
 	private static GoogleMap theMap;
 	private static DirectionsRenderer directionsRenderer;
 	private static List<Marker> markers = new ArrayList<Marker>();
+	private List<Marker> markers2 = new ArrayList<Marker>();
 	private static Polyline polyline;
 	
 	public interface Listener {
-		void getCurrentLocation(String address, LatLng position);
+		void getLocation(String address, LatLng position);
 		void getDirectionResult(DirectionsResult directionResult);
 	}
 	
@@ -84,7 +85,7 @@ public class TravelMap {
 		polyline.setMap(theMap);
 		
 		container.setSize("100%", "100%");
-		addMarker(officeP, "Trip Share Office", true, true);
+		addMarker(officeP, "Trip Share Office", true, true, true);
 		return new TravelMap();
 	}
 
@@ -96,8 +97,8 @@ public class TravelMap {
 		return theMap;
 	}
 
-	public void setMapSize(int width, int height) {
-		container.setSize(width + "px", height + "px");
+	public void setMapSize(String width, String height) {
+		container.setSize(width, height);
 	}
 	
 	public void clearMap() {
@@ -129,9 +130,9 @@ public class TravelMap {
 						@Override
 						public void handle(JsArray<GeocoderResult> a, GeocoderStatus b) {
 							String address = a.get(0).getFormattedAddress();
-							addMarker(l, address, true, true);
+							addMarker(l, address, true, true, true);
 							if(listener != null)
-								listener.getCurrentLocation(address, l);
+								listener.getLocation(address, l);
 						}
 					});
 				}
@@ -144,9 +145,10 @@ public class TravelMap {
 		}
 	}
 
-	public static void addMarker(final LatLng position, final String info, boolean isOriginPoint, boolean isOpenInfoWindow) {
+	public static void addMarker(final LatLng position, final String info, boolean isOriginPoint, boolean isOpenInfoWindow, boolean isAnimation) {
 		MarkerOptions markerOption = MarkerOptions.create();
-		markerOption.setAnimation(Animation.DROP);
+		if(isAnimation)
+			markerOption.setAnimation(Animation.DROP);
 		if(!isOriginPoint)
 			markerOption.setIcon("/resources/green-spotlight.png");
 		else
@@ -168,6 +170,33 @@ public class TravelMap {
 				infowindow.open(theMap, marker);
 			}
 		});
+	}
+	
+	public void addMarker2(final LatLng position, final String info, boolean isOpenInfoWindow) {
+		GoogleMap nullmap = null;
+		for( Marker m: markers2 )
+			m.setMap(nullmap);
+		markers2.clear();
+		MarkerOptions markerOption = MarkerOptions.create();
+		markerOption.setAnimation(Animation.BOUNCE);
+		markerOption.setIcon("/resources/red-spotlight.png");
+		final Marker marker = Marker.create(markerOption);
+		markers2.add(marker);
+		marker.setPosition(position);
+		marker.setMap(theMap);
+		//set Info window
+		if(isOpenInfoWindow) {
+			final InfoWindow infowindow = InfoWindow.create();
+			HTMLPanel html = new HTMLPanel(info);
+			infowindow.setContent(html.getElement());
+			infowindow.open(theMap, marker);
+			marker.addClickListener(new ClickHandler() {
+				@Override
+				public void handle(MouseEvent event) {
+					infowindow.open(theMap, marker);
+				}
+			});
+		}
 	}
 
 	public void findDirection(LatLng originPoint, LatLng destinationPoint, JsArray<DirectionsWaypoint> waypoints) {
@@ -193,58 +222,114 @@ public class TravelMap {
 	int index;
 	
 	@SuppressWarnings("unchecked")
-	public void drawTheJourney(final List<com.born2go.shared.Journey.Point> directions, final List<Locate> locates) {
+	public void drawTheJourney(final List<com.born2go.shared.embedclass.Journey.Point> directions, final List<Locate> locates, boolean animationDraw) {
 		clearMap();
 		final JsArray<LatLng> journey = (JsArray<LatLng>) JsArray.createArray();
 		polyline.setPath(journey);	
 		//zoom the map
 		final LatLngBounds bounds = LatLngBounds.create();
-		for (int i = 0; i < directions.size(); i++) {
-		    bounds.extend(directions.get(i).toLatLng());
+		for (int i = 0; i < locates.size(); i++) {
+		    bounds.extend(locates.get(i).getLatLng());
 		}
 		bounds.getCenter();
 		theMap.fitBounds(bounds);
 		//add marker and draw journey
-		index = 0;
-		Timer timer = new Timer() {
-		     @Override
-		     public void run() {		 
-		    	 if(index == locates.size()) {
-		    		polyline.setMap(theMap);
-		    		index = 1;		    		
-		    		Timer timer = new Timer() {
-		    			 @Override
-		    		     public void run() {
-		    				 if(index >= directions.size()) {
-		    					 cancel();
-		    				 }
-		    				 else {
-			    				 journey.setLength(0);
-			    				 for(int i = 0; i <= index; i++) {
-			    					 journey.push(directions.get(i).toLatLng());
+		if(animationDraw) {
+			index = 0;
+			Timer timer = new Timer() {
+			     @Override
+			     public void run() {		 
+			    	 if(index == locates.size()) {
+			    		polyline.setMap(theMap);
+			    		index = 1;		    		
+			    		Timer timer = new Timer() {
+			    			 @Override
+			    		     public void run() {
+			    				 if(index >= directions.size()) {
+			    					 cancel();
 			    				 }
-			    				 polyline.setPath(journey);			    						
-			    				 index++;
-		    				 }		    				 
-		    			 }
-		    		}; timer.scheduleRepeating(5);
-		    		theMap.fitBounds(bounds);
-		 			cancel();
-		    	 }
-		    	 else {
-		    		 if(index == 0)
-		    			 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), true, false);
-		    		 else {
-		    			 if(index == locates.size() - 1)
-		    				 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, false);
-		    			 else
-		    				 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, false);
-		    		 }
-		    		 index++;
-		    	 }
-		     }
-		 };
-		 timer.scheduleRepeating(670);
+			    				 else {
+				    				 journey.setLength(0);
+				    				 for(int i = 0; i <= index; i++) {
+				    					 journey.push(directions.get(i).toLatLng());
+				    				 }
+				    				 polyline.setPath(journey);			    						
+				    				 index++;
+			    				 }		    				 
+			    			 }
+			    		}; timer.scheduleRepeating(5);
+			    		theMap.fitBounds(bounds);
+//			    		theMap.setZoom(theMap.getZoom()+1);
+			 			cancel();
+			    	 }
+			    	 else {
+			    		 if(index == 0)
+			    			 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), true, false, true);
+			    		 else {
+			    			 if(index == locates.size() - 1)
+			    				 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, false, true);
+			    			 else
+			    				 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, false, true);
+			    		 }
+			    		 index++;
+			    	 }
+			     }
+			};
+			timer.scheduleRepeating(670);
+		}
+		else {
+			for(int i=0; i<locates.size(); i++) {
+				if(i == 0)
+					addMarker(locates.get(i).getLatLng(), locates.get(i).getAddressName(), true, false, false);
+				else 
+					addMarker(locates.get(i).getLatLng(), locates.get(i).getAddressName(), false, false, false);
+			}
+			for(com.born2go.shared.embedclass.Journey.Point p : directions)
+				journey.push(p.toLatLng());
+			polyline.setMap(theMap);
+			polyline.setPath(journey);
+//			theMap.setZoom(theMap.getZoom()+1);
+		}
+	}
+	
+	public void clickToAddMarker() {
+		theMap.addClickListener(new com.google.maps.gwt.client.GoogleMap.ClickHandler() {
+			@Override
+			public void handle(MouseEvent event) {
+				final LatLng position = event.getLatLng();
+				
+				GeocoderRequest geoRequest = GeocoderRequest.create();
+				geoRequest.setLocation(position);
+				Geocoder geoCode = Geocoder.create();
+				geoCode.geocode(geoRequest, new Geocoder.Callback() {
+					@Override
+					public void handle(JsArray<GeocoderResult> a, GeocoderStatus b) {
+						String address = a.get(0).getFormattedAddress();
+						addMarker2(position, address, false);
+						if(listener != null)
+							listener.getLocation(address, position);
+					}
+				});
+			}
+		});
+	}
+	
+	public void removeClickToAddMarker() {
+		theMap.clearClickListeners();
+	}
+	
+	public void removeLocationMarker() {
+		GoogleMap nullmap = null;
+		for( Marker m: markers2 )
+			m.setMap(nullmap);
+		markers2.clear();
+		// Set the map center of polyline
+		final LatLngBounds bounds = LatLngBounds.create();
+		for (int i = 0; i < markers.size(); i++) {
+		    bounds.extend(markers.get(i).getPosition());
+		}
+		bounds.getCenter();
+		theMap.fitBounds(bounds);
 	}
 
 }

@@ -6,8 +6,8 @@
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@ page import="com.born2go.shared.Picture"%>
-<%@ page import="com.born2go.shared.Journey"%>
-<%@ page import="com.born2go.shared.Locate"%>
+<%@ page import="com.born2go.shared.embedclass.Journey"%>
+<%@ page import="com.born2go.shared.embedclass.Locate"%>
 <%@ page import="com.born2go.server.DataServiceImpl"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.text.SimpleDateFormat"%>

@@ -4,12 +4,14 @@ import java.util.Date;
 import java.util.List;
 
 import com.born2go.client.TripShare;
-import com.born2go.shared.Locate;
 import com.born2go.shared.Path;
+import com.born2go.shared.embedclass.Locate;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -22,6 +24,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -88,17 +92,6 @@ public class Journey_PathCreate extends Composite {
 		
 		txbDescription.getElement().setPropertyString("placeholder", "Write your feeling now, or about the story of your best memory on the journey!");
 		txbDescription.getElement().setAttribute("spellcheck", "false");
-		
-		btnFindYourLocation.addStyleName("PathView-Obj14");
-		
-//		final Autocomplete autocomplete = Autocomplete.create(
-//				(InputElement) (Element) txbTitle.getElement());
-//		autocomplete.addPlaceChangedListener(new PlaceChangedHandler() {
-//			public void handle() {
-//				PlaceResult place = autocomplete.getPlace();
-//				locate.setLatLng(place.getGeometry().getLocation());
-//			}
-//		});
 	}
 	
 	public void getListPaths(final List<Path> list_paths) {
@@ -112,14 +105,25 @@ public class Journey_PathCreate extends Composite {
 			public void onChange(ChangeEvent event) {
 				if(lbPostTo.getSelectedIndex() == 0) {
 					updatePath = null;
+					locate = null;
 					txbTitle.setText("");
 					txbTimeline.setEnabled(true);
 				}
 				else {
 					updatePath = list_paths.get(lbPostTo.getSelectedIndex() - 1);
+					locate = updatePath.getLocate();
 					txbTitle.setText(updatePath.getTitle());
 					txbTimeline.setEnabled(false);
 				}
+				if(locate == null) {
+					btnFindYourLocation.removeStyleName("PathCreate-Obj16");
+					btnFindYourLocation.setTitle("Add location");
+				}
+				else {
+					btnFindYourLocation.addStyleName("PathCreate-Obj16");
+					btnFindYourLocation.setTitle(locate.getAddressName());
+				}
+					
 			}
 		});
 	}
@@ -152,79 +156,6 @@ public class Journey_PathCreate extends Composite {
 		});
 	}
 	
-	@UiHandler("btnPost")
-	void onBtnPostClick(ClickEvent event) {
-		if(VerifiedField()) {
-			TripShare.loadBox.center();
-			if(updatePath == null) {
-				Path path = new Path();
-				path.setTitle(txbTitle.getText());
-	//			path.setLocate(locate);
-				path.setCreateDate(txbTimeline.getValue());
-				if(!isRichTextEdit) {
-//					if(txbRichDescription != null) {
-//						txbRichDescription.setText(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
-//						path.setDescription(txbRichDescription.getText());
-//					} else 
-						path.setDescription("<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
-				}
-				else
-					path.setDescription(getDataCustomEditor());
-				TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
-					@Override
-					public void onSuccess(Path result) {
-						if(result != null)
-							uploadPhoto(tripId, result.getId());
-						else {
-							TripShare.loadBox.hide();
-							Window.alert(TripShare.ERROR_MESSAGE);
-						}		
-					}
-					@Override
-					public void onFailure(Throwable caught) {
-						TripShare.loadBox.hide();
-						Window.alert(TripShare.ERROR_MESSAGE);
-					}
-				});
-			} 
-			else {
-				updatePath.setTitle(txbTitle.getText());
-				if(!isRichTextEdit) {
-//					if(txbRichDescription != null) {
-//						txbRichDescription.setText(txbDescription.getText().replaceAll("(\r\n|\n)", "<br />"));
-//						updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbRichDescription.getText()+ "</p>");
-//					} else 
-						updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
-				}
-				else
-					updatePath.setDescription(updatePath.getDescription()+ "<p>"+ getDataCustomEditor()+ "</p>");
-				TripShare.dataService.updatePart(updatePath, new AsyncCallback<Path>() {
-					@Override
-					public void onSuccess(Path result) {
-						if(result != null)
-							uploadPhoto(tripId, result.getId());
-						else {
-							TripShare.loadBox.hide();
-							Window.alert(TripShare.ERROR_MESSAGE);
-						}	
-					}
-					@Override
-					public void onFailure(Throwable caught) {
-						TripShare.loadBox.hide();
-						Window.alert(TripShare.ERROR_MESSAGE);
-					}
-				});
-			}
-		}
-	}
-	
-	void handlerUploadComplete() {
-		TripShare.loadBox.hide();
-		cancelPost();
-		if(listener != null)
-			listener.createPathSuccess(pathID);
-	}
-	
 	public void cancelPost() {
 		this.setStyleName("PathCreate-Obj3");
 		lbPostTo.setSelectedIndex(0);
@@ -248,48 +179,119 @@ public class Journey_PathCreate extends Composite {
 		scrollPathPhotos.setHeight("0px");
 		htmlPathPhotos.getElement().setInnerHTML("");
 		lbCountPhotos.setText("0 / Photos");
-		removePlupLoad();
 		locate = null;
+		btnFindYourLocation.removeStyleName("PathCreate-Obj16");
+		btnFindYourLocation.setTitle("Add location");
+		removePlupLoad();
 		if(listener != null)
 			listener.onClose();
 	}
 
+	void handlerUploadComplete() {
+		TripShare.loadBox.hide();
+		cancelPost();
+		if(listener != null)
+			listener.createPathSuccess(pathID);
+	}
+	
+	void setUploadProces(String uploadPercent) {
+		TripShare.loadBox.setUploadPercent(uploadPercent);
+	}
+
+	@UiHandler("btnPost")
+	void onBtnPostClick(ClickEvent event) {
+		if(VerifiedField()) {
+			TripShare.loadBox.center();
+			if(updatePath == null) {
+				Path path = new Path();
+				path.setTitle(txbTitle.getText());
+				path.setLocate(locate);
+				path.setCreateDate(txbTimeline.getValue());
+				if(!isRichTextEdit) {
+					path.setDescription("<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
+				}
+				else
+					path.setDescription(getDataCustomEditor());
+				TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
+					@Override
+					public void onSuccess(Path result) {
+						if(result != null)
+							uploadPhoto(tripId, result.getId());
+						else {
+							TripShare.loadBox.hide();
+							Window.alert(TripShare.ERROR_MESSAGE);
+						}		
+					}
+					@Override
+					public void onFailure(Throwable caught) {
+						TripShare.loadBox.hide();
+						Window.alert(TripShare.ERROR_MESSAGE);
+					}
+				});
+			} 
+			else {
+				updatePath.setTitle(txbTitle.getText());
+				updatePath.setLocate(locate);
+				if(!isRichTextEdit) {
+					updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
+				}
+				else
+					updatePath.setDescription(updatePath.getDescription()+ "<p>"+ getDataCustomEditor()+ "</p>");
+				TripShare.dataService.updatePart(updatePath, new AsyncCallback<Path>() {
+					@Override
+					public void onSuccess(Path result) {
+						if(result != null)
+							uploadPhoto(tripId, result.getId());
+						else {
+							TripShare.loadBox.hide();
+							Window.alert(TripShare.ERROR_MESSAGE);
+						}	
+					}
+					@Override
+					public void onFailure(Throwable caught) {
+						TripShare.loadBox.hide();
+						Window.alert(TripShare.ERROR_MESSAGE);
+					}
+				});
+			}
+		}
+	}
+	
 	@UiHandler("btnCancel")
 	void onBtnCancelClick(ClickEvent event) {
 		cancelPost();
 	}
 	
-//	@UiHandler("btnFindYourLocation") 
-//	void onBtnFindYourLocationClick(ClickEvent event) {
-//		Geolocation geoLocation = Geolocation.getIfSupported();
-//		if (geoLocation == null) {
-//			Window.alert("!: Your old browser not support GeoLocation");
-//		} else {
-//			geoLocation.getCurrentPosition(new com.google.gwt.core.client.Callback<Position, PositionError>() {
-//				
-//				@Override
-//				public void onSuccess(Position result) {
-//					final LatLng l = LatLng.create(result.getCoordinates().getLatitude(), result.getCoordinates().getLongitude());
-//					GeocoderRequest geoRequest = GeocoderRequest.create();
-//					geoRequest.setLocation(l);
-//					Geocoder geoCode = Geocoder.create();
-//					geoCode.geocode(geoRequest, new Geocoder.Callback() {
-//						@Override
-//						public void handle(JsArray<GeocoderResult> a, GeocoderStatus b) {
-//							String address = a.get(0).getFormattedAddress();
-//							txbTitle.setText(address);
-//							locate.setLatLng(l);
-//						}
-//					});
-//				}
-//				
-//				@Override
-//				public void onFailure(PositionError reason) {
-//					Window.alert("!: Can't find your location");
-//				}
-//			});
-//		}
-//	}
+	@UiHandler("btnFindYourLocation") 
+	void onBtnFindYourLocationClick(ClickEvent event) {
+		LocationPicker lp = new LocationPicker();
+		lp.center();
+		lp.setFocus();
+		lp.setLocation(locate);
+		lp.addCloseHandler(new CloseHandler<PopupPanel>() {
+			
+			@Override
+			public void onClose(CloseEvent<PopupPanel> arg0) {
+				RootPanel.get("tripMap").add(TripShare.tripMap.getMapView());
+			}
+		});
+		lp.setListerner(new LocationPicker.Listener() {
+			
+			@Override
+			public void getLocation(Locate locatee) {
+				if(locatee == null) {
+					btnFindYourLocation.removeStyleName("PathCreate-Obj16");
+					locate = null;
+					btnFindYourLocation.setTitle("Add location");
+				}
+				else {
+					btnFindYourLocation.addStyleName("PathCreate-Obj16");
+					locate = locatee;
+					btnFindYourLocation.setTitle(locatee.getAddressName());
+				}
+			}
+		});
+	}
 	
 	@UiHandler("btnRichTextEdit") 
 	void onBtnRichTextEditClick(ClickEvent event) {
@@ -457,7 +459,8 @@ public class Journey_PathCreate extends Composite {
 		 
 		    init: {
 		        PostInit: function() {	
-		        	$wnd.document.getElementById('not_support_flash_warning').innerHTML = '';
+		        	var e = $wnd.document.getElementById('not_support_flash_warning');
+		        	e.parentNode.removeChild(e);
 		        	$wnd.document.getElementById('lbCountPhotos').style.display = '';
 		        },
 		        
@@ -515,12 +518,13 @@ public class Journey_PathCreate extends Composite {
 				  });
 		        },		      	
 		 
-//		        UploadProgress: function(up, file) {
-//		        	var total_files =  $wnd.uploader.files.length;
-//		        	var files_uploaded = total_files - files_remaining;
-//		        	var total_percent = ((file.percent/100 * 1/total_files)*100) + ((files_uploaded * 1/total_files)*100);
-//		            $wnd.document.getElementById('lbUploadProgress').innerHTML = '<span>' + Math.ceil(total_percent) + "%</span>";
-//		        },
+		        UploadProgress: function(up, file) {
+		        	var total_files =  $wnd.uploader.files.length;
+		        	var files_uploaded = total_files - files_remaining;
+		        	var total_percent = ((file.percent/100 * 1/total_files)*100) + ((files_uploaded * 1/total_files)*100);
+		            var uploadProcess = Math.ceil(total_percent) + "%";
+		            instance.@com.born2go.client.widgets.Journey_PathCreate::setUploadProces(Ljava/lang/String;)(uploadProcess);
+		        },
 		        
 		        FileUploaded: function(up, file, info) {
 	                files_remaining--;

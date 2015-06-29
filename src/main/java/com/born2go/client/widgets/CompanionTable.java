@@ -2,7 +2,7 @@ package com.born2go.client.widgets;
 
 import java.util.List;
 
-import com.born2go.shared.Poster;
+import com.born2go.shared.embedclass.Poster;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -31,14 +31,14 @@ public class CompanionTable extends Composite {
 	public void setTrip(List<Poster> companions) {
 		container.getElement().setInnerHTML("");
 		if(!companions.isEmpty()) {
-			if(companions.size() <= 3) {
+			if(companions.size() <= 4) {
 				for(int i=0; i<companions.size(); i++) {
 					String newCompanion = "<a href='/profile/"+ companions.get(i).getUserID().toString()+ "' style='margin-left: 5px; color: cornflowerblue !important;'>"+ companions.get(i).getUserName()+ ", </a>";
 					container.getElement().setInnerHTML(container.getElement().getInnerHTML()+ newCompanion);
 				}
 			}
 			else {
-				for(int i=0; i<3; i++) {
+				for(int i=0; i<4; i++) {
 					String newCompanion = "<a href='/profile/"+ companions.get(i).getUserID().toString()+ "' style='margin-left: 5px; color: cornflowerblue !important;'>"+ companions.get(i).getUserName()+ ", </a>";
 					container.getElement().setInnerHTML(container.getElement().getInnerHTML()+ newCompanion);
 				}

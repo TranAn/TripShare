@@ -83,24 +83,38 @@
 		font-weight: 700;
 		font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 		font-size: 13px;
-		color: silver;
+		color: gray;
 		position: relative;
 		top: -2px;
 	}
 	
 	.Catalog_Obj9 {
 		position: absolute;
-		opacity: 0.4;
+		opacity: 0.2;
 		top: 20px;
 		right: 10px;
 		width: 260px;
+	}
+	
+	.Catalog_Obj10 {
+		float: right;
+  		color: silver;
+ 		padding: 0px 3px;
+  		background-color: white;
+  		border-radius: 20px;
+  		text-shadow: none;
+	}
+	
+	.Catalog_Obj11 {
+		float: left;
 	}
 	</ui:style>
 	<g:HTMLPanel ui:field="catalog" styleName="{style.Catalog_Obj1}"
 		height="200px">
 		<g:HTMLPanel height="16px" styleName="{style.Catalog_Obj2}"
 			width="">
-			<g:Label text="Book of content" styleName="font-blackTitleNormal" />
+			<g:Label text="Book of content" styleName="font-blackTitleNormal {style.Catalog_Obj11}" />
+			<g:Anchor ui:field="btnClose" styleName="greenbutton {style.Catalog_Obj10}"><i class='fa fa-times'></i></g:Anchor>
 		</g:HTMLPanel>
 
 		<g:ScrollPanel height="360px">

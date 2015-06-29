@@ -11,13 +11,17 @@ import com.axeiya.gwtckeditor.client.ToolbarLine;
 import com.born2go.client.TripShare;
 import com.born2go.shared.Path;
 import com.born2go.shared.Picture;
+import com.born2go.shared.Trip;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.ScrollEvent;
+import com.google.gwt.user.client.Window.ScrollHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -44,17 +48,29 @@ public class Destination_EditToolBar extends Composite {
 	List<String> urls;
 	
 	private Path path;
-	private boolean isPoster = false;
+	private boolean isPoster = false;	
+	private Destination_ToolBar toolbar = new Destination_ToolBar();
+	
+	TextBox txbPathTitle;
+	CKEditor editor;
 
 	public Destination_EditToolBar() {
 		initWidget(uiBinder.createAndBindUi(this));
+		
+		HTMLPanel mapTable = new HTMLPanel("");
+		mapTable.setHeight("300px");
+		
+		if(RootPanel.get("destinationLocate") != null) {
+			RootPanel.get("destinationLocate").add(mapTable);
+			mapTable.add(TripShare.tripMap.getMapView());
+		}
 	}
 	
 	public void checkPermission() {
 		if(TripShare.user_id != null && path != null) {
 			if(path.getPoster().getUserID().toString().equals(TripShare.user_id)) {
-				addEditor();
 				isPoster = true;
+				toolbar.openPosterToolbar();
 			}
 		}
 	}
@@ -151,31 +167,31 @@ public class Destination_EditToolBar extends Composite {
 		return ckf;
 	}
 	
-	void addEditor() {
-		Label btnEdit = new Label();
-		btnEdit.setStyleName("boxbutton");
-		btnEdit.getElement().setInnerHTML("<i style='margin-right:5px;' class='fa fa-pencil fa-lg'></i>Edit");
-		Label btnUpload = new Label();
-		btnUpload.setStyleName("boxbutton");
-		btnUpload.getElement().setInnerHTML("<i style='margin-right:5px;' class='fa fa-camera fa-lg'></i>Upload Photos");
-		RootPanel.get("pathEditTool").add(btnEdit);
-		RootPanel.get("pathUploadTool").add(btnUpload);
-		//event handler
-		btnEdit.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				openEdit();
-			}
-		});
-		btnUpload.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				PhotoUpload photoUpload = new PhotoUpload();
-				photoUpload.center();
-				photoUpload.handlerUploadEvent(path.getTripId(), path.getId());
-			}
-		});
-	}
+//	void addEditor() {
+//		Label btnEdit = new Label();
+//		btnEdit.setStyleName("boxbutton");
+//		btnEdit.getElement().setInnerHTML("<i style='margin-right:5px;' class='fa fa-pencil fa-lg'></i>Edit");
+//		Label btnUpload = new Label();
+//		btnUpload.setStyleName("boxbutton");
+//		btnUpload.getElement().setInnerHTML("<i style='margin-right:5px;' class='fa fa-camera fa-lg'></i>Upload Photos");
+//		RootPanel.get("pathEditTool").add(btnEdit);
+//		RootPanel.get("pathUploadTool").add(btnUpload);
+//		//event handler
+//		btnEdit.addClickHandler(new ClickHandler() {
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				openEdit();
+//			}
+//		});
+//		btnUpload.addClickHandler(new ClickHandler() {
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				PhotoUpload photoUpload = new PhotoUpload();
+//				photoUpload.center();
+//				photoUpload.handlerUploadEvent(path.getTripId(), path.getId());
+//			}
+//		});
+//	}
 	
 	void openEdit() {
 		//remove content
@@ -183,36 +199,136 @@ public class Destination_EditToolBar extends Composite {
 		DOM.getElementById("pathEditTool").setInnerHTML("");
 		DOM.getElementById("pathTitle").setInnerHTML("");
 		//add editor
-		final TextBox txbPathTitle = new TextBox();
+		txbPathTitle = new TextBox();
 		txbPathTitle.setText(path.getTitle());
 		txbPathTitle.setStyleName("font_4");
 		txbPathTitle.getElement().setAttribute("style", "width:99%; text-indent: 5px;");
 		RootPanel.get("pathTitle").add(txbPathTitle);
 		HTMLPanel newContainer = new HTMLPanel("");
 		RootPanel.get("pathDescription").add(newContainer);
-		final CKEditor editor = new CKEditor(getCKConfig());
+		editor = new CKEditor(getCKConfig());
 		newContainer.add(editor);
 		editor.setData(path.getDescription());
-		Window.scrollTo(0, 85);
-		//add edit tool
-		Label btnSave = new Label();
-		Label btnCancel = new Label();
-		btnSave.setStyleName("boxbutton");
-		btnSave.getElement().setInnerHTML("<i style='margin-right:5px;' class='fa fa-floppy-o fa-lg'></i>Save");
-		btnCancel.setStyleName("boxbutton");
-		btnCancel.getElement().setInnerHTML("<i style='margin-right:5px;' class='fa fa-ban fa-lg'></i>Cancel");
-		RootPanel.get("pathEditTool").add(btnSave);
-		RootPanel.get("pathEditTool").add(btnCancel);
-		//event handler
-		btnCancel.addClickHandler(new ClickHandler() {
+		Window.scrollTo(0, 0);
+	}
+	
+	void cancelEdit() {
+		//remove content
+		DOM.getElementById("pathDescription").setInnerHTML("");
+		DOM.getElementById("pathEditTool").setInnerHTML("");
+		DOM.getElementById("pathTitle").setInnerHTML("");
+		//add static content
+		Label title = new Label();
+		title.setText(path.getTitle());
+		title.setStyleName("font_4");
+		RootPanel.get("pathTitle").add(title);
+		HTMLPanel newContainer = new HTMLPanel("");
+		RootPanel.get("pathDescription").add(newContainer);
+		newContainer.getElement().setInnerHTML(path.getDescription());
+		Window.scrollTo(0, 0);
+		toolbar.setCommonToolbar();
+	}
+	
+	public void getPath(Long pathId) {
+		TripShare.dataService.findPart(pathId, new AsyncCallback<Path>() {
 			@Override
-			public void onClick(ClickEvent event) {
-				cancelEdit();
+			public void onSuccess(Path result) {
+				path = result;
+				checkPermission();
+				getTrip(result.getTripId());
+				addToolbar();
+				TripShare.dataService.listPicture(result.getGallery(), new AsyncCallback<List<Picture>>() {
+					@Override
+					public void onSuccess(List<Picture> result) {
+						if (result != null && result.size() > 0) {
+							addImages(result);
+						}
+					}				
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert(TripShare.ERROR_MESSAGE);
+					}
+				});
+			}			
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(TripShare.ERROR_MESSAGE);
 			}
 		});
-		btnSave.addClickHandler(new ClickHandler() {
+	}
+	
+	public void getTrip(Long tripId) {
+		TripShare.dataService.findTrip(tripId, new AsyncCallback<Trip>() {
+			
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onSuccess(Trip arg0) {
+				String tripLink = "/journey/"+ arg0.getId();
+				int index = arg0.getDestination().indexOf(path.getId());
+				if(index == 0) {
+					String nextPostLink = "/destination/"+ arg0.getDestination().get(index+1);
+					toolbar.setNavigator(tripLink, "#", nextPostLink);
+				}
+				else if(index == arg0.getDestination().size()-1) {
+					String prePostLink = "/destination/"+ arg0.getDestination().get(index-1);
+					toolbar.setNavigator(tripLink, prePostLink, "#");
+				}
+				else {
+					String prePostLink = "/destination/"+ arg0.getDestination().get(index-1);
+					String nextPostLink = "/destination/"+ arg0.getDestination().get(index+1);
+					toolbar.setNavigator(tripLink, prePostLink, nextPostLink);
+				}
+				if(path.getLocate() != null) {		
+					TripShare.tripMap.drawTheJourney(arg0.getJourney().getDirections(), arg0.getJourney().getLocates(), false);
+					TripShare.tripMap.addMarker2(path.getLocate().getLatLng(), path.getLocate().getAddressName(), true);
+					TripShare.tripMap.getMap().setCenter(path.getLocate().getLatLng());
+				}
+			}
+			
+			@Override
+			public void onFailure(Throwable arg0) {
+				Window.alert(TripShare.ERROR_MESSAGE);
+			}
+		});
+	}
+	
+	void addToolbar() {
+		if(RootPanel.get("destinationToolbar") != null)
+			RootPanel.get("destinationToolbar").add(toolbar);
+		
+		Window.addWindowScrollHandler(new ScrollHandler() {
+			@Override
+			public void onWindowScroll(ScrollEvent event) {
+				Element toolbarPanel = DOM.getElementById("destinationToolbar");
+				if(event.getScrollTop() >= toolbarPanel.getAbsoluteTop()) {
+					toolbar.setStyleName("DestinationToolBar_Obj1fixed");
+				}
+				else {	
+					toolbar.setStyleName("DestinationToolBar_Obj1");
+				}
+			}
+		});
+		
+		toolbar.setListener(new Destination_ToolBar.Listener() {
+			
+			@Override
+			public void onUploadPhoto() {
+				if(isPoster) {
+					PhotoUpload photoUpload = new PhotoUpload();
+					photoUpload.center();
+					photoUpload.handlerUploadEvent(path.getTripId(), path.getId());
+				}
+			}
+			
+			@Override
+			public void onEdit() {
+				if(isPoster) {
+					openEdit();
+					toolbar.setEditToolbar();
+				}
+			}
+
+			@Override
+			public void onSave() {
 				TripShare.loadBox.center();
 				Path viewPath = path;
 				viewPath.setTitle(txbPathTitle.getText());
@@ -231,58 +347,10 @@ public class Destination_EditToolBar extends Composite {
 					}
 				});
 			}
-		});
-	}
-	
-	void cancelEdit() {
-		//remove content
-		DOM.getElementById("pathDescription").setInnerHTML("");
-		DOM.getElementById("pathEditTool").setInnerHTML("");
-		DOM.getElementById("pathTitle").setInnerHTML("");
-		//add static content
-		Label title = new Label();
-		title.setText(path.getTitle());
-		title.setStyleName("font_4");
-		RootPanel.get("pathTitle").add(title);
-		HTMLPanel newContainer = new HTMLPanel("");
-		RootPanel.get("pathDescription").add(newContainer);
-		newContainer.getElement().setInnerHTML(path.getDescription());
-		Window.scrollTo(0, 85);
-		Label btnEdit = new Label();
-		btnEdit.setStyleName("boxbutton");
-		btnEdit.getElement().setInnerHTML("<i style='margin-right:5px;' class='fa fa-pencil fa-lg'></i>Edit");
-		RootPanel.get("pathEditTool").add(btnEdit);
-		//event handler
-		btnEdit.addClickHandler(new ClickHandler() {
+
 			@Override
-			public void onClick(ClickEvent event) {
-				openEdit();
-			}
-		});
-	}
-	
-	public void getPath(Long pathId) {
-		TripShare.dataService.findPart(pathId, new AsyncCallback<Path>() {
-			@Override
-			public void onSuccess(Path result) {
-				path = result;
-				checkPermission();
-				TripShare.dataService.listPicture(result.getGallery(), new AsyncCallback<List<Picture>>() {
-					@Override
-					public void onSuccess(List<Picture> result) {
-						if (result != null && result.size() > 0) {
-							addImages(result);
-						}
-					}				
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert(TripShare.ERROR_MESSAGE);
-					}
-				});
-			}			
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert(TripShare.ERROR_MESSAGE);
+			public void onCancel() {
+				cancelEdit();
 			}
 		});
 	}
@@ -331,27 +399,27 @@ public class Destination_EditToolBar extends Composite {
 									openGallery(photosUri, index);
 								}
 								
-								@Override
-								public void onSetFeaturedPhotoClick() {
-									option.startLoading();
-									final int index = listPicture.size() - 1 - urls.indexOf(image.getUrl());
-									path.setAvatar(image.getUrl());
-									TripShare.dataService.updatePart(path, new AsyncCallback<Path>() {
-										@Override
-										public void onSuccess(Path result) {
-											option.hide();
-											option.endLoading();
-											DOM.getElementById("destination_featured_photo").setAttribute("src", listPicture.get(index).getServeUrl());
-										}
-										
-										@Override
-										public void onFailure(Throwable caught) {
-											option.hide();
-											option.endLoading();
-											Window.alert(TripShare.ERROR_MESSAGE);
-										}
-									});
-								}
+//								@Override
+//								public void onSetFeaturedPhotoClick() {
+//									option.startLoading();
+//									final int index = listPicture.size() - 1 - urls.indexOf(image.getUrl());
+//									path.setAvatar(image.getUrl());
+//									TripShare.dataService.updatePart(path, new AsyncCallback<Path>() {
+//										@Override
+//										public void onSuccess(Path result) {
+//											option.hide();
+//											option.endLoading();
+//											DOM.getElementById("destination_featured_photo").setAttribute("src", listPicture.get(index).getServeUrl());
+//										}
+//										
+//										@Override
+//										public void onFailure(Throwable caught) {
+//											option.hide();
+//											option.endLoading();
+//											Window.alert(TripShare.ERROR_MESSAGE);
+//										}
+//									});
+//								}
 								
 								@Override
 								public void onDeleteClick() {

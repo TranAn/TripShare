@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.born2go.shared.embedclass.Journey;
+import com.born2go.shared.embedclass.Poster;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -27,7 +29,7 @@ public class Trip implements Serializable {
 	
 	Poster poster;
 	List<Poster> companion = new ArrayList<Poster>(); //Member sharing the same trip
-	List<Long> destination = new ArrayList<Long>(); //Segments ID list
+	List<Long> destination = new ArrayList<Long>(); //Post ID list
 	List<Long> gallery = new ArrayList<Long>();		//Photos list
 	
 	String name;

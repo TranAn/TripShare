@@ -3,9 +3,9 @@ package com.born2go.client.widgets;
 import java.util.List;
 
 import com.born2go.client.TripShare;
-import com.born2go.shared.Locate;
 import com.born2go.shared.Picture;
 import com.born2go.shared.Trip;
+import com.born2go.shared.embedclass.Locate;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

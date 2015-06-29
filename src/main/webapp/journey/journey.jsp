@@ -7,8 +7,8 @@
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@ page import="com.born2go.shared.Picture"%>
-<%@ page import="com.born2go.shared.Journey"%>
-<%@ page import="com.born2go.shared.Locate"%>
+<%@ page import="com.born2go.shared.embedclass.Journey"%>
+<%@ page import="com.born2go.shared.embedclass.Locate"%>
 <%@ page import="com.born2go.server.DataServiceImpl"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.text.SimpleDateFormat"%>
@@ -53,7 +53,7 @@
 	Trip trip = new Trip();
 	String tripId = "";
 	String tripAvatar = "";
-	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d - hh:mm:ss");
+	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d - HH:mm:ss");
 	if (request.getPathInfo() == null
 			|| request.getPathInfo().length() < 1) {
 		redirectHomeUrl(response);
@@ -276,15 +276,14 @@
 			</div>
 		</div>
 	</div>
-
+	
 	<!-- Add Content here -->
 	<div id="content">
-		<div id="tripInfo" class="tripInfo">
-			<div>	
-				<img src="/resources/1411646988_note2.png" width="36px" height="36px" style="position: absolute; top: 4px; right: 2px; z-index: 1;"/>			
-				<table>
-				<tr>
-				<td valign="top" style="width:100%">
+		<div id="left_panel">
+			<div id="tripInfo" class="tripInfo">
+				<div>	
+					<!-- <img src="/resources/1411646988_note2.png" width="36px" height="36px" style="position: absolute; top: 100px; right: 2px; z-index: 1;"/>			 -->
+					
 					<div class="font-blackTitleLarge" style="font-size: 30px;font-family: museo-w01-700,serif; color:rgb(56, 119, 127)"><%=trip.getName()%></div>
 					<div style="float: right; margin-top: 12px;">
 						<div class="fb-like" data-href="http://born2go-b.appspot.com/journey/<%= tripId %>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
@@ -297,6 +296,8 @@
 						<img style="border: 1px silver solid;border-radius: 20px;overflow: hidden;margin-left: 8px;margin-bottom: 15px;" src="https://graph.facebook.com/<%=trip.getPoster().getUserID()%>/picture?width=25&height=25" />					
 					</div>
 					<%} %>
+					
+					<div id="tripMap" class="tripMap" style="height: 300px; border:1px solid gray; margin-bottom: 20px"></div>
 					
 					<%if(trip.getJourney() !=null) {%> 
 					<div class="font-blackTitleLarge">Itinerary:</div>
@@ -318,33 +319,42 @@
 					
 					<%-- <%if(!trip.getCompanion().isEmpty()) { %> --%>
 					<div class="font-blackTitleLarge" style="margin-top:30px;">Companion:</div>
-					<div class="trip-destinations">
+					<div class="trip-destinations" style="overflow: hidden;">
 						<img src="/resources/1432155993_WLM.png" style="width:22px;height:28px;vertical-align: middle;float: left;margin-right: 6px;"/>
 						<div id="companion_table"></div>	
 					</div>	
 					<%-- <%} %>	 --%>
-				</td>
 				
-				<td valign="top" height="1">
-					<div id="tripMap" class="tripMap" style="width: 500px; height: 100%; margin-left: 10px; min-height: 400px; max-height: 500px; border:1px solid gray;"></div>
-				</td>
-				</tr>
-				
-				<tr>
-					<td colspan="2">
-						<div class="tripInfoBorder"></div>
-						<div class="font-blackTitleLarge" style="margin-top:30px;">Journey description:</div>
-						<div style="font-size: 15px; line-height: 1.6em;"><%= trip.getDescription() %></div>
-					</td>
-				</tr>
-				</table>
+					<div class="tripInfoBorder"></div>
+					<div class="font-blackTitleLarge" style="margin-top:30px;">Journey description:</div>
+					<div style="font-size: 15px; line-height: 1.6em;"><%= trip.getDescription() %></div>
+						
+				</div>
+			</div>
+			
+			<div id="tripcontent" class="tripContent"></div>
+			
+			<div id="commentBox" class="commentBox">
+				<div class="fb-comments" data-width="100%" data-href="http://born2go-b.appspot.com/journey/<%= trip.getId() %>" data-numposts="5" data-colorscheme="light" data-order-by="reverse_time" data-version="v2.3"></div>
 			</div>
 		</div>
 		
-		<div id="tripcontent" class="tripContent"></div>
-		
-		<div id="commentBox" class="commentBox">
-			<div class="fb-comments" data-width="100%" data-href="http://born2go-b.appspot.com/journey/<%= trip.getId() %>" data-numposts="5" data-colorscheme="light" data-order-by="reverse_time" data-version="v2.3"></div>
+		<div id="right_panel">
+			<div class="advertise">
+				<img alt="" src="/resources/advertise-with-us-copy.jpg" style="width: 257px;">
+			</div>
+			<div style="float: left; margin-right: 10px;">
+				<img alt="" src="/resources/appstore.png" style="width: 145px; height: 50px; cursor: pointer;">
+			</div>
+			<div>
+				<img alt="" src="/resources/googleplay.jpg" style="width: 145px; height: 50px; cursor: pointer;">
+			</div>
+			<div class="advertise" style="margin-top: 10px;height: 100px">
+				<span style="font-size: 15px; font-weight: bold;">Connect with Born2Go!</span>
+				<br/> <br/>
+				<div class="fb-like" data-href="http://born2go-b.appspot.com/" data-width="260" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
+				<span style="color: #09f; cursor: pointer; margin-left: 10px;">Follow Born2Go</span>
+			</div>
 		</div>
 	</div>
 	

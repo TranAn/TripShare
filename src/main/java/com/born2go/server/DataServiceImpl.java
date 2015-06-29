@@ -17,9 +17,9 @@ import org.jsoup.Jsoup;
 import com.born2go.client.rpc.DataService;
 import com.born2go.shared.Path;
 import com.born2go.shared.Picture;
-import com.born2go.shared.Poster;
 import com.born2go.shared.Trip;
 import com.born2go.shared.User;
+import com.born2go.shared.embedclass.Poster;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
@@ -30,10 +30,15 @@ import com.googlecode.objectify.Key;
 public class DataServiceImpl extends RemoteServiceServlet implements
 		DataService {
 
-	private Trip exportTrip = null;
+	private BlobstoreService blobStoreService = BlobstoreServiceFactory.getBlobstoreService();
 
+	/**
+	 * impls for Trip
+	 */
+	
 	@Override
 	public Trip insertTrip(Trip trip, String accessToken) {
+		Trip exportTrip;
 		try {
 			if(accessToken != null) {
 				Poster poster = getPoster(accessToken);
@@ -66,6 +71,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public Trip findTrip(Long idTrip) {
+		Trip exportTrip;
 		exportTrip = ofy().load().type(Trip.class).id(idTrip).now();
 		return exportTrip;
 	}
@@ -79,20 +85,23 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public Trip updateTrip(Trip trip) {
+		Trip exportTrip;
 		Trip oldTrip = findTrip(trip.getId());
 		if (oldTrip != null) {
 			// Update theme
-			if(!trip.getTheme().equals(oldTrip.getTheme())) {
-				oldTrip.setTheme(trip.getTheme());
-				ofy().save().entity(oldTrip).now();
-				return oldTrip;
+			if(trip.getTheme() != null) {
+				if(!trip.getTheme().equals(oldTrip.getTheme())) {
+					oldTrip.setTheme(trip.getTheme());
+					ofy().save().entity(oldTrip).now();
+					return oldTrip;
+				}
 			}
 			// Update companion---
 			for(Poster p: oldTrip.getCompanion()) {
 				if(!trip.getCompanion().contains(p)) {
 					User user = ofy().load().type(User.class).id(p.getUserID().toString()).now();
 					if(user != null) {
-						user.getMyTrips().remove(exportTrip.getId());
+						user.getMyTrips().remove(trip.getId());
 						ofy().save().entity(user);
 					}
 				}
@@ -101,7 +110,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 				if(!oldTrip.getCompanion().contains(p)) {
 					User user = ofy().load().type(User.class).id(p.getUserID().toString()).now();
 					if(user != null) {
-						user.getMyTrips().add(exportTrip.getId());
+						user.getMyTrips().add(trip.getId());
 						ofy().save().entity(user);
 					}
 				}
@@ -122,29 +131,29 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	/**
-	 * impls for part
+	 * impls for Part
 	 */
-	private Path exportPart = null;
-
+	
 	@Override
-	public Path insertPart(Path part, Long tripId, String accessToken) {
+	public Path insertPart(Path path, Long tripId, String accessToken) {
+		Path exportPath;
 		Trip trip = ofy().load().type(Trip.class).id(tripId).now();
 		if(trip != null) {
 			try {
 				if(accessToken != null) {
 					Poster poster = getPoster(accessToken);
-					part.setPoster(poster);
+					path.setPoster(poster);
 				}
-				part.setTripId(tripId);
-				String preshortHtml = part.getDescription().replaceAll("(?i)<br[^>]*>", "br2n").replaceAll("</p>", "br2nbr2n");
-				//.replaceAll("&nbsp;", "br2nbr2n")
-				part.setShortDescription(Jsoup.parse(preshortHtml).text());
-				Key<Path> key = ofy().save().entity(part).now();
-				exportPart = ofy().load().key(key).now();
+				path.setTripId(tripId);
+				String preshortHtml = getPlainText(path.getDescription());
+				System.out.println(preshortHtml);
+				path.setShortDescription(Jsoup.parse(preshortHtml).text());
+				Key<Path> key = ofy().save().entity(path).now();
+				exportPath = ofy().load().key(key).now();
 				//--
-				trip.getDestination().add(exportPart.getId());
+				trip.getDestination().add(exportPath.getId());
 				ofy().save().entity(trip);
-				return exportPart;
+				return exportPath;
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -155,9 +164,10 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Path findPart(Long idPart) {
-		exportPart = ofy().load().type(Path.class).id(idPart).now();
-		return exportPart;
+	public Path findPart(Long idPath) {
+		Path exportPath;
+		exportPath = ofy().load().type(Path.class).id(idPath).now();
+		return exportPath;
 	}
 
 	@Override
@@ -168,65 +178,32 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Path updatePart(Path part) {
-		Path oldData = findPart(part.getId());
+	public Path updatePart(Path path) {
+		Path exportPath;
+		Path oldData = findPart(path.getId());
 		if (oldData != null) {
-			if(!oldData.getDescription().equals(part.getDescription())) {
-				String preshortHtml = part.getDescription().replaceAll("(?i)<br[^>]*>", "br2n").replaceAll("</p>", "br2nbr2n");
-				//.replaceAll("&nbsp;", "br2nbr2n")
-				part.setShortDescription(Jsoup.parse(preshortHtml).text());
+			if(!oldData.getDescription().equals(path.getDescription())) {
+				String preshortHtml = getPlainText(path.getDescription());
+				System.out.println(preshortHtml);
+				path.setShortDescription(Jsoup.parse(preshortHtml).text());
 			}
-			Key<Path> key = ofy().save().entity(part).now();
-			exportPart = ofy().load().key(key).now();
+			Key<Path> key = ofy().save().entity(path).now();
+			exportPath = ofy().load().key(key).now();
 		} else
-			exportPart = null;
-
-		return exportPart;
+			exportPath = null;
+		return exportPath;
 	}
 
 	@Override
-	public void removePart(Long idPart) {
-		Path oldData = findPart(idPart);
+	public void removePart(Long idPath) {
+		Path oldData = findPart(idPath);
 		if (oldData != null)
 			ofy().delete().entity(oldData);
-
 	}
-
-	private User exportUser = null;
-
-	Poster getPoster(String accessToken) throws Exception{
-		String url = "https://graph.facebook.com/me?access_token=" + accessToken;
-		 
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
- 
-		// optional default is GET
-		con.setRequestMethod("GET");
- 
-		//add request header
-		con.setRequestProperty("User-Agent", "Mozilla/5.0");
- 
-		/*int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);*/
- 
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
- 
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
-		}
-		in.close();
- 
-		//print result
-		JSONObject myObj = new JSONObject(response.toString());
-		Poster poster = new Poster();
-		poster.setUserID(myObj.getLong("id"));
-		poster.setUserName(myObj.getString("name"));
-		
-		return poster;
-	}
+	
+	/**
+	 * impls for User
+	 */
 
 	@Override
 	public String getLongLiveToken(String accessToken) throws Exception{
@@ -292,13 +269,13 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public User updateUser(User user) {
+		User exportUser ;
 		User oldData = findUser(user.getId());
 		if (oldData != null) {
 			Key<User> key = ofy().save().entity(user).now();
 			exportUser = ofy().load().key(key).now();
 		} else
 			exportUser = null;
-
 		return exportUser;
 	}
 
@@ -307,9 +284,10 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		User oldData = findUser(idUser);
 		ofy().delete().entity(oldData);
 	}
-
-	private BlobstoreService blobStoreService = BlobstoreServiceFactory
-			.getBlobstoreService();
+	
+	/**
+	 * impls for Picture
+	 */
 
 	@Override
 	public String getUploadUrl() {
@@ -362,6 +340,65 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 			//Delete picture
 			ofy().delete().entity(p);
 		}
+	}
+	
+	//----- Java function -----
+	
+	private Poster getPoster(String accessToken) throws Exception{
+		String url = "https://graph.facebook.com/me?access_token=" + accessToken;
+		 
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+	
+		// optional default is GET
+		con.setRequestMethod("GET");
+	
+		//add request header
+		con.setRequestProperty("User-Agent", "Mozilla/5.0");
+	
+		/*int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);*/
+	
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+	
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+	
+		//print result
+		JSONObject myObj = new JSONObject(response.toString());
+		Poster poster = new Poster();
+		poster.setUserID(myObj.getLong("id"));
+		poster.setUserName(myObj.getString("name"));
+		
+		return poster;
+	}
+	
+	private String getPlainText(String strSrc) {
+	    String resultStr = strSrc;
+
+	    // Ignore the <p> tag if it is in very start of the text
+//	    if(strSrc.indexOf("<p>") == 0)
+//	        resultStr = strSrc.substring(3);
+
+	    // Replace <p> with two newlines
+//	    resultStr = resultStr.replaceAll("<p[^>]*>(&nbsp;)?", "br2nbr2n");
+	    // Replace <br /> with one newline
+//	    resultStr = resultStr.replaceAll("(?i)<br[^>]*>", "br2n");
+	    // Remove img caption
+	    resultStr = resultStr.replaceAll("<figcaption>.*</figcaption>", "");
+	    
+	    // Remove exceed linebreak
+//	    resultStr = resultStr.replaceAll("(br2nbr2n(</p>)?\\s*\\r*\\n*)+", "br2nbr2n");
+	    
+	    // Remove white space char code
+	    resultStr = resultStr.replaceAll("&nbsp;", " ");
+
+	    return resultStr;
 	}
 	
 }

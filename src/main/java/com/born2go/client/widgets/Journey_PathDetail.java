@@ -2,6 +2,7 @@ package com.born2go.client.widgets;
 
 import com.born2go.client.TripShare;
 import com.born2go.shared.Path;
+import com.born2go.shared.Picture;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -27,7 +28,8 @@ public class Journey_PathDetail extends Composite {
 	
 	@UiField Anchor lbTitle;
 	@UiField Anchor lbPoster;
-	@UiField Image picture;
+	@UiField HTMLPanel pictureTable;
+//	@UiField Image picture;
 	@UiField ParagraphElement htmlContent;
 	@UiField Anchor btnDeletePost;
 	@UiField HTMLPanel postControl;
@@ -35,6 +37,8 @@ public class Journey_PathDetail extends Composite {
 	@UiField Label lbDatePost;
 	@UiField Anchor btnExpandACollapse;
 	@UiField Anchor indexCatalog;
+	@UiField Label txbLocation;
+	@UiField Label txbPhotos;
 
 	Path path;
 	Long pathId;
@@ -71,7 +75,7 @@ public class Journey_PathDetail extends Composite {
 		indexCatalog.getElement().setAttribute("name", "index_"+ path.getId());
 		this.path = path;
 		this.pathId = pathId;
-		picture.setUrl(pictureUrl);
+//		picture.setUrl(pictureUrl);
 		lbTitle.setText(title);
 		lbTitle.setTarget("_blank");
 		String id = String.valueOf(pathId);
@@ -81,6 +85,16 @@ public class Journey_PathDetail extends Composite {
 		imgPoster.setUrl("https://graph.facebook.com/"+ posterId+ "/picture?width=25&height=25");
 		if(path.getCreateDate() != null)
 			lbDatePost.setText(TripShare.dateFormat(path.getCreateDate()));
+		
+		if(path.getLocate() != null) {
+			txbLocation.setText("at: "+ path.getLocate().getAddressName());
+			txbLocation.setVisible(true);
+		}
+		else {
+			txbLocation.setText("- None location added");
+			txbLocation.setVisible(true);
+		}
+		
 		if(path.getShortDescription() != null)
 			htmlContent.setInnerHTML(truncateText(path.getShortDescription().replaceAll("br2n", "<br/>")));
 		else
@@ -107,32 +121,36 @@ public class Journey_PathDetail extends Composite {
 			}
 		});
 		
-		btnExpandACollapse.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				if(!isViewDetail) {
-					picture.setVisible(false);
-					htmlContent.setInnerHTML(path.getDescription());
-					btnExpandACollapse.setTitle("Collapse");
-					btnExpandACollapse.getElement().setInnerHTML("<i style='position: relative; top: 2px;' class='boxbutton'>Collapse</i>");
-				}
-				else {
-					picture.setVisible(true);
-					htmlContent.setInnerHTML(truncateText(path.getShortDescription().replaceAll("br2n", "<br/>")));
-					btnExpandACollapse.setTitle("Read more");
-					btnExpandACollapse.getElement().setInnerHTML("<i style='position: relative; top: 2px;' class='boxbutton'>Read more</i>");
-					Window.scrollTo(0, picture.getAbsoluteTop()-50);
-				}
-				isViewDetail = !isViewDetail;
-			}
-		});
+//		btnExpandACollapse.setTarget("_blank");
+		btnExpandACollapse.setHref("/destination/"+ id);
+//		btnExpandACollapse.addClickHandler(new ClickHandler() {
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				if(!isViewDetail) {
+////					picture.setVisible(false);
+//					htmlContent.setInnerHTML(path.getDescription());
+//					btnExpandACollapse.setTitle("Collapse");
+//					btnExpandACollapse.getElement().setInnerHTML("<i style='position: relative; top: 2px;' class='boxbutton'>Collapse</i>");
+//				}
+//				else {
+////					picture.setVisible(true);
+//					htmlContent.setInnerHTML(truncateText(path.getShortDescription().replaceAll("br2n", "<br/>")));
+//					btnExpandACollapse.setTitle("Read more");
+//					btnExpandACollapse.getElement().setInnerHTML("<i style='position: relative; top: 2px;' class='boxbutton'>Read more</i>");
+////					Window.scrollTo(0, picture.getAbsoluteTop()-50);
+//				}
+//				isViewDetail = !isViewDetail;
+//			}
+//		});
+		
+		getPathPhotos();
 	}
 	
 	public static native String truncateText(String content) /*-{
-		if(content.trim().length > 701) {
+		if(content.trim().length > 301) {
 			var shortText = content    // get the text within the div
 			    .trim()    // remove leading and trailing spaces
-			    .substring(0, 700)    // get first 600 characters
+			    .substring(0, 300)    // get first 500 characters
 			    .split(" ") // separate characters into an array of words
 			    .slice(0, -1)    // remove the last full or partial word
 			    .join(" ") + "..."; // combine into a single string and append "..."
@@ -149,7 +167,7 @@ public class Journey_PathDetail extends Composite {
 	}
 	
 	public void setDisplayPhoto(String src) {
-		picture.setUrl(src);
+//		picture.setUrl(src);
 	}
 	
 	public void removeThisPost() {
@@ -165,5 +183,49 @@ public class Journey_PathDetail extends Composite {
 	public Path getPath() {
 		return path;
 	}
+	
+	public void getPathPhotos() {
+		final int displayPhotoNumber;
+		if(path.getGallery().isEmpty()) {}
+		else {
+			pictureTable.setVisible(true);
+			if(path.getGallery().size() <= 4) {
+				displayPhotoNumber = path.getGallery().size();
+				txbPhotos.setVisible(false);
+			}
+			else {
+				displayPhotoNumber = (int) (Math.random() * 3) + 2;
+				txbPhotos.setVisible(true);
+				txbPhotos.setText("+"+ (path.getGallery().size()-displayPhotoNumber)+ " Photos");
+			}
+			for(int i=0; i<=displayPhotoNumber-1; i++) {
+				final int index = i;
+				TripShare.dataService.findPicture(path.getGallery().get(i), new AsyncCallback<Picture>() {
+					
+					@Override
+					public void onSuccess(Picture arg0) {				
+						Image photo = new Image();
+						photo.setUrl(arg0.getServeUrl());
+						photo.setStyleName("PathDetail_Obj15");
+						int photoMaxWidth = 700 / displayPhotoNumber - 28;
+						int rotate1 = (int) (Math.random() * 4) - 2;
+						int rotate2 = (int) (Math.random() * 4) - 2;
+						if(index == 0) 
+							photo.getElement().setAttribute("style", "max-width:"+ photoMaxWidth+ "px");
+						else 
+							photo.getElement().setAttribute("style", "max-width:"+ photoMaxWidth+ "px; transform:rotate("+ rotate1+ "deg) translate3d( 0, 0, 0); -webkit-transform:rotate("+ rotate2+ "deg) translate3d( 0, 0, 0)");
+						pictureTable.add(photo);
+					}
+					
+					@Override
+					public void onFailure(Throwable arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+			}
+		}
+	}
+	
 
 }

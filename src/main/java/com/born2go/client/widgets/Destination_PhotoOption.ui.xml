@@ -24,6 +24,7 @@
 	
 	.PhotoOption_Obj4 {
 		margin-right: 10px;
+		padding: 10px 45px;
 	}
 	
 	.PhotoOption_Obj5 {
@@ -35,7 +36,7 @@
 		margin-left: 10px;
 	}
 	</ui:style>
-	<g:HTMLPanel width="400px" height="">
+	<g:HTMLPanel width="350px" height="">
 		<g:HTMLPanel height="16px" styleName="{style.PhotoOption_Obj1}">
 			<g:Label text="Chose your option" styleName="font-blackTitleNormal {style.PhotoOption_Obj5}"/>
 			<g:Image url="/resources/loading.gif" styleName="{style.PhotoOption_Obj6}" width="30px" height="18px" ui:field="imgUploading" visible="false"/>
@@ -44,7 +45,7 @@
 		<g:HTMLPanel height="80px" styleName="{style.PhotoOption_Obj2}">
 			<g:HTMLPanel styleName="{style.PhotoOption_Obj3}">
 				<g:Anchor ui:field="btnView" styleName="greenbutton {style.PhotoOption_Obj4}">View</g:Anchor>
-				<g:Anchor ui:field="btnSetFeaturedPhoto" styleName="greenbutton {style.PhotoOption_Obj4}">Set Avatar</g:Anchor>
+				<!-- <g:Anchor ui:field="btnSetFeaturedPhoto" styleName="greenbutton {style.PhotoOption_Obj4}">Set Avatar</g:Anchor> -->
 				<g:Anchor ui:field="btnDelete" styleName="greenbutton {style.PhotoOption_Obj4}">Delete</g:Anchor>
 			</g:HTMLPanel>
 		</g:HTMLPanel>

@@ -6,8 +6,8 @@ import java.util.List;
 import com.born2go.client.TripShare;
 import com.born2go.shared.Path;
 import com.born2go.shared.Picture;
-import com.born2go.shared.Poster;
 import com.born2go.shared.Trip;
+import com.born2go.shared.embedclass.Poster;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -263,7 +263,7 @@ public class Journey_PathView extends Composite {
 			public void onSuccess(Trip result) {
 				if(result != null) {
 					theTrip = result;
-					TripShare.tripMap.drawTheJourney(result.getJourney().getDirections(), result.getJourney().getLocates());
+					TripShare.tripMap.drawTheJourney(result.getJourney().getDirections(), result.getJourney().getLocates(), true);
 					CompanionTable companionTable = new CompanionTable();
 					companionTable.setTrip(theTrip.getCompanion());
 					if(RootPanel.get("companion_table") != null)
@@ -325,23 +325,19 @@ public class Journey_PathView extends Composite {
 	void getPathPhoto(Path path, final Journey_PathDetail pathDetail) {
 		if(path.getGallery().isEmpty()) {}
 		else {
-			if(path.getAvatar() != null)
-				pathDetail.setDisplayPhoto(path.getAvatar());
-			else {
-				Long displayPhotoId = path.getGallery().get(0);
-				if(displayPhotoId != null) {
-					TripShare.dataService.findPicture(displayPhotoId, new AsyncCallback<Picture>() {
-						@Override
-						public void onSuccess(Picture result) {
-							if(result != null)
-								pathDetail.setDisplayPhoto(result.getServeUrl());
-						}				
-						@Override
-						public void onFailure(Throwable caught) {
-							// TODO Auto-generated method stub
-						}
-					});
-				}
+			Long displayPhotoId = path.getGallery().get(0);
+			if(displayPhotoId != null) {
+				TripShare.dataService.findPicture(displayPhotoId, new AsyncCallback<Picture>() {
+					@Override
+					public void onSuccess(Picture result) {
+						if(result != null)
+							pathDetail.setDisplayPhoto(result.getServeUrl());
+					}				
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+					}
+				});
 			}
 		}
 	}
@@ -393,7 +389,7 @@ public class Journey_PathView extends Composite {
 		}
 		tripInfo.setTrip(theTrip);
 		tripInfo.setDisable();
-		TripShare.tripMap.drawTheJourney(theTrip.getJourney().getDirections(), theTrip.getJourney().getLocates());
+		TripShare.tripMap.drawTheJourney(theTrip.getJourney().getDirections(), theTrip.getJourney().getLocates(), true);
 	}
 
 	@UiHandler("btnSave")
@@ -509,7 +505,7 @@ public class Journey_PathView extends Composite {
 	  	var viewer = new $wnd.PhotoViewer();
 	  	var URIs = photosUri.split(";");
 	  	for(var i = 0; i < URIs.length-1; i++) {
-	  		viewer.add(URIs[i]);
+	  		viewer.add(URIs[i]+"=s1600");
 	  	}
 		viewer.show(0);
 	}-*/;

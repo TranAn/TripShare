@@ -19,8 +19,9 @@ public class User implements Serializable {
 	
 	List<Long> myTrips = new ArrayList<Long>();
 	
-	String userName;
 	Date joinDate;
+	// temporary
+	String userName;
 
 	public User() {
 		super();

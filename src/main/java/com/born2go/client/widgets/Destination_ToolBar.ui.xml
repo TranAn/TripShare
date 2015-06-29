@@ -1,0 +1,80 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	@external .DestinationToolBar_Obj1, .DestinationToolBar_Obj1fixed, .DestinationToolBar_Obj5;
+	.DestinationToolBar_Obj1 {
+		margin: auto;
+		padding: 20px 0px;
+		padding-bottom: 35px;
+		border: 1px solid #a1a1a1;
+		background-color: #f6f7f8;
+		border-radius: 0px 0px 10px 10px;
+		-webkit-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+		-moz-box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+		box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.25);
+	}
+	
+	.DestinationToolBar_Obj1fixed {
+		position: fixed;
+		width: 740px;
+		top: 0px;
+		padding: 20px 0px;
+		border: 2px solid #a1a1a1;
+		border-top: none;
+		background-color: rgba(255, 254, 252, 0.9);
+		border-radius: 0px 0px 10px 10px;
+		-webkit-box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.25);
+		-moz-box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.25);
+		box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.25);
+		z-index: 1;
+	}
+	
+	.DestinationToolBar_Obj2 {
+		float: left;
+		margin-left: 10px;
+	}
+	
+	.DestinationToolBar_Obj3 {
+		color: aliceblue !important;
+  		padding: 6px 10px;
+  		margin-left: 10px;
+	}
+	
+	.DestinationToolBar_Obj4 {
+	  	width: 1px;
+	 	border-right: 1px silver dotted;
+	  	height: 15px;
+	  	margin-left: 15px;
+	  	margin-right: 5px;
+	}
+	
+	.DestinationToolBar_Obj5 {
+	  	color: aliceblue !important;
+  		background-color: silver !important;
+	}
+	
+	.DestinationToolBar_Obj5:hover {
+	  	color: aliceblue !important;
+  		background-color: silver;
+  		font-weight: normal !important;
+	}
+	</ui:style>
+	<g:HTMLPanel ui:field="toolbar" styleName="{style.DestinationToolBar_Obj1}">
+		<g:HorizontalPanel ui:field="commonToolbar" styleName="{style.DestinationToolBar_Obj2}" >
+			<g:Anchor href="#" styleName="greenbutton {style.DestinationToolBar_Obj3}" width="105px" ui:field="btnTripHome" title="Go To Trip"><i  class="fa fa-home fa-lg"></i> </g:Anchor>
+			<g:Anchor href="#" styleName="greenbutton {style.DestinationToolBar_Obj3} {style.DestinationToolBar_Obj5}" width="72px" ui:field="btnPreviousPost" title="Previous Post"><i  class="fa fa-arrow-left"></i> </g:Anchor>
+			<g:Anchor href="#" styleName="greenbutton {style.DestinationToolBar_Obj3} {style.DestinationToolBar_Obj5}" width="72px" ui:field="btnNextPost" title="Next Post"><i  class="fa fa-arrow-right"></i> </g:Anchor>
+			<g:HTMLPanel styleName="{style.DestinationToolBar_Obj4}"></g:HTMLPanel>
+			<g:Anchor styleName="greenbutton {style.DestinationToolBar_Obj3}" width="65px" ui:field="btnGallery" title="Gallery"><i  class="fa fa-picture-o fa-lg"></i> </g:Anchor>
+			<g:Anchor styleName="greenbutton {style.DestinationToolBar_Obj3}" width="105px" ui:field="btnComment" title="Comment"><i  class="fa fa-comment fa-lg"></i> </g:Anchor>
+			<g:HTMLPanel styleName="{style.DestinationToolBar_Obj4}"></g:HTMLPanel>
+			<g:Anchor styleName="greenbutton {style.DestinationToolBar_Obj3} {style.DestinationToolBar_Obj5}" width="65px" ui:field="btnEdit" title="Edit"><i  class="fa fa-file-text-o fa-lg"></i> </g:Anchor>
+			<g:Anchor styleName="greenbutton {style.DestinationToolBar_Obj3} {style.DestinationToolBar_Obj5}" width="65px" ui:field="btnUploadPhoto" title="Upload Photo"><i  class="fa fa-camera fa-lg"></i> </g:Anchor>
+		</g:HorizontalPanel>
+		<g:HorizontalPanel ui:field="editToolbar" styleName="{style.DestinationToolBar_Obj2}" visible="false">
+			<g:Anchor styleName="greenbutton {style.DestinationToolBar_Obj3}" width="105px" ui:field="btnSave" title="Save"><i  class="fa fa-floppy-o fa-lg" style="margin-right:7px;"></i>Save </g:Anchor>
+			<g:Anchor styleName="greenbutton {style.DestinationToolBar_Obj3}" width="105px" ui:field="btnCancel" title="Cancel"><i  class="fa fa-ban fa-lg" style="margin-right:7px;"></i>Cancel </g:Anchor>
+		</g:HorizontalPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

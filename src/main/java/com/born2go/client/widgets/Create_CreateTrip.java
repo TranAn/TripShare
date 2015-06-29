@@ -11,10 +11,10 @@ import com.axeiya.gwtckeditor.client.Toolbar;
 import com.axeiya.gwtckeditor.client.ToolbarLine;
 import com.born2go.client.TripShare;
 import com.born2go.client.widgets.Create_HandlerJsonListFriends.ListFriends;
-import com.born2go.shared.Journey;
-import com.born2go.shared.Journey.Point;
-import com.born2go.shared.Locate;
-import com.born2go.shared.Poster;
+import com.born2go.shared.embedclass.Journey;
+import com.born2go.shared.embedclass.Locate;
+import com.born2go.shared.embedclass.Poster;
+import com.born2go.shared.embedclass.Journey.Point;
 import com.born2go.shared.Trip;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
@@ -203,7 +203,7 @@ public class Create_CreateTrip extends Composite {
 				String address = txbOrigin.getText();
 				originPoint = new Locate(address, place.getGeometry().getLocation());
 				if(destinationPoint == null) {
-					TripShare.tripMap.addMarker(place.getGeometry().getLocation(), address, true, true);
+					TripShare.tripMap.addMarker(place.getGeometry().getLocation(), address, true, true, true);
 					TripShare.tripMap.getMap().setCenter(place.getGeometry().getLocation());
 					TripShare.tripMap.getMap().setZoom(17.0);
 				}
@@ -255,12 +255,12 @@ public class Create_CreateTrip extends Composite {
 		
 		lb.setStyleName("font-blackTitleNormal");
 		txb.setStyleName("gwt-TextBox CreateTrip-Obj7");
-		btn1.setStyleName("greenbutton CreateTrip-Obj13");
+		btn1.setStyleName("greenbutton CreateTrip-Obj13 CreateTrip-Obj20");
 		btn.setStyleName("greenbutton CreateTrip-Obj12");
 		btn1.getElement().setInnerHTML("<i class='fa fa-picture-o fa-lg'></i>");
 		btn.getElement().setInnerHTML("<i class='fa fa-times fa-lg'></i>");
-		btn1.setTitle("Find tourist place");
-		btn.setTitle("Remove destination point");
+		btn1.setTitle("Find Tourist Place");
+		btn.setTitle("Remove Destination Point");
 		
 		htmlDestinationBox.add(lb);
 		htmlDestinationBox.add(txb);

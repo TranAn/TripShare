@@ -7,8 +7,8 @@
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@ page import="com.born2go.shared.Picture"%>
-<%@ page import="com.born2go.shared.Journey"%>
-<%@ page import="com.born2go.shared.Locate"%>
+<%@ page import="com.born2go.shared.embedclass.Journey"%>
+<%@ page import="com.born2go.shared.embedclass.Locate"%>
 <%@ page import="com.born2go.shared.User"%>
 <%@ page import="com.born2go.server.DataServiceImpl"%>
 <%@ page import="java.util.ArrayList"%>
@@ -183,7 +183,9 @@
 										<td><%=user.getMyTrips().size()%></td>
 									</tr>
 								</table>
-								<div style="margin-top: 10px; margin-bottom:5px; text-align: center; font-size: 13px; padding: 7px 15px;" class="greenbutton" onclick="logoutfacebook()">Log Out</span>
+								<div style="margin-top: 10px; margin-bottom:5px; text-align: center; font-size: 13px; padding: 7px 15px;" class="greenbutton" onclick="logoutfacebook()">Log Out</div>
+								<div style="border-bottom: 1px solid black; margin-top: 20px; display: none;"></div>
+								<!-- <div id="profileFriends"></div> -->
 							</div>
 						</td>
 						<td valign="top" style="width: 100%;">

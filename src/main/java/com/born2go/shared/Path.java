@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.born2go.shared.embedclass.Locate;
+import com.born2go.shared.embedclass.Poster;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -26,7 +28,6 @@ public class Path implements Serializable {
 	Locate locate;
 	String description;
 	String shortDescription;
-	String avatar;
 	
 	public Path() {
 		super();
@@ -94,14 +95,6 @@ public class Path implements Serializable {
 
 	public void setTripId(Long tripId) {
 		this.tripId = tripId;
-	}
-
-	public String getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
 	}
 
 	public String getShortDescription() {

@@ -28,7 +28,7 @@
 	
 	.PathView-Obj4 {
 		position: fixed;
-		width: 1020px;
+		width: 740px;
 		top: 0px;
 		border: 2px solid #a1a1a1;
 		border-top: none;
@@ -105,18 +105,18 @@
 		
 			<g:HTMLPanel ui:field="toolbar" styleName="{style.PathView-Obj1}">
 				<g:HorizontalPanel styleName="{style.PathView-Obj5}">
-					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="65px" ui:field="btnEdit"><i style="margin-right:5px;" class="fa fa-file-text-o fa-lg"></i> Edit</g:Anchor>
-					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="65px" ui:field="btnThemes"><i style="margin-right:5px;" class="fa fa-magic fa-lg"></i> Themes</g:Anchor>
+					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="105px" ui:field="btnContent" title="Book Of Content"><i  class="fa fa-book fa-lg"></i> </g:Anchor>
+					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="72px" ui:field="btnGallery" title="Gallery"><i  class="fa fa-picture-o fa-lg"></i> </g:Anchor>
+					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="72px" ui:field="btnComment" title="Comment"><i  class="fa fa-comment fa-lg"></i> </g:Anchor>
 					<g:HTMLPanel styleName="{style.PathView_Obj15}"></g:HTMLPanel>
-					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="65px" ui:field="btnPost"><i style="margin-right:5px;" class="fa fa-pencil fa-lg"></i> Post</g:Anchor>
-					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="105px" ui:field="btnUpload"><i style="margin-right:5px;" class="fa fa-camera fa-lg"></i> Upload Photos</g:Anchor>
+					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="65px" ui:field="btnPost" title="Post"><i  class="fa fa-pencil fa-lg"></i> </g:Anchor>
+					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="105px" ui:field="btnUpload" title="Upload Photo"><i  class="fa fa-camera fa-lg"></i> </g:Anchor>
 					<g:HTMLPanel styleName="{style.PathView_Obj15}"></g:HTMLPanel>
-					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="105px" ui:field="btnContent"><i style="margin-right:5px;" class="fa fa-book fa-lg"></i> Catalog</g:Anchor>
-					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="72px" ui:field="btnGallery"><i style="margin-right:5px;" class="fa fa-picture-o fa-lg"></i> Gallery</g:Anchor>
-					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="72px" ui:field="btnComment"><i style="margin-right:5px;" class="fa fa-comment fa-lg"></i> Comment</g:Anchor>
+					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="65px" ui:field="btnEdit" title="Edit Trip"><i  class="fa fa-file-text-o fa-lg"></i> </g:Anchor>
+					<g:Anchor styleName="greenbutton {style.PathView-Obj2}" width="65px" ui:field="btnThemes" title="Chose Theme"><i  class="fa fa-magic fa-lg"></i> </g:Anchor>
 				</g:HorizontalPanel>
 				<g:HorizontalPanel styleName="{style.PathView-Obj6}">
-					<g:Label text="Arrange by:" styleName="{style.PathView-Obj7} font-blackTitleNormal" />
+					<g:Label text="Sort by:" styleName="{style.PathView-Obj7} font-blackTitleNormal" />
 					<g:ListBox styleName="gwt-ListBox {style.PathView-Obj8}" height="30px" width="100px" ui:field="listArrange"/>
 				</g:HorizontalPanel>
 			</g:HTMLPanel>

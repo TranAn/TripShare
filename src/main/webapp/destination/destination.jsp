@@ -8,8 +8,8 @@
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@ page import="com.born2go.shared.Picture"%>
-<%@ page import="com.born2go.shared.Journey"%>
-<%@ page import="com.born2go.shared.Locate"%>
+<%@ page import="com.born2go.shared.embedclass.Journey"%>
+<%@ page import="com.born2go.shared.embedclass.Locate"%>
 <%@ page import="com.born2go.server.DataServiceImpl"%>
 <%@ page import="java.util.ArrayList"%>
 <%@page import="java.io.IOException"%>
@@ -57,7 +57,7 @@
 	Path path = new Path();
 	String pathId = "";
 	String pathTitle = "";
-	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d - hh:mm:ss");
+	java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy MMM d - HH:mm:ss");
 	String pathPicture = "";
 	//Get the data 
 	if (request.getPathInfo() == null || request.getPathInfo().length() < 1) {
@@ -85,12 +85,7 @@
 				pathTitle = path.getLocate().getAddressName();
 			List<Long> gallery = path.getGallery();	
 			if(gallery != null && !gallery.isEmpty()) {
-				if(path.getAvatar() == null) {
-					pathPicture = service.findPicture(path.getGallery().get(0)).getServeUrl();
-				}
-				else {
-					pathPicture = path.getAvatar();
-				}
+				pathPicture = service.findPicture(path.getGallery().get(0)).getServeUrl();
 			}
 			if(path.getTripId() != null)
 				trip = service.findTrip(path.getTripId());
@@ -279,119 +274,136 @@
 
 	<!-- Add Content here -->
 	<div id="content">
+		<div id="left_panel">
+		<div id="destinationToolbar" style="margin-top: 0px; height: 57px;"></div>
 		<div class="pathInfo">
 			<div>
-				<!-- Add content -->
-				<table style="width: 100%;">
-					<tr>
-						<td valign="top" style="padding-right: 10px;">
-							<div class="left_Path">
-								<div id="pathTitle" class="font_4 "><%=pathTitle%></div>
-								<div style="float: right;">
-									<div class="fb-like" data-href="http://born2go-b.appspot.com/destination/<%= pathId %>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
-								</div>
-								<div style="height: 48px;">
-								<%if(path.getPoster() != null) {%>
-								<p class="font_9">
-									<span>Post by: </span>
-									<a href="/profile/<%=path.getPoster().getUserID()%>"><%=path.getPoster().getUserName()%></a>
-									<img style="border: 1px silver solid;border-radius: 20px;overflow: hidden;margin-left: 8px;margin-bottom: -15px;" src="https://graph.facebook.com/<%=path.getPoster().getUserID()%>/picture?width=25&height=25" />
-								</p>
-								<%;} %>
-								<%if(path.getCreateDate() != null) {%>
-								<p class="font_9">Date post: <%=df.format(path.getCreateDate())%></p>
-								<%;} %>
-								</div>
-								<div style="background: whitesmoke;min-height: 10px;padding: 15px 0px;">
-								<%if(!pathPicture.equals("")) {%>									
-								<img id="destination_featured_photo" src="<%=pathPicture+"=s1600"%>" class="one_imageView">	
-								<%} %>																				
-								</div>
+				<!-- Add content -->					
+				<div id="pathTitle" class="font_4 "><%=pathTitle%></div>
+				<div style="float: right;">
+					<div class="fb-like" data-href="http://born2go-b.appspot.com/destination/<%= pathId %>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+				</div>
+				<div style="height: 48px;">
+				<%if(path.getPoster() != null) {%>
+				<p class="font_9">
+					<span>Post by: </span>
+					<a href="/profile/<%=path.getPoster().getUserID()%>"><%=path.getPoster().getUserName()%></a>
+					<img style="border: 1px silver solid;border-radius: 20px;overflow: hidden;margin-left: 8px;margin-bottom: -15px;" src="https://graph.facebook.com/<%=path.getPoster().getUserID()%>/picture?width=25&height=25" />
+				</p>
+				<%;} %>
+				<%if(path.getCreateDate() != null) {%>
+				<p class="font_9">Date post: <%=df.format(path.getCreateDate())%></p>
+				<%;} %>
+				</div>
+				
+				<%-- <div style="background: whitesmoke;min-height: 10px;padding: 15px 0px;">
+				<%if(!pathPicture.equals("")) {%>									
+				<img id="destination_featured_photo" src="<%=pathPicture+"=s1600"%>" class="one_imageView">	
+				<%} %>																				
+				</div> --%>
+				
+				<%if(path.getLocate() == null) {%>
+				<div class="tripMap" style="border-top: 1px solid whitesmoke; box-shadow: none;"></div>
+				<%} else { %>
+				<div id="destinationLocate" class="tripMap" style="height: 300px; border-top: 1px solid silver;"></div>
+				<%} %>
+				
+				<!-- Editor content -->
+				<div id="pathDescription" style=" overflow: auto; margin-top: 20px;">
+					<p style="font-size: 15px; line-height: 1.6em; white-space: pre-line;"><%=path.getDescription()%></p>
+				</div>
+				<!-- Trip info -->
+				<div style="height: 20px; padding-top: 10px;">
+					<p class="font_9">
+					On Journey: <a href="/journey/<%=trip.getId()%>"><%=trip.getName()%></a>
+					</p>
+				</div>
+				<!-- Toolbar -->
+				<div style="height: 55px;">
+					<div class="font-blackTitleLarge" style="position: absolute; float: left;margin-top: 30px; color: gray;">Gallery:</div>
+					<div id="pathUploadTool" style="position: relative; float: right; top: 15px; font-size: small;"> 													
+					</div>	
+					<div id="pathEditTool" style="position: relative; float: right; top: 15px; font-size: small; margin-right: 10px;">
+					</div>							
+				</div>
+				<div style="with:100%; border: 1px solid #ccc; margin: 15px 0px" id="gallery" class="gallery"></div>
+				<!--  -->
+				<div id="facebook">
+					<div class="fb-like"
+						data-href="http://born2go-b.appspot.com/destination/<%= pathId %>"
+						data-layout="standard" data-action="like"
+						data-show-faces="true" data-share="true"></div>
+					<div class="fb-comments" data-width="100%"
+						data-href="http://born2go-b.appspot.com/destination/<%= pathId %>"
+						data-numposts="5" data-colorscheme="light" data-order-by="reverse_time" data-version="v2.3"></div>
+				</div>
+			</div>
+		
+			<%-- <div class="right_Path">
+				<div>
+					<div style="margin-top: 20px;" class="font_6">ONTRIP
+						POSTS:</div>
+					<ul class="a">
+						<li class="font_4" style="font-size: 14px"><a>Path 1
+								Home - Office</a></li>
+						<li class="font_4" style="font-size: 14px"><a>Path 2
+								Home - Office</a></li>
+						<li class="font_4" style="font-size: 14px"><a>Path 3
+								Home - Office</a></li>
+					</ul>
+				</div>
+				<hr style="margin-bottom: 20px;" />
 
-								<br/>
-								<!-- Editor content -->
-								<div id="pathDescription" style=" overflow: auto;">
-									<p style="font-size: 15px; line-height: 1.6em; white-space: pre-line;"><%=path.getDescription()%></p>
-								</div>
-								<!-- Trip info -->
-								<div style="height: 20px; padding-top: 10px;">
-									<p class="font_9">
-									On Journey: <a href="/journey/<%=trip.getId()%>"><%=trip.getName()%></a>
-									</p>
-								</div>
-								<!-- Toolbar -->
-								<div style="height: 55px;">
-									<div class="font-blackTitleLarge" style="position: absolute; float: left;margin-top: 30px; color: gray;">Gallery:</div>
-									<div id="pathUploadTool" style="position: relative; float: right; top: 15px; font-size: small;"> 													
-									</div>	
-									<div id="pathEditTool" style="position: relative; float: right; top: 15px; font-size: small; margin-right: 10px;">
-									</div>							
-								</div>
-								<div style="with:100%; border: 1px solid #ccc;   margin: 15px 0px" id="gallery" class="gallery"></div>
-								<!--  -->
-								<div id="facebook">
-									<div class="fb-like"
-										data-href="http://born2go-b.appspot.com/destination/<%= pathId %>"
-										data-layout="standard" data-action="like"
-										data-show-faces="true" data-share="true"></div>
-									<div class="fb-comments" data-width="100%"
-										data-href="http://born2go-b.appspot.com/destination/<%= pathId %>"
-										data-numposts="5" data-colorscheme="light" data-order-by="reverse_time" data-version="v2.3"></div>
-								</div>
-							</div>
-						</td>
-						
-						<td valign="top">
-							<div class="right_Path">
-								<div>
-									<div style="margin-top: 20px;" class="font_6">ONTRIP
-										POSTS:</div>
-									<ul class="a">
-										<li class="font_4" style="font-size: 14px"><a>Path 1
-												Home - Office</a></li>
-										<li class="font_4" style="font-size: 14px"><a>Path 2
-												Home - Office</a></li>
-										<li class="font_4" style="font-size: 14px"><a>Path 3
-												Home - Office</a></li>
-									</ul>
-								</div>
-								<hr style="margin-bottom: 20px;" />
+				<div>
+					<div style="margin-top: 20px;" class="font_6">FOLLOW ME:</div>
+					<div class="image"
+						style="width: 131px; height: 146px; margin: auto; padding-top: 20px;">
+						<img src="/resources/Travel tips2_resize.jpg"
+							style="margin-top: 0px; margin-left: 0px; width: 131px; height: 146px;" />
+					</div>
+					<!-- <div style="margin-top: 20px">
+						<div align="left">FaceBook</div>
+						<div align="center" style="margin-top: -18px;">Twinter</div>
+						<div align="right" style="margin-top: -18px;">Google +</div>
+					</div> -->
+				</div>
+				<hr style="margin-bottom: 20px;" />
 
-								<div>
-									<div style="margin-top: 20px;" class="font_6">FOLLOW ME:</div>
-									<div class="image"
-										style="width: 131px; height: 146px; margin: auto; padding-top: 20px;">
-										<img src="/resources/Travel tips2_resize.jpg"
-											style="margin-top: 0px; margin-left: 0px; width: 131px; height: 146px;" />
-									</div>
-									<!-- <div style="margin-top: 20px">
-										<div align="left">FaceBook</div>
-										<div align="center" style="margin-top: -18px;">Twinter</div>
-										<div align="right" style="margin-top: -18px;">Google +</div>
-									</div> -->
-								</div>
-								<hr style="margin-bottom: 20px;" />
-
-								<div>
-									<div style="margin-top: 20px;" class="font_6">RELATIVE
-										POST:</div>
-									<ul class="a">
-										<li class="font_4" style="font-size: 14px"><a>Path 1
-												Home - Office</a></li>
-										<li class="font_4" style="font-size: 14px"><a>Path 2
-												Home - Office</a></li>
-										<li class="font_4" style="font-size: 14px"><a>Path 3
-												Home - Office</a></li>
-									</ul>
-								</div>
-								<%-- <div class="font-blackTitleLarge" style="margin-top: 30px;">Mô
-									tả:</div>
-								<div
-									style="font-size: 15px; line-height: 1.8em; white-space: pre-line;"><%=path.getDescription()%></div> --%>
-							</div>
-						</td>
-					</tr>
-				</table>
+				<div>
+					<div style="margin-top: 20px;" class="font_6">RELATIVE
+						POST:</div>
+					<ul class="a">
+						<li class="font_4" style="font-size: 14px"><a>Path 1
+								Home - Office</a></li>
+						<li class="font_4" style="font-size: 14px"><a>Path 2
+								Home - Office</a></li>
+						<li class="font_4" style="font-size: 14px"><a>Path 3
+								Home - Office</a></li>
+					</ul>
+				</div>
+				<div class="font-blackTitleLarge" style="margin-top: 30px;">Mô
+					tả:</div>
+				<div
+					style="font-size: 15px; line-height: 1.8em; white-space: pre-line;"><%=path.getDescription()%></div>
+			</div> --%>
+		</div>
+		</div>
+		
+		<div id="right_panel" style="margin-top: 70px;">
+			<div class="advertise">
+				<img alt="" src="/resources/advertise-with-us-copy.jpg" style="width: 257px;">
+			</div>
+			<div style="float: left; margin-right: 10px;">
+				<img alt="" src="/resources/appstore.png" style="width: 145px; height: 50px; cursor: pointer;">
+			</div>
+			<div>
+				<img alt="" src="/resources/googleplay.jpg" style="width: 145px; height: 50px; cursor: pointer;">
+			</div>
+			<div class="advertise" style="margin-top: 10px;height: 100px">
+				<span style="font-size: 15px; font-weight: bold;">Connect with Born2Go!</span>
+				<br/> <br/>
+				<div class="fb-like" data-href="http://born2go-b.appspot.com/" data-width="260" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
+				<span style="color: #09f; cursor: pointer; margin-left: 10px;">Follow Born2Go</span>
 			</div>
 		</div>
 	</div>

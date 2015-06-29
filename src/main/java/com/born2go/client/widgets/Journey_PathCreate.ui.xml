@@ -126,8 +126,8 @@
 	.PathCreate-Obj14 {
 		float: right;
 		position: relative;
-  		top: -6px;
- 		right: 2px;
+  		top: -8px;
+ 		right: 0px;
 	}
 	
 	.PathCreate-Obj15 {
@@ -208,25 +208,25 @@
 				<g:Label text="Post to:" width="55px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>
 				</td>
 				<td style="padding-left: 5px;">
-				<g:ListBox styleName="gwt-ListBox {style.PathCreate-Obj17}" width="130px" height="28px" ui:field="lbPostTo"/>
+				<g:ListBox styleName="gwt-ListBox {style.PathCreate-Obj17}" width="70px" height="28px" ui:field="lbPostTo"/>
 				</td>
 				<!--  -->
-				<td style="border-right: 1px dotted silver; padding-left: 20px;"></td>
+				<td style="border-right: 1px dotted silver; padding-left: 15px;"></td>
 				<!--  -->
 				<td style="padding-top: 5px;">
-				<g:Label text="Title:" ui:field="lbTitle" width="55px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>
+				<g:Label text="Title:" ui:field="lbTitle" width="45px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>
 				</td>
 				<td style="padding-left: 5px;">
-				<g:TextBox width="" ui:field="txbTitle" height=""/>
+				<g:TextBox width="150px" ui:field="txbTitle" height=""/>
 				</td>
 				<td style="padding-top: 5px;">
-				<g:Label text="Time:" width="70px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>
+				<g:Label text="Time:" width="60px" styleName="font-blackTitleNormal" horizontalAlignment="ALIGN_RIGHT"/>
 				</td>
 				<td style="padding-left: 5px;">
-				<p1:DateBox width="" ui:field="txbTimeline" height="18px"/>
+				<p1:DateBox width="140px" ui:field="txbTimeline" height="18px"/>
 				</td>
 				<!--  -->
-				<td style="border-right: 1px dotted silver; padding-left: 25px;"></td>
+				<td style="border-right: 1px dotted silver; padding-left: 15px;"></td>
 				<!--  -->
 			</tr>
 			</table>

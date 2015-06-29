@@ -85,7 +85,7 @@ public class TripShare implements EntryPoint {
 					@Override
 					public void onSuccess(Trip result) {
 						tripMap.drawTheJourney(result.getJourney().getDirections(),
-								result.getJourney().getLocates());
+								result.getJourney().getLocates(), true);
 					}
 					@Override
 					public void onFailure(Throwable caught) {}
@@ -119,7 +119,7 @@ public class TripShare implements EntryPoint {
 					pathView.setDirectionResult(directionResult);
 			}
 			@Override
-			public void getCurrentLocation(String address, LatLng position) {
+			public void getLocation(String address, LatLng position) {
 				if (RootPanel.get("createTrip") != null) 
 					createTrip.setYourLocation(address, position);
 			}
@@ -192,7 +192,7 @@ public class TripShare implements EntryPoint {
 	}
 
 	public static final String dateFormat(Date date) {
-		String dateString = "yyyy MMM d - hh:mm:ss";
+		String dateString = "yyyy MMM d - HH:mm:ss";
 		DateTimeFormat formatDate = DateTimeFormat.getFormat(dateString);
 		return formatDate.format(date);
 	}

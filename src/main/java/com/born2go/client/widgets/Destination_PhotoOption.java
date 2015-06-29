@@ -25,7 +25,7 @@ public class Destination_PhotoOption extends DialogBox {
 			
 	public interface Listener {
 		void onViewClick();
-		void onSetFeaturedPhotoClick();
+//		void onSetFeaturedPhotoClick();
 		void onDeleteClick();
 	}
 	
@@ -69,12 +69,12 @@ public class Destination_PhotoOption extends DialogBox {
 		}
 	}
 	
-	@UiHandler("btnSetFeaturedPhoto")
-	void onBtnSetFeaturedPhotoClick(ClickEvent event) {
-		if(listener != null) {
-			listener.onSetFeaturedPhotoClick();
-		}
-	}
+//	@UiHandler("btnSetFeaturedPhoto")
+//	void onBtnSetFeaturedPhotoClick(ClickEvent event) {
+//		if(listener != null) {
+//			listener.onSetFeaturedPhotoClick();
+//		}
+//	}
 	
 	@UiHandler("btnDelete")
 	void onBtnDeleteClick(ClickEvent event) {
