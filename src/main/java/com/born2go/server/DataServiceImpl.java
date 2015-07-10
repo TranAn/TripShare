@@ -33,40 +33,76 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	private BlobstoreService blobStoreService = BlobstoreServiceFactory.getBlobstoreService();
 
 	/**
-	 * impls for Trip
+	 * Exchange token
+	 */
+	
+	@Override
+	public String getLongLiveToken(String accessToken) throws Exception{
+		String url = "https://graph.facebook.com/oauth/access_token?"  
+				+ "grant_type=fb_exchange_token&"
+				+ "client_id=386540048195283&"
+				+ "client_secret=e46d1a5f49dfa88cce1e3396526d8cd6&"
+				+ "fb_exchange_token="+ accessToken;
+		 
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+	
+		// optional default is GET
+		con.setRequestMethod("GET");
+	
+		//add request header
+		con.setRequestProperty("User-Agent", "Mozilla/5.0");
+	
+		/*int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);*/
+	
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+	
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+		
+		String token[] = response.toString().replaceAll("access_token=", "").split("&");
+		/*System.out.println("long live token="+ token[0]);*/
+		return token[0];
+	}
+
+	/**
+	 * Impl for Trip
 	 */
 	
 	@Override
 	public Trip insertTrip(Trip trip, String accessToken) {
-		Trip exportTrip;
-		try {
-			if(accessToken != null) {
-				Poster poster = getPoster(accessToken);
+		Trip exportTrip = null;
+		if(accessToken != null) {
+			Poster poster = getPoster(accessToken);
+			if(poster != null) {
 				trip.setPoster(poster);
-			}
-			trip.setCreateDate(new Date());
-			Key<Trip> key = ofy().save().entity(trip).now();
-			exportTrip = ofy().load().key(key).now();
-			//save trip to user
-			User user = ofy().load().type(User.class).id(exportTrip.getPoster().getUserID().toString()).now();
-			if(user != null) {
-				user.getMyTrips().add(exportTrip.getId());
-				ofy().save().entity(user);
-			}
-			if(!trip.getCompanion().isEmpty()) {
-				for(Poster p: trip.getCompanion()) {
-					User u = ofy().load().type(User.class).id(p.getUserID().toString()).now();
-					if(u != null) {
-						u.getMyTrips().add(exportTrip.getId());
-						ofy().save().entity(u);
+				trip.setCreateDate(new Date());
+				Key<Trip> key = ofy().save().entity(trip).now();
+				exportTrip = ofy().load().key(key).now();
+				//save trip to user
+				User user = ofy().load().type(User.class).id(exportTrip.getPoster().getUserID().toString()).now();
+				if(user != null) {
+					user.getMyTrips().add(exportTrip.getId());
+					ofy().save().entity(user);
+				}
+				if(!trip.getCompanion().isEmpty()) {
+					for(Poster p: trip.getCompanion()) {
+						User u = ofy().load().type(User.class).id(p.getUserID().toString()).now();
+						if(u != null) {
+							u.getMyTrips().add(exportTrip.getId());
+							ofy().save().entity(u);
+						}
 					}
 				}
 			}
-			return exportTrip;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
 		}
+		return exportTrip;
 	}
 
 	@Override
@@ -84,10 +120,11 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Trip updateTrip(Trip trip) {
-		Trip exportTrip;
+	public Trip updateTrip(Trip trip, String accessToken) {
+		Trip exportTrip = null;
 		Trip oldTrip = findTrip(trip.getId());
-		if (oldTrip != null) {
+		Poster poster = getPoster(accessToken);
+		if (oldTrip != null && poster != null && poster.getUserID().equals(oldTrip.getPoster().getUserID())) {
 			// Update theme
 			if(trip.getTheme() != null) {
 				if(!trip.getTheme().equals(oldTrip.getTheme())) {
@@ -118,53 +155,60 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 			// Update trip
 			Key<Trip> key = ofy().save().entity(trip).now();
 			exportTrip = ofy().load().key(key).now();
-		} else
-			exportTrip = null;
+		} 
 		return exportTrip;
 	}
 
 	@Override
-	public void removeTrip(Long idTrip) {
+	public void removeTrip(Long idTrip, String accessToken) {
 		Trip oldTrip = findTrip(idTrip);
-		if (oldTrip != null)
+		Poster poster = getPoster(accessToken);
+		if (oldTrip != null && poster != null && poster.getUserID().equals(oldTrip.getPoster().getUserID())) {
+			//Delete the link trip in the owner and companions
+			User u = ofy().load().type(User.class).id(oldTrip.getPoster().getUserID()).now();
+			if(u != null) {
+				u.getMyTrips().remove(oldTrip.getId());
+				ofy().save().entity(u);
+			}
+			for(Poster p: oldTrip.getCompanion()) {
+				User us = ofy().load().type(User.class).id(p.getUserID()).now();
+				if(us != null) {
+					us.getMyTrips().remove(oldTrip.getId());
+					ofy().save().entity(us);
+				}
+			}
+			//Delete Trip
 			ofy().delete().entity(oldTrip);
+		}
 	}
 
 	/**
-	 * impls for Part
+	 * Impls for Part
 	 */
 	
 	@Override
-	public Path insertPart(Path path, Long tripId, String accessToken) {
-		Path exportPath;
+	public Path insertPath(Path path, Long tripId, String accessToken) {
+		Path exportPath = null;
 		Trip trip = ofy().load().type(Trip.class).id(tripId).now();
-		if(trip != null) {
-			try {
-				if(accessToken != null) {
-					Poster poster = getPoster(accessToken);
-					path.setPoster(poster);
-				}
+		if(trip != null && accessToken != null) {
+			Poster poster = getPoster(accessToken);
+			if(poster != null) {
+				path.setPoster(poster);
 				path.setTripId(tripId);
 				String preshortHtml = getPlainText(path.getDescription());
-				System.out.println(preshortHtml);
 				path.setShortDescription(Jsoup.parse(preshortHtml).text());
 				Key<Path> key = ofy().save().entity(path).now();
 				exportPath = ofy().load().key(key).now();
 				//--
 				trip.getDestination().add(exportPath.getId());
 				ofy().save().entity(trip);
-				return exportPath;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
 			}
 		}
-		else
-			return null;
+		return exportPath;
 	}
 
 	@Override
-	public Path findPart(Long idPath) {
+	public Path findPath(Long idPath) {
 		Path exportPath;
 		exportPath = ofy().load().type(Path.class).id(idPath).now();
 		return exportPath;
@@ -178,68 +222,41 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Path updatePart(Path path) {
-		Path exportPath;
-		Path oldData = findPart(path.getId());
-		if (oldData != null) {
+	public Path updatePath(Path path, String accessToken) {
+		Path exportPath = null;
+		Path oldData = findPath(path.getId());
+		Poster poster = getPoster(accessToken);
+		if (oldData != null && poster != null && poster.getUserID().equals(oldData.getPoster().getUserID())) {
 			if(!oldData.getDescription().equals(path.getDescription())) {
 				String preshortHtml = getPlainText(path.getDescription());
-				System.out.println(preshortHtml);
 				path.setShortDescription(Jsoup.parse(preshortHtml).text());
 			}
 			Key<Path> key = ofy().save().entity(path).now();
 			exportPath = ofy().load().key(key).now();
-		} else
-			exportPath = null;
+		} 
 		return exportPath;
 	}
 
 	@Override
-	public void removePart(Long idPath) {
-		Path oldData = findPart(idPath);
-		if (oldData != null)
+	public void removePath(Long idPath, String accessToken) {
+		Path oldData = findPath(idPath);
+		Poster poster = getPoster(accessToken);
+		if (oldData != null && poster != null && poster.getUserID().equals(oldData.getPoster().getUserID())) {
+			//Delete the link part on the trip
+			Trip trip = ofy().load().type(Trip.class).id(oldData.getTripId()).now();
+			if(trip != null) {
+				trip.getDestination().remove(oldData.getId());
+				ofy().save().entity(trip);
+			}
+			//Delete Part
 			ofy().delete().entity(oldData);
+		}
 	}
 	
 	/**
-	 * impls for User
+	 * Impls for User
 	 */
-
-	@Override
-	public String getLongLiveToken(String accessToken) throws Exception{
-		String url = "https://graph.facebook.com/oauth/access_token?"  
-				+ "grant_type=fb_exchange_token&"
-				+ "client_id=386540048195283&"
-				+ "client_secret=e46d1a5f49dfa88cce1e3396526d8cd6&"
-				+ "fb_exchange_token="+ accessToken;
-		 
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
- 
-		// optional default is GET
-		con.setRequestMethod("GET");
- 
-		//add request header
-		con.setRequestProperty("User-Agent", "Mozilla/5.0");
- 
-		/*int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);*/
- 
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
- 
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
-		}
-		in.close();
-		
-		String token[] = response.toString().replaceAll("access_token=", "").split("&");
-		/*System.out.println("long live token="+ token[0]);*/
-		return token[0];
-	}
-
+	
 	@Override
 	public void insertUser(User user) {
 		User existUser = ofy().load().type(User.class).id(user.getId()).now();
@@ -267,37 +284,44 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		return result;
 	}
 
-	@Override
-	public User updateUser(User user) {
-		User exportUser ;
-		User oldData = findUser(user.getId());
-		if (oldData != null) {
-			Key<User> key = ofy().save().entity(user).now();
-			exportUser = ofy().load().key(key).now();
-		} else
-			exportUser = null;
-		return exportUser;
-	}
+//	@Override
+//	public User updateUser(User user) {
+//		User exportUser ;
+//		User oldData = findUser(user.getId());
+//		if (oldData != null) {
+//			Key<User> key = ofy().save().entity(user).now();
+//			exportUser = ofy().load().key(key).now();
+//		} else
+//			exportUser = null;
+//		return exportUser;
+//	}
 
-	@Override
-	public void removeUser(String idUser) {
-		User oldData = findUser(idUser);
-		ofy().delete().entity(oldData);
-	}
+//	@Override
+//	public void removeUser(String idUser) {
+//		User oldData = findUser(idUser);
+//		ofy().delete().entity(oldData);
+//	}
 	
 	/**
-	 * impls for Picture
+	 * Impls for Picture
 	 */
 
 	@Override
-	public String getUploadUrl() {
-		return blobStoreService.createUploadUrl("/photo_upload");
+	public String getUploadUrl(Long pathId, Long tripId, String accessToken) {
+		Trip oldTrip = findTrip(tripId);
+		Path oldPath = findPath(pathId);
+		Poster poster = getPoster(accessToken);
+		if(oldTrip != null && poster != null && poster.getUserID().equals(oldTrip.getPoster().getUserID())
+				|| oldPath != null && poster != null && poster.getUserID().equals(oldPath.getPoster().getUserID())) 
+			return blobStoreService.createUploadUrl("/photo_upload");
+		else
+			return "#";
 	}
 
-	@Override
-	public void insertPicture(Picture picture) {
-		ofy().save().entity(picture);
-	}
+//	@Override
+//	public void insertPicture(Picture picture) {
+//		ofy().save().entity(picture);
+//	}
 
 	@Override
 	public Picture findPicture(Long idPicture) {
@@ -313,69 +337,81 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public void deletePicture(Long idPicture) {
+	public void deletePicture(Long idPicture, String accessToken) {
 		Picture p = findPicture(idPicture);
+		Trip oldTrip = null;
+		if(p.getOnTrip() != null)
+			oldTrip = findTrip(p.getOnTrip());
+		Path oldPath = null;
+		if(p.getOnPath() != null)
+			oldPath = findPath(p.getOnPath());
+		Poster poster = getPoster(accessToken);
 		if(p != null) {
-			//Delete blob
-			BlobKey blobKey = new BlobKey(p.getKey());
-			blobStoreService.delete(blobKey);
-			//Delete link on Trip of on Path
-			if(p.getOnPath() == null) {
-				Trip trip = ofy().load().type(Trip.class).id(p.getOnTrip()).now();
-				if(trip != null)
-					trip.getGallery().remove(p.getId());
-				ofy().save().entity(trip);
-			}
-			else {
-				Path path = ofy().load().type(Path.class).id(p.getOnPath()).now();
-				if(path != null) {
-//					if(path.getGallery().get(path.getFeaturedPhoto()).equals(idPicture))
-//						path.setFeaturedPhoto(null);
-//					else if(path.getGallery().indexOf(idPicture) < path.getFeaturedPhoto())
-//						path.setFeaturedPhoto(path.getFeaturedPhoto() - 1);
-					path.getGallery().remove(p.getId());
+			if(oldTrip != null && poster != null && poster.getUserID().equals(oldTrip.getPoster().getUserID())
+					|| oldPath != null && poster != null && poster.getUserID().equals(oldPath.getPoster().getUserID())) {
+				//Delete blob
+				BlobKey blobKey = new BlobKey(p.getKey());
+				blobStoreService.delete(blobKey);
+				//Delete link on Trip of on Path
+				if(p.getOnPath() == null) {
+					Trip trip = ofy().load().type(Trip.class).id(p.getOnTrip()).now();
+					if(trip != null) {
+						trip.getGallery().remove(p.getId());
+						ofy().save().entity(trip);
+					}
 				}
-				ofy().save().entity(path);
+				else {
+					Path path = ofy().load().type(Path.class).id(p.getOnPath()).now();
+					if(path != null) {
+						path.getGallery().remove(p.getId());
+						ofy().save().entity(path);
+					}
+				}
+				//Delete picture
+				ofy().delete().entity(p);
 			}
-			//Delete picture
-			ofy().delete().entity(p);
 		}
 	}
 	
 	//----- Java function -----
 	
-	private Poster getPoster(String accessToken) throws Exception{
-		String url = "https://graph.facebook.com/me?access_token=" + accessToken;
-		 
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-	
-		// optional default is GET
-		con.setRequestMethod("GET");
-	
-		//add request header
-		con.setRequestProperty("User-Agent", "Mozilla/5.0");
-	
-		/*int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);*/
-	
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-	
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
-		}
-		in.close();
-	
-		//print result
-		JSONObject myObj = new JSONObject(response.toString());
-		Poster poster = new Poster();
-		poster.setUserID(myObj.getLong("id"));
-		poster.setUserName(myObj.getString("name"));
+	private Poster getPoster(String accessToken) {
+		try {
+			String url = "https://graph.facebook.com/me?access_token=" + accessToken;
+			 
+			URL obj = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		
-		return poster;
+			// optional default is GET
+			con.setRequestMethod("GET");
+		
+			//add request header
+			con.setRequestProperty("User-Agent", "Mozilla/5.0");
+		
+			/*int responseCode = con.getResponseCode();
+			System.out.println("\nSending 'GET' request to URL : " + url);
+			System.out.println("Response Code : " + responseCode);*/
+		
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+		
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+		
+			//print result
+			JSONObject myObj = new JSONObject(response.toString());
+			Poster poster = new Poster();
+			poster.setUserID(myObj.getLong("id"));
+			poster.setUserName(myObj.getString("name"));
+			
+			return poster;
+			
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 	private String getPlainText(String strSrc) {

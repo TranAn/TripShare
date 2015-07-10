@@ -22,20 +22,20 @@ public interface DataService extends RemoteService {
 	
 	public List<Trip> listOfTrip(List<Long> idsTrip);
 
-	public Trip updateTrip(Trip trip);
+	public Trip updateTrip(Trip trip, String accessToken);
 
-	public void removeTrip(Long idTrip);
+	public void removeTrip(Long idTrip, String accessToken);
 
 	// part
-	public Path insertPart(Path part, Long tripId, String accessToken);
+	public Path insertPath(Path path, Long tripId, String accessToken);
 
-	public Path findPart(Long idPart);
+	public Path findPath(Long idPath);
 	
 	public List<Path> listOfPath(List<Long> idsPath);
 
-	public Path updatePart(Path part);
+	public Path updatePath(Path path, String accessToken);
 
-	public void removePart(Long idPart);
+	public void removePath(Long idPath, String accessToken);
 
 	// user
 	public void insertUser(User user);
@@ -44,19 +44,19 @@ public interface DataService extends RemoteService {
 	
 	public List<User> listOfUser(List<String> idsUser);
 
-	public User updateUser(User user);
+//	public User updateUser(User user);
 
-	public void removeUser(String idUser);
+//	public void removeUser(String idUser);
 
 	// picture
-	public String getUploadUrl();
+	public String getUploadUrl(Long pathId, Long tripId, String accessToken);
 
-	public void deletePicture(Long idPicture);
+	public void deletePicture(Long idPicture, String accessToken);
 
 	public Picture findPicture(Long idPicture);
 	
 	public List<Picture> listPicture(List<Long> idsPicture);
 
-	public void insertPicture(Picture picture);
+//	public void insertPicture(Picture picture);
 
 }

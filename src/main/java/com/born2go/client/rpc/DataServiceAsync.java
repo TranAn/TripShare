@@ -20,20 +20,20 @@ public interface DataServiceAsync {
 	
 	void listOfTrip(List<Long> idsTrip, AsyncCallback<List<Trip>> callback);
 
-	void updateTrip(Trip trip, AsyncCallback<Trip> callback);
+	void updateTrip(Trip trip, String accessToken, AsyncCallback<Trip> callback);
 
-	void removeTrip(Long idTrip, AsyncCallback<Void> callback);
+	void removeTrip(Long idTrip, String accessToken, AsyncCallback<Void> callback);
 
 	// part
-	void insertPart(Path part, Long tripId, String accessToken, AsyncCallback<Path> callback);
+	void insertPath(Path path, Long tripId, String accessToken, AsyncCallback<Path> callback);
 
-	void findPart(Long idPart, AsyncCallback<Path> callback);
+	void findPath(Long idPath, AsyncCallback<Path> callback);
 	
 	void listOfPath(List<Long> idsPath, AsyncCallback<List<Path>> callback);
 
-	void updatePart(Path part, AsyncCallback<Path> callback);
+	void updatePath(Path path, String accessToken, AsyncCallback<Path> callback);
 
-	void removePart(Long idPart, AsyncCallback<Void> callback);
+	void removePath(Long idPath, String accessToken, AsyncCallback<Void> callback);
 
 	// user
 	void insertUser(User user, AsyncCallback<Void> callback);
@@ -42,19 +42,19 @@ public interface DataServiceAsync {
 	
 	void listOfUser(List<String> idsUser, AsyncCallback<List<User>> callback);
 
-	void updateUser(User user, AsyncCallback<User> callback);
+//	void updateUser(User user, AsyncCallback<User> callback);
 
-	void removeUser(String idUser, AsyncCallback<Void> callback);
+//	void removeUser(String idUser, AsyncCallback<Void> callback);
 
 	// picture
-	void getUploadUrl(AsyncCallback<String> callback);
+	void getUploadUrl(Long pathId, Long tripId, String accessToken, AsyncCallback<String> callback);
 
-	void deletePicture(Long idPicture, AsyncCallback<Void> callback);
+	void deletePicture(Long idPicture, String accessToken, AsyncCallback<Void> callback);
 
 	void findPicture(Long idPicture, AsyncCallback<Picture> callback);
 	
 	void listPicture(List<Long> idsPicture, AsyncCallback<List<Picture>> callback);
 
-	void insertPicture(Picture picture, AsyncCallback<Void> callback);
+//	void insertPicture(Picture picture, AsyncCallback<Void> callback);
 	
 }
