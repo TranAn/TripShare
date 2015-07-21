@@ -6,7 +6,6 @@ import org.timepedia.exporter.client.ExporterUtil;
 
 import com.born2go.client.rpc.DataService;
 import com.born2go.client.rpc.DataServiceAsync;
-import com.born2go.client.widgets.BetaTripSample;
 import com.born2go.client.widgets.Create_CreateTrip;
 import com.born2go.client.widgets.Destination_EditToolBar;
 import com.born2go.client.widgets.Journey_PathView;
@@ -93,11 +92,6 @@ public class TripShare implements EntryPoint {
 			}
 		}
 		
-		if (RootPanel.get("betaTrip") != null) {
-			BetaTripSample trip = new BetaTripSample();
-			RootPanel.get("betaTrip").add(trip);
-		}
-		
 		//--- User, login handler ---
 		exportGwtClass();
 		checkUserStatus();
@@ -128,10 +122,10 @@ public class TripShare implements EntryPoint {
 
 	private native void checkUserStatus() /*-{
 	    $wnd.FB.init({
-	      appId      : '386540048195283',
+	      appId      : '1636504239911870',
 	      cookie	 : true,
 	      xfbml      : true,
-	      version    : 'v2.2'
+	      version    : 'v2.3'
 	    });
 		
 		(function(d, s, id){
@@ -172,22 +166,22 @@ public class TripShare implements EntryPoint {
 		else {
 			pathView.checkPermission();
 			viewFullPath.checkPermission();
-			try {
-				dataService.getLongLiveToken(accessToken, new AsyncCallback<String>() {
-					@Override
-					public void onSuccess(String result) {
-						if(result != null && !result.isEmpty())
-							access_token = result;
-					}
-					@Override
-					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
-					}
-				});
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				dataService.getLongLiveToken(accessToken, new AsyncCallback<String>() {
+//					@Override
+//					public void onSuccess(String result) {
+//						if(result != null && !result.isEmpty())
+//							access_token = result;
+//					}
+//					@Override
+//					public void onFailure(Throwable caught) {
+//						// TODO Auto-generated method stub
+//					}
+//				});
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		}
 	}
 

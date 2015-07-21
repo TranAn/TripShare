@@ -14,27 +14,27 @@ import java.util.Map;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
-import com.born2go.client.rpc.DataService;
 import com.born2go.shared.Path;
-import com.born2go.shared.Picture;
 import com.born2go.shared.Trip;
 import com.born2go.shared.User;
 import com.born2go.shared.embedclass.Poster;
-import com.google.api.server.spi.config.AnnotationBoolean;
-import com.google.api.server.spi.config.ApiResourceProperty;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.google.api.server.spi.config.Api;
+import com.google.api.server.spi.config.ApiMethod;
+import com.google.api.server.spi.config.ApiMethod.HttpMethod;
+import com.google.api.server.spi.config.ApiNamespace;
+import com.google.api.server.spi.config.Named;
 import com.googlecode.objectify.Key;
 
-@SuppressWarnings("serial")
-public class DataServiceImpl extends RemoteServiceServlet implements
-		DataService {
-
-	private BlobstoreService blobStoreService = BlobstoreServiceFactory.getBlobstoreService();
-
-	//----- Java function -----
+/** An endpoint class we are exposing */
+@Api(name = "dataServiceApi",
+	 title = "Trip Share dataservice endpoints",
+     version = "v1",
+     namespace = @ApiNamespace(ownerDomain = "server.born2go.com",
+                                ownerName = "server.born2go.com",
+                                packagePath = ""))
+public class DataServiceApi {
+	
+	DataServiceImpl dataServiceImpl = new DataServiceImpl();
 	
 	private Poster getPoster(String accessToken) {
 		try {
@@ -74,7 +74,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 			return null;
 		}
 	}
-		
+	
 	private String getPlainText(String strSrc) {
 	    String resultStr = strSrc;
 
@@ -98,48 +98,15 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	    return resultStr;
 	}
 
-	//----- Exchange token -----
-	
-	@Override
-	public String getLongLiveToken(String accessToken) throws Exception{
-		String url = "https://graph.facebook.com/oauth/access_token?"  
-				+ "grant_type=fb_exchange_token&"
-				+ "client_id=386540048195283&"
-				+ "client_secret=e46d1a5f49dfa88cce1e3396526d8cd6&"
-				+ "fb_exchange_token="+ accessToken;
-		 
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-	
-		// optional default is GET
-		con.setRequestMethod("GET");
-	
-		//add request header
-		con.setRequestProperty("User-Agent", "Mozilla/5.0");
-	
-		/*int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);*/
-	
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-	
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
-		}
-		in.close();
-		
-		String token[] = response.toString().replaceAll("access_token=", "").split("&");
-		/*System.out.println("long live token="+ token[0]);*/
-		return token[0];
-	}
-
-	//----- Impl for Trip -----
-	
-	@Override
-	public Trip insertTrip(Trip trip, String accessToken) {
-		Trip exportTrip = null;
+	/**
+	 * Insert a trip
+	 * @param accessToken
+	 * @param trip
+	 * @return inserted trip
+	 */
+    @ApiMethod(name = "insertTrip", httpMethod = HttpMethod.POST)
+    public Trip insertTrip(@Named("accessToken") String accessToken, Trip trip) {
+    	Trip exportTrip = null;
 		if(accessToken != null) {
 			Poster poster = getPoster(accessToken);
 			if(poster != null) {
@@ -165,25 +132,41 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 			}
 		}
 		return exportTrip;
+    }
+    
+    /**
+     * Find trip by id
+     * @param tripId
+     * @return trip match the id
+     */
+    @ApiMethod(name = "findTrip", httpMethod = HttpMethod.GET)
+    public Trip findTrip(@Named("tripId") Long tripId) {
+//		Trip exportTrip;
+//		exportTrip = ofy().load().type(Trip.class).id(tripId).now();
+//		return exportTrip;
+    	return dataServiceImpl.findTrip(tripId);
 	}
-
-	@Override
-	@ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
-	public Trip findTrip(Long idTrip) {
-		Trip exportTrip;
-		exportTrip = ofy().load().type(Trip.class).id(idTrip).now();
-		return exportTrip;
-	}
-
-	@Override
-	public List<Trip> listOfTrip(List<Long> idsTrip) {
-		Map<Long, Trip> mapTrips = ofy().load().type(Trip.class).ids(idsTrip);
+    
+    /**
+     * Get all trip
+     * @param tripIds
+     * @return list all of trip
+     */
+    @ApiMethod(name = "listTrip", httpMethod = HttpMethod.GET)
+    public List<Trip> listTrip(@Named("tripIds") List<Long> tripIds) {
+		Map<Long, Trip> mapTrips = ofy().load().type(Trip.class).ids(tripIds);
 		List<Trip> result = new ArrayList<Trip>(mapTrips.values());
 		return result;
 	}
-
-	@Override
-	public Trip updateTrip(Trip trip, String accessToken) {
+    
+    /**
+     * Update a trip
+     * @param accessToken
+     * @param trip
+     * @return updated trip
+     */
+    @ApiMethod(name = "updateTrip", httpMethod = HttpMethod.PUT)
+    public Trip updateTrip(@Named("accessToken") String accessToken, Trip trip) {
 		Trip exportTrip = null;
 		Trip oldTrip = findTrip(trip.getId());
 		Poster poster = getPoster(accessToken);
@@ -221,10 +204,15 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		} 
 		return exportTrip;
 	}
-
-	@Override
-	public void removeTrip(Long idTrip, String accessToken) {
-		Trip oldTrip = findTrip(idTrip);
+    
+    /**
+     * Delete a trip
+     * @param accessToken
+     * @param tripId
+     */
+    @ApiMethod(name = "removeTrip", httpMethod = HttpMethod.DELETE)
+    public void removeTrip(@Named("accessToken") String accessToken, @Named("tripId") Long tripId) {
+		Trip oldTrip = findTrip(tripId);
 		Poster poster = getPoster(accessToken);
 		if (oldTrip != null && poster != null && poster.getUserID().equals(oldTrip.getPoster().getUserID())) {
 			//Delete the link trip in the owner and companions
@@ -244,11 +232,16 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 			ofy().delete().entity(oldTrip);
 		}
 	}
-
-	//----- Impls for Path -----
-	
-	@Override
-	public Path insertPath(Path path, Long tripId, String accessToken) {
+    
+    /**
+     * Insert a path (post)
+     * @param accessToken
+     * @param tripId
+     * @param path
+     * @return inserted path
+     */
+    @ApiMethod(name = "insertPath", httpMethod = HttpMethod.POST)
+    public Path insertPath(@Named("accessToken") String accessToken, @Named("tripId") Long tripId, Path path) {
 		Path exportPath = null;
 		Trip trip = ofy().load().type(Trip.class).id(tripId).now();
 		if(trip != null && accessToken != null) {
@@ -267,23 +260,39 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		}
 		return exportPath;
 	}
-
-	@Override
-	public Path findPath(Long idPath) {
+    
+    /**
+     * Find path (post) by id
+     * @param pathId
+     * @return path match the id
+     */
+    @ApiMethod(name = "findPath", httpMethod = HttpMethod.GET)
+    public Path findPath(@Named("pathId") Long pathId) {
 		Path exportPath;
-		exportPath = ofy().load().type(Path.class).id(idPath).now();
+		exportPath = ofy().load().type(Path.class).id(pathId).now();
 		return exportPath;
 	}
-
-	@Override
-	public List<Path> listOfPath(List<Long> idsPath) {
-		Map<Long, Path> mapPaths = ofy().load().type(Path.class).ids(idsPath);
+    
+    /**
+     * Get all path (post)
+     * @param pathIds
+     * @return list all of path
+     */
+    @ApiMethod(name = "listPath", httpMethod = HttpMethod.GET)
+    public List<Path> listPath(@Named("pathIds") List<Long> pathIds) {
+		Map<Long, Path> mapPaths = ofy().load().type(Path.class).ids(pathIds);
 		List<Path> result = new ArrayList<Path>(mapPaths.values());
 		return result;
 	}
-
-	@Override
-	public Path updatePath(Path path, String accessToken) {
+    
+    /**
+     * Update a path (post)
+     * @param accessToken
+     * @param path
+     * @return updated path
+     */
+    @ApiMethod(name = "updatePath", httpMethod = HttpMethod.PUT)
+    public Path updatePath(@Named("accessToken") String accessToken, Path path) {
 		Path exportPath = null;
 		Path oldData = findPath(path.getId());
 		Poster poster = getPoster(accessToken);
@@ -297,10 +306,15 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		} 
 		return exportPath;
 	}
-
-	@Override
-	public void removePath(Long idPath, String accessToken) {
-		Path oldData = findPath(idPath);
+    
+    /**
+     * Remove a path (post)
+     * @param accessToken
+     * @param pathId
+     */
+    @ApiMethod(name = "removePath", httpMethod = HttpMethod.DELETE)
+    public void removePath(@Named("accessToken") String accessToken, @Named("pathId") Long pathId) {
+		Path oldData = findPath(pathId);
 		Poster poster = getPoster(accessToken);
 		if (oldData != null && poster != null && poster.getUserID().equals(oldData.getPoster().getUserID())) {
 			//Delete the link part on the trip
@@ -313,125 +327,34 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 			ofy().delete().entity(oldData);
 		}
 	}
-	
-	//----- Impls for User -----
-	
-	@Override
-	public void insertUser(User user) {
+    
+    /**
+     * Insert new user
+     * @param user
+     */
+    @ApiMethod(name = "insertUser", httpMethod = HttpMethod.POST)
+    public void insertUser(User user) {
 		User existUser = ofy().load().type(User.class).id(user.getId()).now();
 		if(existUser == null) {
 			user.setJoinDate(new Date());
 			ofy().save().entity(user);
 		}
 	}
-
-	@Override
-	public User findUser(String idUser) {
-		if(idUser == null || idUser.isEmpty()) {
+    
+    /**
+     * Find a user
+     * @param userId
+     * @return user match the id
+     */
+    @ApiMethod(name = "findUser", httpMethod = HttpMethod.GET)
+    public User findUser(@Named("userId") String userId) {
+		if(userId == null || userId.isEmpty()) {
 			return null;
 		}
 		else {
-			User oldData = ofy().load().type(User.class).id(idUser).now();
+			User oldData = ofy().load().type(User.class).id(userId).now();
 			return oldData;
 		}
 	}
-
-	@Override
-	public List<User> listOfUser(List<String> idsUser) {
-		Map<String, User> mapUsers = ofy().load().type(User.class).ids(idsUser);
-		List<User> result = new ArrayList<User>(mapUsers.values());
-		return result;
-	}
-
-//	@Override
-//	public User updateUser(User user) {
-//		User exportUser ;
-//		User oldData = findUser(user.getId());
-//		if (oldData != null) {
-//			Key<User> key = ofy().save().entity(user).now();
-//			exportUser = ofy().load().key(key).now();
-//		} else
-//			exportUser = null;
-//		return exportUser;
-//	}
-
-//	@Override
-//	public void removeUser(String idUser) {
-//		User oldData = findUser(idUser);
-//		ofy().delete().entity(oldData);
-//	}
-	
-	//----- Impls for Picture -----
-
-	@Override
-	public String getUploadUrl(Long pathId, Long tripId, String accessToken) {
-		Trip oldTrip = null;
-		Path oldPath = null;
-		if(tripId != null)
-			oldTrip = findTrip(tripId);
-		if(pathId != null)
-			oldPath = findPath(pathId);
-		Poster poster = getPoster(accessToken);
-		if(oldTrip != null && poster != null && poster.getUserID().equals(oldTrip.getPoster().getUserID())
-				|| oldPath != null && poster != null && poster.getUserID().equals(oldPath.getPoster().getUserID())) 
-			return blobStoreService.createUploadUrl("/photo_upload");
-		else
-			return "#";
-	}
-
-//	@Override
-//	public void insertPicture(Picture picture) {
-//		ofy().save().entity(picture);
-//	}
-
-	@Override
-	public Picture findPicture(Long idPicture) {
-		Picture p = ofy().load().type(Picture.class).id(idPicture).now();
-		return p;
-	}
-
-	@Override
-	public List<Picture> listPicture(List<Long> idsPicture) {
-		Map<Long, Picture> mapPaths = ofy().load().type(Picture.class).ids(idsPicture);
-		List<Picture> result = new ArrayList<Picture>(mapPaths.values());
-		return result;
-	}
-
-	@Override
-	public void deletePicture(Long idPicture, String accessToken) {
-		Picture p = findPicture(idPicture);
-		Trip oldTrip = null;
-		if(p.getOnTrip() != null)
-			oldTrip = findTrip(p.getOnTrip());
-		Path oldPath = null;
-		if(p.getOnPath() != null)
-			oldPath = findPath(p.getOnPath());
-		Poster poster = getPoster(accessToken);
-		if(p != null) {
-			if(oldTrip != null && poster != null && poster.getUserID().equals(oldTrip.getPoster().getUserID())
-					|| oldPath != null && poster != null && poster.getUserID().equals(oldPath.getPoster().getUserID())) {
-				//Delete blob
-				BlobKey blobKey = new BlobKey(p.getKey());
-				blobStoreService.delete(blobKey);
-				//Delete link on Trip of on Path
-				if(p.getOnPath() == null) {
-					Trip trip = ofy().load().type(Trip.class).id(p.getOnTrip()).now();
-					if(trip != null) {
-						trip.getGallery().remove(p.getId());
-						ofy().save().entity(trip);
-					}
-				}
-				else {
-					Path path = ofy().load().type(Path.class).id(p.getOnPath()).now();
-					if(path != null) {
-						path.getGallery().remove(p.getId());
-						ofy().save().entity(path);
-					}
-				}
-				//Delete picture
-				ofy().delete().entity(p);
-			}
-		}
-	}
-	
+    
 }

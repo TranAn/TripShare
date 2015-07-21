@@ -205,7 +205,7 @@ public class ThemePickTable extends DialogBox {
 	void onBtnSaveClick(ClickEvent event) {
 		hide();
 		TripShare.loadBox.center();
-		TripShare.dataService.updateTrip(trip, new AsyncCallback<Trip>() {
+		TripShare.dataService.updateTrip(trip, TripShare.access_token, new AsyncCallback<Trip>() {
 			
 			@Override
 			public void onSuccess(Trip result) {

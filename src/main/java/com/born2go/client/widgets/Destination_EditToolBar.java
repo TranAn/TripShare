@@ -230,7 +230,7 @@ public class Destination_EditToolBar extends Composite {
 	}
 	
 	public void getPath(Long pathId) {
-		TripShare.dataService.findPart(pathId, new AsyncCallback<Path>() {
+		TripShare.dataService.findPath(pathId, new AsyncCallback<Path>() {
 			@Override
 			public void onSuccess(Path result) {
 				path = result;
@@ -279,8 +279,8 @@ public class Destination_EditToolBar extends Composite {
 				}
 				if(path.getLocate() != null) {		
 					TripShare.tripMap.drawTheJourney(arg0.getJourney().getDirections(), arg0.getJourney().getLocates(), false);
-					TripShare.tripMap.addMarker2(path.getLocate().getLatLng(), path.getLocate().getAddressName(), true);
-					TripShare.tripMap.getMap().setCenter(path.getLocate().getLatLng());
+					TripShare.tripMap.addMarker2(TripShare.tripMap.getLatLng(path.getLocate()), path.getLocate().getAddressName(), true);
+					TripShare.tripMap.getMap().setCenter(TripShare.tripMap.getLatLng(path.getLocate()));
 				}
 			}
 			
@@ -333,7 +333,7 @@ public class Destination_EditToolBar extends Composite {
 				Path viewPath = path;
 				viewPath.setTitle(txbPathTitle.getText());
 				viewPath.setDescription(editor.getData());
-				TripShare.dataService.updatePart(viewPath, new AsyncCallback<Path>() {
+				TripShare.dataService.updatePath(viewPath, TripShare.access_token, new AsyncCallback<Path>() {
 					@Override
 					public void onSuccess(Path result) {
 						TripShare.loadBox.hide();
@@ -425,7 +425,7 @@ public class Destination_EditToolBar extends Composite {
 								public void onDeleteClick() {
 									option.startLoading();
 									final int index = listPicture.size() - 1 - urls.indexOf(image.getUrl());
-									TripShare.dataService.deletePicture(path.getGallery().get(index), new AsyncCallback<Void>() {								
+									TripShare.dataService.deletePicture(path.getGallery().get(index), TripShare.access_token, new AsyncCallback<Void>() {								
 										@Override
 										public void onSuccess(Void result) {
 											option.hide();

@@ -8,8 +8,9 @@
 
 	<properties>
 		<javaRuntime>1.7</javaRuntime>
-		<appengine.target.version>1.8.9</appengine.target.version>
+		<appengine.target.version>1.9.23</appengine.target.version>
 		<gwtVersion>2.7.0</gwtVersion>
+		<gcloud.plugin.version>0.9.58.v20150505</gcloud.plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<appengine.home>${user.home}/.m2/repository/com/google/appengine/appengine-java-sdk/${appengine.target.version}/appengine-java-sdk-${appengine.target.version}</appengine.home>
 	</properties>
@@ -22,6 +23,11 @@
 			<artifactId>appengine-api-1.0-sdk</artifactId>
 			<version>${appengine.target.version}</version>
 		</dependency>
+		<dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-endpoints</artifactId>
+            <version>${appengine.target.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
@@ -156,6 +162,15 @@
 					<address>0.0.0.0</address>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+              	<groupId>com.google.appengine</groupId>
+              	<artifactId>gcloud-maven-plugin</artifactId>
+              	<version>${gcloud.plugin.version}</version>
+              	<configuration>
+                	<set_default>true</set_default>
+              	</configuration>
+            </plugin>
 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -164,8 +179,8 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>compile</goal>
-							<goal>test</goal>
+							<!-- <goal>compile</goal>
+							<goal>test</goal> -->
 							<!-- <goal>generateAsync</goal> -->
 						</goals>
 					</execution>

@@ -118,8 +118,8 @@ public class LocationPicker extends DialogBox {
 		this.locate = locate;
 		if(locate != null) {
 			txbLocation.setText(locate.getAddressName());
-			TripShare.tripMap.addMarker2(locate.getLatLng(), locate.getAddressName(), false);
-			TripShare.tripMap.getMap().setCenter(locate.getLatLng());
+			TripShare.tripMap.addMarker2(TripShare.tripMap.getLatLng(locate), locate.getAddressName(), false);
+			TripShare.tripMap.getMap().setCenter(TripShare.tripMap.getLatLng(locate));
 		}
 	}
 	

@@ -54,8 +54,8 @@ public class Journey_PathCreate extends Composite {
 	@UiField Anchor pick_files;
 	@UiField HTML not_support_flash_warning;
 	
-	Long tripId;
-	Long pathID;
+	static Long tripID;
+	static Long pathID;
 	Locate locate;
 	
 	TextArea txbRichDescription;
@@ -133,16 +133,17 @@ public class Journey_PathCreate extends Composite {
 	}
 	
 	public void setTripId(Long tripId) {
-		this.tripId = tripId;
+		tripID = tripId;
 		txbTimeline.setValue(new Date());
 		txbTitle.setFocus(true);
 	}
 
 	public void uploadPhoto(final Long tripId, final Long pathId) {
-		TripShare.dataService.getUploadUrl(new AsyncCallback<String>() {
+		TripShare.dataService.getUploadUrl(pathId, tripId, TripShare.access_token, new AsyncCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
 				pathID = pathId;
+				tripID = tripId;
 				String trip_id = (tripId != null ? tripId.toString() : "");
 				String path_id = (pathId != null ? pathId.toString() : "");
 				updatePlupLoad(trip_id, path_id);
@@ -212,11 +213,11 @@ public class Journey_PathCreate extends Composite {
 				}
 				else
 					path.setDescription(getDataCustomEditor());
-				TripShare.dataService.insertPart(path, tripId, TripShare.access_token, new AsyncCallback<Path>() {
+				TripShare.dataService.insertPath(path, tripID, TripShare.access_token, new AsyncCallback<Path>() {
 					@Override
 					public void onSuccess(Path result) {
 						if(result != null)
-							uploadPhoto(tripId, result.getId());
+							uploadPhoto(tripID, result.getId());
 						else {
 							TripShare.loadBox.hide();
 							Window.alert(TripShare.ERROR_MESSAGE);
@@ -237,11 +238,11 @@ public class Journey_PathCreate extends Composite {
 				}
 				else
 					updatePath.setDescription(updatePath.getDescription()+ "<p>"+ getDataCustomEditor()+ "</p>");
-				TripShare.dataService.updatePart(updatePath, new AsyncCallback<Path>() {
+				TripShare.dataService.updatePath(updatePath, TripShare.access_token, new AsyncCallback<Path>() {
 					@Override
 					public void onSuccess(Path result) {
 						if(result != null)
-							uploadPhoto(tripId, result.getId());
+							uploadPhoto(tripID, result.getId());
 						else {
 							TripShare.loadBox.hide();
 							Window.alert(TripShare.ERROR_MESSAGE);
@@ -398,7 +399,7 @@ public class Journey_PathCreate extends Composite {
 	}-*/;
 	
 	public static void updateUploaderUrl() {
-		TripShare.dataService.getUploadUrl(new AsyncCallback<String>() {
+		TripShare.dataService.getUploadUrl(pathID, tripID, TripShare.access_token, new AsyncCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
 				updatePlupLoad(result);
@@ -431,7 +432,7 @@ public class Journey_PathCreate extends Composite {
 		    
 		    //Enable params
 		    multipart_params : {
-				tripId: '',
+				tripID: '',
 				pathId: ''
 			},
 		     

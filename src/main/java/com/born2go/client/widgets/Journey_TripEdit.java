@@ -87,13 +87,13 @@ public class Journey_TripEdit extends Composite {
 		waypoints.setLength(0);
 		for(int i=0; i<listDestinationPoint.size()-1; i++) {
 			DirectionsWaypoint waypoint = DirectionsWaypoint.create();
-			waypoint.setLocation(listDestinationPoint.get(i).getLatLng());
+			waypoint.setLocation(TripShare.tripMap.getLatLng(listDestinationPoint.get(i)));
 			waypoints.push(waypoint);
 		}
 		if(waypoints.length() != 0)
-			TripShare.tripMap.findDirection(originPoint.getLatLng(), listDestinationPoint.get(listDestinationPoint.size()-1).getLatLng(), waypoints);
+			TripShare.tripMap.findDirection(TripShare.tripMap.getLatLng(originPoint), TripShare.tripMap.getLatLng(listDestinationPoint.get(listDestinationPoint.size()-1)), waypoints);
 		else
-			TripShare.tripMap.findDirection(originPoint.getLatLng(), listDestinationPoint.get(listDestinationPoint.size()-1).getLatLng(), null);
+			TripShare.tripMap.findDirection(TripShare.tripMap.getLatLng(originPoint), TripShare.tripMap.getLatLng(listDestinationPoint.get(listDestinationPoint.size()-1)), null);
 	}
 
 	Journey getJourney() {
@@ -330,7 +330,7 @@ public class Journey_TripEdit extends Composite {
 		trip.setDescription(txbRichDescription.getData());
 		trip.setCompanion(listCompanion);
 		trip.setJourney(getJourney());
-		TripShare.dataService.updateTrip(trip, new AsyncCallback<Trip>() {
+		TripShare.dataService.updateTrip(trip, TripShare.access_token, new AsyncCallback<Trip>() {
 			@Override
 			public void onSuccess(Trip result) {
 				TripShare.loadBox.hide();

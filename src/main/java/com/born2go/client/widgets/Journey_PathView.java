@@ -160,7 +160,7 @@ public class Journey_PathView extends Composite {
 			@Override
 			public void createPathSuccess(Long newPathId) {
 				TripShare.loadBox.center();
-				TripShare.dataService.findPart(newPathId, new AsyncCallback<Path>() {
+				TripShare.dataService.findPath(newPathId, new AsyncCallback<Path>() {
 					@Override
 					public void onSuccess(final Path result) {
 						TripShare.loadBox.hide();

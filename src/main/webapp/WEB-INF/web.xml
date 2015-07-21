@@ -45,15 +45,28 @@
 		<servlet-name>PhotoUploadServlet</servlet-name>
 		<url-pattern>/photo_upload</url-pattern>
 	</servlet-mapping>
-
+	
 	<servlet>
+        <servlet-name>SystemServiceServlet</servlet-name>
+        <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+        <init-param>
+            <param-name>services</param-name>
+            <param-value>com.born2go.server.DataServiceApi</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SystemServiceServlet</servlet-name>
+        <url-pattern>/_ah/spi/*</url-pattern>
+    </servlet-mapping>
+
+	<!-- <servlet>
 		<servlet-name>RESTful</servlet-name>
 		<servlet-class>com.born2go.server.BAPI</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>RESTful</servlet-name>
 		<url-pattern>/api</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping> -->
 	
 	<!-- JSP Servlet -->
 	<servlet>

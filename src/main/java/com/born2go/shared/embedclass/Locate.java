@@ -55,9 +55,9 @@ public class Locate implements Serializable {
 		longitude = latlng.lng();
 	}
 	
-	public LatLng getLatLng() {
-		LatLng l = LatLng.create(latitude, longitude);
-		return l;
-	}
+//	public LatLng getLatLng() {
+//		LatLng l = LatLng.create(latitude, longitude);
+//		return l;
+//	}
 	
 }

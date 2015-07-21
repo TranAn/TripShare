@@ -36,6 +36,9 @@ public class PhotoUpload extends DialogBox {
 //	@UiField HTMLPanel dropzone;
 	
 //	boolean isHandlerUploadEvent = false;
+	
+	static Long tripID;
+	static Long pathID;
 
 	interface Binder extends UiBinder<Widget, PhotoUpload> {
 	}
@@ -74,6 +77,8 @@ public class PhotoUpload extends DialogBox {
 		getPlupLoad(this);
 		String trip_id = (tripId != null ? tripId.toString() : "");
 		String path_id = (pathId != null ? pathId.toString() : "");
+		tripID = tripId;
+		pathID = pathId;
 		updatePlupLoad(trip_id, path_id);
 	}
 	
@@ -100,7 +105,7 @@ public class PhotoUpload extends DialogBox {
 	@UiHandler("btnPost")
 	void onBtnPostClick(ClickEvent event) {
 		uploadingForm.setVisible(true);
-		TripShare.dataService.getUploadUrl(new AsyncCallback<String>() {
+		TripShare.dataService.getUploadUrl(pathID, tripID, TripShare.access_token, new AsyncCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
 				startPlupLoad(result);
@@ -144,7 +149,7 @@ public class PhotoUpload extends DialogBox {
 	}-*/;
 	
 	public static void updateUploaderUrl() {
-		TripShare.dataService.getUploadUrl(new AsyncCallback<String>() {
+		TripShare.dataService.getUploadUrl(pathID, tripID, TripShare.access_token, new AsyncCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
 				updatePlupLoad(result);
@@ -177,7 +182,7 @@ public class PhotoUpload extends DialogBox {
 		    
 		    //Enable params
 		    multipart_params : {
-    			tripId: '',
+    			tripID: '',
     			pathId: ''
     		},
 		     

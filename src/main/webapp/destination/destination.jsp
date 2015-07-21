@@ -74,7 +74,7 @@
 			return;
 		}
 		// find the path(post) by id
-		path = service.findPart(path_id);
+		path = service.findPath(path_id);
 		if (path == null) {
 			redirectHomeUrl(response);
 			return;

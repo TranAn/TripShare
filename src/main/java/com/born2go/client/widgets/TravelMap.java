@@ -88,6 +88,11 @@ public class TravelMap {
 		addMarker(officeP, "Trip Share Office", true, true, true);
 		return new TravelMap();
 	}
+	
+	public LatLng getLatLng(Locate loc) {
+		LatLng l = LatLng.create(loc.getLatitude(), loc.getLongitude());
+		return l;
+	}
 
 	public SimplePanel getMapView() {
 		return container;
@@ -229,7 +234,7 @@ public class TravelMap {
 		//zoom the map
 		final LatLngBounds bounds = LatLngBounds.create();
 		for (int i = 0; i < locates.size(); i++) {
-		    bounds.extend(locates.get(i).getLatLng());
+		    bounds.extend(getLatLng(locates.get(i)));
 		}
 		bounds.getCenter();
 		theMap.fitBounds(bounds);
@@ -264,12 +269,12 @@ public class TravelMap {
 			    	 }
 			    	 else {
 			    		 if(index == 0)
-			    			 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), true, false, true);
+			    			 addMarker(getLatLng(locates.get(index)), locates.get(index).getAddressName(), true, false, true);
 			    		 else {
 			    			 if(index == locates.size() - 1)
-			    				 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, false, true);
+			    				 addMarker(getLatLng(locates.get(index)), locates.get(index).getAddressName(), false, false, true);
 			    			 else
-			    				 addMarker(locates.get(index).getLatLng(), locates.get(index).getAddressName(), false, false, true);
+			    				 addMarker(getLatLng(locates.get(index)), locates.get(index).getAddressName(), false, false, true);
 			    		 }
 			    		 index++;
 			    	 }
@@ -280,9 +285,9 @@ public class TravelMap {
 		else {
 			for(int i=0; i<locates.size(); i++) {
 				if(i == 0)
-					addMarker(locates.get(i).getLatLng(), locates.get(i).getAddressName(), true, false, false);
+					addMarker(getLatLng(locates.get(i)), locates.get(i).getAddressName(), true, false, false);
 				else 
-					addMarker(locates.get(i).getLatLng(), locates.get(i).getAddressName(), false, false, false);
+					addMarker(getLatLng(locates.get(i)), locates.get(i).getAddressName(), false, false, false);
 			}
 			for(com.born2go.shared.embedclass.Journey.Point p : directions)
 				journey.push(p.toLatLng());

@@ -105,7 +105,7 @@ public class Journey_PathDetail extends Composite {
 			public void onClick(ClickEvent event) {
 				if(Window.confirm("!: Are you sure you want to delete this post?")) {
 					TripShare.loadBox.center();
-					TripShare.dataService.removePart(pathId, new AsyncCallback<Void>() {			
+					TripShare.dataService.removePath(pathId, TripShare.access_token, new AsyncCallback<Void>() {			
 						@Override
 						public void onSuccess(Void result) {
 							TripShare.loadBox.hide();

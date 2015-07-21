@@ -176,13 +176,13 @@ public class Create_CreateTrip extends Composite {
 		waypoints.setLength(0);
 		for(Locate locate: listWayPoint) {
 			DirectionsWaypoint waypoint = DirectionsWaypoint.create();
-			waypoint.setLocation(locate.getLatLng());
+			waypoint.setLocation(TripShare.tripMap.getLatLng(locate));
 			waypoints.push(waypoint);
 		}
 		if(waypoints.length() != 0)
-			TripShare.tripMap.findDirection(originPoint.getLatLng(), destinationPoint.getLatLng(), waypoints);
+			TripShare.tripMap.findDirection(TripShare.tripMap.getLatLng(originPoint), TripShare.tripMap.getLatLng(destinationPoint), waypoints);
 		else
-			TripShare.tripMap.findDirection(originPoint.getLatLng(), destinationPoint.getLatLng(), null);
+			TripShare.tripMap.findDirection(TripShare.tripMap.getLatLng(originPoint), TripShare.tripMap.getLatLng(destinationPoint), null);
 	}
 
 	public Create_CreateTrip() {

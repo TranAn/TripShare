@@ -39,7 +39,7 @@ public class UploadService extends HttpServlet implements Servlet {
 		
 		Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(req);
 		List<BlobKey> blobKeys = blobs.get("file");
-//		System.out.println("Trip Id: "+ req.getParameter("tripId")+ "-----------------------------------");
+//		System.out.println("Trip Id: "+ req.getParameter("tripID")+ "-----------------------------------");
 //		System.out.println("Path Id: "+ req.getParameter("pathId")+ "-----------------------------------");
 		
 		if(blobKeys != null) {

@@ -29,7 +29,7 @@
 		 
 		if (idPath != null) {
 	DataServiceImpl service = new DataServiceImpl();
-	Path path = service.findPart(idPath);
+	Path path = service.findPath(idPath);
 	if (path == null)
 		redirectHomeUrl(response);
 	else {
