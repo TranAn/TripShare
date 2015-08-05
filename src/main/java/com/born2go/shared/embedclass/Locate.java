@@ -11,9 +11,9 @@ public class Locate implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	String addressName;
-	Double latitude;
-	Double longitude;
+	String addressName = "";
+	Double latitude = 0D;
+	Double longitude = 0D;
 	
 	public Locate() {
 		super();
@@ -55,9 +55,9 @@ public class Locate implements Serializable {
 		longitude = latlng.lng();
 	}
 	
-//	public LatLng getLatLng() {
-//		LatLng l = LatLng.create(latitude, longitude);
-//		return l;
-//	}
+	public LatLng getLatLng() {
+		LatLng l = LatLng.create(latitude, longitude);
+		return l;
+	}
 	
 }

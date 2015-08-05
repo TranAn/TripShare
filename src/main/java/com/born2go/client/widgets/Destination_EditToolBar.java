@@ -12,6 +12,7 @@ import com.born2go.client.TripShare;
 import com.born2go.shared.Path;
 import com.born2go.shared.Picture;
 import com.born2go.shared.Trip;
+import com.born2go.shared.embedclass.ClientTransform;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -68,7 +69,7 @@ public class Destination_EditToolBar extends Composite {
 	
 	public void checkPermission() {
 		if(TripShare.user_id != null && path != null) {
-			if(path.getPoster().getUserID().toString().equals(TripShare.user_id)) {
+			if(new ClientTransform().stringToPoster(path.getPoster()).getUserID().toString().equals(TripShare.user_id)) {
 				isPoster = true;
 				toolbar.openPosterToolbar();
 			}
@@ -278,9 +279,9 @@ public class Destination_EditToolBar extends Composite {
 					toolbar.setNavigator(tripLink, prePostLink, nextPostLink);
 				}
 				if(path.getLocate() != null) {		
-					TripShare.tripMap.drawTheJourney(arg0.getJourney().getDirections(), arg0.getJourney().getLocates(), false);
-					TripShare.tripMap.addMarker2(TripShare.tripMap.getLatLng(path.getLocate()), path.getLocate().getAddressName(), true);
-					TripShare.tripMap.getMap().setCenter(TripShare.tripMap.getLatLng(path.getLocate()));
+					TripShare.tripMap.drawTheJourney(new ClientTransform().stringToJourney(arg0.getJourney()).getDirections(), new ClientTransform().stringToJourney(arg0.getJourney()).getLocates(), false);
+					TripShare.tripMap.addMarker2(TripShare.tripMap.getLatLng(new ClientTransform().stringToLocate(path.getLocate())), new ClientTransform().stringToLocate(path.getLocate()).getAddressName(), true);
+					TripShare.tripMap.getMap().setCenter(TripShare.tripMap.getLatLng(new ClientTransform().stringToLocate(path.getLocate())));
 				}
 			}
 			

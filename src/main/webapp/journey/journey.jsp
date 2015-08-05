@@ -9,6 +9,7 @@
 <%@ page import="com.born2go.shared.Picture"%>
 <%@ page import="com.born2go.shared.embedclass.Journey"%>
 <%@ page import="com.born2go.shared.embedclass.Locate"%>
+<%@ page import="com.born2go.shared.embedclass.ServerTransform"%>
 <%@ page import="com.born2go.server.DataServiceImpl"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.text.SimpleDateFormat"%>
@@ -167,87 +168,84 @@
 	</script>
 	
 	<%
-	if(trip.getTheme() == null) {
-	%>
-		<script type="text/javascript">
-			document.body.className = "journeypage_default_theme";
-		</script>
-	<%
-	}
-	else {
-		switch (trip.getTheme()) {
-		case DEFAULT:
+	switch (trip.getTheme()) {
+		case Trip.DEFAULT_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_default_theme";
 			</script>
 		<%
 			break;
-		case BEACH_DAWN:
+		case Trip.BEACH_DAWN_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_beachdawn_theme";
 			</script>
 		<%
 			break;
-		case BEACH_MORNING:
+		case Trip.BEACH_MORNING_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_beachmorning_theme";
 			</script>
 		<%
 			break;
-		case BEACH_SUNSET:
+		case Trip.BEACH_SUNSET_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_beachsunset_theme";
 			</script>
 		<%
 			break;
-		case CITY:
+		case Trip.CITY_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_city_theme";
 			</script>
 		<%
 			break;
-		case COUNTRY:
+		case Trip.COUNTRY_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_country_theme";
 			</script>
 		<%
 			break;
-		case FOREST:
+		case Trip.FOREST_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_forest_theme";
 			</script>
 		<%
 			break;
-		case FOREST_WATERFALL:
+		case Trip.FOREST_WATERFALL_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_forestwaterfall_theme";
 			</script>
 		<%
 			break;
-		case MOUNTAIN_SPRING:
+		case Trip.MOUNTAIN_SPRING_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_mountainspring_theme";
 			</script>
 		<%
 			break;
-		case MOUNTAIN_WINTER:
+		case Trip.MOUNTAIN_WINTER_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_mountainwinter_theme";
 			</script>
 		<%
 			break;
-		} 
-	}
+		default:
+		%>
+			<script type="text/javascript">
+				document.body.className = "journeypage_default_theme";
+			</script>
+		<%
+	} 
 	%>
 
 	<div id="header" style="margin:0px; height: 130px;">
@@ -292,8 +290,8 @@
 					<%if(trip.getPoster() != null) {%>
 					<div style="display: inline-flex; display: -webkit-inline-box; display: -webkit-inline-flex; display: -ms-inline-flexbox; -webkit-align-self: auto;">
 						<div class="font-blackTitleLarge" style="margin-top: 12px;margin-bottom: 20px;margin-right: 4px;font-size: 15px;font-family: museo-w01-700,serif; color:gray; font-style: italic;">Create by:</div>
-						<a href="/profile/<%=trip.getPoster().getUserID()%>" class="font-blackTitleLarge link" style="margin-top: 12px;;margin-bottom: 20px;font-size: 15px;font-family: museo-w01-700,serif; color: cornflowerblue; font-style: italic;"><%=(trip.getPoster()!=null?trip.getPoster().getUserName():"Tester")%></a>
-						<img style="border: 1px silver solid;border-radius: 20px;overflow: hidden;margin-left: 8px;margin-bottom: 15px;" src="https://graph.facebook.com/<%=trip.getPoster().getUserID()%>/picture?width=25&height=25" />					
+						<a href="/profile/<%=new ServerTransform().stringToPoster(trip.getPoster()).getUserID()%>" class="font-blackTitleLarge link" style="margin-top: 12px;;margin-bottom: 20px;font-size: 15px;font-family: museo-w01-700,serif; color: cornflowerblue; font-style: italic;"><%=(trip.getPoster()!=null? new ServerTransform().stringToPoster(trip.getPoster()).getUserName():"Tester")%></a>
+						<img style="border: 1px silver solid;border-radius: 20px;overflow: hidden;margin-left: 8px;margin-bottom: 15px;" src="https://graph.facebook.com/<%=new ServerTransform().stringToPoster(trip.getPoster()).getUserID()%>/picture?width=25&height=25" />					
 					</div>
 					<%} %>
 					
@@ -303,10 +301,10 @@
 					<div class="font-blackTitleLarge">Itinerary:</div>
 					<div class="trip-destinations">
 						<img src="/resources/red-spotlight.png" style="width:22px;height:30px;vertical-align: middle;"/>
-						<span style="margin-left:5px"><%=trip.getJourney().getLocates().get(0).getAddressName()%></span>
+						<span style="margin-left:5px"><%=new ServerTransform().stringToJourney(trip.getJourney()).getLocates().get(0).getAddressName()%></span>
 					</div>
-					<%for (int i = 1; i < trip.getJourney().getLocates().size(); i++) { %>
-					<div class="trip-destinations"><img src="/resources/green-spotlight.png" style="width:22px;height:30px;vertical-align: middle;"/> <span style="margin-left:5px"> <%= trip.getJourney().getLocates().get(i).getAddressName() %> </span></div>
+					<%for (int i = 1; i < new ServerTransform().stringToJourney(trip.getJourney()).getLocates().size(); i++) { %>
+					<div class="trip-destinations"><img src="/resources/green-spotlight.png" style="width:22px;height:30px;vertical-align: middle;"/> <span style="margin-left:5px"> <%= new ServerTransform().stringToJourney(trip.getJourney()).getLocates().get(i).getAddressName() %> </span></div>
 					<%} }%>
 					
 					<%if(trip.getDepartureDate() != null) {%>
@@ -317,13 +315,13 @@
 					</div>
 					<%} %>
 					
-					<%-- <%if(!trip.getCompanion().isEmpty()) { %> --%>
+					<%if(!trip.getCompanion().isEmpty()) { %>
 					<div class="font-blackTitleLarge" style="margin-top:30px;">Companion:</div>
 					<div class="trip-destinations" style="overflow: hidden;">
 						<img src="/resources/1432155993_WLM.png" style="width:22px;height:28px;vertical-align: middle;float: left;margin-right: 6px;"/>
 						<div id="companion_table"></div>	
 					</div>	
-					<%-- <%} %>	 --%>
+					<%} %>	
 				
 					<div class="tripInfoBorder"></div>
 					<div class="font-blackTitleLarge" style="margin-top:30px;">Journey description:</div>

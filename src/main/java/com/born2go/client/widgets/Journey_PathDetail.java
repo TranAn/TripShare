@@ -3,6 +3,7 @@ package com.born2go.client.widgets;
 import com.born2go.client.TripShare;
 import com.born2go.shared.Path;
 import com.born2go.shared.Picture;
+import com.born2go.shared.embedclass.ClientTransform;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -87,7 +88,7 @@ public class Journey_PathDetail extends Composite {
 			lbDatePost.setText(TripShare.dateFormat(path.getCreateDate()));
 		
 		if(path.getLocate() != null) {
-			txbLocation.setText("at: "+ path.getLocate().getAddressName());
+			txbLocation.setText("at: "+ new ClientTransform().stringToLocate(path.getLocate()).getAddressName());
 			txbLocation.setVisible(true);
 		}
 		else {

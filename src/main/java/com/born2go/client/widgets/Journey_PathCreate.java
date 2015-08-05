@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.born2go.client.TripShare;
 import com.born2go.shared.Path;
+import com.born2go.shared.embedclass.ClientTransform;
 import com.born2go.shared.embedclass.Locate;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -111,7 +112,7 @@ public class Journey_PathCreate extends Composite {
 				}
 				else {
 					updatePath = list_paths.get(lbPostTo.getSelectedIndex() - 1);
-					locate = updatePath.getLocate();
+					locate = new ClientTransform().stringToLocate(updatePath.getLocate());
 					txbTitle.setText(updatePath.getTitle());
 					txbTimeline.setEnabled(false);
 				}
@@ -206,7 +207,7 @@ public class Journey_PathCreate extends Composite {
 			if(updatePath == null) {
 				Path path = new Path();
 				path.setTitle(txbTitle.getText());
-				path.setLocate(locate);
+				path.setLocate(new ClientTransform().locateToString(locate));
 				path.setCreateDate(txbTimeline.getValue());
 				if(!isRichTextEdit) {
 					path.setDescription("<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
@@ -232,7 +233,7 @@ public class Journey_PathCreate extends Composite {
 			} 
 			else {
 				updatePath.setTitle(txbTitle.getText());
-				updatePath.setLocate(locate);
+				updatePath.setLocate(new ClientTransform().locateToString(locate));
 				if(!isRichTextEdit) {
 					updatePath.setDescription(updatePath.getDescription()+ "<p>"+ txbDescription.getText().replaceAll("(\r\n|\n)", "<br />")+ "</p>");
 				}

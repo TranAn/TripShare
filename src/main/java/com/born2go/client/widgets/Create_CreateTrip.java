@@ -11,6 +11,7 @@ import com.axeiya.gwtckeditor.client.Toolbar;
 import com.axeiya.gwtckeditor.client.ToolbarLine;
 import com.born2go.client.TripShare;
 import com.born2go.client.widgets.Create_HandlerJsonListFriends.ListFriends;
+import com.born2go.shared.embedclass.ClientTransform;
 import com.born2go.shared.embedclass.Journey;
 import com.born2go.shared.embedclass.Locate;
 import com.born2go.shared.embedclass.Poster;
@@ -352,6 +353,13 @@ public class Create_CreateTrip extends Composite {
 		return journey;
 	}
 	
+	List<String> listCompanionToString(List<Poster> listCompanion) {
+		List<String> lcts = new ArrayList<String>();
+		for(Poster p: listCompanion)
+			lcts.add(new ClientTransform().posterToString(p));
+		return lcts;
+	}
+	
 	@UiHandler("btnCreateTrip")
 	void onBtnCreateTripClick(ClickEvent event) {
 		if(TripShare.access_token.equals("")) {
@@ -365,7 +373,7 @@ public class Create_CreateTrip extends Composite {
 				Trip trip = new Trip();
 				trip.setName(txbName.getText());
 				trip.setDepartureDate(txbDeparture.getValue());
-				trip.setCompanion(listCompanion);
+				trip.setCompanion(listCompanionToString(listCompanion));
 		
 				if(!isRichTextEdit) {
 					if(txbRichDescription != null) {
@@ -377,7 +385,7 @@ public class Create_CreateTrip extends Composite {
 				else
 					trip.setDescription(txbRichDescription.getData());
 				
-				trip.setJourney(getJourney());
+				trip.setJourney(new ClientTransform().journeyToString(getJourney()));
 				
 				TripShare.dataService.insertTrip(trip, TripShare.access_token, new AsyncCallback<Trip>() {
 					@Override

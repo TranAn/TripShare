@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.born2go.shared.embedclass.Locate;
-import com.born2go.shared.embedclass.Poster;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -19,13 +17,13 @@ public class Path implements Serializable {
 	@Id
 	Long id;
 	
-	Poster poster;
+	String poster;
 	Long tripId;
 	List<Long> gallery = new ArrayList<Long>();
 	
 	String title;
 	Date createDate;
-	Locate locate;
+	String locate;
 	String description;
 	String shortDescription;
 	
@@ -33,11 +31,11 @@ public class Path implements Serializable {
 		super();
 	}
 
-	public Locate getLocate() {
+	public String getLocate() {
 		return locate;
 	}
 
-	public void setLocate(Locate locate) {
+	public void setLocate(String locate) {
 		this.locate = locate;
 	}
 
@@ -81,11 +79,11 @@ public class Path implements Serializable {
 		this.description = description;
 	}
 
-	public Poster getPoster() {
+	public String getPoster() {
 		return poster;
 	}
 
-	public void setPoster(Poster poster) {
+	public void setPoster(String poster) {
 		this.poster = poster;
 	}
 

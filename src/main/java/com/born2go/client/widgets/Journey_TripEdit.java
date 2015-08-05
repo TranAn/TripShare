@@ -10,6 +10,7 @@ import com.axeiya.gwtckeditor.client.Toolbar;
 import com.axeiya.gwtckeditor.client.ToolbarLine;
 import com.born2go.client.TripShare;
 import com.born2go.client.widgets.Create_HandlerJsonListFriends.ListFriends;
+import com.born2go.shared.embedclass.ClientTransform;
 import com.born2go.shared.embedclass.Journey;
 import com.born2go.shared.embedclass.Locate;
 import com.born2go.shared.embedclass.Poster;
@@ -223,17 +224,20 @@ public class Journey_TripEdit extends Composite {
 		mapTable.add(TripShare.tripMap.getMapView());
 		txbName.setText(trip.getName());
 		if(trip.getPoster() != null) {
-			lbPoster.setText(trip.getPoster().getUserName());
-			lbPoster.setHref("/profile/"+ trip.getPoster().getUserID());
+			lbPoster.setText(new ClientTransform().stringToPoster(trip.getPoster()).getUserName());
+			lbPoster.setHref("/profile/"+ new ClientTransform().stringToPoster(trip.getPoster()).getUserID());
 		}
 		else
 			lbPoster.setText("Tester");
-		imgPoster.setUrl("https://graph.facebook.com/"+ trip.getPoster().getUserID()+ "/picture?width=25&height=25");
+		imgPoster.setUrl("https://graph.facebook.com/"+ new ClientTransform().stringToPoster(trip.getPoster()).getUserID()+ "/picture?width=25&height=25");
 		txbDepartureDate.setValue(trip.getDepartureDate());
 		//
-		companionTable.setTrip(trip.getCompanion());
+		List<Poster> lc = new ArrayList<Poster>();
+		for(String p: trip.getCompanion())
+			lc.add(new ClientTransform().stringToPoster(p));
+		companionTable.setTrip(lc);
 		listCompanion.clear();
-		listCompanion.addAll(trip.getCompanion());
+		listCompanion.addAll(lc);
 		btnAddFriend.getElement().setAttribute("id", "btnAddFriend");
 		if(trip.getCompanion().isEmpty()) 
 			btnAddFriend.removeStyleName("TripEdit_Obj14");
@@ -252,16 +256,16 @@ public class Journey_TripEdit extends Composite {
 			editContent.getElement().setInnerHTML(trip.getDescription());
 		}
 		//
-		originPoint = trip.getJourney().getLocates().get(0);
-		txbOrigin.setText(trip.getJourney().getLocates().get(0).getAddressName());
+		originPoint = new ClientTransform().stringToJourney(trip.getJourney()).getLocates().get(0);
+		txbOrigin.setText(new ClientTransform().stringToJourney(trip.getJourney()).getLocates().get(0).getAddressName());
 		listDestinationPoint.clear();
 		htmlDestinationTable.clear();
-		for(int i = 1; i < trip.getJourney().getLocates().size(); i++) {
-			listDestinationPoint.add(trip.getJourney().getLocates().get(i));
-			htmlDestinationTable.add(addDestination(trip.getJourney().getLocates().get(i).getAddressName()));
+		for(int i = 1; i < new ClientTransform().stringToJourney(trip.getJourney()).getLocates().size(); i++) {
+			listDestinationPoint.add(new ClientTransform().stringToJourney(trip.getJourney()).getLocates().get(i));
+			htmlDestinationTable.add(addDestination(new ClientTransform().stringToJourney(trip.getJourney()).getLocates().get(i).getAddressName()));
 		}
 		directions.clear();
-		directions.addAll(trip.getJourney().getDirections());
+		directions.addAll(new ClientTransform().stringToJourney(trip.getJourney()).getDirections());
 	}
 	
 	public void setDirectionResult(DirectionsResult directionResult) {
@@ -328,8 +332,11 @@ public class Journey_TripEdit extends Composite {
 		trip.setName(txbName.getText());
 		trip.setDepartureDate(txbDepartureDate.getValue());
 		trip.setDescription(txbRichDescription.getData());
-		trip.setCompanion(listCompanion);
-		trip.setJourney(getJourney());
+		List<String> lcts = new ArrayList<String>();
+		for(Poster p: listCompanion)
+			lcts.add(new ClientTransform().posterToString(p));
+		trip.setCompanion(lcts);
+		trip.setJourney(new ClientTransform().journeyToString(getJourney()));
 		TripShare.dataService.updateTrip(trip, TripShare.access_token, new AsyncCallback<Trip>() {
 			@Override
 			public void onSuccess(Trip result) {

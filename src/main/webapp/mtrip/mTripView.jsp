@@ -41,8 +41,8 @@
 	    	 
 	String urlFacebook = request.getRequestURL().toString();
 	String dateCreate = "Date post " + dateFormat1.format( trip.getCreateDate());
-	String poster = "Created by " + trip.getPoster().getUserName();
-	String hrefProfile = "/profile/"+ trip.getPoster().getUserID().toString();
+	/* String poster = "Created by " + trip.getPoster().getUserName();
+	String hrefProfile = "/profile/"+ trip.getPoster().getUserID().toString(); */
 	String departureDate = dateFormat1.format( trip.getDepartureDate());
 %>
 <!doctype html>
@@ -146,8 +146,8 @@
 				<td style="padding-right: 5px"><div class="mitalictext">Created
 						by</div></td>
 				<td><div class="mitalictext">
-				<a href=<%=hrefProfile %>><%=(trip.getPoster() != null ? trip.getPoster()
-								.getUserName() : "Tester")%></a>
+				<%-- <a href=<%=hrefProfile %>><%=(trip.getPoster() != null ? trip.getPoster()
+								.getUserName() : "Tester")%></a> --%>
 				</div></td>
 			</tr>
 		</table>
@@ -159,18 +159,18 @@
 
 		<div class="mtrip-destinations">
 			<img src="/resources/red-spotlight.png" /> 
-			<span><%=trip.getJourney().getLocates().get(0)
-							.getAddressName()%></span>
+			<%-- <span><%=trip.getJourney().getLocates().get(0)
+							.getAddressName()%></span> --%>
 		</div>
 		<%
-			for (int i = 1; i < trip.getJourney().getLocates().size(); i++) 
+			/* for (int i = 1; i < trip.getJourney().getLocates().size(); i++)  */
 																																													     					{
 		%>
-		<div class="mtrip-destinations">
+		<%-- <div class="mtrip-destinations">
 			<img src="/resources/green-spotlight.png" /> <span> <%=trip.getJourney().getLocates().get(i)
 								.getAddressName()%>
 			</span>
-		</div>
+		</div> --%>
 		<%
 			}
 		%>
@@ -202,12 +202,12 @@
 									{
 										Path path = listPaths.get(i);
 										String hrefShow = "/destination/"+ path.getId().toString();
-										String hrefProfile2 = "/profile/"+ path.getPoster().getUserID().toString();
+										/* String hrefProfile2 = "/profile/"+ path.getPoster().getUserID().toString(); */
 										String namePath = null;
 										if(path.getTitle() != null)
 											namePath = path.getTitle();
-										else if( path.getLocate() != null)
-											namePath = path.getLocate().getAddressName();
+										/* else if( path.getLocate() != null)
+											namePath = path.getLocate().getAddressName(); */
 			%>
 			<div class="mblock">
 				<h2>
@@ -227,9 +227,9 @@
 						<td style="padding-right: 5px"><div class="mitalictext">Created
 								by</div></td>
 						<td>
-						<div class="mitalictext"><a href= <%=hrefProfile2 %>><%=(trip.getPoster() != null ? trip.getPoster()
+						<%-- <div class="mitalictext"><a href= <%=hrefProfile2 %>><%=(trip.getPoster() != null ? trip.getPoster()
 							.getUserName() : "Tester")%></a></div>
-						</td>
+						</td> --%>
 					</tr>
 				</table>
 				<p class="mparagraptext">

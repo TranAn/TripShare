@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.born2go.client.TripShare;
 import com.born2go.shared.Path;
+import com.born2go.shared.embedclass.ClientTransform;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -59,7 +60,7 @@ public class Journey_Catalog extends Composite {
 			content.setStyleName("Catalog_Obj4");
 			String span = "<img src='/resources/1427111517_palm_tree.png' style='height: 22px; width: 22px; vertical-align: bottom; margin-right: 10px; opacity: 0.6;'>";
 			String span1 = "<span class='Catalog_Obj5'><a style='color: black;' href='#index_"+ p.getId()+ "' id='#index_"+ p.getId()+ "'>"+ p.getTitle()+ "</a></span>";
-			String span2 = "<span style='color: gray;'> - by <a href='/profile/"+ p.getPoster().getUserID()+ "' style='font-style: italic; color: cornflowerblue !important;'>"+ p.getPoster().getUserName()+ "</a></span>";
+			String span2 = "<span style='color: gray;'> - by <a href='/profile/"+ new ClientTransform().stringToPoster(p.getPoster()).getUserID()+ "' style='font-style: italic; color: cornflowerblue !important;'>"+ new ClientTransform().stringToPoster(p.getPoster()).getUserName()+ "</a></span>";
 			String span3 = "<span style='margin-left: 20px; color: gray;'> on: "+ TripShare.dateFormat(p.getCreateDate())+ "</span>";
 			content.setHTML(span+ span1+ span2+ span3);
 			htmlContent.add(content);

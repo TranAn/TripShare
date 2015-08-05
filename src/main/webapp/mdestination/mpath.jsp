@@ -121,13 +121,13 @@
 	<div class="mcontent">
 		<div class="mnametrip">
 			<%
-				String hrefProfile = "/profile/" + path.getPoster().getUserID().toString();
+				/* String hrefProfile = "/profile/" + path.getPoster().getUserID().toString(); */
 				String namePath = null;
 							if(path.getTitle() != null)
 								namePath = path.getTitle();
-							else
+							/* else
 								if(path.getLocate() != null)
-									namePath = path.getLocate().getAddressName();
+									namePath = path.getLocate().getAddressName(); */
 			%>
 			<h1><%=namePath%></h1>
 		</div>
@@ -145,8 +145,8 @@
 				<td style="padding-right: 5px"><div class="mitalictext">Created
 						by</div></td>
 				<td><div class="mitalictext">
-				<a href=<%=hrefProfile %>><%=(path.getPoster() != null ? path.getPoster()
-								.getUserName() : "Tester")%></a>
+				<%-- <a href=<%=hrefProfile %>><%=(path.getPoster() != null ? path.getPoster()
+								.getUserName() : "Tester")%></a> --%>
 				</div></td>
 			</tr>
 		</table>

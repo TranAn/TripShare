@@ -7,6 +7,7 @@ import com.born2go.client.TripShare;
 import com.born2go.shared.Path;
 import com.born2go.shared.Picture;
 import com.born2go.shared.Trip;
+import com.born2go.shared.embedclass.ClientTransform;
 import com.born2go.shared.embedclass.Poster;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -175,7 +176,7 @@ public class Journey_PathView extends Composite {
 							String title = (result.getTitle());
 							Poster poster = new Poster();
 							if(result.getPoster() != null)
-								poster = result.getPoster();
+								poster = new ClientTransform().stringToPoster(result.getPoster());
 							Journey_PathDetail pathDetail = new Journey_PathDetail(result, result.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), result.getDescription());
 							pathDetail.addPostControl();
 							pathDetail.setListener(new Journey_PathDetail.Listener() {
@@ -225,7 +226,7 @@ public class Journey_PathView extends Composite {
 		else {
 			Poster p = new Poster();
 			p.setUserID(Long.valueOf(TripShare.user_id));
-			if(theTrip.getPoster().getUserID().toString().equals(TripShare.user_id)) {
+			if(new ClientTransform().stringToPoster(theTrip.getPoster()).getUserID().toString().equals(TripShare.user_id)) {
 				isAdmin = true;
 				isPoster = true;
 				btnEdit.removeStyleName("PathView-Obj14");
@@ -241,7 +242,7 @@ public class Journey_PathView extends Composite {
 				btnPost.removeStyleName("PathView-Obj14");
 				btnUpload.removeStyleName("PathView-Obj14");
 				for(Journey_PathDetail pd: listPathsDetail) {
-					if(pd.getPath().getPoster().getUserID().toString().equals(TripShare.user_id))
+					if(new ClientTransform().stringToPoster(pd.getPath().getPoster()).getUserID().toString().equals(TripShare.user_id))
 						pd.addPostControl();
 				}
 			}
@@ -263,9 +264,12 @@ public class Journey_PathView extends Composite {
 			public void onSuccess(Trip result) {
 				if(result != null) {
 					theTrip = result;
-					TripShare.tripMap.drawTheJourney(result.getJourney().getDirections(), result.getJourney().getLocates(), true);
+					TripShare.tripMap.drawTheJourney(new ClientTransform().stringToJourney(result.getJourney()).getDirections(), new ClientTransform().stringToJourney(result.getJourney()).getLocates(), true);
 					CompanionTable companionTable = new CompanionTable();
-					companionTable.setTrip(theTrip.getCompanion());
+					List<Poster> listCompanion = new ArrayList<Poster>();
+					for(String p: theTrip.getCompanion())
+						listCompanion.add(new ClientTransform().stringToPoster(p));
+					companionTable.setTrip(listCompanion);
 					if(RootPanel.get("companion_table") != null)
 						RootPanel.get("companion_table").add(companionTable);
 					getThePaths(result.getDestination());
@@ -292,10 +296,10 @@ public class Journey_PathView extends Composite {
 						if(path.getTitle() != null)
 							title = path.getTitle(); 
 						else if(path.getLocate() != null)
-							title = path.getLocate().getAddressName();
+							title = new ClientTransform().stringToLocate(path.getLocate()).getAddressName();
 						Poster poster = new Poster();
 						if(path.getPoster() != null)
-							poster = path.getPoster();
+							poster = new ClientTransform().stringToPoster(path.getPoster());
 						Journey_PathDetail pathDetail = new Journey_PathDetail(path, path.getId(), "/resources/Travel tips2_resize.jpg", title, poster.getUserName(), poster.getUserID().toString(), path.getDescription());
 						pathDetail.setListener(new Journey_PathDetail.Listener() {
 							@Override
@@ -308,8 +312,8 @@ public class Journey_PathView extends Composite {
 						});
 						htmlPathTable.add(pathDetail);
 						getPathPhoto(path, pathDetail);
-						if(theTrip.getPoster().getUserID().toString().equals(TripShare.user_id)
-								|| path.getPoster().getUserID().toString().equals(TripShare.user_id)) 
+						if(new ClientTransform().stringToPoster(theTrip.getPoster()).getUserID().toString().equals(TripShare.user_id)
+								|| new ClientTransform().stringToPoster(path.getPoster()).getUserID().toString().equals(TripShare.user_id)) 
 							pathDetail.addPostControl();
 						//---
 						listPathsDetail.add(pathDetail);
@@ -389,7 +393,7 @@ public class Journey_PathView extends Composite {
 		}
 		tripInfo.setTrip(theTrip);
 		tripInfo.setDisable();
-		TripShare.tripMap.drawTheJourney(theTrip.getJourney().getDirections(), theTrip.getJourney().getLocates(), true);
+		TripShare.tripMap.drawTheJourney(new ClientTransform().stringToJourney(theTrip.getJourney()).getDirections(), new ClientTransform().stringToJourney(theTrip.getJourney()).getLocates(), true);
 	}
 
 	@UiHandler("btnSave")

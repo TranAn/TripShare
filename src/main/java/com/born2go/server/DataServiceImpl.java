@@ -20,8 +20,7 @@ import com.born2go.shared.Picture;
 import com.born2go.shared.Trip;
 import com.born2go.shared.User;
 import com.born2go.shared.embedclass.Poster;
-import com.google.api.server.spi.config.AnnotationBoolean;
-import com.google.api.server.spi.config.ApiResourceProperty;
+import com.born2go.shared.embedclass.ServerTransform;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
@@ -71,6 +70,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 			return poster;
 			
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			return null;
 		}
 	}
@@ -143,19 +143,19 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		if(accessToken != null) {
 			Poster poster = getPoster(accessToken);
 			if(poster != null) {
-				trip.setPoster(poster);
+				trip.setPoster(new ServerTransform().posterToString(poster));
 				trip.setCreateDate(new Date());
 				Key<Trip> key = ofy().save().entity(trip).now();
 				exportTrip = ofy().load().key(key).now();
 				//save trip to user
-				User user = ofy().load().type(User.class).id(exportTrip.getPoster().getUserID().toString()).now();
+				User user = ofy().load().type(User.class).id(new ServerTransform().stringToPoster(exportTrip.getPoster()).getUserID().toString()).now();
 				if(user != null) {
 					user.getMyTrips().add(exportTrip.getId());
 					ofy().save().entity(user);
 				}
 				if(!trip.getCompanion().isEmpty()) {
-					for(Poster p: trip.getCompanion()) {
-						User u = ofy().load().type(User.class).id(p.getUserID().toString()).now();
+					for(String p: trip.getCompanion()) {
+						User u = ofy().load().type(User.class).id(new ServerTransform().stringToPoster(p).getUserID().toString()).now();
 						if(u != null) {
 							u.getMyTrips().add(exportTrip.getId());
 							ofy().save().entity(u);
@@ -168,7 +168,6 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	@ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
 	public Trip findTrip(Long idTrip) {
 		Trip exportTrip;
 		exportTrip = ofy().load().type(Trip.class).id(idTrip).now();
@@ -187,38 +186,38 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		Trip exportTrip = null;
 		Trip oldTrip = findTrip(trip.getId());
 		Poster poster = getPoster(accessToken);
-		if (oldTrip != null && poster != null && poster.getUserID().equals(oldTrip.getPoster().getUserID())) {
-			// Update theme
-			if(trip.getTheme() != null) {
-				if(!trip.getTheme().equals(oldTrip.getTheme())) {
+		if (oldTrip != null && poster != null) {
+			if (poster.getUserID().equals(new ServerTransform().stringToPoster(oldTrip.getPoster()).getUserID())) {
+				// Update theme
+				if(!(trip.getTheme() == oldTrip.getTheme())) {
 					oldTrip.setTheme(trip.getTheme());
 					ofy().save().entity(oldTrip).now();
 					return oldTrip;
 				}
-			}
-			// Update companion---
-			for(Poster p: oldTrip.getCompanion()) {
-				if(!trip.getCompanion().contains(p)) {
-					User user = ofy().load().type(User.class).id(p.getUserID().toString()).now();
-					if(user != null) {
-						user.getMyTrips().remove(trip.getId());
-						ofy().save().entity(user);
+				// Update companion---
+				for(String p: oldTrip.getCompanion()) {
+					if(!trip.getCompanion().contains(p)) {
+						User user = ofy().load().type(User.class).id(new ServerTransform().stringToPoster(p).getUserID().toString()).now();
+						if(user != null) {
+							user.getMyTrips().remove(trip.getId());
+							ofy().save().entity(user);
+						}
 					}
 				}
-			}
-			for(Poster p: trip.getCompanion()) {
-				if(!oldTrip.getCompanion().contains(p)) {
-					User user = ofy().load().type(User.class).id(p.getUserID().toString()).now();
-					if(user != null) {
-						user.getMyTrips().add(trip.getId());
-						ofy().save().entity(user);
+				for(String p: trip.getCompanion()) {
+					if(!oldTrip.getCompanion().contains(p)) {
+						User user = ofy().load().type(User.class).id(new ServerTransform().stringToPoster(p).getUserID().toString()).now();
+						if(user != null) {
+							user.getMyTrips().add(trip.getId());
+							ofy().save().entity(user);
+						}
 					}
 				}
-			}
-			// Update trip
-			Key<Trip> key = ofy().save().entity(trip).now();
-			exportTrip = ofy().load().key(key).now();
-		} 
+				// Update trip
+				Key<Trip> key = ofy().save().entity(trip).now();
+				exportTrip = ofy().load().key(key).now();
+			} 
+		}
 		return exportTrip;
 	}
 
@@ -226,15 +225,15 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	public void removeTrip(Long idTrip, String accessToken) {
 		Trip oldTrip = findTrip(idTrip);
 		Poster poster = getPoster(accessToken);
-		if (oldTrip != null && poster != null && poster.getUserID().equals(oldTrip.getPoster().getUserID())) {
+		if (oldTrip != null && poster != null && poster.getUserID().equals(new ServerTransform().stringToPoster(oldTrip.getPoster()).getUserID())) {
 			//Delete the link trip in the owner and companions
-			User u = ofy().load().type(User.class).id(oldTrip.getPoster().getUserID()).now();
+			User u = ofy().load().type(User.class).id(new ServerTransform().stringToPoster(oldTrip.getPoster()).getUserID()).now();
 			if(u != null) {
 				u.getMyTrips().remove(oldTrip.getId());
 				ofy().save().entity(u);
 			}
-			for(Poster p: oldTrip.getCompanion()) {
-				User us = ofy().load().type(User.class).id(p.getUserID()).now();
+			for(String p: oldTrip.getCompanion()) {
+				User us = ofy().load().type(User.class).id(new ServerTransform().stringToPoster(p).getUserID()).now();
 				if(us != null) {
 					us.getMyTrips().remove(oldTrip.getId());
 					ofy().save().entity(us);
@@ -248,14 +247,14 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	//----- Impls for Path -----
 	
 	@Override
-	public Path insertPath(Path path, Long tripId, String accessToken) {
+	public Path insertPath(Path path, Long idTrip, String accessToken) {
 		Path exportPath = null;
-		Trip trip = ofy().load().type(Trip.class).id(tripId).now();
+		Trip trip = ofy().load().type(Trip.class).id(idTrip).now();
 		if(trip != null && accessToken != null) {
 			Poster poster = getPoster(accessToken);
 			if(poster != null) {
-				path.setPoster(poster);
-				path.setTripId(tripId);
+				path.setPoster(new ServerTransform().posterToString(poster));
+				path.setTripId(idTrip);
 				String preshortHtml = getPlainText(path.getDescription());
 				path.setShortDescription(Jsoup.parse(preshortHtml).text());
 				Key<Path> key = ofy().save().entity(path).now();
@@ -287,7 +286,8 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		Path exportPath = null;
 		Path oldData = findPath(path.getId());
 		Poster poster = getPoster(accessToken);
-		if (oldData != null && poster != null && poster.getUserID().equals(oldData.getPoster().getUserID())) {
+		if ((oldData != null && poster != null) && 
+				poster.getUserID().equals(new ServerTransform().stringToPoster(oldData.getPoster()).getUserID())) {
 			if(!oldData.getDescription().equals(path.getDescription())) {
 				String preshortHtml = getPlainText(path.getDescription());
 				path.setShortDescription(Jsoup.parse(preshortHtml).text());
@@ -302,7 +302,8 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	public void removePath(Long idPath, String accessToken) {
 		Path oldData = findPath(idPath);
 		Poster poster = getPoster(accessToken);
-		if (oldData != null && poster != null && poster.getUserID().equals(oldData.getPoster().getUserID())) {
+		if ((oldData != null && poster != null) 
+				&& poster.getUserID().equals(new ServerTransform().stringToPoster(oldData.getPoster()).getUserID())) {
 			//Delete the link part on the trip
 			Trip trip = ofy().load().type(Trip.class).id(oldData.getTripId()).now();
 			if(trip != null) {
@@ -364,16 +365,16 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	//----- Impls for Picture -----
 
 	@Override
-	public String getUploadUrl(Long pathId, Long tripId, String accessToken) {
+	public String getUploadUrl(Long pathId, Long idTrip, String accessToken) {
 		Trip oldTrip = null;
 		Path oldPath = null;
-		if(tripId != null)
-			oldTrip = findTrip(tripId);
+		if(idTrip != null)
+			oldTrip = findTrip(idTrip);
 		if(pathId != null)
 			oldPath = findPath(pathId);
 		Poster poster = getPoster(accessToken);
-		if(oldTrip != null && poster != null && poster.getUserID().equals(oldTrip.getPoster().getUserID())
-				|| oldPath != null && poster != null && poster.getUserID().equals(oldPath.getPoster().getUserID())) 
+		if((oldTrip != null && poster != null) && poster.getUserID().equals(new ServerTransform().stringToPoster(oldTrip.getPoster()).getUserID())
+				|| (oldPath != null && poster != null) && poster.getUserID().equals(new ServerTransform().stringToPoster(oldPath.getPoster()).getUserID())) 
 			return blobStoreService.createUploadUrl("/photo_upload");
 		else
 			return "#";
@@ -408,8 +409,8 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 			oldPath = findPath(p.getOnPath());
 		Poster poster = getPoster(accessToken);
 		if(p != null) {
-			if(oldTrip != null && poster != null && poster.getUserID().equals(oldTrip.getPoster().getUserID())
-					|| oldPath != null && poster != null && poster.getUserID().equals(oldPath.getPoster().getUserID())) {
+			if((oldTrip != null && poster != null) && poster.getUserID().equals(new ServerTransform().stringToPoster(oldTrip.getPoster()).getUserID())
+					|| (oldPath != null && poster != null) && poster.getUserID().equals(new ServerTransform().stringToPoster(oldPath.getPoster()).getUserID())) {
 				//Delete blob
 				BlobKey blobKey = new BlobKey(p.getKey());
 				blobStoreService.delete(blobKey);

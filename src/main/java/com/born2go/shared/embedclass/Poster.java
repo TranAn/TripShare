@@ -9,9 +9,9 @@ public class Poster implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	Long userID;
-	String userName;
-	String userImg;
+	Long userID = 0L;
+	String userName = "";
+	String userImg = "";
 	
 	public Poster() {
 		super();

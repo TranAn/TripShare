@@ -14,6 +14,7 @@ import com.born2go.client.widgets.Profile_ProfileView;
 import com.born2go.client.widgets.TravelMap;
 import com.born2go.client.widgets.TravelMap.Listener;
 import com.born2go.shared.Trip;
+import com.born2go.shared.embedclass.ClientTransform;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -83,8 +84,8 @@ public class TripShare implements EntryPoint {
 				dataService.findTrip(idTrip, new AsyncCallback<Trip>() {
 					@Override
 					public void onSuccess(Trip result) {
-						tripMap.drawTheJourney(result.getJourney().getDirections(),
-								result.getJourney().getLocates(), true);
+						tripMap.drawTheJourney(new ClientTransform().stringToJourney(result.getJourney()).getDirections(),
+								new ClientTransform().stringToJourney(result.getJourney()).getLocates(), true);
 					}
 					@Override
 					public void onFailure(Throwable caught) {}
@@ -122,7 +123,7 @@ public class TripShare implements EntryPoint {
 
 	private native void checkUserStatus() /*-{
 	    $wnd.FB.init({
-	      appId      : '1636504239911870',
+	      appId      : '386540048195283',
 	      cookie	 : true,
 	      xfbml      : true,
 	      version    : 'v2.3'
@@ -140,6 +141,7 @@ public class TripShare implements EntryPoint {
 			if (response.status === 'connected') {
 				var userId = response.authResponse.userID;
 			    var accessToken = response.authResponse.accessToken;
+//			    console.log(response.authResponse);
 			    @com.born2go.client.TripShare::getAccessToken(Ljava/lang/String;Ljava/lang/String;)(accessToken,userId);
 				$wnd.FB.api('/me', function(response) {
 					var menuProfile = $wnd.document.getElementById('menubutton');

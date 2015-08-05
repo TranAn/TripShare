@@ -5,6 +5,7 @@ import java.util.List;
 import com.born2go.client.TripShare;
 import com.born2go.shared.Picture;
 import com.born2go.shared.Trip;
+import com.born2go.shared.embedclass.ClientTransform;
 import com.born2go.shared.embedclass.Locate;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -54,9 +55,9 @@ public class Profile_JourneyInfoView extends Composite {
 		lbTitle.setText(trip.getName());
 		lbTitle.setHref("/journey/"+trip.getId());
 		lbPoster.setText(TripShare.dateFormat(trip.getCreateDate()));
-		posterPicture.setUrl("https://graph.facebook.com/"+ trip.getPoster().getUserID().toString()+ "/picture?width=25&height=25");
-		posterName.setText(trip.getPoster().getUserName());
-		posterName.setHref("/profile/"+ trip.getPoster().getUserID().toString());
+		posterPicture.setUrl("https://graph.facebook.com/"+ new ClientTransform().stringToPoster(trip.getPoster()).getUserID().toString()+ "/picture?width=25&height=25");
+		posterName.setText(new ClientTransform().stringToPoster(trip.getPoster()).getUserName());
+		posterName.setHref("/profile/"+ new ClientTransform().stringToPoster(trip.getPoster()).getUserID().toString());
 		// set des for trip
 		setLocate(trip);
 		String content = trip.getDescription();
@@ -99,7 +100,7 @@ public class Profile_JourneyInfoView extends Composite {
 	}
 
 	private void setLocate(Trip trip) {
-		List<Locate> locates = trip.getJourney().getLocates();
+		List<Locate> locates = new ClientTransform().stringToJourney(trip.getJourney()).getLocates();
 		noteDes.setText(locates.get(0).getAddressName());
 		for (int i = 1; i < locates.size(); i++) {
 			HorizontalPanel horiLocate = new HorizontalPanel();

@@ -46,53 +46,52 @@ public class ThemePickTable extends DialogBox {
 		setAutoHideEnabled(true);
 		
 		this.trip = trip;
-		
-		if(trip.getTheme() == null) {
+	
+		switch (trip.getTheme()) {
+		case Trip.DEFAULT_THEME:
 			ck_default.setValue(true);
 			previewImg.setUrl("/resources/themes/Default-thumbnail.jpg");
-		} else {
-			switch (trip.getTheme()) {
-			case DEFAULT:
-				ck_default.setValue(true);
-				previewImg.setUrl("/resources/themes/Default-thumbnail.jpg");
-				break;
-			case BEACH_DAWN:
-				ck_beach_dawn.setValue(true);
-				previewImg.setUrl("/resources/themes/Beach-Dawn-thumbnail.jpg");
-				break;
-			case BEACH_MORNING:
-				ck_beach_morning.setValue(true);
-				previewImg.setUrl("/resources/themes/Beach-Morning-thumbnail.jpg");
-				break;
-			case BEACH_SUNSET:
-				ck_beach_sunset.setValue(true);
-				previewImg.setUrl("/resources/themes/Beach-Sunset-thumbnail.jpg");
-				break;
-			case CITY:
-				ck_city.setValue(true);
-				previewImg.setUrl("/resources/themes/City-thumbnail.jpg");
-				break;
-			case COUNTRY:
-				ck_country.setValue(true);
-				previewImg.setUrl("/resources/themes/Country-thumbnail.jpg");
-				break;
-			case FOREST:
-				ck_forest.setValue(true);
-				previewImg.setUrl("/resources/themes/Forest-thumbnail.jpg");
-				break;
-			case FOREST_WATERFALL:
-				ck_forest_waterfall.setValue(true);
-				previewImg.setUrl("/resources/themes/Forest-Waterfall-thumbnail.jpg");
-				break;
-			case MOUNTAIN_SPRING:
-				ck_mountain_spring.setValue(true);
-				previewImg.setUrl("/resources/themes/Mountain-Spring-thumbnail.jpg");
-				break;
-			case MOUNTAIN_WINTER:
-				ck_mountain_winter.setValue(true);
-				previewImg.setUrl("/resources/themes/Mountain-Winter-thumbnail.jpg");
-				break;
-			}
+			break;
+		case Trip.BEACH_DAWN_THEME:
+			ck_beach_dawn.setValue(true);
+			previewImg.setUrl("/resources/themes/Beach-Dawn-thumbnail.jpg");
+			break;
+		case Trip.BEACH_MORNING_THEME:
+			ck_beach_morning.setValue(true);
+			previewImg.setUrl("/resources/themes/Beach-Morning-thumbnail.jpg");
+			break;
+		case Trip.BEACH_SUNSET_THEME:
+			ck_beach_sunset.setValue(true);
+			previewImg.setUrl("/resources/themes/Beach-Sunset-thumbnail.jpg");
+			break;
+		case Trip.CITY_THEME:
+			ck_city.setValue(true);
+			previewImg.setUrl("/resources/themes/City-thumbnail.jpg");
+			break;
+		case Trip.COUNTRY_THEME:
+			ck_country.setValue(true);
+			previewImg.setUrl("/resources/themes/Country-thumbnail.jpg");
+			break;
+		case Trip.FOREST_THEME:
+			ck_forest.setValue(true);
+			previewImg.setUrl("/resources/themes/Forest-thumbnail.jpg");
+			break;
+		case Trip.FOREST_WATERFALL_THEME:
+			ck_forest_waterfall.setValue(true);
+			previewImg.setUrl("/resources/themes/Forest-Waterfall-thumbnail.jpg");
+			break;
+		case Trip.MOUNTAIN_SPRING_THEME:
+			ck_mountain_spring.setValue(true);
+			previewImg.setUrl("/resources/themes/Mountain-Spring-thumbnail.jpg");
+			break;
+		case Trip.MOUNTAIN_WINTER_THEME:
+			ck_mountain_winter.setValue(true);
+			previewImg.setUrl("/resources/themes/Mountain-Winter-thumbnail.jpg");
+			break;
+		default:
+			ck_default.setValue(true);
+			previewImg.setUrl("/resources/themes/Default-thumbnail.jpg");
+			break;
 		}
 	}
 	
@@ -126,7 +125,7 @@ public class ThemePickTable extends DialogBox {
 		clearCheck();
 		ck_default.setValue(true);
 		previewImg.setUrl("/resources/themes/Default-thumbnail.jpg");
-		trip.setTheme(Trip.Theme.DEFAULT);
+		trip.setTheme(Trip.DEFAULT_THEME);
 	}
 	
 	@UiHandler("ck_beach_dawn")
@@ -134,7 +133,7 @@ public class ThemePickTable extends DialogBox {
 		clearCheck();
 		ck_beach_dawn.setValue(true);
 		previewImg.setUrl("/resources/themes/Beach-Dawn-thumbnail.jpg");
-		trip.setTheme(Trip.Theme.BEACH_DAWN);
+		trip.setTheme(Trip.BEACH_DAWN_THEME);
 	}
 	
 	@UiHandler("ck_beach_morning")
@@ -142,7 +141,7 @@ public class ThemePickTable extends DialogBox {
 		clearCheck();
 		ck_beach_morning.setValue(true);
 		previewImg.setUrl("/resources/themes/Beach-Morning-thumbnail.jpg");
-		trip.setTheme(Trip.Theme.BEACH_MORNING);
+		trip.setTheme(Trip.BEACH_MORNING_THEME);
 	}
 	
 	@UiHandler("ck_beach_sunset")
@@ -150,7 +149,7 @@ public class ThemePickTable extends DialogBox {
 		clearCheck();
 		ck_beach_sunset.setValue(true);
 		previewImg.setUrl("/resources/themes/Beach-Sunset-thumbnail.jpg");
-		trip.setTheme(Trip.Theme.BEACH_SUNSET);
+		trip.setTheme(Trip.BEACH_SUNSET_THEME);
 	}
 	
 	@UiHandler("ck_city")
@@ -158,7 +157,7 @@ public class ThemePickTable extends DialogBox {
 		clearCheck();
 		ck_city.setValue(true);
 		previewImg.setUrl("/resources/themes/City-thumbnail.jpg");
-		trip.setTheme(Trip.Theme.CITY);
+		trip.setTheme(Trip.CITY_THEME);
 	}
 	
 	@UiHandler("ck_country")
@@ -166,7 +165,7 @@ public class ThemePickTable extends DialogBox {
 		clearCheck();
 		ck_country.setValue(true);
 		previewImg.setUrl("/resources/themes/Country-thumbnail.jpg");
-		trip.setTheme(Trip.Theme.COUNTRY);
+		trip.setTheme(Trip.COUNTRY_THEME);
 	}
 	
 	@UiHandler("ck_forest")
@@ -174,7 +173,7 @@ public class ThemePickTable extends DialogBox {
 		clearCheck();
 		ck_forest.setValue(true);
 		previewImg.setUrl("/resources/themes/Forest-thumbnail.jpg");
-		trip.setTheme(Trip.Theme.FOREST);
+		trip.setTheme(Trip.FOREST_THEME);
 	}
 	
 	@UiHandler("ck_forest_waterfall")
@@ -182,7 +181,7 @@ public class ThemePickTable extends DialogBox {
 		clearCheck();
 		ck_forest_waterfall.setValue(true);
 		previewImg.setUrl("/resources/themes/Forest-Waterfall-thumbnail.jpg");
-		trip.setTheme(Trip.Theme.FOREST_WATERFALL);
+		trip.setTheme(Trip.FOREST_WATERFALL_THEME);
 	}
 	
 	@UiHandler("ck_mountain_spring")
@@ -190,7 +189,7 @@ public class ThemePickTable extends DialogBox {
 		clearCheck();
 		ck_mountain_spring.setValue(true);
 		previewImg.setUrl("/resources/themes/Mountain-Spring-thumbnail.jpg");
-		trip.setTheme(Trip.Theme.MOUNTAIN_SPRING);
+		trip.setTheme(Trip.MOUNTAIN_SPRING_THEME);
 	}
 	
 	@UiHandler("ck_mountain_winter")
@@ -198,7 +197,7 @@ public class ThemePickTable extends DialogBox {
 		clearCheck();
 		ck_mountain_winter.setValue(true);
 		previewImg.setUrl("/resources/themes/Mountain-Winter-thumbnail.jpg");
-		trip.setTheme(Trip.Theme.MOUNTAIN_WINTER);
+		trip.setTheme(Trip.MOUNTAIN_WINTER_THEME);
 	}
 	
 	@UiHandler("btnSave")
@@ -211,35 +210,38 @@ public class ThemePickTable extends DialogBox {
 			public void onSuccess(Trip result) {
 				TripShare.loadBox.hide();
 				switch (trip.getTheme()) {
-				case DEFAULT:
+				case Trip.DEFAULT_THEME:
 					setBodyClass("journeypage_default_theme");
 					break;
-				case BEACH_DAWN:
+				case Trip.BEACH_DAWN_THEME:
 					setBodyClass("journeypage_beachdawn_theme");
 					break;
-				case BEACH_MORNING:
+				case Trip.BEACH_MORNING_THEME:
 					setBodyClass("journeypage_beachmorning_theme");
 					break;
-				case BEACH_SUNSET:
+				case Trip.BEACH_SUNSET_THEME:
 					setBodyClass("journeypage_beachsunset_theme");
 					break;
-				case CITY:
+				case Trip.CITY_THEME:
 					setBodyClass("journeypage_city_theme");
 					break;
-				case COUNTRY:
+				case Trip.COUNTRY_THEME:
 					setBodyClass("journeypage_country_theme");
 					break;
-				case FOREST:
+				case Trip.FOREST_THEME:
 					setBodyClass("journeypage_forest_theme");
 					break;
-				case FOREST_WATERFALL:
+				case Trip.FOREST_WATERFALL_THEME:
 					setBodyClass("journeypage_forestwaterfall_theme");
 					break;
-				case MOUNTAIN_SPRING:
+				case Trip.MOUNTAIN_SPRING_THEME:
 					setBodyClass("journeypage_mountainspring_theme");
 					break;
-				case MOUNTAIN_WINTER:
+				case Trip.MOUNTAIN_WINTER_THEME:
 					setBodyClass("journeypage_mountainwinter_theme");
+					break;
+				default:
+					setBodyClass("journeypage_default_theme");
 					break;
 				}
 			}

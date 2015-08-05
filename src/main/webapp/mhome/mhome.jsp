@@ -140,8 +140,8 @@
 							<tr>
 								<td style="padding-right: 5px"><div class="mitalictext">Created
 										by</div></td>
-								<td><div class="mitalictext"><%=(trip.getPoster() != null ? trip.getPoster()
-							.getUserName() : "Tester")%></div></td>
+								<td><%-- <div class="mitalictext"><%=(trip.getPoster() != null ? trip.getPoster()
+							.getUserName() : "Tester")%></div> --%></td>
 							</tr>
 						</table>
 						<div class="imgdefault">

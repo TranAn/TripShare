@@ -34,7 +34,7 @@
 			    	 
 					String urlFacebook = request.getRequestURL().toString();
 					String dateCreate = "Ngày tạo " + dateFormat1.format( trip.getCreateDate());
-					String poster = "Người tạo " + trip.getPoster().getUserName();
+					/* String poster = "Người tạo " + trip.getPoster().getUserName(); */
 					String departureDate = dateFormat1.format( trip.getDepartureDate());
 %>
 <!doctype html>
@@ -129,26 +129,26 @@
 			</div>
 			<div class="mitalictext">
 				<%=dateCreate%></div>
-			<div class="mitalictext">
-				<%=poster%></div>
+			<%-- <div class="mitalictext">
+				<%=poster%></div> --%>
 			<div class="mpadB10"></div>
 			<div class="mtripmap" id="mtripmap"></div>
 			<div class="mitinerary">
 				<h3>Hành trình:</h3>
 			</div>
 			<div class="mtrip-destinations">
-				<img src="/resources/red-spotlight.png" /> <span><%=trip.getJourney().getLocates().get(0)
-							.getAddressName()%></span>
+				<%-- <img src="/resources/red-spotlight.png" /> <span><%=trip.getJourney().getLocates().get(0)
+							.getAddressName()%></span> --%>
 			</div>
 			<%
-				for (int i = 1; i < trip.getJourney().getLocates().size(); i++) 
+				/* for (int i = 1; i < trip.getJourney().getLocates().size(); i++)  */
 																																												     					{
 			%>
-			<div class="mtrip-destinations">
+			<%-- <div class="mtrip-destinations">
 				<img src="/resources/green-spotlight.png" /> <span> <%=trip.getJourney().getLocates().get(i)
 								.getAddressName()%>
 				</span>
-			</div>
+			</div> --%>
 			<%
 				}
 			%>
@@ -181,7 +181,7 @@
 																																														Path path = listPaths.get(i);
 				%>
 				<div class="mblock">
-					<h2><%=path.getLocate().getAddressName()%></h2>
+					<%-- <h2><%=path.getLocate().getAddressName()%></h2> --%>
 					<table cellpadding="0" cellspacing="0" border="0"
 						style="line-height: 17px">
 						<tr>
@@ -195,8 +195,8 @@
 						<tr>
 							<td style="padding-right: 5px"><div class="mitalictext">Create
 									by</div></td>
-							<td><div class="mitalictext"><%=(trip.getPoster() != null ? trip.getPoster()
-							.getUserName() : "Tester")%></div></td>
+							<td><%-- <div class="mitalictext"><%=(trip.getPoster() != null ? trip.getPoster()
+							.getUserName() : "Tester")%></div> --%></td>
 						</tr>
 					</table>
 					<p class="mparagraptext">

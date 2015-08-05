@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.born2go.shared.embedclass.Journey;
-import com.born2go.shared.embedclass.Poster;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -16,19 +14,25 @@ import com.googlecode.objectify.annotation.Id;
 @Cache
 public class Trip implements Serializable {
 	
-	public enum TripStatus {
-		ONGOING, COMPLETED;
-	}
+	public static final int COMPLETED_STATUS = 0;
+	public static final int ONGOING_STATUS = 1;
 	
-	public enum Theme {
-		DEFAULT, BEACH_DAWN, BEACH_MORNING, BEACH_SUNSET, CITY, COUNTRY, FOREST, FOREST_WATERFALL, MOUNTAIN_SPRING, MOUNTAIN_WINTER;
-	}
+	public static final int DEFAULT_THEME = 0;
+	public static final int BEACH_DAWN_THEME = 1;
+	public static final int BEACH_MORNING_THEME = 2;
+	public static final int BEACH_SUNSET_THEME = 3;
+	public static final int CITY_THEME = 4;
+	public static final int COUNTRY_THEME = 5;
+	public static final int FOREST_THEME = 6;
+	public static final int FOREST_WATERFALL_THEME = 7;
+	public static final int MOUNTAIN_SPRING_THEME = 8;
+	public static final int MOUNTAIN_WINTER_THEME = 9;
 
 	@Id
 	Long id;
 	
-	Poster poster;
-	List<Poster> companion = new ArrayList<Poster>(); //Member sharing the same trip
+	String poster;	//trip owner
+	List<String> companion = new ArrayList<String>(); //Member sharing the same trip
 	List<Long> destination = new ArrayList<Long>(); //Post ID list
 	List<Long> gallery = new ArrayList<Long>();		//Photos list
 	
@@ -36,21 +40,13 @@ public class Trip implements Serializable {
 	Date createDate;
 	Date departureDate;
 	String description;
-	Journey journey;
-	TripStatus status;
-	Theme theme;
+	String journey;
+	int status;
+	int theme;
 	
-	
+
 	public Trip() {
 		super();
-	}
-
-	public Journey getJourney() {
-		return journey;
-	}
-
-	public void setJourney(Journey journey) {
-		this.journey = journey;
 	}
 
 	public Long getId() {
@@ -61,19 +57,19 @@ public class Trip implements Serializable {
 		this.id = id;
 	}
 
-	public Poster getPoster() {
+	public String getPoster() {
 		return poster;
 	}
 
-	public void setPoster(Poster poster) {
+	public void setPoster(String poster) {
 		this.poster = poster;
 	}
 
-	public List<Poster> getCompanion() {
+	public List<String> getCompanion() {
 		return companion;
 	}
 
-	public void setCompanion(List<Poster> companion) {
+	public void setCompanion(List<String> companion) {
 		this.companion = companion;
 	}
 
@@ -125,19 +121,27 @@ public class Trip implements Serializable {
 		this.departureDate = departureDate;
 	}
 
-	public TripStatus getStatus() {
+	public String getJourney() {
+		return journey;
+	}
+
+	public void setJourney(String journey) {
+		this.journey = journey;
+	}
+
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(TripStatus status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
-	public Theme getTheme() {
+	public int getTheme() {
 		return theme;
 	}
 
-	public void setTheme(Theme theme) {
+	public void setTheme(int theme) {
 		this.theme = theme;
 	}
 	

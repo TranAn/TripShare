@@ -5,6 +5,7 @@ import java.util.List;
 import com.born2go.client.TripShare;
 import com.born2go.shared.Trip;
 import com.born2go.shared.User;
+import com.born2go.shared.embedclass.ClientTransform;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -56,7 +57,7 @@ public class Profile_ProfileView extends Composite {
 				} 
 				else if (lstbViewOption.getSelectedIndex() == 1) {
 					for(int i = listTrips.size()-1; i >=0; i--) {
-						if(listTrips.get(i).getPoster().getUserID().toString().equals(profileId)) {
+						if(new ClientTransform().stringToPoster(listTrips.get(i).getPoster()).getUserID().toString().equals(profileId)) {
 							Profile_JourneyInfoView journeyInfoView = new Profile_JourneyInfoView("/resources/Travel tips2_resize.jpg", listTrips.get(i));
 							verDetails.add(journeyInfoView);
 							countTripDisplay++;
@@ -65,7 +66,7 @@ public class Profile_ProfileView extends Composite {
 				}
 				else if (lstbViewOption.getSelectedIndex() == 2) {
 					for(int i = listTrips.size()-1; i >=0; i--) {
-						if(!listTrips.get(i).getPoster().getUserID().toString().equals(profileId)) {
+						if(! new ClientTransform().stringToPoster(listTrips.get(i).getPoster()).getUserID().toString().equals(profileId)) {
 							Profile_JourneyInfoView journeyInfoView = new Profile_JourneyInfoView("/resources/Travel tips2_resize.jpg", listTrips.get(i));
 							verDetails.add(journeyInfoView);
 							countTripDisplay++;

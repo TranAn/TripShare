@@ -19,6 +19,7 @@
 	<inherits name='org.timepedia.exporter.Exporter' />
 	<inherits name='com.axeiya.gwtckeditor.Gwtckeditor' />
 	<inherits name="com.google.web.bindery.autobean.AutoBean" />
+	<inherits name="com.google.gwt.json.JSON" />
 	<!-- <inherits name="com.google.gwt.logging.Logging"/> -->
 
 	<!-- Specify the app entry point class. -->

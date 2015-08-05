@@ -20,8 +20,7 @@ public class User implements Serializable {
 	List<Long> myTrips = new ArrayList<Long>();
 	
 	Date joinDate;
-	// temporary
-	String userName;
+	String userName; // temporary field
 
 	public User() {
 		super();

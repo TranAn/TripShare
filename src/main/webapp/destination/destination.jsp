@@ -10,6 +10,8 @@
 <%@ page import="com.born2go.shared.Picture"%>
 <%@ page import="com.born2go.shared.embedclass.Journey"%>
 <%@ page import="com.born2go.shared.embedclass.Locate"%>
+<%@ page import="com.born2go.shared.embedclass.Poster"%>
+<%@ page import="com.born2go.shared.embedclass.ServerTransform"%>
 <%@ page import="com.born2go.server.DataServiceImpl"%>
 <%@ page import="java.util.ArrayList"%>
 <%@page import="java.io.IOException"%>
@@ -82,7 +84,7 @@
 			if(path.getTitle() != null)
 				pathTitle = path.getTitle(); 
 			else if(path.getLocate() != null)
-				pathTitle = path.getLocate().getAddressName();
+				pathTitle = new ServerTransform().stringToLocate(path.getLocate()).getAddressName();
 			List<Long> gallery = path.getGallery();	
 			if(gallery != null && !gallery.isEmpty()) {
 				pathPicture = service.findPicture(path.getGallery().get(0)).getServeUrl();
@@ -162,87 +164,84 @@
 	</script> -->
 	
 	<%
-	if(trip.getTheme() == null) {
-	%>
-		<script type="text/javascript">
-			document.body.className = "journeypage_default_theme";
-		</script>
-	<%
-	}
-	else {
-		switch (trip.getTheme()) {
-		case DEFAULT:
+	switch (trip.getTheme()) {
+		case Trip.DEFAULT_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_default_theme";
 			</script>
 		<%
 			break;
-		case BEACH_DAWN:
+		case Trip.BEACH_DAWN_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_beachdawn_theme";
 			</script>
 		<%
 			break;
-		case BEACH_MORNING:
+		case Trip.BEACH_MORNING_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_beachmorning_theme";
 			</script>
 		<%
 			break;
-		case BEACH_SUNSET:
+		case Trip.BEACH_SUNSET_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_beachsunset_theme";
 			</script>
 		<%
 			break;
-		case CITY:
+		case Trip.CITY_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_city_theme";
 			</script>
 		<%
 			break;
-		case COUNTRY:
+		case Trip.COUNTRY_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_country_theme";
 			</script>
 		<%
 			break;
-		case FOREST:
+		case Trip.FOREST_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_forest_theme";
 			</script>
 		<%
 			break;
-		case FOREST_WATERFALL:
+		case Trip.FOREST_WATERFALL_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_forestwaterfall_theme";
 			</script>
 		<%
 			break;
-		case MOUNTAIN_SPRING:
+		case Trip.MOUNTAIN_SPRING_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_mountainspring_theme";
 			</script>
 		<%
 			break;
-		case MOUNTAIN_WINTER:
+		case Trip.MOUNTAIN_WINTER_THEME:
 		%>
 			<script type="text/javascript">
 				document.body.className = "journeypage_mountainwinter_theme";
 			</script>
 		<%
 			break;
-		} 
-	}
+		default:
+		%>
+			<script type="text/javascript">
+				document.body.className = "journeypage_default_theme";
+			</script>
+		<%
+	} 
 	%>
 
 	<div id="header" style="margin:0px; height: 130px;">
@@ -287,8 +286,8 @@
 				<%if(path.getPoster() != null) {%>
 				<p class="font_9">
 					<span>Post by: </span>
-					<a href="/profile/<%=path.getPoster().getUserID()%>"><%=path.getPoster().getUserName()%></a>
-					<img style="border: 1px silver solid;border-radius: 20px;overflow: hidden;margin-left: 8px;margin-bottom: -15px;" src="https://graph.facebook.com/<%=path.getPoster().getUserID()%>/picture?width=25&height=25" />
+					<a href="/profile/<%=new ServerTransform().stringToPoster(path.getPoster()).getUserID()%>"><%=new ServerTransform().stringToPoster(path.getPoster()).getUserName()%></a>
+					<img style="border: 1px silver solid;border-radius: 20px;overflow: hidden;margin-left: 8px;margin-bottom: -15px;" src="https://graph.facebook.com/<%=new ServerTransform().stringToPoster(path.getPoster()).getUserID()%>/picture?width=25&height=25" />
 				</p>
 				<%;} %>
 				<%if(path.getCreateDate() != null) {%>
